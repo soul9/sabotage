@@ -2,6 +2,7 @@
 autoconf
 automake
 bison
+busybox-man
 diffutils
 expat
 file
@@ -10,14 +11,16 @@ gdb
 gnu-grep
 jpeg
 less
-libssh
 lynx
 nano
 ncurses
 openssh
 patch
+patchutils
 psmisc
 python
 perl
+strace
 vim
 wget
+
