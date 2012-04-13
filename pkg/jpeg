@@ -8,7 +8,7 @@ http://prdownloads.sourceforge.net/libjpeg/jpegsrc.v6b.tar.gz
 
 [build]
 
-./configure --prefix=/ --disable-shared --disable-dso || exit 1
+LDFLAGS="-static" ./configure --prefix=/ --disable-shared --disable-dso || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make install || exit 1
