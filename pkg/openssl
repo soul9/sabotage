@@ -1,5 +1,6 @@
 [deps]
 perl
+patch
 
 [main]
 filesize=4453920
