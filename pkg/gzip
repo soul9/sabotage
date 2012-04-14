@@ -1,0 +1,39 @@
+[deps]
+xz
+zlib
+
+[main]
+filesize=613984
+sha512=ec7cf186dc9549c146e7df9b4fdc0c289bb214b48e40a04f2e6f6b9a8ebf4deed1450e63f2dfb788e057c7380ac8defde53b856d4da175000d902ce1ce7f165a
+
+[mirrors]
+http://ftp.gnu.org/gnu/gzip/gzip-1.4.tar.xz
+
+[build]
+
+empty_file() {
+	rm -f "$1"
+	touch "$1"
+}
+
+./configure --prefix=/ || exit 1
+
+#fixing gnulib
+
+cd lib
+for i in printf.c fprintf.c freadahead.c closein.c fseterr.c vfprintf.c ; do
+	empty_file "$i"
+done
+
+echo "#define __printf__ printf" >> config.h
+echo "#define rpl_fprintf fprintf" >> config.h
+
+cd ..
+
+sed -i 's,atexit (close_stdin),,' gzip.c
+
+#gnulib patching done
+
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
