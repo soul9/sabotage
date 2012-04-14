@@ -3,17 +3,17 @@ musl
 kernel
 
 [main]
-filesize=2168055
-sha512=e28c1f0e4ca2308862c609ec86744d8eef1dfab07b33ecb2b3c6b44dcaad5cdb2a8270a9c8d761848532565ad9f796aebd4d2aa5ba371aa1331794f9828f939f
+filesize=2167516
+sha512=e7ba4e6ee07e695a214006acadda0b9305d0ecd73201d53f777b89844b201915c47d2195ff7fb4503ee12df61a6a79643cf89ffa94b329fe8663863973482f24
 
 [mirrors]
-http://www.busybox.net/downloads/busybox-1.19.2.tar.bz2
+http://www.busybox.net/downloads/busybox-1.19.4.tar.bz2
 
 [build]
 
-cp $K/busybox.stage1.config .config
-patch -p1 <$K/busybox.patch || exit 1
-patch -p1 <$K/busybox-patch.patch || exit 1
+cp "$K/busybox.stage1.config" .config
+patch -p1 < "$K/busybox.patch" || exit 1
+patch -p1 < "$K/busybox-patch.patch" || exit 1
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
 sed -i 's,__inline,,' ./scripts/kconfig/zconf.hash.c_shipped
@@ -21,9 +21,10 @@ sed -i 's,__inline,,' ./scripts/kconfig/zconf.hash.c_shipped
 make KBUILD_VERBOSE=1 CC="$CC" HOSTCC="$HOSTCC" \
      HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS || exit 1
 
-mkdir -p "$butch_install_dir/bin" || exit 1
-cp busybox "$butch_install_dir/bin" || exit 1
-cd "$butch_install_dir/bin"
+mkdir -p "$butch_install_dir/bin/"
+cp busybox "$butch_install_dir/bin/" || exit 1
+cd "$butch_install_dir/bin/" || exit 1
+./busybox --list >/dev/null || (echo "busybox binary: no list" ; exit 1)
 for f in $(./busybox --list); do
-  [ ! -f $f ] || [ $(readlink $f) = busybox ] && ln -sf busybox $f
+  [ ! -f $f ] || [ "$(readlink $f)" = "busybox" ] && ln -sf busybox $f
 done
