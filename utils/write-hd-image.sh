@@ -55,6 +55,7 @@ imagefile="$1"
 
 contents="$2"
 [ -z "$contents" ] && usage
+[ ! -f "$contents" ] && [ ! -d "$contents" ] && die "failed to access $contents"
 
 imagesize="$3"
 [ -z "$imagesize" ] && usage
@@ -123,7 +124,7 @@ echo_bold "copying contents, this will take a while"
 if [ -d "$contents" ]
 then
 	[ "$clear_builds" = "1" ] && rm -rf "$mountdir/src/build/*"
-	[ "$copy_tarballs" = "1" ] && cp -f "$C/*" "$mountdir/src/tarballs/"
+	[ "$copy_tarballs" = "1" ] && cp -f "$C/"* "$mountdir/src/tarballs/"
 
 	time cp -a "$contents"/* "$mountdir"/ || die_unmount 'Failed to copy /'
 else
