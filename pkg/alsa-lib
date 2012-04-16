@@ -52,9 +52,21 @@ FU=include/global.h
 sed -i 's,#include <time.h>,#include <sys/time.h>,' $FU || exit 1
 sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' $FU || exit 1
 
-THIS="$PWD"
-CFLAGS="-include $THIS/dladdr_hack.c -DPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=PTHREAD_MUTEX_INITIALIZER -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -Dversionsort=alphasort" ./configure \
-	 --prefix=/ --disable-python || exit 1
 
-make -j$MAKE_THREADS || exit 1
+FU=src/conf.c
+#musl doesn't support PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
+#this hack sets the right flag to 1 but will fail when musl changes its internal layout
+sed -i 's@PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP@{{{1,0,0,0,0,0,0,0,0,0}}}@' src/conf.c
+#lol alsa uses %L instead of %ll. such idiots
+sed -i 's,%L,%ll,g' $FU || exit 1
+FU=test/midiloop.c
+sed -i 's,%L,%ll,g' $FU || exit 1
+
+THIS="$PWD"
+CFLAGS="-include stdlib.h -include $THIS/dladdr_hack.c -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -Dversionsort=alphasort -g -O0" ./configure \
+	 --prefix=/ --disable-python --enable-debug --with-debug || exit 1
+
+find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1
+
+make V=1 -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
