@@ -1,0 +1,24 @@
+[deps]
+alsa-lib
+ncurses-dynamic
+
+[main]
+filesize=1132780
+sha512=2f2c8ed880d8fa07f6a507f7040a291b1509f1d9bb26aee8549aa1238d7e691dc372bc5271547fd76eabe5b67f781050cd84b28c13910171bd4afdcb5d6444e1
+
+[mirrors]
+http://gentoo.netnitco.net/distfiles/alsa-utils-1.0.25.tar.bz2
+http://alsa.cybermirror.org/utils/alsa-utils-1.0.25.tar.bz2
+http://distfiles.lesslinux.org/alsa-utils-1.0.25.tar.bz2
+http://distfiles.exherbo.org/distfiles/alsa-utils-1.0.25.tar.bz2
+
+[build]
+sed -i 's,#include <sys/signal.h>,#include <signal.h>,' aplay/aplay.c
+sed -i 's,#include <sys/signal.h>,#include <signal.h>,' alsaloop/alsaloop.c
+
+CFLAGS="-D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -DPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=PTHREAD_MUTEX_INITIALIZER -Dexp10\(x\)=pow\(10.f,x\) -Dlseek64=lseek -Dopen64=open -Ddirent64=dirent" ./configure \
+	--prefix=/ --disable-xmlto --disable-alsaloop --disable-alsatest || exit 1
+#disabling alsaloop until musl gets the posix sched.h extension
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1

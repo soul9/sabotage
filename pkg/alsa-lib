@@ -1,0 +1,59 @@
+[deps]
+kernel
+sabotage-utils
+
+[main]
+filesize=838403
+sha512=bd7066d588d0eadc7872980847d7474fce25ddcff813aa8a9a62216a2f981118d7b4de745b3dd3ab7203b892657e0574d5b66e31dfd8e883e76afb4c6ae8139e
+
+[mirrors]
+http://gentoo.netnitco.net/distfiles/alsa-lib-1.0.25.tar.bz2
+http://alsa.cybermirror.org/lib/alsa-lib-1.0.25.tar.bz2
+http://distfiles.lesslinux.org/alsa-lib-1.0.25.tar.bz2
+http://distfiles.exherbo.org/distfiles/alsa-lib-1.0.25.tar.bz2
+
+[build]
+rm -f src/compat/hsearch_r.c
+touch src/compat/hsearch_r.c
+
+cat << EOF > dladdr_hack.c
+#ifndef HAVE_DLADDR_HACK
+#define HAVE_DLADDR_HACK
+
+           typedef struct {
+               const char *dli_fname;  /* Pathname of shared object that
+                                          contains address */
+               void       *dli_fbase;  /* Address at which shared object
+                                          is loaded */
+               const char *dli_sname;  /* Name of nearest symbol with address
+                                          lower than addr */
+               void       *dli_saddr;  /* Exact address of symbol named
+                                          in dli_sname */
+           } Dl_info;
+
+static int dladdr(void *addr, Dl_info *info) {
+        return 0;
+}
+#endif
+EOF
+
+#this header gets installed systemwide so we have to patch it
+#instead of just passing -Du_int8_t=uint8_t -Du_int16_t=uint16_t -Du_int32_t=uint32_t -Du_int64_t=uint64_t
+FU=include/pcm.h
+
+sed -i 's,u_int8_t,uint8_t,' $FU || exit 1
+sed -i 's,u_int16_t,uint16_t,' $FU || exit 1
+sed -i 's,u_int32_t,uint32_t,' $FU || exit 1
+sed -i 's,u_int64_t,uint64_t,' $FU || exit 1
+
+insertline "$FU" "35" '#include <stdint.h>'
+
+FU=include/global.h
+sed -i 's,#include <time.h>,#include <sys/time.h>,' $FU || exit 1
+
+THIS="$PWD"
+CFLAGS="-include $THIS/dladdr_hack.c -DPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=PTHREAD_MUTEX_INITIALIZER -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -Dversionsort=alphasort" ./configure \
+	 --prefix=/ --disable-python || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
