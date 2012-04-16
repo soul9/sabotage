@@ -28,6 +28,6 @@ done
 cp "$K"/config.stage1 "$R"/src/config
 echo "export A=$A" >> "$R"/src/config
 
-cp /etc/resolv.conf "$R"/etc
+echo nameserver 8.8.8.8 > "$R"/etc/resolv.conf
 ln -s /proc/mounts "$R"/etc/mtab
 
