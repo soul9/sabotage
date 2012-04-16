@@ -13,7 +13,7 @@ cp $K/musl.config.mak config.mak
 
 patch -p1 < $K/musl-0.8.7-math_h_casts.patch || exit 1
 patch -p1 < $K/musl-0.8.7-syscall.patch || exit 1
-
+patch -p1 < $K/musl-0.8.7-wordfree.patch || exit 1
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.
