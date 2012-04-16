@@ -50,6 +50,7 @@ insertline "$FU" "35" '#include <stdint.h>'
 
 FU=include/global.h
 sed -i 's,#include <time.h>,#include <sys/time.h>,' $FU || exit 1
+sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' $FU || exit 1
 
 THIS="$PWD"
 CFLAGS="-include $THIS/dladdr_hack.c -DPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=PTHREAD_MUTEX_INITIALIZER -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -Dversionsort=alphasort" ./configure \
