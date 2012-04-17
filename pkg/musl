@@ -14,6 +14,7 @@ cp $K/musl.config.mak config.mak
 patch -p1 < $K/musl-0.8.7-math_h_casts.patch || exit 1
 patch -p1 < $K/musl-0.8.7-syscall.patch || exit 1
 patch -p1 < $K/musl-0.8.7-wordfree.patch || exit 1
+patch -p1 < $K/musl-0.8.7-vfprintf.patch || exit 1
 
 #create directory structure for static toolchain
 TC_PATH=$R/opt/toolchain
