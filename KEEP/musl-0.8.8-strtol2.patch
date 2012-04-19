@@ -1,0 +1,60 @@
+From 1bf725eda7a06713825b0609c9b39c55cf5ab76a Mon Sep 17 00:00:00 2001
+From: Rich Felker <dalias@aerifal.cx>
+Date: Thu, 19 Apr 2012 12:56:29 -0400
+Subject: [PATCH 2/2] further fixes to leading space issue (forgot the wide versions)
+
+---
+ src/stdlib/wcstod.c |    8 +++++---
+ src/stdlib/wcstol.c |    6 ++++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/src/stdlib/wcstod.c b/src/stdlib/wcstod.c
+index 338c616..5ec45dd 100644
+--- a/src/stdlib/wcstod.c
++++ b/src/stdlib/wcstod.c
+@@ -39,9 +39,11 @@ static long double wcstox(const wchar_t *s, wchar_t **p, int prec)
+ 	while (iswspace(*t)) t++;
+ 	f.cookie = (void *)t;
+ 	shlim(&f, 0);
+-	long double y = __floatscan(&f, -1, prec, 1);
+-	off_t cnt = shcnt(&f);
+-	if (p) *p = cnt ? t + cnt : (wchar_t *)s;
++	long double y = __floatscan(&f, prec, 1);
++	if (p) {
++		size_t cnt = shcnt(&f);
++		*p = cnt ? t + cnt : (wchar_t *)s;
++	}
+ 	return y;
+ }
+ 
+diff --git a/src/stdlib/wcstol.c b/src/stdlib/wcstol.c
+index 822bcf1..840bb0a 100644
+--- a/src/stdlib/wcstol.c
++++ b/src/stdlib/wcstol.c
+@@ -27,6 +27,7 @@ static size_t do_read(FILE *f, unsigned char *buf, size_t len)
+ 
+ static unsigned long long wcstox(const wchar_t *s, wchar_t **p, int base, unsigned long long lim)
+ {
++	wchar_t *t = (wchar_t *)s;
+ 	unsigned char buf[64];
+ 	FILE f = {0};
+ 	f.flags = 0;
+@@ -35,12 +36,13 @@ static unsigned long long wcstox(const wchar_t *s, wchar_t **p, int base, unsign
+ 	f.buf_size = sizeof buf - 4;
+ 	f.lock = -1;
+ 	f.read = do_read;
+-	f.cookie = (void *)s;
++	while (iswspace(*t)) t++;
++	f.cookie = (void *)t;
+ 	shlim(&f, 0);
+ 	unsigned long long y = __intscan(&f, base, 1, lim);
+ 	if (p) {
+ 		size_t cnt = shcnt(&f);
+-		*p = (wchar_t *)s + cnt;
++		*p = cnt ? t + cnt : (wchar_t *)s;
+ 	}
+ 	return y;
+ }
+-- 
+1.7.3.4
+

@@ -1,20 +1,17 @@
 [main]
-filesize=629680
-sha512=559f6df4e642254b19f572163090ce66b216182a708615c111d9e60d6326f8ee350afb809930b666e4f6f20cd6b70c1e71744628a99d32fe07ec57a829da6360
+filesize=635099
+sha512=9c1d24933e43f0bc24d017fc21c5dce6ddcf2ae46cb4ebb2d37e6562a428e37e359f5376a5026f14e2f929a7cf50fd50bef9d5b913865fa5cce3c351c249373e
 
 [deps]
 stage0_gcc3
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-0.8.7.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.8.8.tar.gz
 
 [build]
-cp $K/musl.config.mak config.mak
-
-patch -p1 < $K/musl-0.8.7-math_h_casts.patch || exit 1
-patch -p1 < $K/musl-0.8.7-syscall.patch || exit 1
-patch -p1 < $K/musl-0.8.7-wordfree.patch || exit 1
-patch -p1 < $K/musl-0.8.7-vfprintf.patch || exit 1
+cp "$K/musl.config.mak" config.mak
+patch -p1 < "$K/musl-0.8.8-strtol.patch" || exit 1
+patch -p1 < "$K/musl-0.8.8-strtol2.patch" || exit 1
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.
