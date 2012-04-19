@@ -12,6 +12,10 @@ http://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-3.4.6.tar.bz2
 if [ ! $CC ] ; then
 	CC=cc
 fi
+
+#apparently some control freak gcc used by ubuntu enforces that the mode arg is set in open calls
+sed -i 's@O_CREAT@O_CREAT, 0770@' gcc/collect2.c
+
 sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
 sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux.h
