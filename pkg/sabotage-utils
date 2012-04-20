@@ -1,4 +1,8 @@
+[deps]
+9base
+
 [build]
+#9base dep is needed for "bc"
 
 bindir="$butch_install_dir/bin"
 util=insertline
