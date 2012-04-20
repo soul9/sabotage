@@ -9,7 +9,7 @@ stage0_busybox
 ftp://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.gz
 
 [build]
-export CC="$R/bin/musl-gcc -static -D_GNU_SOURCE" 
+export CC="$R/bin/musl-gcc -static -D_GNU_SOURCE -Werror-implicit-function-declaration" 
 ./configure --prefix=$R
 make -j$MAKE_THREADS
 make install
