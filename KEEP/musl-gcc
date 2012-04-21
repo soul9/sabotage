@@ -21,10 +21,16 @@ libgcc.a%%s %%:if-exists(libgcc_eh.a%%s)
 %%(cc1_cpu)
 
 *startfile:
-%s %s crtbegin.o%%s
+%%{!shared: %s} %s %s crtbegin.o%%s
 
 *endfile:
 crtend.o%%s %s
+
+*esp_link:
+
+*esp_options:
+
+*esp_cpp_options:
 
 ' \
  "$libc_lib" "$libc_crt" "$libc_start" "$libc_end" > "$tmp_specs" || exit 1
