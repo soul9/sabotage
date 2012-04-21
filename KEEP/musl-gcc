@@ -11,33 +11,44 @@ libc_end="$libc_lib/crtn.o"
 
 tmp_specs=$HOME/.specs.tmp.$$
 printf '
+%%rename cpp_options old_cpp_options
+
+*cpp_options:
+-nostdinc -isystem %s %%(old_cpp_options)
+
+*cc1:
+%%(cc1_cpu) -nostdinc -isystem %s 
+
 *link_libgcc:
 -L%s
 
 *libgcc:
 libgcc.a%%s %%:if-exists(libgcc_eh.a%%s)
 
-*cc1:
-%%(cc1_cpu)
-
 *startfile:
-%%{!shared: %s} %s %s crtbegin.o%%s
+%%{!shared: %s} %s %%{shared|pie:crtbeginS.o%%s;:crtbegin.o%%s}
 
 *endfile:
-crtend.o%%s %s
+%%{shared|pie:crtendS.o%%s;:crtend.o%%s} %s
+
+%%rename link old_link
+
+*link:
+%%(old_link) -dynamic-linker %s -nostdlib
 
 *esp_link:
 
+
 *esp_options:
+
 
 *esp_cpp_options:
 
+
 ' \
- "$libc_lib" "$libc_crt" "$libc_start" "$libc_end" > "$tmp_specs" || exit 1
+ "$libc_inc" "$libc_inc" "$libc_lib" "$libc_crt" "$libc_start" "$libc_end" "$ldso_pathname" > "$tmp_specs" || exit 1
 
 exec 3<"$tmp_specs"
 rm -f "$tmp_specs"
 
-exec "$gcc" -Werror-implicit-function-declaration -specs=/proc/self/fd/3 -nostdinc -isystem "$libc_inc" \
- "$@" -Wl,-dynamic-linker,"$ldso_pathname" -Wl,-nostdlib
-
+exec "$gcc" -Werror-implicit-function-declaration -specs=/proc/self/fd/3 "$@"
