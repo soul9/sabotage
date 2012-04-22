@@ -12,7 +12,7 @@ http://www.cpan.org/src/5.0/perl-5.14.1.tar.gz
 
 sed -i 's,-fstack-protector,-fnostack-protector,g' ./Configure
 
-CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE' \
+CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE' \
   -Dprefix=/ -Dvendorprefix=/ -Dinstallprefix=$R/ \
   -Dprivlib=/share/perl5/core_perl \
   -Darchlib=/lib/perl5/core_perl \
