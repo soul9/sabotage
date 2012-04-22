@@ -24,7 +24,7 @@ $R/bin/patch -p1 < $K/gdb-amd64-debugreg.patch || exit 1
 mkdir build
 cd build
 
-CC="$CC -static -L$R/lib -I$R/include -D_GNU_SOURCE -DUT_NAMESIZE=32" ../configure \
+CC="$CC -static -L$R/lib -I$R/include -D_GNU_SOURCE -DUT_NAMESIZE=32 -Dfeof_unlocked=feof" ../configure \
   --prefix=/ --disable-werror --disable-tls \
   --with-system-zlib=yes --enable-gdbserver=no || exit 1
 
