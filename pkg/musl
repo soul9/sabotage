@@ -30,6 +30,13 @@ make clean
 make CC="$TC_PATH/bin/gcc" -j$MAKE_THREADS || exit 1
 make DESTDIR="$TC_PATH" install || exit 1
 
+musl_gcc="$TC_PATH/bin/musl-gcc"
+
+cp "$K/musl-gcc" "$musl_gcc"
+chmod +x "$musl_gcc"
+sed -i "s,AAAA,$A," "$musl_gcc"
+sed -i "s,PPPP,$R," "$musl_gcc"
+
 #remove dependency on libgcc_eh, which doesnt get built
 #when gcc is built using --disable-shared
-sed -i 's,-lgcc_eh ,,' $TC_PATH/bin/musl-gcc
+#sed -i 's,-lgcc_eh ,,' $TC_PATH/bin/musl-gcc
