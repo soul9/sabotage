@@ -1,6 +1,7 @@
 [deps]
 alsa-lib
 ncurses-dynamic
+sabotage-utils
 
 [main]
 filesize=1132780
@@ -16,7 +17,9 @@ http://distfiles.exherbo.org/distfiles/alsa-utils-1.0.25.tar.bz2
 sed -i 's,#include <sys/signal.h>,#include <signal.h>,' aplay/aplay.c
 sed -i 's,#include <sys/signal.h>,#include <signal.h>,' alsaloop/alsaloop.c
 
-CFLAGS="-D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -DPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=PTHREAD_MUTEX_INITIALIZER -Dexp10\(x\)=pow\(10.f,x\) -Dlseek64=lseek -Dopen64=open -Ddirent64=dirent" ./configure \
+insertline alsamixer/mixer_widget.c 20 '#include <strings.h>'
+
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=PTHREAD_MUTEX_INITIALIZER -Dexp10\(x\)=pow\(10.f,x\) -Dlseek64=lseek -Dopen64=open -Ddirent64=dirent" ./configure \
 	--prefix=/ --disable-xmlto --disable-alsaloop --disable-alsatest || exit 1
 #disabling alsaloop until musl gets the posix sched.h extension
 
