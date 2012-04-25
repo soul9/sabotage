@@ -1,12 +1,12 @@
 [main]
-filesize=635420
-sha512=891f1e4ec1fad1660ab73df73ef9cac4d3c6d1682a1055b4acb2495699d7acae2946c0bc41fe64c2f51f413007881501d02bc14cdd0788dffabd8f5e41897282
+filesize=638912
+sha512=6676680129dc24020f35cd2497f5fa525b19a4edaddb95c57ae74343b6a1160509b969043e33ad473f10e895dd791eb43a3628fb5fe8e08a18173977a8a10d05
 
 [deps]
 stage0_gcc3
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-0.8.9.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.8.10.tar.gz
 
 [build]
 cp "$K/musl.config.mak" config.mak
@@ -18,4 +18,8 @@ echo "SHARED_LIBS =" >> config.mak
 
 make CC=$R/bin/gcc -j$MAKE_THREADS || exit 1
 make install DESTDIR=$R || exit 1
-sed -i 's:libc_prefix=".*":libc_prefix="'$R'":' $R/bin/musl-gcc
+#sed -i 's:libc_prefix=".*":libc_prefix="'$R'":' $R/bin/musl-gcc
+sed -i 's://lib/:$R/lib/:' "$R/bin/musl-gcc"
+sed -i 's,//,'"$R"'/,g' "$R/lib/musl-gcc.specs"
+sed -i 's,/lib/ld-musl,/xxx/xxx/,' "$R/lib/musl-gcc.specs"
+
