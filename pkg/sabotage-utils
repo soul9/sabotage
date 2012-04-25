@@ -2,11 +2,19 @@
 9base
 
 [build]
-#9base dep is needed for "bc"
+# 9base dep is needed for "bc"
 
 bindir="$butch_install_dir/bin"
-util=insertline
 mkdir -p "$bindir"
+
+# config_log_extractor creates a bunch of C files out of each failed configure test
+# use like: cat config.log | config_log_extractor.pl
+cp "$K/config_log_extractor.pl" "$bindir"
+
+
+# insertline inserts a line into a give file. 
+# if the file was executable, permissions have to be restored manually
+util=insertline
 
 utilpath="$bindir/$util"
 cat << EOF > "$utilpath"
