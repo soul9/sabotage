@@ -7,6 +7,7 @@ http://ftpmirror.gnu.org/gawk/gawk-4.0.0.tar.bz2
 http://ftp.gnu.org/pub/gnu/gawk/gawk-4.0.0.tar.bz2
 
 [build]
+patch -p1 < "$K/gawk-configure.patch" || exit 1
 CC="$CC -static" ./configure --prefix=/ --libexecdir=/lib --disable-nls ac_cv_header_dlfcn_h=no || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
