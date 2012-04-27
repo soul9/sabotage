@@ -1,4 +1,5 @@
 [deps]
+config-cache
 9base
 binutils
 bsdtar

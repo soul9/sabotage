@@ -19,6 +19,6 @@ insertline configure 4164 '#include <termcap.h>'
 
 chmod +x configure
 
-CFLAGS=-D_GNU_SOURCE ./configure --prefix=/ || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix=/ || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

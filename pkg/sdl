@@ -12,7 +12,7 @@ sed -i -e "s|__u16|ushort|" -e "s|__u32|uint|" *.c *.h
 sed -i "s|defined(FB_TYPE_VGA_PLANES)|defined(DONT_TOUCH_THIS)|" SDL_fbvideo.c
 cd ../../..
 
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D_XFUNCS_H_" ./configure --prefix=/ || exit 1
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D_XFUNCS_H_" ./configure -C --prefix=/ || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 

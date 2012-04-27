@@ -65,7 +65,7 @@ sed -i 's,%L,%ll,g' $FU || exit 1
 insertline src/pcm/mask_inline.h 22 '#include <strings.h>'
 
 THIS="$PWD"
-CFLAGS="-include stdlib.h -include $THIS/dladdr_hack.c -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -Dversionsort=alphasort -g -O0" ./configure \
+CFLAGS="-include stdlib.h -include $THIS/dladdr_hack.c -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -Dversionsort=alphasort -g -O0" ./configure -C \
 	 --prefix=/ --disable-python --enable-debug --with-debug || exit 1
 
 find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1

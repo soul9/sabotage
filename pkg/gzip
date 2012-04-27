@@ -16,7 +16,7 @@ empty_file() {
 	touch "$1"
 }
 
-./configure --prefix=/ || exit 1
+./configure -C --prefix=/ || exit 1
 
 #fixing gnulib
 

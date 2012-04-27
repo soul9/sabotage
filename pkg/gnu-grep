@@ -7,6 +7,6 @@ http://ftp.gnu.org/gnu/grep/grep-2.9.tar.gz
 
 [build]
 patch -p1 < "$K/gnu-grep-configure.patch" || exit 1
-CC="$CC -static -D_GNU_SOURCE" ./configure --prefix=/ || exit 1
+CC="$CC -static -D_GNU_SOURCE" ./configure -C --prefix=/ || exit 1
 make || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

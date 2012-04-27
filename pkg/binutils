@@ -25,7 +25,7 @@ if [[ ! -e $TC_PATH/usr ]] ; then
 fi
 
 
-CC="$CC -static -L$R/lib -I$R/include" ./configure \
+CC="$CC -static -D_GNU_SOURCE -L$R/lib -I$R/include" ./configure -C \
 	--prefix=/ --disable-nls --disable-shared \
 	--with-build-sysroot=$R --with-sysroot=$TC_PATH \
 	|| exit 1

@@ -11,6 +11,6 @@ http://curl.haxx.se/download/curl-7.21.4.tar.bz2
 
 [build]
 
-CFLAGS="-Wl,-rpath-link=/lib" ./configure --with-ca-path=/etc/ssl/certs --prefix=/ --with-ssl --enable-ipv6 --with-random=/dev/urandom || exit 1
+CFLAGS="-Wl,-rpath-link=/lib" ./configure -C --with-ca-path=/etc/ssl/certs --prefix=/ --with-ssl --enable-ipv6 --with-random=/dev/urandom || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

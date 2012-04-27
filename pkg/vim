@@ -19,7 +19,7 @@ for n in $(seq -w 001 $PATCHLEVEL); do
   wget -q -O - ftp://ftp.vim.org/pub/vim/patches/7.3/7.3.$n | patch -p0
 done
 
-CFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" ./configure \
+CFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" ./configure -C \
   --prefix=/ --mandir=/share/man --localstatedir=/var/lib/vim \
   --disable-nls --disable-netbeans --disable-gui --with-x=no --enable-multibyte || exit 1
 make -C src auto/osdef.h || exit 1
