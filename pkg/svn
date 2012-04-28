@@ -3,7 +3,6 @@ musl
 pkg-config
 apr
 apr-util
-gettext
 zlib-dynamic
 neon
 sqlite
@@ -20,8 +19,7 @@ http://www.apache.org/dist/subversion/subversion-1.7.3.tar.bz2
 [build]
 patch -p1 < "$K/svn-configure.patch" || exit 1
 
-#gettext seems to provide libintl, which for some reason we have to hardcode into LDFLAGS
-CFLAGS="-D_GNU_SOURCE" LDFLAGS="-lintl" ./configure -C --prefix=/ || exit 1
+CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix=/ --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make install || exit 1
 
