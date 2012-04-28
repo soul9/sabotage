@@ -1,5 +1,6 @@
 [deps]
 alsa-lib
+ncurses
 ncurses-dynamic
 sabotage-utils
 
@@ -14,6 +15,8 @@ http://distfiles.lesslinux.org/alsa-utils-1.0.25.tar.bz2
 http://distfiles.exherbo.org/distfiles/alsa-utils-1.0.25.tar.bz2
 
 [build]
+#the ncurses package does install some headers which are required
+
 sed -i 's,#include <sys/signal.h>,#include <signal.h>,' aplay/aplay.c
 sed -i 's,#include <sys/signal.h>,#include <signal.h>,' alsaloop/alsaloop.c
 
