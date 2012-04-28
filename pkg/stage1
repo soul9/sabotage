@@ -4,12 +4,10 @@ config-cache
 binutils
 bsdtar
 busybox
-curl
 e2fsprogs
 extlinux
 gawk
 gcc4
-git
 gmp
 kernel
 la
@@ -19,8 +17,6 @@ man
 mpc
 mpfr
 musl
-openssl
-pkg-config
 relocate_toolchain
 sed
 xz
