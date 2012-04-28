@@ -1332,8 +1332,6 @@ ac_cv_path_EGREP=${ac_cv_path_EGREP='grep -E'}
 ac_cv_path_EGREP=${ac_cv_path_EGREP='fn_grep'}
 ac_cv_path_EXPR=${ac_cv_path_EXPR='expr'}
 ac_cv_path_FGREP=${ac_cv_path_FGREP='grep -F'}
-ac_cv_path_GMSGFMT=${ac_cv_path_GMSGFMT='/bin/msgfmt'}
-ac_cv_path_GMSGFMT=${ac_cv_path_GMSGFMT=':'}
 ac_cv_path_GREP=${ac_cv_path_GREP='grep'}
 ac_cv_path_GZIP=${ac_cv_path_GZIP='gzip'}
 ac_cv_path_INSTALL=${ac_cv_path_INSTALL='install -c'}
