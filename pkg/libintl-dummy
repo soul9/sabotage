@@ -1,0 +1,15 @@
+[build]
+dest="$butch_install_dir/lib"
+mkdir -p "$dest"
+
+cfile="$K/libintl.c"
+ofile="/tmp/libintl.o"
+afile="$dest/libintl.a"
+
+cc -D_GNU_SOURCE -fPIC -c "$cfile" -o "$ofile" || exit 1
+rm -f "$afile"
+ar rc "$afile" "$ofile"
+ranlib "$afile"
+rm -f "$ofile"
+
+true
