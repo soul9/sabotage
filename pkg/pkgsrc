@@ -13,6 +13,10 @@ sha512=b5e2b6bd1c9d17eb62d9bd0ab97786b52e0d1b25a0d6afb44d9e0262a984f09a1c8b54a38
 ftp://ftp.netbsd.org/pub/pkgsrc/pkgsrc-2012Q1/pkgsrc.tar.gz
 
 [build]
+# pkgsrc is provided for convenience, but if you use it you are on your own.
+# using pkgsrc is not officially supported, and is not even guaranteed to build.
+# thanks to Gregor Richards for supplying the necessary patches.
+
 PKGSRC_EXT="$PWD"
 mkdir -p /opt
 cd /opt || exit 1
