@@ -1051,7 +1051,6 @@ ac_cv_header_machine_endian_h=${ac_cv_header_machine_endian_h='no'}
 ac_cv_header_machine_hal_sysinfo_h=${ac_cv_header_machine_hal_sysinfo_h='no'}
 ac_cv_header_machine_param_h=${ac_cv_header_machine_param_h='no'}
 ac_cv_header_machine_reg_h=${ac_cv_header_machine_reg_h='no'}
-ac_cv_header_magic_h=${ac_cv_header_magic_h='yes'}
 ac_cv_header_maillock_h=${ac_cv_header_maillock_h='no'}
 ac_cv_header_malloc_h=${ac_cv_header_malloc_h='yes'}
 ac_cv_header_math_h=${ac_cv_header_math_h='yes'}
