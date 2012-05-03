@@ -8,11 +8,10 @@ echo_bold() {
 
 usage() {
 	echo_bold "Usage: $0 <img file> <directory or tarball of content> <img size> [options]"
-	echo "options: --clear-builds --copy-tarballs --zero-fill"
+	echo "options: --clear-builds --copy-tarballs"
 	echo
 	echo "--clear-builds will remove stuff in /src/build (butch 0.0.8+ build directory)"
 	echo '--copy-tarballs will copy tarballs from directory pointed to by "C" env var'
-	echo "--zero-fill will fill the rest of the hd image with zero for better compressability"
 	echo
 	echo "<img size> will be passed directly to dd, so you can use whatever value dd supports, i.e. 8G"
 	exit 1
@@ -42,8 +41,6 @@ check_opts() {
 				clear_builds=1;;
 			--copy-tarballs)
 				copy_tarballs=1;;
-			--zero-fill)
-				zero_fill=1;;
 		esac
 		shift
 	done
@@ -57,6 +54,7 @@ run_echo() {
 mountdir=
 
 which extlinux 2>&1 > /dev/null || die 'extlinux must be in PATH (try installing syslinux)'
+[ -z "$UID" ] && UID=`id -u`
 [ "$UID" = "0" ] || die "must be root"
 
 imagefile="$1"
@@ -78,11 +76,7 @@ for mbr_bin in mbr.bin /usr/lib/syslinux/mbr.bin /usr/share/syslinux/mbr.bin
 [ -z "$mbr_bin" ] && die 'Could not find mbr.bin'
 
 echo_bold "1) make the image file"
-if [ "$zero_fill = "1" ] ; then
-	time dd if=/dev/zero of="$imagefile" bs=1 count="$imagesize" || die "Failed to create $imagefile"
-else
-	dd if=/dev/zero of="$imagefile" bs=1 count=1 seek="$imagesize" || die "Failed to create $imagefile"
-fi
+dd if=/dev/zero of="$imagefile" bs=1 count=0 seek="$imagesize" || die "Failed to create $imagefile"
 
 echo_bold "2) fdisk"
 echo 'n
@@ -146,11 +140,6 @@ then
 	fi
 
 	time cp -a "$contents"/* "$mountdir"/ || die_unmount 'Failed to copy /'
-	if [ "$zero_fill" = "1" ] ; then
-		echo_bold "filling rest of image with 0"
-		time dd if=/dev/zero of="$mountdir"/tmp/zero.img
-		rm -f "$mountdir"/tmp/zero.img
-	fi
 	ls_contents=`ls "$mountdir/"`
 	printf "%s\n" "$ls_contents"
 else
