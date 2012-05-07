@@ -15,7 +15,6 @@ gnu-grep
 jpeg
 less
 lynx
-mercurial
 nano
 ncurses
 openal
@@ -28,6 +27,5 @@ perl
 sdl
 strace
 svn
-vim
 wget
 
