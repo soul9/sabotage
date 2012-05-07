@@ -37,6 +37,5 @@ chmod +x "$musl_gcc"
 sed -i "s,AAAA,$A," "$musl_gcc"
 sed -i "s,PPPP,$R," "$musl_gcc"
 
-#remove dependency on libgcc_eh, which doesnt get built
-#when gcc is built using --disable-shared
-#sed -i 's,-lgcc_eh ,,' $TC_PATH/bin/musl-gcc
+#prevent custom buildscripts from messing with the toolchain
+exit 0

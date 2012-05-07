@@ -38,4 +38,6 @@ cd $TC_PATH/bin/
 rm -f ld
 ln -sf ld.bfd ld
 
+#prevent custom buildscripts from messing with the toolchain
+exit 0
 

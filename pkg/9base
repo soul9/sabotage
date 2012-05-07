@@ -42,5 +42,5 @@ do
   make -C $f DESTDIR="$butch_install_dir" install || exit 1
 done
 
-cd $R/bin
+cd "$butch_install_dir/bin"
 ln -sf troff nroff

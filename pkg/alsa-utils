@@ -25,9 +25,8 @@ sed -i 's@PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP@{{{1,0,0,0,0,0,0,0,0,0}}}@' als
 
 insertline alsamixer/mixer_widget.c 20 '#include <strings.h>'
 
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -Dexp10\(x\)=pow\(10.f,x\) -Dlseek64=lseek -Dopen64=open -Ddirent64=dirent" ./configure -C \
-	--prefix=/ --disable-xmlto --disable-alsaloop --disable-alsatest || exit 1
-#disabling alsaloop until musl gets the posix sched.h extension
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -D_LARGEFILE64_SOURCE" ./configure -C \
+	--prefix=/ --disable-xmlto --disable-alsatest || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

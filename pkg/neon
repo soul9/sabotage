@@ -1,6 +1,7 @@
 [deps]
 musl
 pkg-config
+openssl
 openssl-dynamic
 expat
 

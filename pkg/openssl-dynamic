@@ -23,5 +23,7 @@ make -j$MAKE_THREADS all || exit 1
 make -j$MAKE_THREADS  build-shared || exit 1
 # we do not want the .a files compiled with -fPIC so we only copy the *.so's
 #make -j1 INSTALL_PREFIX=$R MANDIR=/share/man install
-cp -f *.so* "$butch_install_dir/lib"
+dest="$butch_install_dir/lib"
+mkdir -p "$dest"
+cp -f *.so* "$dest" || exit 1
 

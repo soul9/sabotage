@@ -103,3 +103,7 @@ fi
 rm $TC_PATH/lib/gcc/$host_tuple/4.5.3/include/stddef.h
 
 [ "$A" = x86_64 ] && mv $TC_PATH/lib64/* $TC_PATH/lib/ || true
+
+#prevent custom buildscripts from messing with the toolchain
+exit 0
+
