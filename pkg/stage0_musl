@@ -1,12 +1,12 @@
 [main]
-filesize=638912
-sha512=6676680129dc24020f35cd2497f5fa525b19a4edaddb95c57ae74343b6a1160509b969043e33ad473f10e895dd791eb43a3628fb5fe8e08a18173977a8a10d05
+filesize=634429
+sha512=ef35142ae9e00330428d4f5c2d961a3a92a05a832f8eaf22af5f13926810a9169d621e35f8b408ce364f9713026daf8da413950d2482fadfa9b17f2bb7e4951d
 
 [deps]
 stage0_gcc3
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-0.8.10.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.9.0.tar.gz
 
 [build]
 cp "$K/musl.config.mak" config.mak
