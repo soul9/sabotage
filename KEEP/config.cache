@@ -1434,7 +1434,6 @@ ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=${ac_cv_sys_tiocgwinsz_in_sys_ioctl_h='yes'}
 ac_cv_sys_tiocgwinsz_in_termios_h=${ac_cv_sys_tiocgwinsz_in_termios_h='no'}
 ac_cv_sys_xsi_stack_overflow_heuristic=${ac_cv_sys_xsi_stack_overflow_heuristic='no'}
 ac_cv_tanh_preserves_zero_sign=${ac_cv_tanh_preserves_zero_sign='yes'}
-ac_cv_target=${ac_cv_target='x86_64-unknown-linux-gnu'}
 ac_cv_tls=${ac_cv_tls='no'}
 ac_cv_type__Bool=${ac_cv_type__Bool='yes'}
 ac_cv_type___int64=${ac_cv_type___int64='no'}
