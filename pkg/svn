@@ -17,8 +17,6 @@ http://www.eu.apache.org/dist/subversion/subversion-1.7.3.tar.bz2
 http://www.apache.org/dist/subversion/subversion-1.7.3.tar.bz2
 
 [build]
-patch -p1 < "$K/svn-configure.patch" || exit 1
-
 CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix=/ --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make install || exit 1
