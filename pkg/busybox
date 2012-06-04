@@ -3,17 +3,16 @@ musl
 kernel
 
 [main]
-filesize=2167516
-sha512=e7ba4e6ee07e695a214006acadda0b9305d0ecd73201d53f777b89844b201915c47d2195ff7fb4503ee12df61a6a79643cf89ffa94b329fe8663863973482f24
+filesize=2190170
+sha512=9ad2af7216ae79c2c8cf246654a2c591983d347d22bfe4cd54ae41eaee0ea17f7bf8d6834add3f1f843494d6980707e0443aaf663075fda6e4e7e29728606c53
 
 [mirrors]
-http://www.busybox.net/downloads/busybox-1.19.4.tar.bz2
+http://www.busybox.net/downloads/busybox-1.20.1.tar.bz2
 
 [build]
 
 cp "$K/busybox.stage1.config" .config
 patch -p1 < "$K/busybox.patch" || exit 1
-patch -p1 < "$K/busybox-patch.patch" || exit 1
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
 sed -i 's,__inline,,' ./scripts/kconfig/zconf.hash.c_shipped
