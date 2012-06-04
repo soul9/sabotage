@@ -28,6 +28,9 @@ butch_root=$R
 #currently passing a version from a package is not implemented.
 butch_package_version=0.0.0
 
+# if we unlink busybox, nothing will work anymore
+[ "$butch_package_name" = "busybox" ] && butch_do_cleanup_custom_destdir=false
+
 # butch_install_dir is usually set to $R
 # it denotes the DESTDIR passed to make
 if $butch_do_custom_destdir ; then
