@@ -1,18 +1,20 @@
 [main]
-filesize=2168055
-sha512=e28c1f0e4ca2308862c609ec86744d8eef1dfab07b33ecb2b3c6b44dcaad5cdb2a8270a9c8d761848532565ad9f796aebd4d2aa5ba371aa1331794f9828f939f
+filesize=2190170
+sha512=9ad2af7216ae79c2c8cf246654a2c591983d347d22bfe4cd54ae41eaee0ea17f7bf8d6834add3f1f843494d6980707e0443aaf663075fda6e4e7e29728606c53
 
 [deps]
 stage0_mini-kernel-headers
 stage0_musl
 
 [mirrors]
-http://www.busybox.net/downloads/busybox-1.19.2.tar.bz2
+http://www.busybox.net/downloads/busybox-1.20.1.tar.bz2
 
 [build]
 
 cp $K/busybox.stage0.config .config
 patch -p1 <$K/busybox.patch || exit 1
+patch -p1 <$K/busybox-sed.patch || exit 1
+
 make LDFLAGS=-static CFLAGS_busybox="-Wl,-z,muldefs -Werror-implicit-function-declaration" HOSTCC=gcc CC=$R/bin/musl-gcc -j$MAKE_THREADS || exit 1
 cp busybox $R/bin
 cd $R/bin
