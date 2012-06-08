@@ -1,6 +1,5 @@
 [deps]
 m4
-sed
 gmp
 mpfr
 mpc

@@ -1,6 +1,5 @@
 [deps]
 relocate_toolchain
-sed
 
 [main]
 filesize=2826473

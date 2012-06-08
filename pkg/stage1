@@ -18,6 +18,5 @@ mpc
 mpfr
 musl
 relocate_toolchain
-sed
 xz
 zlib
