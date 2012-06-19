@@ -80,6 +80,6 @@ fi
 cp $kpath $R/boot/vmlinuz
 
 #fix ext2 header...
-sed -i 's,umode_t,__u16,' $R/include/linux/ext2_fs.h
+cp -f $K/ext2_fs.h $R/include/linux/
 
 exit 0
