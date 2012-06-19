@@ -232,7 +232,7 @@ ac_cv_func_fork=${ac_cv_func_fork='yes'}
 ac_cv_func_fork_works=${ac_cv_func_fork_works='yes'}
 ac_cv_func_forkpty=${ac_cv_func_forkpty='yes'}
 ac_cv_func_fpathconf=${ac_cv_func_fpathconf='yes'}
-ac_cv_func_fprintf_unlocked=${ac_cv_func_fprintf_unlocked='no'}
+ac_cv_func_fprintf_unlocked=${ac_cv_func_fprintf_unlocked='yes'}
 ac_cv_func_fpurge=${ac_cv_func_fpurge='yes'}
 ac_cv_func_fputc_unlocked=${ac_cv_func_fputc_unlocked='yes'}
 ac_cv_func_fputs_unlocked=${ac_cv_func_fputs_unlocked='yes'}
