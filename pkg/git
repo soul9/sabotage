@@ -1,5 +1,7 @@
 [deps]
 curl
+openssl
+openssl-dynamic
 
 [main]
 filesize=3399942
@@ -11,7 +13,7 @@ http://www.kernel.org/pub/software/scm/git/git-1.7.6.5.tar.gz
 
 [build]
 
-make CURL_LIBCURL="/lib/libcurl.a /lib/libssl.a /lib/libcrypto.a" \
+make CURL_LIBCURL="/lib/libcurl.a /lib/libcyassl.a" \
   CC="$CC" HOSTCC="$HOSTCC" \
   prefix=/ gitexecdir=/lib/git-core \
   NO_TCLTK=1 NO_PYTHON=1 NO_PTHREADS=1 NO_MEMMEM=1 NO_EXPAT=1 \
