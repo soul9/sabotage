@@ -1,8 +1,7 @@
 [deps]
-9base
 
 [build]
-# 9base dep is needed for "bc"
+# 9base dep is needed for "bc" in insertline tool.
 
 bindir="$butch_install_dir/bin"
 mkdir -p "$bindir"
@@ -62,13 +61,13 @@ utilpath="$bindir/$util"
 cat << EOF > "$utilpath"
 #!/bin/sh
 empty_file() {
-        rm -f "$1"
-        touch "$1"
+        rm -f "\$1"
+        touch "\$1"
 }
 
-gnulib_dir="$1"
-for i in freadahead.c fseterr.c ; do empty_file "$gnulib_dir"/$i ; done
-echo "void close_stdin(void) {}" > "$gnulib_dir"/closein.c
+gnulib_dir="\$1"
+for i in freadahead.c fseterr.c ; do empty_file "\$gnulib_dir"/\$i ; done
+echo "void close_stdin(void) {}" > "\$gnulib_dir"/closein.c
 
 EOF
 chmod +x "$utilpath"
