@@ -1,5 +1,5 @@
 [deps]
-openssl-dynamic
+cyassl
 ca-certificates
 
 [main]
@@ -10,7 +10,11 @@ sha512=2fb6437b31ed52ee80f183585c3539a470d934f9e9f6d08b24f2b870276411512688d7f34
 http://curl.haxx.se/download/curl-7.21.4.tar.bz2
 
 [build]
-
-CFLAGS="-Wl,-rpath-link=/lib -D_GNU_SOURCE" ./configure -C --with-ca-path=/etc/ssl/certs --prefix=/ --with-ssl --enable-ipv6 --with-random=/dev/urandom || exit 1
+CFLAGS="-Wl,-rpath-link=/lib -D_GNU_SOURCE" ./configure -C \
+  --with-ca-path=/etc/ssl/certs \
+  --prefix=/ \
+  --with-ssl \
+  --enable-ipv6 \
+  --with-random=/dev/urandom || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
