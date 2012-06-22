@@ -1,6 +1,7 @@
 [deps]
 xz
-cyassl
+openssl
+openssl-dynamic
 ca-certificates
 zlib-dynamic
 
@@ -14,11 +15,11 @@ http://curl.haxx.se/download/curl-7.26.0.tar.lzma
 [build]
 CFLAGS="-Wl,-rpath-link=/lib -D_GNU_SOURCE" ./configure -C \
   --prefix=/ \
-  --with-cyassl \
+  --with-ssl \
   --enable-ipv6 \
+  --with-ca-path=/etc/ssl/certs \
   --with-random=/dev/urandom || exit 1
 
-#  --with-ca-path=/etc/ssl/certs \
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
