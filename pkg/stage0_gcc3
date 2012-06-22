@@ -22,7 +22,10 @@ sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux.h
 sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux64.h
 sed -i 's@/lib64/ld-linux-x86-64.so.2@/lib/ld-musl-x86_64.so.1@' gcc/config/i386/linux64.h
 
-./configure --prefix=/ --disable-bootstrap --disable-shared --disable-multilib --disable-nls || exit 1
+armflags=
+[ "$A" = "arm" ] && armflags=--with-float=soft
+
+./configure --prefix=/ --disable-bootstrap --disable-shared --disable-multilib --disable-nls $armflags || exit 1
 make CFLAGS="-DSTDC_HEADERS -Werror-implicit-function-declaration" LDFLAGS="-static" -j$MAKE_THREADS || exit 1
 make DESTDIR=$R install-gcc || exit 1
 
