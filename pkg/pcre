@@ -4,6 +4,7 @@ sha512=0d6fd24baaf75819e254898763ae0918a6455b822b0d72043c7c52d2b5e5880352ba19815
 
 [mirrors]
 ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.30.tar.bz2
+http://sourceforge.net/projects/pcre/files/pcre/8.30/pcre-8.30.tar.bz2
 
 [deps]
 zlib
