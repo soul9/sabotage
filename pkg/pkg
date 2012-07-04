@@ -12,8 +12,9 @@ flex
 gdb
 git
 gnu-grep
-jpeg
 less
+libjpeg
+libpng
 lynx
 nano
 ncurses
