@@ -15,6 +15,9 @@ else
 fi
 
 cp "$K/musl.config.mak" config.mak
+# enable debug libc when DEBUGBUILD is set
+[ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
+
 
 TC_PATH=$R/opt/toolchain
 
