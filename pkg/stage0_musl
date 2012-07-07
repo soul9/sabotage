@@ -20,6 +20,7 @@ echo "SHARED_LIBS =" >> config.mak
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
+[ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
 make CC=$R/bin/gcc -j$MAKE_THREADS || exit 1
 make install DESTDIR="$butch_install_dir" || exit 1
