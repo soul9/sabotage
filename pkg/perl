@@ -13,19 +13,20 @@ http://www.cpan.org/src/5.0/perl-5.16.0.tar.bz2
 sed -i 's,-fstack-protector,-fnostack-protector,g' ./Configure
 
 CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE' \
-  -Dprefix=/ -Dvendorprefix=/ -Dinstallprefix=$R/ \
-  -Dprivlib=/share/perl5/core_perl \
-  -Darchlib=/lib/perl5/core_perl \
-  -Dsitelib=/share/perl5/site_perl \
-  -Dsitearch=/lib/perl5/site_perl \
-  -Dvendorlib=/share/perl5/vendor_perl \
-  -Dvendorarch=/lib/perl5/vendor_perl \
-  -Dscriptdir=/bin \
-  -Dsitescript=/bin \
-  -Dvendorscript=/bin \
+  -Dprefix="$butch_prefix" -Dvendorprefix="$butch_prefix" \
+  -Dinstallprefix="$butch_install_dir"/ \
+  -Dprivlib="$butch_prefix"/share/perl5/core_perl \
+  -Darchlib="$butch_prefix"/lib/perl5/core_perl \
+  -Dsitelib="$butch_prefix"/share/perl5/site_perl \
+  -Dsitearch="$butch_prefix"/lib/perl5/site_perl \
+  -Dvendorlib="$butch_prefix"/share/perl5/vendor_perl \
+  -Dvendorarch="$butch_prefix"/lib/perl5/vendor_perl \
+  -Dscriptdir="$butch_prefix"/bin \
+  -Dsitescript="$butch_prefix"/bin \
+  -Dvendorscript="$butch_prefix"/bin \
   -Dinc_version_list=none \
-  -Dman1dir=/share/man/man1 -Dman1ext=1perl \
-  -Dman3dir=/share/man/man3 -Dman3ext=3perl || exit 1
+  -Dman1dir="$butch_prefix"/share/man/man1 -Dman1ext=1perl \
+  -Dman3dir="$butch_prefix"/share/man/man3 -Dman3ext=3perl || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make install || exit 1
