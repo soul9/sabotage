@@ -22,12 +22,14 @@ butch_filelists="$S/filelists/"
 butch_created_tarball_dest="$S/dist/"
 
 butch_package_name=%BUTCH_PACKAGE_NAME
-butch_custom_destdir="/opt/$butch_package_name"
 butch_root=$R
 [ -z "$butch_root" ] && butch_root=/
+
 # butch_prefix is used in buildscripts to customize the prefix.
 # butch_install_dir musl be the same path or a child path of the prefix, otherwise it's UB.
 butch_prefix="$butch_root"
+
+butch_custom_destdir="$butch_prefix/opt/$butch_package_name"
 
 #currently passing a version from a package is not implemented.
 butch_package_version=0.0.0
@@ -43,9 +45,9 @@ if $butch_do_custom_destdir ; then
 		rm -rf "$butch_custom_destdir"
 	fi
 else
-	butch_install_dir="$butch_root/"
+	butch_install_dir=""
 fi
-mkdir -p "$butch_install_dir"
+[ -z "$butch_install_dir" ] || mkdir -p "$butch_install_dir"
 
 #butch_cache_dir is the place where tarballs are found
 butch_cache_dir="$C"
