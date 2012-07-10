@@ -25,6 +25,10 @@ butch_package_name=%BUTCH_PACKAGE_NAME
 butch_custom_destdir="/opt/$butch_package_name"
 butch_root=$R
 [ -z "$butch_root" ] && butch_root=/
+# butch_prefix is used in buildscripts to customize the prefix.
+# butch_install_dir musl be the same path or a child path of the prefix, otherwise it's UB.
+butch_prefix="$butch_root"
+
 #currently passing a version from a package is not implemented.
 butch_package_version=0.0.0
 
