@@ -12,6 +12,6 @@ zlib-dynamic
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE LDFLAGS="-lz" ./configure -C --prefix=/ || exit 1
+CFLAGS=-D_GNU_SOURCE LDFLAGS="-lz" ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

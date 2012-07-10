@@ -10,7 +10,7 @@ http://download.oracle.com/berkeley-db/db-5.3.21.tar.gz
 [build]
 #patch -p1 < "$K/some.patch"
 cd build_unix
-CFLAGS=-D_GNU_SOURCE ../dist/configure --prefix=/ --enable-compat185 \
+CFLAGS=-D_GNU_SOURCE ../dist/configure --prefix="$butch_prefix" --enable-compat185 \
     --enable-shared --enable-static --enable-dbm || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

@@ -8,7 +8,7 @@ sha512=f07162411ab79b881659fc31bdd3e9a6f8704dbfdd1f1af3ac107f790c834f9498f2ad0e2
 http://www.yassl.com/altpkg/cyassl-2.2.0.tar.xz
 
 [build]
-CFLAGS=-D_GNU_SOURCE ./configure --prefix=/ --enable-dtls --enable-opensslExtra \
+CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" --enable-dtls --enable-opensslExtra \
   --enable-ipv6 --enable-ripemd --enable-sha512 \
   --enable-sessioncerts --enable-certgen || exit 1
 # aesni is only for cpus with aes extension, amd bulldozer+ or corei7ish

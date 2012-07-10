@@ -21,7 +21,7 @@ sed -i -e \
       "s@__BEGIN_DECLS@#ifdef __cplusplus\nextern \"C\" {\n#endif@" \
       -e "s@__END_DECLS@#ifdef __cplusplus\n}\n#endif@" libelf/elf.h
 sed -i 's@__mempcpy@mempcpy@g' libelf/elf_begin.c 
-CC="$CC -static -D_LARGEFILE64_SOURCE" ./configure -C --prefix=/ \
+CC="$CC -static -D_LARGEFILE64_SOURCE" ./configure -C --prefix="$butch_prefix" \
     --disable-shared \
     --disable-nls \
     ac_cv_tls=no || exit 1

@@ -9,6 +9,6 @@ sha512=0049388d16207078a3d6dce97c877f1d9647aa9d908a9372a3f67ca064b70d8c8b23ee458
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix=/ || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

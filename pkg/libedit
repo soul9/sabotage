@@ -13,6 +13,6 @@ patch -p0 src/editline/readline.h -i "$K/readlineh.patch"
 mkdir -p examples/sys
 ln -s /include/errno.h examples/sys/errno.h
 #these things need fixing later... 
-CFLAGS="-D_GNU_SOURCE -D__STDC_ISO_10646__" ./configure -C --prefix=/ --enable-widec || exit 1
+CFLAGS="-D_GNU_SOURCE -D__STDC_ISO_10646__" ./configure -C --prefix="$butch_prefix" --enable-widec || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

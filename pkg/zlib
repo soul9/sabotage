@@ -12,7 +12,7 @@ http://gentoo.tiscali.nl/distfiles/zlib-1.2.7.tar.gz
 http://prdownloads.sourceforge.net/libpng/zlib-1.2.7.tar.gz
 
 [build]
-CC="$CC -static -D_GNU_SOURCE" ./configure --prefix=/ --static || exit 1
+CC="$CC -static -D_GNU_SOURCE" ./configure --prefix="$butch_prefix" --static || exit 1
 #busybox mktemp -u is broken and returns empty string
 sed -i 's,mktemp -u,mktemp,g' Makefile
 make -j$MAKE_THREADS || exit 1

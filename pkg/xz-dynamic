@@ -9,7 +9,7 @@ sha512=4afa838925983f8927f62c5499c61e0a4a7f2ed9e5b9074fddaf43b28317892d954e404a1
 http://tukaani.org/xz/xz-5.0.3.tar.bz2
 
 [build]
-./configure -C --prefix=/ --disable-nls || exit 1
+./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 
 dest="$butch_install_dir/lib/"

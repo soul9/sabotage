@@ -10,7 +10,7 @@ http://tortois.es/~nenolod/distfiles/pkgconf-0.8.tar.bz2
 http://nenolod.net/~nenolod/distfiles/pkgconf-0.8.tar.bz2
 
 [build]
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" ./configure -C --prefix=/ || exit 1
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 ln -sf pkgconf "$butch_install_dir/bin/pkg-config"

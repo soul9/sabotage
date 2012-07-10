@@ -15,7 +15,7 @@ sabotage-utils
 patch -p1 < "$K/openssh-configure.patch"
 
 cp $K/openssh-hacks.h .
-CC="gcc -include openssh-hacks.h -D_BSD_SOURCE -DMISSING_HOWMANY -DMISSING_FD_MASK -DMISSING_NFDBITS" ./configure -C --prefix=/ \
+CC="gcc -include openssh-hacks.h -D_BSD_SOURCE -DMISSING_HOWMANY -DMISSING_FD_MASK -DMISSING_NFDBITS" ./configure -C --prefix="$butch_prefix" \
   --sbindir=/bin --libexecdir=/lib/ssh --sysconfdir=/etc/ssh \
   --with-privsep-user=nobody \
   --with-md5-passwords --with-mantype=man --mandir=/share/man \

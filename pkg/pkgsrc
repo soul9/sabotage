@@ -26,5 +26,5 @@ cd pkgsrc || exit 1
 patch -p1 -i "$K"/pkgsrc.diff || exit 1
 cd bootstrap || exit 1
 # env -u is broken
-sh -c 'unset A; unset R; unset H; CC="gcc -D_GNU_SOURCE -D_BSD_SOURCE -Wl,-rpath-link=/lib" ./bootstrap --prefix=/opt/pkg' || exit 1
+sh -c 'unset A; unset R; unset H; CC="gcc -D_GNU_SOURCE -D_BSD_SOURCE -Wl,-rpath-link=/lib" ./bootstrap --prefix="$butch_prefix"opt/pkg' || exit 1
 echo 'PREFER.openssl=pkgsrc' >> /opt/pkg/etc/mk.conf || exit 1

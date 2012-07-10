@@ -14,7 +14,7 @@ http://curl.haxx.se/download/curl-7.26.0.tar.lzma
 
 [build]
 CFLAGS="-Wl,-rpath-link=/lib -D_GNU_SOURCE" ./configure -C \
-  --prefix=/ \
+  --prefix="$butch_prefix" \
   --with-ssl \
   --enable-ipv6 \
   --with-ca-path=/etc/ssl/certs \

@@ -10,6 +10,6 @@ http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.bz2
 
 [build]
 gnulibfix lib
-CC="$CC -static" ./configure -C --prefix=/ || exit 1
+CC="$CC -static" ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

@@ -8,7 +8,7 @@ http://prdownloads.sourceforge.net/libjpeg/jpegsrc.v6b.tar.gz
 
 [build]
 
-LDFLAGS="-static" ./configure --prefix=/ --disable-shared --disable-dso || exit 1
+LDFLAGS="-static" ./configure --prefix="$butch_prefix" --disable-shared --disable-dso || exit 1
 
 sed -i -e 's, $(bindir), $(DESTDIR)/$(bindir),' Makefile
 sed -i -e 's, $(libdir), $(DESTDIR)/$(libdir),' Makefile
