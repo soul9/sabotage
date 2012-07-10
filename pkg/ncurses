@@ -19,7 +19,7 @@ cp $K/ncurses-fallback.c ncurses/fallback.c
 CC="$CC -static -I$R/include -L$R/lib -D_GNU_SOURCE" ./configure -C \
    --with-normal --without-tests \
    --enable-sigwinch --with-fallbacks="linux vt100 xterm xterm256-color" \
-   --prefix="$butch_prefix" --includedir=/include --mandir=/share/man \
+   --prefix="$butch_prefix" --includedir="$butch_prefix"/include --mandir="$butch_prefix"/share/man \
    --disable-nls --without-dlsym --without-cxx-binding </dev/ptmx || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

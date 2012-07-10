@@ -20,7 +20,7 @@ cp $K/ncurses-fallback.c ncurses/fallback.c
 CC="$CC -fPIC -I$R/include -D_GNU_SOURCE" ./configure -C \
    --with-shared --without-tests \
    --enable-sigwinch --with-fallbacks="linux vt100 xterm xterm256-color" \
-   --prefix="$butch_prefix" --includedir=/include --mandir=/share/man \
+   --prefix="$butch_prefix" --includedir="$butch_prefix"/include --mandir="$butch_prefix"/share/man \
    --disable-nls --without-dlsym --without-cxx-binding </dev/ptmx || exit 1
    
 make -j$MAKE_THREADS libs || exit 1

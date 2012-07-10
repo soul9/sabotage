@@ -25,10 +25,14 @@ bzip2
 [build]
 #musl-git #needs crypt_r, currenlty fixed with hack during configure.
 
-CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE -DSTDC_HEADERS -I/include -DHAVE_STRLCPY -DHAVE_STRLCAT -DHAVE_STRTOK_R -DHAVE_POSIX_READDIR_R" \
-./configure -C ac_cv_func_crypt_r=0 --prefix="$butch_prefix" --enable-re2c-cgoto --enable-embed=static \
---with-curlwrappers --with-libxml-dir=/ --with-jpeg-dir=/ --with-png-dir=/ --with-openssl-dir=/ --with-sqlite \
---with-pcre-regex=/ --with-pcre-dir=/ --with-zlib=/ --with-zlib-dir=/ --with-curl=/ --with-bz2=/ --with-db4=/  \
--with-gettext=/ --with-gmp=/ --with-libedit=/ --with-freetype-dir=/ || exit 1
+CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE -DSTDC_HEADERS -I$butch_prefix/include "
+CFLAGS="$CFLAGS -DHAVE_STRLCPY -DHAVE_STRLCAT -DHAVE_STRTOK_R -DHAVE_POSIX_READDIR_R" \
+./configure -C ac_cv_func_crypt_r=0 --prefix="$butch_prefix" --enable-re2c-cgoto \
+  --with-curlwrappers --with-libxml-dir="$butch_prefix" --with-jpeg-dir="$butch_prefix" \
+  --with-png-dir="$butch_prefix" --with-openssl-dir="$butch_prefix" --with-sqlite \
+  --with-pcre-regex="$butch_prefix" --with-pcre-dir="$butch_prefix" --with-zlib="$butch_prefix" \
+  --with-zlib-dir="$butch_prefix" --with-curl="$butch_prefix" --with-bz2="$butch_prefix" \
+  --with-db4="$butch_prefix" -with-gettext="$butch_prefix" --with-gmp="$butch_prefix" \
+  --with-libedit="$butch_prefix" --with-freetype-dir="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make INSTALLROOT="$butch_install_dir" install || exit 1

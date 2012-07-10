@@ -17,7 +17,7 @@ CFLAGS="-Wl,-rpath-link=/lib -D_GNU_SOURCE" ./configure -C \
   --prefix="$butch_prefix" \
   --with-ssl \
   --enable-ipv6 \
-  --with-ca-path=/etc/ssl/certs \
+  --with-ca-path="$butch_prefix"/etc/ssl/certs \
   --with-random=/dev/urandom || exit 1
 
 

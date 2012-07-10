@@ -15,13 +15,15 @@ http://www.openssl.org/source/openssl-1.0.1.tar.gz
 patch -p1 < "$K/openssl-1.0.1-parallel-build.patch" || exit 1
 sed -i 's/-DTERMIO/-DTERMIOS/g' Configure
 sed -i 's/defined(linux)/0/' crypto/ui/ui_openssl.c
-./config --prefix="$butch_prefix" --openssldir=/etc/ssl --libdir=lib no-dso zlib enable-md2 -Wa,--noexecstack -fPIC -D_GNU_SOURCE
+
+./config --prefix="$butch_prefix" --openssldir="$butch_prefix"/etc/ssl \
+  --libdir="$butch_prefix"/lib no-dso zlib enable-md2 -Wa,--noexecstack -fPIC -D_GNU_SOURCE
 touch include/memory.h
 make -j$MAKE_THREADS depend || exit 1
 make -j$MAKE_THREADS build_libs || exit 1
 make -j$MAKE_THREADS  build-shared || exit 1
+
 # we do not want the .a files compiled with -fPIC so we only copy the *.so's
-#make -j1 INSTALL_PREFIX=$R MANDIR=/share/man install
 dest="$butch_install_dir/lib"
 mkdir -p "$dest"
 cp -f *.so* "$dest" || exit 1

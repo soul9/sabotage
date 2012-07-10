@@ -13,7 +13,8 @@ http://www.openssl.org/source/openssl-1.0.1.tar.gz
 patch -p1 < "$K/openssl-1.0.1-parallel-build.patch" || exit 1
 sed -i 's/-DTERMIO/-DTERMIOS/g' Configure
 sed -i 's/defined(linux)/0/' crypto/ui/ui_openssl.c
-./config --prefix="$butch_prefix" --openssldir=/etc/ssl --libdir=lib no-shared no-dso zlib enable-md2 -D_GNU_SOURCE -Wa,--noexecstack
+./config --prefix="$butch_prefix" --openssldir="$butch_prefix"/etc/ssl --libdir="$butch_prefix"/lib \
+  no-shared no-dso zlib enable-md2 -D_GNU_SOURCE -Wa,--noexecstack
 touch include/memory.h
 make -j$MAKE_THREADS depend || exit 1
 make -j$MAKE_THREADS all || exit 1

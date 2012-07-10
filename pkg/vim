@@ -20,7 +20,7 @@ for n in $(seq -w 001 $PATCHLEVEL); do
 done
 
 CFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" ./configure -C \
-  --prefix="$butch_prefix" --mandir=/share/man --localstatedir=/var/lib/vim \
+  --prefix="$butch_prefix" --mandir="$butch_prefix"/share/man --localstatedir="$butch_prefix"/var/lib/vim \
   --disable-nls --disable-netbeans --disable-gui --with-x=no --enable-multibyte || exit 1
 make -C src auto/osdef.h || exit 1
 sed -i '/define stack_t/d' src/auto/config.h
@@ -28,4 +28,4 @@ sed -i '/setenv/d' src/auto/osdef.h
 sed -i '/putenv/d' src/auto/osdef.h
 
 make || exit 1
-make -j1 VIMRCLOC=/etc DESTDIR="$butch_install_dir" install || exit 1
+make -j1 VIMRCLOC="$butch_prefix"/etc DESTDIR="$butch_install_dir" install || exit 1
