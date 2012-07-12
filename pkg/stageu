@@ -1,0 +1,16 @@
+[deps]
+config-cache
+binutils
+gawk
+gcc4
+gmp
+la
+m4
+make
+man
+mpc
+mpfr
+musl
+relocate_toolchain
+xz
+zlib
