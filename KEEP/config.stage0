@@ -25,3 +25,6 @@ export HOSTCC=gcc
 ## stage0 builds in less than 2minutes using -j9 on an AMD 8core
 export MAKE_THREADS=1
 
+# disable template which could mess up the build
+unset BUTCH_BUILD_TEMPLATE
+

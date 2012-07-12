@@ -24,6 +24,9 @@ butch_created_tarball_dest="$S/dist/"
 butch_package_name=%BUTCH_PACKAGE_NAME
 butch_root=$R
 [ -z "$butch_root" ] && butch_root=/
+[ "$butch_root" = "///" ] && butch_root=/
+[ "$butch_root" = "//" ] && butch_root=/
+[ "$butch_root" = "/" ] && butch_do_custom_prefix=false || butch_do_custom_prefix=true
 
 # butch_prefix is used in buildscripts to customize the prefix.
 # butch_install_dir musl be the same path or a child path of the prefix, otherwise it's UB.
@@ -46,6 +49,7 @@ if $butch_do_custom_destdir ; then
 	fi
 else
 	butch_install_dir=""
+	butch_do_relocate=false
 fi
 [ -z "$butch_install_dir" ] || mkdir -p "$butch_install_dir"
 
@@ -78,6 +82,29 @@ if %BUTCH_HAVE_TARBALL ; then
 	fi
 fi
 
+mv_or_recurse() {
+        local file="$1"
+        local destdir="$2"
+        local sourcedir="$3"
+        if [ -d "$destdir/$file" ] ; then
+                for target in "$sourcedir/$file/"* ; do
+                        local newfile=`basename "$target"`
+                        mv_or_recurse "$newfile" "$destdir/$file/" "$sourcedir/$file/"
+                done
+        else
+                echo mv "$sourcedir/$file" "$destdir/$file"
+                mv "$sourcedir/$file" "$destdir/$file"
+        fi
+}
+
+fixdestdir() {
+	if $butch_do_custom_prefix && [ -z $skipdestdirfix ] ; then
+	        for each in "$butch_install_dir/$butch_prefix"/* ; do
+        	        mv_or_recurse `basename "$each"` "$butch_install_dir/" "$butch_install_dir/$butch_prefix/"
+	        done
+	fi
+}
+
 # this will be replaced by the contents of the pkg's [build] section.
 # note that all critical commands in the buildscript should use || exit 1
 # so that it aborts on error!
@@ -96,7 +123,7 @@ relocate() {
 	local target_root=$1
 	local dir=$2
 	local backlinks=$3
-	mkdir -p /$dir
+	mkdir -p $butch_prefix/$dir
 	[ -d "$butch_install_dir/$dir" ] || return 0
 	cd "$butch_install_dir/$dir" || return 1
 	echo "relocating $butch_install_dir/$dir"
@@ -107,8 +134,8 @@ relocate() {
 			cd "$save"
 		elif [ -f "$i" ] ; then
 			target="$target_root/$dir/$i"
-			echo "ln -sf $backlinks/$butch_install_dir/$dir/$i $target"
-			ln -sf "$backlinks/$butch_install_dir/$dir/$i" "$target"
+			echo "ln -sf $butch_install_dir/$dir/$i $target"
+			ln -sf "$butch_install_dir/$dir/$i" "$target"
 		else
 			echo "UNKNOWN object $i"
 		fi
@@ -128,8 +155,10 @@ if $have_files ; then
 	fi
 
 	if $butch_do_relocate ; then
-		# now we make a symlink from each file into /
+		# now we make a symlink from each file into butch_prefix
 		echo relocating...
+		fixdestdir
+
 		if [ -d usr ] ; then
 			mv usr/* .
 		fi

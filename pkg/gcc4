@@ -55,7 +55,8 @@ if [ x$A = xarm ] ; then
 fi
 
 #create directory structure for static toolchain
-TC_PATH=$R/opt/toolchain
+TC_PATH="$butch_prefix"/opt/toolchain
+butch_install_dir="$TC_PATH"
 mkdir -p $TC_PATH
 SELF=`pwd`
 if [[ ! -e $TC_PATH/usr ]] ; then
@@ -71,7 +72,7 @@ CFLAGS="-O0 -s" LDFLAGS="-Wl,--no-keep-memory" ./configure -C --with-newlib --wi
   --disable-libmudflap --disable-libssp --disable-libgomp \
   --disable-debug --disable-bootstrap \
   --enable-lto --with-system-zlib \
-  --with-build-sysroot=/ --with-sysroot=$TC_PATH \
+  --with-build-sysroot="$butch_prefix" --with-sysroot="$butch_prefix" \
   --with-target-libiberty=no --with-target-zlib=no \
   --enable-languages=c,c++ --enable-clocale=generic \
   LD_FOR_TARGET=$TC_PATH/bin/ld \
@@ -85,6 +86,8 @@ make -j$MAKE_THREADS BOOT_LDFLAGS="-static" LDFLAGS="-static" || exit 1
 #according to some gnu ppl, install-gcc will only install the relevant
 #stuff and leaves libiberty and co out.
 make -j1 DESTDIR=$TC_PATH install-gcc install-lto-plugin install-target-libgcc install-target-libstdc++-v3 || exit 1
+
+fixdestdir
 
 #create a host_tuple dummy entry, so binutils stuff will get into /bin, etc
 lib_gcc=`$TC_PATH/bin/gcc -print-libgcc-file-name`

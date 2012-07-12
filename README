@@ -63,6 +63,24 @@ to see how it works.
 The default root password is "sabotage".
 
 
+*** SABOTAGE IN USERSPACE or "Co-Musl" ***
+this is another mode that lets you use sabotage packages in a custom prefix.
+(for usage parallel to an existing system, without chroot.)
+this mode is not heavily optimized or tested, and builds some stuff that is not really
+necessary. however its quite handy to use sw on an existing system without having to
+use a chroot.
+
+  cp KEEP/config.local .
+  nano config.local # edit paths
+  . ./config.local
+  ./build-stage u
+
+  # after finished, you can 
+  cd $R
+  export PATH="$R/bin:$PATH"
+  butch install ncurses nano etc etc
+
+
 NOTE TO CONTRIBUTORS
 if you want to add packages, start from KEEP/package.template .
 please do not use HTTPS or FTP mirrors.

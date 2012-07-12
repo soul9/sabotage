@@ -15,10 +15,12 @@ sabotage-utils
 patch -p1 < "$K/openssh-configure.patch"
 
 cp $K/openssh-hacks.h .
-CC="gcc -include openssh-hacks.h -D_BSD_SOURCE -DMISSING_HOWMANY -DMISSING_FD_MASK -DMISSING_NFDBITS" ./configure -C --prefix="$butch_prefix" \
-  --sbindir=/bin --libexecdir=/lib/ssh --sysconfdir=/etc/ssh \
+CC="gcc -include openssh-hacks.h -D_BSD_SOURCE -DMISSING_HOWMANY -DMISSING_FD_MASK -DMISSING_NFDBITS" \
+  ./configure -C --prefix="$butch_prefix" \
+  --sbindir="$butch_prefix"/bin --libexecdir="$butch_prefix"/lib/ssh \
+  --sysconfdir="$butch_prefix"/etc/ssh \
   --with-privsep-user=nobody \
-  --with-md5-passwords --with-mantype=man --mandir=/share/man \
+  --with-md5-passwords --with-mantype=man --mandir="$butch_prefix"/share/man \
   --disable-strip --disable-lastlog --disable-utmpx --disable-btmp || exit 1
 
 mkdir netinet
