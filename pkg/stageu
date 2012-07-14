@@ -1,5 +1,4 @@
 [deps]
-config-cache
 binutils
 gawk
 gcc4
