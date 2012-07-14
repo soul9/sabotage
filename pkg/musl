@@ -21,6 +21,7 @@ patch -p1 < "$K/musl-0.9.2-arm_init.patch" || exit 1
 patch -p1 < "$K/musl-0.9.2-arm_sigsetjmp.patch" || exit 1
 patch -p1 < "$K/musl-0.9.2-longjmp.patch" || exit 1
 patch -p1 < "$K/musl-0.9.2-rtld.patch" || exit 1
+patch -p1 < "$K/musl-0.9.2-sendmsg.patch" || exit 1
 
 #create directory structure for static toolchain
 TC_PATH="$butch_prefix"/opt/toolchain
