@@ -1,5 +1,6 @@
 [deps]
 relocate_toolchain
+ncurses
 
 [main]
 filesize=2826473
@@ -27,3 +28,5 @@ make -j$MAKE_THREADS libs || exit 1
 
 mkdir -p "$butch_install_dir/lib"
 cp lib/* "$butch_install_dir/lib"
+
+skipdestdirfix=1
