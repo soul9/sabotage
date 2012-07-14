@@ -12,5 +12,9 @@ http://switch.dl.sourceforge.net/project/levent/libevent/libevent-2.0/libevent-2
 [build]
 #patch -p1 < "$K/some.patch"
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
+if [ "$DEBUGBUILD" = "1" ] ; then
+  make -j$MAKE_THREADS CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -O0 -g -Wall -Wextra" || exit 1
+else
+  make -j$MAKE_THREADS || exit 1
+fi
 make DESTDIR="$butch_install_dir" install || exit 1
