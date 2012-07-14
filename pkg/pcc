@@ -10,6 +10,6 @@ yasm
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_BSD_SOURCE ./configure -C --prefix=/ --with-yasm || exit 1
+CFLAGS=-D_BSD_SOURCE ./configure -C --prefix="$butch_prefix" --with-yasm || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
