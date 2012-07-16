@@ -71,6 +71,7 @@ CFLAGS="-O0 -s" LDFLAGS="-Wl,--no-keep-memory" ./configure -C --with-newlib --wi
   --disable-multilib --disable-nls --disable-shared --disable-mudflap \
   --disable-libmudflap --disable-libssp --disable-libgomp \
   --disable-debug --disable-bootstrap \
+  --disable-tls \
   --enable-lto --with-system-zlib \
   --with-build-sysroot="$butch_prefix" --with-sysroot="$butch_prefix" \
   --with-target-libiberty=no --with-target-zlib=no \
