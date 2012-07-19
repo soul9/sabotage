@@ -17,7 +17,7 @@ xz
 xz-dynamic
 
 [build]
-#patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --without-iconv --without-iso8859x --without-legacy --without-threads --without-python || exit 1
+patch -p1 < "$K/libxml2-pthread.patch"
+CFLAGS="-D_GNU_SOURCE -fPIC" ./configure -C --prefix="$butch_prefix" --enable-shared --without-iconv --without-iso8859x --without-legacy --without-python || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
