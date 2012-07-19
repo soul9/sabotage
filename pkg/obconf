@@ -12,7 +12,7 @@ libglade
 
 [build]
 patch -p1 < "$K/obconf-git.patch"
-patch -p1 < "$K/openbox-implicit.patch"
+patch -p1 < "$K/obconf-implicit.patch"
 
 CFLAGS=-D_GNU_SOURCE LDFLAGS="-llzma -lz" ./configure -C \
   --prefix="$butch_prefix" \
