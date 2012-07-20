@@ -11,6 +11,7 @@ fontconfig
 libpng
 glib
 pixman
+libx11
 
 [build]
 #patch -p1 < "$K/some.patch"

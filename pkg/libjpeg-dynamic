@@ -6,6 +6,9 @@ tardir=jpeg-6b
 [mirrors]
 http://prdownloads.sourceforge.net/libjpeg/jpegsrc.v6b.tar.gz
 
+[deps]
+libjpeg
+
 [build]
 
 CFLAGS=-fPIC ./configure --prefix="$butch_prefix" \

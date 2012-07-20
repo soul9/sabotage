@@ -3,6 +3,7 @@ musl
 xz
 libffi
 gettext
+pkgconf
 
 [main]
 filesize=6117764

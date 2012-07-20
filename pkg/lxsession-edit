@@ -7,6 +7,7 @@ filesize=224146
 sha512=6bf039322738502ec92e2d600d98142dafff7caa3e4a45f132cc7f4460985df2351b38fdf57ea214c49311d1b4fd96b79086936fade44fb0316dd013c417ba9f
 
 [deps]
+gtk+2
 
 [build]
 #patch -p1 < "$K/some.patch"

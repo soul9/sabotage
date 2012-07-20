@@ -10,6 +10,7 @@ libxext
 glib
 libxml2
 pkgconf
+pango
 
 [build]
 patch -p1 < "$K/openbox-git.patch"

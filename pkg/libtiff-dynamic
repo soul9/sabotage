@@ -9,6 +9,7 @@ sha512=bfc82b2780f2a7d89b1cd6d73ba45091fc74de996b2dad616cfdba59770b192449d6a9eff
 libjpeg-dynamic
 zlib-dynamic
 xz-dynamic
+libtiff
 
 [build]
 #patch -p1 < "$K/some.patch"

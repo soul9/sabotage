@@ -10,6 +10,7 @@ pango
 cairo
 atk
 gdk-pixbuf
+pkgconf
 
 [build]
 #patch -p1 < "$K/some.patch"

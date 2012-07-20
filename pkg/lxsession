@@ -8,6 +8,7 @@ sha512=eea554ba70b3fd278b7ce0bb2d278241dff26eaccf74f2a4a0a9846515688fd5dd846c97f
 
 [deps]
 intltool
+gtk+2
 
 [build]
 #patch -p1 < "$K/some.patch"
