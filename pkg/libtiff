@@ -11,7 +11,7 @@ zlib
 xz
 
 [build]
-#patch -p1 < "$K/some.patch"
+patch -p1 < "$K/libtiff-CVE-2012-3401.patch"
 CFLAGS=-D_GNU_SOURCE LDFLAGS=-static ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
