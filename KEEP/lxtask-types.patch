@@ -1,0 +1,29 @@
+--- lxtask-0.1.4.org/src/types.h
++++ lxtask-0.1.4/src/types.h
+@@ -79,6 +79,6 @@
+ const gchar *custom_signal_0;
+ const gchar *custom_signal_1;
+ 
+-extern int PAGE_SIZE;
++//extern int PAGE_SIZE;
+ 
+ #endif
+--- lxtask-0.1.4.org/src/main.c
++++ lxtask-0.1.4/src/main.c
+@@ -56,8 +56,6 @@
+ guint refresh_interval;
+ guint rID;
+ 
+-int PAGE_SIZE;
+-
+ int main (int argc, char *argv[])
+ {
+ 
+@@ -72,7 +70,6 @@
+ #endif
+     gtk_init (&argc, &argv);
+ 
+-    PAGE_SIZE=sysconf(_SC_PAGESIZE)>>10;
+     own_uid = getuid();
+ 
+     config_file = g_build_filename(g_get_user_config_dir(), "lxtask.conf", NULL);
