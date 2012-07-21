@@ -9,7 +9,7 @@ sha512=52985cffeb2db215f8fb77a9b01e5671c285741a2e333f2b4a630d6b514177dbf6f1ab454
 [deps]
 gtk+2
 glib
-libmenu-cache
+menu-cache
 libwnck
 wireless-tools
 intltool
