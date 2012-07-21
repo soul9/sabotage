@@ -11,6 +11,8 @@ cairo
 atk
 gdk-pixbuf
 pkgconf
+libx11
+libxext
 
 [build]
 #patch -p1 < "$K/some.patch"

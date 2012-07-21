@@ -12,6 +12,7 @@ glib
 libmenu-cache
 libwnck
 wireless-tools
+intltool
 
 [build]
 patch -p1 < "$K/lxpanel-linux.patch"
