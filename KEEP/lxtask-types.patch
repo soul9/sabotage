@@ -27,3 +27,59 @@
      own_uid = getuid();
  
      config_file = g_build_filename(g_get_user_config_dir(), "lxtask.conf", NULL);
+--- lxtask-0.1.4.org/src/interface.c	2012-07-21 23:32:11.760000012 +0000
++++ lxtask-0.1.4/src/interface.c	2012-07-21 23:36:38.554000012 +0000
+@@ -346,7 +346,7 @@
+     gtk_widget_show(preferences1);
+     gtk_menu_shell_append(GTK_MENU_SHELL(mainmenu), preferences1);
+ 
+-    g_signal_connect ((gpointer) show_user_tasks1, "toggled", G_CALLBACK (on_show_tasks_toggled), (void *)own_uid);
++    g_signal_connect ((gpointer) show_user_tasks1, "toggled", G_CALLBACK (on_show_tasks_toggled), (void *)(size_t)own_uid);
+     g_signal_connect ((gpointer) show_root_tasks1, "toggled", G_CALLBACK (on_show_tasks_toggled), (void *)0);
+     g_signal_connect ((gpointer) show_other_tasks1, "toggled", G_CALLBACK (on_show_tasks_toggled), (void *)-1);
+     g_signal_connect ((gpointer) show_cached_as_free1, "toggled", G_CALLBACK (on_show_cached_as_free_toggled), (void *)0);
+@@ -423,10 +423,10 @@
+         gtk_tree_store_set(GTK_TREE_STORE(list_store), iter, COLUMN_STATE, task->state, -1);
+ 
+         /* size */
+-        gtk_tree_store_set(GTK_TREE_STORE(list_store), iter, COLUMN_MEM, size_to_string(buf, task->size * 1024), -1);
++        gtk_tree_store_set(GTK_TREE_STORE(list_store), iter, COLUMN_MEM, size_to_string(buf, task->size), -1);
+ 
+         /* rss */
+-        gtk_tree_store_set(GTK_TREE_STORE(list_store), iter, COLUMN_RSS, size_to_string(buf, task->rss*1024), -1);
++        gtk_tree_store_set(GTK_TREE_STORE(list_store), iter, COLUMN_RSS, size_to_string(buf, task->rss), -1);
+ 
+         gtk_tree_store_set(GTK_TREE_STORE(list_store), iter, COLUMN_UNAME, task->uname, -1);
+         sprintf(buf,"%0d%%", (guint)task->time_percentage);
+--- lxtask-0.1.4.org/src/types.h	2012-07-21 23:32:11.761000012 +0000
++++ lxtask-0.1.4/src/types.h	2012-07-21 23:34:02.402000012 +0000
+@@ -21,6 +21,7 @@
+ #define TYPES_H
+ 
+ #include <gtk/gtk.h>
++#include <stddef.h>
+ 
+ #define REFRESH_INTERVAL 1000
+ 
+@@ -32,8 +33,8 @@
+     gchar uname[64];
+     gchar name[64];
+     gchar state[16];
+-    gint size;
+-    gint rss;
++    size_t size;
++    size_t rss;
+     gboolean checked;
+     gint time;
+     gint old_time;
+--- lxtask-0.1.4.org//src/xfce-taskmanager-linux.c	2012-07-21 23:32:11.760000012 +0000
++++ lxtask-0.1.4/src/xfce-taskmanager-linux.c	2012-07-21 23:35:01.367000012 +0000
+@@ -44,7 +44,7 @@
+         fd=open(line,O_RDONLY);
+         if(fd==-1) return;
+         read(fd,line,256);
+-        sscanf(line,"%d %d",&task->size,&task->rss);
++        sscanf(line,"%zu %zu",&task->size,&task->rss);
+         close(fd);
+         if(!task->size) return;
+ 	task->size*=PAGE_SIZE;
