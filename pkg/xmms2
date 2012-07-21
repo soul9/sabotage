@@ -12,12 +12,6 @@ python
 libstdc++-dynamic
 
 [build]
-./waf
-sync
-sleep 1
-patch -p1 < "$K/xmms2-waf.patch"
-sync
-
 patch -p1 < "$K/xmms2-rtp.patch"
 
 CFLAGS=-D_GNU_SOURCE ./waf configure --prefix="$butch_prefix" || exit 1
