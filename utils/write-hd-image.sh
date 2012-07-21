@@ -38,8 +38,10 @@ check_opts() {
 	while [ ! -z "$1" ] ; do
 		case $1 in
 			--clear-builds)
+				echo "clear_builds selected"
 				clear_builds=1;;
 			--copy-tarballs)
+				echo "copy_tarballs selected"
 				copy_tarballs=1;;
 		esac
 		shift
@@ -133,10 +135,17 @@ mount "$loopdev" "$mountdir" || die_unloop 'Failed to mount loop for /'
 echo_bold "copying contents, this will take a while"
 if [ -d "$contents" ]
 then
-	[ "$clear_builds" = "1" ] && rm -rf "$mountdir/src/build/"*
+	if [ "$clear_builds" = "1" ] ; then
+		echo -ne "clearing builds..."
+		[ -d "$contents/src/build" ] && rm -rf "$contents/src/build"
+		mkdir -p "$contents/src/build"
+		echo "done"
+	fi
 	if [ "$copy_tarballs" = "1" ] ; then
+		echo -ne "copying tarballs..."
 		mkdir -p "$mountdir/src/tarballs/"
 		cp -f "$C/"* "$mountdir/src/tarballs/"
+		echo "done"
 	fi
 
 	time cp -a "$contents"/* "$mountdir"/ || die_unmount 'Failed to copy /'
