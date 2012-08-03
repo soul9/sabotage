@@ -15,6 +15,7 @@ gnu-grep
 less
 libjpeg
 libpng
+luajit
 lynx
 nano
 ncurses
