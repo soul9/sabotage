@@ -1035,7 +1035,7 @@ ac_cv_header_bstring_h=${ac_cv_header_bstring_h='no'}
 ac_cv_header_byteswap_h=${ac_cv_header_byteswap_h='yes'}
 ac_cv_header_complex_h=${ac_cv_header_complex_h='yes'}
 ac_cv_header_conio_h=${ac_cv_header_conio_h='no'}
-ac_cv_header_crypt_h=${ac_cv_header_crypt_h='no'}
+ac_cv_header_crypt_h=${ac_cv_header_crypt_h='yes'}
 ac_cv_header_ctype_h=${ac_cv_header_ctype_h='yes'}
 ac_cv_header_direct_h=${ac_cv_header_direct_h='no'}
 ac_cv_header_dirent_dirent_h=${ac_cv_header_dirent_dirent_h='yes'}
