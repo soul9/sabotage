@@ -1,25 +1,19 @@
-[main]
-filesize=638807
-sha512=2cc92e036cb42a41abe58433569cae75950301380bc14965fcae392f34d36715d5859506521f269b005b4fbcc3c28d6a1a9b93ed5383f5a6f094a8608bece5a4
-
 [deps]
 stage0_gcc3
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-0.9.2.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.9.3.tar.gz
+
+[main]
+filesize=651580
+sha512=fbae5bfc3953b338726c89e57c199e5f24176003a9d83d2d5a2d33f54ad41925e007687865b09319a7c5a6b7c231606fe09db015395a18a0fb48e6a844ceb5c6
 
 [build]
 cp "$K/musl.config.mak" config.mak
 [ -z "$butch_prefix" ] && butch_prefix=/
 sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
 
-
-patch -p1 < "$K/musl-0.9.2-arm_init.patch" || exit 1
-patch -p1 < "$K/musl-0.9.2-arm_sigsetjmp.patch" || exit 1
-patch -p1 < "$K/musl-0.9.2-longjmp.patch" || exit 1
-patch -p1 < "$K/musl-0.9.2-rtld.patch" || exit 1
-patch -p1 < "$K/musl-0.9.2-sendmsg.patch" || exit 1
-patch -p1 < "$K/musl-0.9.2-getservbyname.patch" || exit 1
+# patch -p1 < "$K/xxx.patch" || exit 1
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.
