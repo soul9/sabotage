@@ -1,11 +1,11 @@
 #!/bin/sh
 
-tarxf http://mirror.wzff.de/butch/ butch-0.1.1 .tar.bz2 butch
+tarxf http://mirror.wzff.de/butch/ butch-0.1.2 .tar.bz2 butch
 
-filesize='62697'
-sha512='eef9a6d6c11aaed8c59193b77953d5bc910a60da047cd56415b54b3f58cf5d5f18a80bf48e094acc0829a5457ef65d8c173d6ba059af08826fcb0bee75361d01'
+filesize='62924'
+sha512='61552086768fe81462566af09c9d42f6c20d546a18a9ef12ad68aa486a4c9bb0be16048686c86cbb6f9bf9ce71bbc948a8866ba7b3fa216c0f09090312c6c881'
 
-filename="$S"/butch-0.1.1.tar.bz2
+filename="$S"/butch-0.1.2.tar.bz2
 
 read sz _ <<EOF
 $(du -b "$filename")
