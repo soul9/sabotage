@@ -22,8 +22,9 @@ for i in strsignal putenv random setenv strstr strtod strtol strtoul; do
 done
 
 armflags=
-[ "$A" = "arm" ] && armflags="--with-float=softfp --with-fpu=vfp --target=arm-linux-gnueabi --host=arm-linux-gnueabi --build=arm-linux-gnueabi"
-#[ "$A" = "arm" ] && armflags="--with-float=hard --with-fpu=neon"
+[ -z "$ARM_FLOAT_MODE" ] && ARM_FLOAT_MODE=softfp
+[ -z "$ARM_FPU" ] && ARM_FPU=vfp
+[ "$A" = "arm" ] && armflags="--with-float=$ARM_FLOAT_MODE --with-fpu=$ARM_FPU --target=arm-linux-gnueabi --host=arm-linux-gnueabi --build=arm-linux-gnueabi"
 
 echo ac_cv_func_strsignal=yes > config.site
 ./configure --prefix="$butch_prefix" \
