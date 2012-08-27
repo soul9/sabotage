@@ -9,6 +9,7 @@ sha512=fc02e9ea67ad86626b35c3c7fc3fd63947c7452352751009256c42717d350eff9855eae2e
 openssl-dynamic
 bzip2-dynamic
 pcre
+xz
 
 [build]
 #patch -p1 < "$K/some.patch"
