@@ -12,7 +12,7 @@ cp "$K/musl.config.mak" config.mak
 [ -z "$butch_prefix" ] && butch_prefix=/
 sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
 
-# patch -p1 < "$K/xxx.patch" || exit 1
+patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.

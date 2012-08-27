@@ -17,7 +17,7 @@ sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-# patch -p1 < "$K/xxx.patch" || exit 1
+patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
 
 #create directory structure for static toolchain
 TC_PATH="$butch_prefix"/opt/toolchain
