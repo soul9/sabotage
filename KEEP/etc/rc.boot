@@ -6,6 +6,9 @@ echo sabotage booting
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 
+echo /bin/mdev > /proc/sys/kernel/hotplug
+mdev -s
+
 # only show warning or worse on console
 grep -q " verbose" /proc/cmdline && dmesg -n 8 || dmesg -n 3
 
