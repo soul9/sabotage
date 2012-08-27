@@ -2,7 +2,6 @@
 config-cache
 9base
 binutils
-bsdtar
 busybox
 e2fsprogs
 extlinux
