@@ -1,0 +1,10 @@
+[deps]
+stage1
+pkg
+xorg
+lxde
+bsdtar
+php
+phoronix-testsuite
+
+
