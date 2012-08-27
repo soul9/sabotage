@@ -16,27 +16,6 @@ http://distfiles.exherbo.org/distfiles/alsa-lib-1.0.25.tar.bz2
 rm -f src/compat/hsearch_r.c
 touch src/compat/hsearch_r.c
 
-cat << EOF > dladdr_hack.c
-#ifndef HAVE_DLADDR_HACK
-#define HAVE_DLADDR_HACK
-
-           typedef struct {
-               const char *dli_fname;  /* Pathname of shared object that
-                                          contains address */
-               void       *dli_fbase;  /* Address at which shared object
-                                          is loaded */
-               const char *dli_sname;  /* Name of nearest symbol with address
-                                          lower than addr */
-               void       *dli_saddr;  /* Exact address of symbol named
-                                          in dli_sname */
-           } Dl_info;
-
-static int dladdr(void *addr, Dl_info *info) {
-        return 0;
-}
-#endif
-EOF
-
 patch -p1 < "$K/alsa-lib_pcm_h.patch"
 
 FU=include/global.h
@@ -61,7 +40,7 @@ sed -i 's,%L,%ll,g' $FU || exit 1
 patch -p1 < "$K/alsa-lib_mask_inline.patch"
 
 THIS="$PWD"
-CFLAGS="-include stdlib.h -include $THIS/dladdr_hack.c -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -g -O0" ./configure -C \
+CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -DF_SETSIG=10 -g -O0" ./configure -C \
 	 --prefix="$butch_prefix" --disable-python --enable-debug --with-debug || exit 1
 
 find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1
