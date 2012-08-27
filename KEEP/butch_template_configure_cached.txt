@@ -58,7 +58,7 @@ fi
 butch_cache_dir="$C"
 
 # this is were stuff gets extracted to and built in
-butch_build_root="$S/build/"
+butch_build_root="$S/build/$butch_package_name"
 butch_build_dir="$butch_build_root/%BUTCH_TARDIR"
 
 #this is the location of our optimized config.cache
@@ -75,6 +75,7 @@ if %BUTCH_HAVE_TARBALL ; then
 	if $butch_do_cleanup_builddir && [ -e "$butch_build_dir" ] ; then
 		rm -rf "$butch_build_dir"
 	fi
+	[ -d "$butch_build_root" ] || mkdir -p "$butch_build_root"
 	cd "$butch_build_root"
 	tar xf "$butch_cache_dir/%BUTCH_TARBALL" || (echo tarball error; exit 1)
 	cd "$butch_build_dir"
