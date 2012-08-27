@@ -167,7 +167,7 @@ if $have_files ; then
 			mv usr/* .
 		fi
 
-		for loc in bin etc include lib libexec share var ; do
+		for loc in bin sbin etc include lib libexec share var ; do
 			relocate "$butch_root" $loc ..
 		done
 	fi
