@@ -105,6 +105,21 @@ fi
 #remove gcc's stddef.h which is not compatible
 rm $TC_PATH/lib/gcc/$host_tuple/4.5.3/include/stddef.h
 
+copy() {
+	printf "cp %s %s\n" "$1" "$2"
+	cp "$1" "$2"
+}
+
+echo link gcc intrinsic headers into /include/gcc
+# this allows usage of -I/include/gcc for stuff that uses them
+mkdir -p  $TC_PATH/include/gcc
+for i in $TC_PATH/lib/gcc/$host_tuple/4.5.3/include/* ; do
+  header=`basename "$i"`
+  # do not copy headers that exist in musl
+  [ -e "$TC_PATH/include/$header" ] || copy "$i" "$TC_PATH/include/gcc/"
+done
+
+
 [ "$A" = x86_64 ] && mv $TC_PATH/lib64/* $TC_PATH/lib/ || true
 
 #prevent custom buildscripts from messing with the toolchain
