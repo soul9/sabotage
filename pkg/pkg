@@ -31,4 +31,5 @@ sdl
 strace
 svn
 wget
-
+wireless-tools
+wpa-supplicant
