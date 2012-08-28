@@ -24,6 +24,7 @@ openssh
 patch
 patchutils
 posix-man
+proxychains
 psmisc
 python
 perl
