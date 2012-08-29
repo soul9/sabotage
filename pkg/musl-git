@@ -4,14 +4,14 @@ git
 
 [build]
 dest="$S/build/"
-if [ -d "$dest/musl" ] ; then
-	cd "$dest/musl"
+if [ -d "$dest/musl-git" ] ; then
+	cd "$dest/musl-git"
 	git pull || exit 1
 else
 	mkdir -p "$dest"
 	cd "$dest"
-	git clone git://git.etalabs.net/musl || exit 1
-	cd musl
+	git clone git://git.etalabs.net/musl musl-git || exit 1
+	cd musl-git
 fi
 
 cp "$K/musl.config.mak" config.mak
