@@ -4,6 +4,7 @@ xz
 libffi
 gettext
 pkgconf
+zlib-dynamic
 
 [main]
 filesize=6117764
