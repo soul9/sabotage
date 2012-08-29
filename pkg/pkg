@@ -29,6 +29,10 @@ psmisc
 python
 perl
 sdl
+sdl-image
+sdl-mixer
+sdl-net
+sdl-ttf
 strace
 svn
 wget
