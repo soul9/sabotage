@@ -12,6 +12,7 @@ flex
 gdb
 git
 less
+libao
 libjpeg
 libpng
 lighttpd
@@ -33,6 +34,7 @@ sdl-image
 sdl-mixer
 sdl-net
 sdl-ttf
+sdl-gfx
 strace
 svn
 wget
