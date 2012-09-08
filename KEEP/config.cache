@@ -1562,6 +1562,8 @@ ac_cv_wchar_t_signed=${ac_cv_wchar_t_signed='no'}
 ac_cv_win_or_dos=${ac_cv_win_or_dos='no'}
 ac_cv_window_has_flags=${ac_cv_window_has_flags='yes'}
 ac_cv_working_alloca_h=${ac_cv_working_alloca_h='yes'}
+ac_cv_working_getnameinfo=${ac_cv_working_getnameinfo='yes'}
+ac_cv_working_getaddrinfo=${ac_cv_working_getaddrinfo='yes'}
 ac_cv_working_tzset=${ac_cv_working_tzset='yes'}
 ac_cv_x87_double_rounding=${ac_cv_x87_double_rounding='no'}
 ac_cv_zos_uss=${ac_cv_zos_uss='no'}
