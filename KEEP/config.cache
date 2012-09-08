@@ -997,7 +997,10 @@ ac_cv_have_decl_wmemset=${ac_cv_have_decl_wmemset='yes'}
 ac_cv_have_decl_writev=${ac_cv_have_decl_writev='yes'}
 ac_cv_have_getc_unlocked=${ac_cv_have_getc_unlocked='yes'}
 ac_cv_have_getopt_optreset=${ac_cv_have_getopt_optreset='no'}
+ac_cv_have_int16_t=${ac_cv_have_int16_t='yes'}
+ac_cv_have_int32_t=${ac_cv_have_int32_t='yes'}
 ac_cv_have_int64_t=${ac_cv_have_int64_t='yes'}
+ac_cv_have_int8_t=${ac_cv_have_int8_t='yes'}
 ac_cv_have_intxx_t=${ac_cv_have_intxx_t='yes'}
 ac_cv_have_lchflags=${ac_cv_have_lchflags='no'}
 ac_cv_have_long_long_format=${ac_cv_have_long_long_format='yes'}
@@ -1018,7 +1021,10 @@ ac_cv_have_struct_sockaddr_in6=${ac_cv_have_struct_sockaddr_in6='yes'}
 ac_cv_have_struct_sockaddr_storage=${ac_cv_have_struct_sockaddr_storage='yes'}
 ac_cv_have_struct_timeval=${ac_cv_have_struct_timeval='yes'}
 ac_cv_have_u_char=${ac_cv_have_u_char='no'}
+ac_cv_have_u_int16_t=${ac_cv_have_u_int16_t='yes'}
+ac_cv_have_u_int32_t=${ac_cv_have_u_int32_t='yes'}
 ac_cv_have_u_int64_t=${ac_cv_have_u_int64_t='yes'}
+ac_cv_have_u_int8_t=${ac_cv_have_u_int8_t='yes'}
 ac_cv_have_u_int=${ac_cv_have_u_int='no'}
 ac_cv_have_u_intxx_t=${ac_cv_have_u_intxx_t='yes'}
 ac_cv_have_va_copy=${ac_cv_have_va_copy='yes'}
@@ -1483,8 +1489,10 @@ ac_cv_type_getgroups=${ac_cv_type_getgroups='int'}
 ac_cv_type_in_addr_t=${ac_cv_type_in_addr_t='yes'}
 ac_cv_type_in_port_t=${ac_cv_type_in_port_t='yes'}
 ac_cv_type_ino_t=${ac_cv_type_ino_t='yes'}
+ac_cv_type_int16_t=${ac_cv_type_int16_t='yes'}
 ac_cv_type_int32_t=${ac_cv_type_int32_t='yes'}
 ac_cv_type_int64_t=${ac_cv_type_int64_t='yes'}
+ac_cv_type_int8_t=${ac_cv_type_int8_t='yes'}
 ac_cv_type_int=${ac_cv_type_int='yes'}
 ac_cv_type_int_fast32_t=${ac_cv_type_int_fast32_t='yes'}
 ac_cv_type_int_least32_t=${ac_cv_type_int_least32_t='yes'}
@@ -1527,7 +1535,10 @@ ac_cv_type_struct_timespec=${ac_cv_type_struct_timespec='yes'}
 ac_cv_type_struct_tms=${ac_cv_type_struct_tms='yes'}
 ac_cv_type_struct_user_desc=${ac_cv_type_struct_user_desc='yes'}
 ac_cv_type_time_t=${ac_cv_type_time_t='yes'}
+ac_cv_type_u_int16_t=${ac_cv_type_u_int16_t='yes'}
+ac_cv_type_u_int32_t=${ac_cv_type_u_int32_t='yes'}
 ac_cv_type_u_int64_t=${ac_cv_type_u_int64_t='yes'}
+ac_cv_type_u_int8_t=${ac_cv_type_u_int8_t='yes'}
 ac_cv_type_uchar=${ac_cv_type_uchar='no'}
 ac_cv_type_uid_t=${ac_cv_type_uid_t='yes'}
 ac_cv_type_uint16_t=${ac_cv_type_uint16_t='yes'}
