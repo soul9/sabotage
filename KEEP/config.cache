@@ -1527,7 +1527,7 @@ ac_cv_type_struct_timespec=${ac_cv_type_struct_timespec='yes'}
 ac_cv_type_struct_tms=${ac_cv_type_struct_tms='yes'}
 ac_cv_type_struct_user_desc=${ac_cv_type_struct_user_desc='yes'}
 ac_cv_type_time_t=${ac_cv_type_time_t='yes'}
-ac_cv_type_u_int64_t=${ac_cv_type_u_int64_t='no'}
+ac_cv_type_u_int64_t=${ac_cv_type_u_int64_t='yes'}
 ac_cv_type_uchar=${ac_cv_type_uchar='no'}
 ac_cv_type_uid_t=${ac_cv_type_uid_t='yes'}
 ac_cv_type_uint16_t=${ac_cv_type_uint16_t='yes'}
