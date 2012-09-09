@@ -38,5 +38,9 @@ cd 1/2
 sed -i 's,_GLIBCXX_USE_C99_FENV_TR1,0,' ../../libstdc++-v3/include/tr1_impl/cfenv || exit 1
 
 make -j$MAKE_THREADS || exit 1
+
 find . -name 'libstdc++.so*' -exec cp -f "{}" /opt/toolchain/lib/ \;
+for i in /opt/toolchain/lib/libstdc++.so* ; do
+	ln -sf "..${i}" $R/lib/
+done
 #g++ -I /include/c+\+/4.5.3/ -L/lib test.cc
