@@ -3,11 +3,11 @@ gcc4
 binutils
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-0.9.4.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.9.5.tar.gz
 
 [main]
-filesize=668620
-sha512=9a8d95103fac4fb50f2f0670556f96f4e214a6f2a57a438d4c5cc05324b7e1218327513615bf4c963a7151edffb7a09e439c15e3abe9a223798509406afb497b
+filesize=679305
+sha512=8796a1611b57ee99cb7fe229c04a0569b7f9dcc9c2c7af64a5f64067bd449ebf5bd8505cc1c17b095e204220cb45244b1eb9266ededec876fdfef187e063588c
 
 [build]
 cp "$K/musl.config.mak" config.mak
@@ -17,7 +17,7 @@ sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
+#patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
 
 #create directory structure for static toolchain
 TC_PATH="$butch_prefix"/opt/toolchain
