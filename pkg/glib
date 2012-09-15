@@ -18,5 +18,14 @@ patch -p1 < "$K/glib-skip-tests.patch" || exit 1
 this_dir="$PWD"
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Dloff_t=off_t" ./configure -C --prefix="$butch_prefix" --disable-modular-tests --disable-selinux --disable-fam || exit 1
 echo '#include <string.h>' >> config.h
+
+# after updating musl to 0.9.5 ( 28c215dfe8 ) we have a new problem:
+# make[4]: Entering directory `/src/build/glib/glib-2.32.2/docs/reference/glib'
+# cd ../../.. && /bin/sh /src/build/glib/glib-2.32.2/missing --run automake-1.11 --gnu docs/reference/glib/Makefile
+# configure.ac: no proper invocation of AM_INIT_AUTOMAKE was found.
+# configure.ac: You should verify that configure.ac invokes AM_INIT_AUTOMAKE,
+# i have no fucking clue what could have caused the different behaviour, to fix it we'll simply make "missing" return true.
+echo true > missing
+
 make -j$MAKE_THREADS DESTDIR="$butch_install_dir" LDFLAGS="-Wl,-rpath-link=$this_dir/gthread/.libs/ -Wl,-rpath-link=$this_dir/gmodule/.libs/" || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
