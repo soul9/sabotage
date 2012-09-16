@@ -50,9 +50,6 @@ packages you can find... install them using butch, i.e.
 % butch install nano
 % butch install gdb
 
-copy $R to a ext4 file-system
-# extlinux -i $R/boot
-
 # butch install pkg           # additional stuff
 # butch install  xorg          # build X.org
 
@@ -60,25 +57,43 @@ Run "butch" and look at the usage information it outputs for further options.
 butch uses build templates, please take a look at KEEP/butch_template_configure_cached.txt
 to see how it works.
 
+when you're done, exit the chroot and use utils/write-hd-image.sh to create an image file.
+this can be directly booted in qemu, to use it in vbox use VBoxManage convertfromraw.
+or you can simply copy the rootfs in $R to your medium of choice.
+
+*** RUNNING SABOTAGE FOR THE FIRST TIME ***
+
 The default root password is "sabotage".
 
+as usual, 
 
-*** SABOTAGE IN USERSPACE or "Co-Musl" ***
-this is another mode that lets you use sabotage packages in a custom prefix.
-(for usage parallel to an existing system, without chroot.)
-this mode is not heavily optimized or tested, and builds some stuff that is not really
-necessary. however its quite handy to use sw on an existing system without having to
-use a chroot.
+% source /src/config
 
-  cp KEEP/config.local .
-  nano config.local # edit paths
-  . ./config.local
-  ./build-stage u
+so that butch has its environment variables set.
 
-  # after finished, you can 
-  cd $R
-  export PATH="$R/bin:$PATH"
-  butch install ncurses nano etc etc
+you may want to generate some sshd-keys for sshd to use; use
+
+% butch install sshd-keys
+
+the sshd itself can be started using /sbin/sshd
+
+if you need dhcp, run
+
+% butch install ndhcp-init
+
+this will create users and chroot for ndchp to use, afterwards you use
+
+% /etc/rc.dhcp start
+
+to run it.
+otherwise use ifconfig, route and /etc/resolve.conf to configure your static ip.
+you can of course put it into a script, and launch it automatically using
+/etc/rc.local
+
+for example
+% echo nameserver 8.8.8.8 > /etc/resolv.conf
+% ifconfig eth0 192.168.1.2 netmask 255.255.255.0
+% route add default gw 192.168.0.1
 
 
 NOTE TO CONTRIBUTORS
@@ -107,3 +122,28 @@ There is a mailinglist sabotage@lists.openwall.com, mail
 sabotage-subscribe@lists.openwall.com and follow instructions to get
 on it.  Archives are at http://openwall.com/lists/sabotage/
 You can also /join #musl on irc.freenode.net for realtime help.
+
+
+
+
+*** SABOTAGE IN USERSPACE or "Co-Musl" ***
+this is another mode that lets you use sabotage packages in a custom prefix.
+
+IT IS HIGHLY EXPERIMENTAL at this point. so expect some packages failing to build.
+
+(for usage parallel to an existing system, without chroot.)
+this mode is not heavily optimized or tested, and builds some stuff that is not really
+necessary. however its quite handy to use sw on an existing system without having to
+use a chroot.
+
+  cp KEEP/config.local .
+  nano config.local # edit paths
+  . ./config.local
+  ./build-stage u
+
+  # after finished, you can 
+  cd $R
+  export PATH="$R/bin:$PATH"
+  butch install ncurses nano etc etc
+
+
