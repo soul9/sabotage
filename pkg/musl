@@ -3,11 +3,12 @@ gcc4
 binutils
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-0.9.5.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.9.6.tar.gz
+http://www.musl-libc.org/releases/musl-0.9.6.tar.gz
 
 [main]
-filesize=679305
-sha512=8796a1611b57ee99cb7fe229c04a0569b7f9dcc9c2c7af64a5f64067bd449ebf5bd8505cc1c17b095e204220cb45244b1eb9266ededec876fdfef187e063588c
+filesize=681467
+sha512=58aeb82a325de6c5eeab6236f9abc62f18b0b3633408f004964a5bae24eba42833f09910c0b8c18bd0cfb99f83832690e33dfb1e87bb5483fad7c1821787dad8
 
 [build]
 cp "$K/musl.config.mak" config.mak
