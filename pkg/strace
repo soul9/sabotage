@@ -1,5 +1,5 @@
 [deps]
-kernel
+kernel-headers
 
 [main]
 filesize=403788
