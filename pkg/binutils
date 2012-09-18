@@ -29,6 +29,7 @@ fi
 CC="$CC -static -D_GNU_SOURCE -L$R/lib -I$R/include -D_LARGEFILE64_SOURCE" ./configure -C \
 	--prefix="$butch_prefix" --disable-nls --disable-shared --disable-werror \
 	--with-build-sysroot="$butch_prefix" --with-sysroot="$butch_prefix" \
+	--disable-install-libbfd \
 	|| exit 1
 
 make -j$MAKE_THREADS tooldir=$R || exit 1
