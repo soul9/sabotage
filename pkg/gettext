@@ -1,16 +1,14 @@
-[deps]
-relocate_toolchain
-ncurses-dynamic
+[mirrors]
+http://codu.org/~rofl/gettext-tiny-0.0.1.tar.bz2
+http://mirror.wzff.de/butch/gettext-tiny-0.0.1.tar.bz2
 
 [main]
-filesize=15139737
-sha512=1735599307a2d12be609ecfe1141815a11af144c6b94301f6c7101242e0b628251a3613d1d70df099ec07423befeaf10dfb53b8176f710c7e158c4fc63ea8747
+filesize=7995
+sha512=8315771fefc9fee5cd893d360bb0bf5089e78ea5061ee7b07e65858295d2f8f428e843e22c96fe2e7da75cb9e3ccfb0c70d83c323cda4385dd8a762f765fda57
 
-[mirrors]
-http://ftp.gnu.org/pub/gnu/gettext/gettext-0.18.1.1.tar.gz
+[deps]
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+echo prefix="$butch_prefix" > config.mak
 make -j$MAKE_THREADS || exit 1
-make install DESTDIR="$butch_install_dir" || exit 1
-
+make DESTDIR="$butch_install_dir" install || exit 1
