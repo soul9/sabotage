@@ -7,7 +7,6 @@ sha512=f1b8e6e4d1aa9f5c1b51d5d08684c9fdfa4b7d22efc1a77c13e4d5f0ae8e053bbb3d49a1c
 tardir=attr-2.4.46
 
 [deps]
-gettext
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
@@ -15,7 +14,7 @@ sed -i 's@__BEGIN_DECLS@@g' include/xattr.h
 sed -i 's@__END_DECLS@@g' include/xattr.h
 sed -i 's@__THROW@@g' include/xattr.h
 sed -i 's@#include <errno.h>@#include <syscall.h>@' libattr/syscalls.c
-LDFLAGS=-lintl CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE" ./configure -C --enable-gettext=no --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 
 # attr has no DESTDIR support
