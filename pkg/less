@@ -1,6 +1,5 @@
 [deps]
 ncurses
-sabotage-utils
 
 [main]
 filesize=307308

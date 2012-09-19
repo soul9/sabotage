@@ -1,6 +1,5 @@
 [deps]
 kernel-headers
-sabotage-utils
 
 [main]
 filesize=838403

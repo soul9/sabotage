@@ -18,6 +18,7 @@ cp "$H"/enter-chroot "$R"/src/
 cp "$K"/extlinux.conf "$R"/boot/
 cp "$K"/runsvdir-start "$R"/bin/
 cp -r "$K"/etc/* "$R"/etc/
+cp -r "$K"/bin/* "$R"/bin/
 chmod 0600 "$R"/etc/shadow
 
 cd "$R"

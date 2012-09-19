@@ -1,0 +1,10 @@
+#!/bin/sh
+empty_file() {
+        rm -f "$1"
+        touch "$1"
+}
+
+gnulib_dir="$1"
+for i in freadahead.c fseterr.c ; do empty_file "$gnulib_dir"/$i ; done
+echo "void close_stdin(void) {}" > "$gnulib_dir"/closein.c
+
