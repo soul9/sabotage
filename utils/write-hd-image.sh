@@ -81,23 +81,69 @@ echo_bold "1) make the image file"
 dd if=/dev/zero of="$imagefile" bs=1 count=0 seek="$imagesize" || die "Failed to create $imagefile"
 
 echo_bold "2) fdisk"
-echo 'n
+
+bytes_per_sector=512
+sectors_per_track=63
+heads=255
+#tracks/cylinder
+
+# first partition (/boot), starts on sector 2048 and is 100 MB
+part1_start_sector=2048
+part1_size_mb=100
+
+# byte positions
+part1_start=`echo "$bytes_per_sector * $part1_start_sector" | bc`
+part1_size=`echo "$part1_size_mb * 1024 * 1024" | bc`
+part2_start=`echo "$part1_start + $part1_size" | bc`
+
+# second partition starts at $part1_start_sector + ($part1_size_mb * 1024 * (1024/512))
+part2_start_sector=`echo "$part1_start_sector + ($part1_size_mb * 1024 * (1024/512))" | bc`
+
+# ancient fdisk 2.17 (as used by debian 6) does not calculate cylinders automatically...
+imagesize_in_bytes=`wc -c $imagefile |  cut -d ' ' -f 1`
+
+cylinders=`echo "$imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per_sector)" | bc`
+
+# n - new partition
+# p - primary partition
+# part. number
+# 2048 : first sector (this is required for images > a couple GB)
+# +100M: size of first partition
+# n - new partition
+# part. number
+# RETURN : use default sector
+# RETURN : use default size
+# a - toggle bootable flag
+# part. number
+# w - write
+
+# test if we're using the ancient version, it can't deal with -u=sectors flag
+# additionally, sending "u" to it as a keystroke will turn into sectors mode, while
+# the newer versions will turn into deprecated cylinder mode.
+# even worse, the old version will allocate one sector too much.
+echo q | fdisk -u=sectors "$imagefile" || olde_shit=1
+if [ "$olde_shit" = "1" ] ; then
+	echo "ancient fdisk version detected, passing -u"
+	need_u_flag=-u
+	part2_start_sector=`echo "$part2_start_sector + 2" | bc`
+fi
+
+echo fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile"
+fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile" << EOF
+n
 p
 1
-2048
-+100M
+$part1_start_sector
++${part1_size_mb}M
 n
 p
 2
-
+$part2_start_sector
 
 a
 1
-w' | fdisk "$imagefile" || die "fdisk failed"
-
-part1_start=`echo "512 * 2048" | bc`
-part1_size=`echo "100 * 1024 * 1024" | bc`
-part2_start=`echo "$part1_start + $part1_size" | bc`
+w
+EOF
 
 echo_bold '3) copy mbr'
 dd conv=notrunc if="$mbr_bin" of="$imagefile" || die 'Failed to set up MBR'
