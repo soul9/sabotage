@@ -91,11 +91,6 @@ heads=255
 part1_start_sector=2048
 part1_size_mb=100
 
-# byte positions
-part1_start=`echo "$bytes_per_sector * $part1_start_sector" | bc`
-part1_size=`echo "$part1_size_mb * 1024 * 1024" | bc`
-part2_start=`echo "$part1_start + $part1_size" | bc`
-
 # second partition starts at $part1_start_sector + ($part1_size_mb * 1024 * (1024/512))
 part2_start_sector=`echo "$part1_start_sector + ($part1_size_mb * 1024 * (1024/512))" | bc`
 
@@ -117,6 +112,10 @@ cylinders=`echo "$imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per
 # part. number
 # w - write
 
+# byte positions
+part1_start=`echo "$bytes_per_sector * $part1_start_sector" | bc`
+part1_size=`echo "$part1_size_mb * 1024 * 1024" | bc`
+
 # test if we're using the ancient version, it can't deal with -u=sectors flag
 # additionally, sending "u" to it as a keystroke will turn into sectors mode, while
 # the newer versions will turn into deprecated cylinder mode.
@@ -126,7 +125,11 @@ if [ "$olde_shit" = "1" ] ; then
 	echo "ancient fdisk version detected, passing -u"
 	need_u_flag=-u
 	part2_start_sector=`echo "$part2_start_sector + 2" | bc`
+	part1_size=`echo "$part1_size + (2 * $bytes_per_sector)" | bc`
 fi
+
+# byte pos
+part2_start=`echo "$part1_start + $part1_size" | bc`
 
 echo fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile"
 fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile" << EOF
