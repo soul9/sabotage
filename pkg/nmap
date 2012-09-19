@@ -19,8 +19,9 @@ find . -name 'configure' -exec sed -i 's@-llua@-lluajit-5.1@' "{}" \;
 LDFLAGS="-lz -Wl,-rpath-link=$butch_prefix/lib" CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
   CPPFLAGS="-I$butch_prefix/include/luajit-2.0/" \
   CXXFLAGS="-DIPPROTO_MAX=256" \
-  ./configure -C --prefix="$butch_prefix" ac_cv_working_getaddrinfo=yes ac_cv_working_getnameinfo=yes || exit 1
-find . -name 'Makefile' -exec sed -i 's@-llua @-lluajit-5.1@' "{}" \;
+  ./configure -C --prefix="$butch_prefix" \
+    --without-subversion --without-nmap-update --without-zenmap \
+    ac_cv_working_getaddrinfo=yes ac_cv_working_getnameinfo=yes || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
