@@ -72,4 +72,18 @@ echo "void close_stdin(void) {}" > "\$gnulib_dir"/closein.c
 EOF
 chmod +x "$utilpath"
 
+util=dhclient
+utilpath="$bindir/$util"
+cat << EOF > "$utilpath"
+#!/bin/sh
+if [ -z "\$1" ] ; then
+	echo usage: \$0 [interface]
+	echo i.e. \$0 eth0
+	echo i.e. \$0 wlan0
+	exit 1
+fi
+interface="\$1"
+/sbin/udhcpc -i "\$interface" -s /etc/udhcpc-script
 
+EOF
+chmod +x "$utilpath"

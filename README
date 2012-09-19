@@ -86,6 +86,10 @@ this will create users and chroot for ndchp to use, afterwards you use
 % /etc/rc.dhcp start
 
 to run it.
+
+an alternate dhcp client is uclibc's udhcpc,
+which can be launched using /bin/dhclient.
+
 otherwise use ifconfig, route and /etc/resolve.conf to configure your static ip.
 you can of course put it into a script, and launch it automatically using
 /etc/rc.local
