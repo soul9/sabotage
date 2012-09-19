@@ -9,7 +9,6 @@ gawk
 gcc4
 gmp
 kernel
-la
 m4
 make
 man
