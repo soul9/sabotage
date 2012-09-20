@@ -1,5 +1,5 @@
 [deps]
-openssl
+openssl-dynamic
 
 [main]
 filesize=1446492

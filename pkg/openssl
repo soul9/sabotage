@@ -1,15 +1,19 @@
 [deps]
 perl
 patch
-
-[main]
-filesize=4453920
-sha512=e09890e99cb1740303e7b57af91c90894c41734ad656d385b57b3d1f00968dfed2aa52f1c1e4f0417deb6ec02463627c7b0ef607f92f1dc3ff7855d9cada826e
+openssl-dynamic
 
 [mirrors]
-http://www.openssl.org/source/openssl-1.0.1.tar.gz
+http://openssl.org/source/openssl-1.0.1c.tar.gz
+[main]
+filesize=4457113
+sha512=14f766daab0828a2f07c65d6da8469a4a5a2b839ff3da188538c4e2db3e3e2f37217fb37e269617fb438463b75fb77dab0b155f36831ff48edbc9e7f2903ebd3
 
 [build]
+# the openssl-dynamic package also supplies our libcrypto.a and libssl.a
+# those are built with fPIC, but that shouldn't matter much
+exit 0
+
 patch -p1 < "$K/openssl-1.0.1-parallel-build.patch" || exit 1
 sed -i 's/-DTERMIO/-DTERMIOS/g' Configure
 sed -i 's/defined(linux)/0/' crypto/ui/ui_openssl.c

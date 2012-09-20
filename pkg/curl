@@ -1,6 +1,5 @@
 [deps]
 xz
-openssl
 openssl-dynamic
 ca-certificates
 zlib-dynamic
