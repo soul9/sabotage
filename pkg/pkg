@@ -26,6 +26,8 @@ openal
 openssh
 patch
 patchutils
+pax-utils
+paxctl
 posix-man
 proxychains
 psmisc

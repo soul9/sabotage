@@ -1,0 +1,14 @@
+[mirrors]
+http://dev.gentoo.org/~solar/pax/pax-utils-0.1.16.tar.bz2
+[main]
+filesize=64708
+sha512=e60ed7a028154bd2afbc4f5de0d5277e6dc456d137074816bd22b3b5769cc330900b52d5f86cc8100a8286caae07ced2a1c2675c146266652726b34a0f6061ef
+
+[deps]
+libcap2
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make PREFIX="$butch_install_dir$butch_prefix" install || exit 1
