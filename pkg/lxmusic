@@ -8,6 +8,7 @@ sha512=2467096190fd8e1d628e234e4646fbbf96683eca6244990353cade732d91487783e4462d7
 
 [deps]
 xmms2
+gtk+2
 
 [build]
 #patch -p1 < "$K/some.patch"
