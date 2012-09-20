@@ -7,6 +7,7 @@ busybox-man
 capchroot
 curl
 diffutils
+dropbear
 expat
 file
 flex
