@@ -9,7 +9,10 @@ http://matt.ucc.asn.au/dropbear/releases/dropbear-2012.55.tar.bz2
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
 # TODO : edit generated options.h
+
+sed -i 's@#include "tomcrypt.h"@#include "tomcrypt.h"\n#define mp_read_unsigned_bin(a, b, c) ltc_mp.unsigned_read(a, b, c)\n#define mp_prime_is_prime(a, b, c)   ltc_mp.isprime(a, c)@' libtomcrypt/src/math/rand_prime.c
+
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
