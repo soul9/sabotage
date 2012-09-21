@@ -17,6 +17,6 @@ http://www.apache.org/dist/apr/apr-util-1.4.1.tar.bz2
   --disable-util-dso || exit 1
 echo '#define APR_HAVE_CRYPT_H 1' >> include/private/apu_config.h
 make -j$MAKE_THREADS || exit 1
-make install || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
 
 
