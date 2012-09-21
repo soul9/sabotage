@@ -18,7 +18,7 @@ CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
-[ "$STAGEU" = "1" ] && fixdestdir
 echo query modules
-"$butch_install_dir"/bin/pango-querymodules > "$butch_install_dir"/etc/pango/pango.modules
-echo $?
+dest="$butch_install_dir""$butch_prefix"
+LD_LIBRARY_PATH="$dest"/lib \
+  "$dest"/bin/pango-querymodules > "$dest"/etc/pango/pango.modules || exit 1
