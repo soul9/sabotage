@@ -125,9 +125,10 @@ part1_size=`calculate "$part1_size_mb * 1024 * 1024"`
 # the newer versions will turn into deprecated cylinder mode.
 # even worse, the old version will allocate one sector too much.
 echo q | fdisk -u=sectors "$imagefile" 2>/dev/null || olde_shit=1
+need_u_flag=
 if [ "$olde_shit" = "1" ] ; then
 	echo "ancient fdisk version detected, passing -u"
-	need_u_flag=-u
+	need_u_flag="-u"
 	part2_start_sector=`calculate "$part2_start_sector + 2"`
 	part1_size=`calculate "$part1_size + (2 * $bytes_per_sector)"`
 fi
@@ -135,8 +136,8 @@ fi
 # byte pos
 part2_start=`calculate "$part1_start + $part1_size"`
 
-echo fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile"
-fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile" << EOF
+echo fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" $need_u_flag "$imagefile"
+fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" $need_u_flag "$imagefile" << EOF
 n
 p
 1
@@ -190,8 +191,7 @@ if [ -d "$contents" ]
 then
 	if [ "$clear_builds" = "1" ] ; then
 		echo -ne "clearing builds..."
-		[ -d "$contents/src/build" ] && rm -rf "$contents/src/build"
-		mkdir -p "$contents/src/build"
+		[ -d "$contents/src/build" ] && rm -rf "$contents/src/build"/*
 		echo "done"
 	fi
 	if [ "$copy_tarballs" = "1" ] ; then
