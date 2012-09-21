@@ -131,6 +131,12 @@ ac_cv_cc_timezone=${ac_cv_cc_timezone='yes'}
 ac_cv_cc_werror=${ac_cv_cc_werror='yes'}
 ac_cv_cc_wextra=${ac_cv_cc_wextra='yes'}
 ac_cv_cpp_func=${ac_cv_cpp_func='yes'}
+ac_cv_crypt_blowfish=${ac_cv_crypt_blowfish='yes'}
+ac_cv_crypt_des=${ac_cv_crypt_des='yes'}
+ac_cv_crypt_ext_des=${ac_cv_crypt_ext_des='yes'}
+ac_cv_crypt_md5=${ac_cv_crypt_md5='yes'}
+ac_cv_crypt_SHA256=${ac_cv_crypt_SHA256='yes'}
+ac_cv_crypt_SHA512=${ac_cv_crypt_SHA512='yes'}
 ac_cv_cxx_compiler_gnu=${ac_cv_cxx_compiler_gnu='yes'}
 ac_cv_cxx_thread=${ac_cv_cxx_thread='no'}
 ac_cv_dir_trailing_space=${ac_cv_dir_trailing_space='yes'}
@@ -166,6 +172,7 @@ ac_cv_func_acosh=${ac_cv_func_acosh='yes'}
 ac_cv_func_acosl=${ac_cv_func_acosl='yes'}
 ac_cv_func_alarm=${ac_cv_func_alarm='yes'}
 ac_cv_func_alloca_works=${ac_cv_func_alloca_works='yes'}
+ac_cv_func_alphasort=${ac_cv_func_alphasort='yes'}
 ac_cv_func_arc4random=${ac_cv_func_arc4random='no'}
 ac_cv_func_arc4random_buf=${ac_cv_func_arc4random_buf='no'}
 ac_cv_func_arc4random_uniform=${ac_cv_func_arc4random_uniform='no'}
@@ -199,6 +206,7 @@ ac_cv_func_ceilf=${ac_cv_func_ceilf='yes'}
 ac_cv_func_ceill=${ac_cv_func_ceill='yes'}
 ac_cv_func_chown=${ac_cv_func_chown='yes'}
 ac_cv_func_chown_works=${ac_cv_func_chown_works='yes'}
+ac_cv_func_chroot=${ac_cv_func_chroot='yes'}
 ac_cv_func_clearerr_unlocked=${ac_cv_func_clearerr_unlocked='yes'}
 ac_cv_func_clock=${ac_cv_func_clock='yes'}
 ac_cv_func_clock_gettime=${ac_cv_func_clock_gettime='yes'}
@@ -214,7 +222,10 @@ ac_cv_func_coshf=${ac_cv_func_coshf='yes'}
 ac_cv_func_coshl=${ac_cv_func_coshl='yes'}
 ac_cv_func_cosl=${ac_cv_func_cosl='yes'}
 ac_cv_func_cputime=${ac_cv_func_cputime='no'}
+ac_cv_func_crypt=${ac_cv_func_crypt='yes'}
+ac_cv_func_crypt_r=${ac_cv_func_crypt_r='yes'}
 ac_cv_func_ctermid=${ac_cv_func_ctermid='yes'}
+ac_cv_func_ctime_r=${ac_cv_func_ctime_r='yes'}
 ac_cv_func_cuserid=${ac_cv_func_cuserid='yes'}
 ac_cv_func_daemon=${ac_cv_func_daemon='yes'}
 ac_cv_func_decl_getgrgid=${ac_cv_func_decl_getgrgid='yes'}
@@ -287,6 +298,7 @@ ac_cv_func_ftell64=${ac_cv_func_ftell64='no'}
 ac_cv_func_ftello64=${ac_cv_func_ftello64='no'}
 ac_cv_func_ftello=${ac_cv_func_ftello='yes'}
 ac_cv_func_ftime=${ac_cv_func_ftime='no'}
+ac_cv_func_ftok=${ac_cv_func_ftok='yes'}
 ac_cv_func_ftruncate=${ac_cv_func_ftruncate='yes'}
 ac_cv_func_futimens=${ac_cv_func_futimens='yes'}
 ac_cv_func_futimes=${ac_cv_func_futimes='yes'}
@@ -294,6 +306,7 @@ ac_cv_func_futimesat=${ac_cv_func_futimesat='no'}
 ac_cv_func_fwrite_unlocked=${ac_cv_func_fwrite_unlocked='yes'}
 ac_cv_func_gai_strerror=${ac_cv_func_gai_strerror='yes'}
 ac_cv_func_gamma=${ac_cv_func_gamma='no'}
+ac_cv_func_gcvt=${ac_cv_func_gcvt='yes'}
 ac_cv_func_getaddrinfo=${ac_cv_func_getaddrinfo='yes'}
 ac_cv_func_getc_unlocked=${ac_cv_func_getc_unlocked='yes'}
 ac_cv_func_getchar_unlocked=${ac_cv_func_getchar_unlocked='yes'}
@@ -305,6 +318,8 @@ ac_cv_func_getegid=${ac_cv_func_getegid='yes'}
 ac_cv_func_geteuid=${ac_cv_func_geteuid='yes'}
 ac_cv_func_getgid=${ac_cv_func_getgid='yes'}
 ac_cv_func_getgrent=${ac_cv_func_getgrent='yes'}
+ac_cv_func_getgrgid_r=${ac_cv_func_getgrgid_r='yes'}
+ac_cv_func_getgrnam_r=${ac_cv_func_getgrnam_r='yes'}
 ac_cv_func_getgrouplist=${ac_cv_func_getgrouplist='yes'}
 ac_cv_func_getgroups=${ac_cv_func_getgroups='yes'}
 ac_cv_func_gethostbyname=${ac_cv_func_gethostbyname='yes'}
@@ -330,14 +345,20 @@ ac_cv_func_getpgrp=${ac_cv_func_getpgrp='yes'}
 ac_cv_func_getpgrp_void=${ac_cv_func_getpgrp_void='yes'}
 ac_cv_func_getpid=${ac_cv_func_getpid='yes'}
 ac_cv_func_getpriority=${ac_cv_func_getpriority='yes'}
+ac_cv_func_getprotobyname=${ac_cv_func_getprotobyname='yes'}
+ac_cv_func_getprotobynumber=${ac_cv_func_getprotobynumber='yes'}
 ac_cv_func_getpseudotty=${ac_cv_func_getpseudotty='no'}
 ac_cv_func_getpwent=${ac_cv_func_getpwent='yes'}
 ac_cv_func_getpwnam=${ac_cv_func_getpwnam='yes'}
+ac_cv_func_getpwnam_r=${ac_cv_func_getpwnam_r='yes'}
 ac_cv_func_getpwuid=${ac_cv_func_getpwuid='yes'}
+ac_cv_func_getpwuid_r=${ac_cv_func_getpwuid_r='yes'}
 ac_cv_func_getresgid=${ac_cv_func_getresgid='yes'}
 ac_cv_func_getresuid=${ac_cv_func_getresuid='yes'}
 ac_cv_func_getrlimit=${ac_cv_func_getrlimit='yes'}
 ac_cv_func_getrusage=${ac_cv_func_getrusage='yes'}
+ac_cv_func_getservbyname=${ac_cv_func_getservbyname='yes'}
+ac_cv_func_getservbyport=${ac_cv_func_getservbyport='yes'}
 ac_cv_func_getsid=${ac_cv_func_getsid='yes'}
 ac_cv_func_getsockopt=${ac_cv_func_getsockopt='yes'}
 ac_cv_func_getspent=${ac_cv_func_getspent='yes'}
@@ -355,6 +376,7 @@ ac_cv_func_getutxline=${ac_cv_func_getutxline='yes'}
 ac_cv_func_getutxuser=${ac_cv_func_getutxuser='no'}
 ac_cv_func_getwd=${ac_cv_func_getwd='no'}
 ac_cv_func_glob=${ac_cv_func_glob='yes'}
+ac_cv_func_gmtime_r=${ac_cv_func_gmtime_r='yes'}
 ac_cv_func_grantpt=${ac_cv_func_grantpt='yes'}
 ac_cv_func_group_from_gid=${ac_cv_func_group_from_gid='no'}
 ac_cv_func_hypot=${ac_cv_func_hypot='yes'}
@@ -395,6 +417,7 @@ ac_cv_func_libiconvlist=${ac_cv_func_libiconvlist='no'}
 ac_cv_func_link=${ac_cv_func_link='yes'}
 ac_cv_func_localeconv=${ac_cv_func_localeconv='yes'}
 ac_cv_func_localtime_r=${ac_cv_func_localtime_r='yes'}
+ac_cv_func_lockf=${ac_cv_func_lockf='yes'}
 ac_cv_func_log10f=${ac_cv_func_log10f='yes'}
 ac_cv_func_log10l=${ac_cv_func_log10l='yes'}
 ac_cv_func_log1p=${ac_cv_func_log1p='yes'}
@@ -502,10 +525,12 @@ ac_cv_func_pututline=${ac_cv_func_pututline='yes'}
 ac_cv_func_pututxline=${ac_cv_func_pututxline='yes'}
 ac_cv_func_qsort=${ac_cv_func_qsort='no'}
 ac_cv_func_raise=${ac_cv_func_raise='yes'}
+ac_cv_func_rand_r=${ac_cv_func_rand_r='yes'}
 ac_cv_func_random=${ac_cv_func_random='yes'}
 ac_cv_func_rawmemchr=${ac_cv_func_rawmemchr='no'}
 ac_cv_func_read_real_time=${ac_cv_func_read_real_time='no'}
 ac_cv_func_readdir=${ac_cv_func_readdir='yes'}
+ac_cv_func_readdir_r=${ac_cv_func_readdir_r='yes'}
 ac_cv_func_readlink=${ac_cv_func_readlink='yes'}
 ac_cv_func_readpassphrase=${ac_cv_func_readpassphrase='no'}
 ac_cv_func_realloc_0_nonnull=${ac_cv_func_realloc_0_nonnull='yes'}
@@ -521,6 +546,7 @@ ac_cv_func_round=${ac_cv_func_round='yes'}
 ac_cv_func_rpmatch=${ac_cv_func_rpmatch='no'}
 ac_cv_func_rresvport_af=${ac_cv_func_rresvport_af='no'}
 ac_cv_func_sbrk=${ac_cv_func_sbrk='yes'}
+ac_cv_func_scandir=${ac_cv_func_scandir='yes'}
 ac_cv_func_select=${ac_cv_func_select='yes'}
 ac_cv_func_sem_getvalue=${ac_cv_func_sem_getvalue='yes'}
 ac_cv_func_sem_open=${ac_cv_func_sem_open='yes'}
@@ -572,6 +598,7 @@ ac_cv_func_sigsetjmp=${ac_cv_func_sigsetjmp='yes'}
 ac_cv_func_sigsetmask=${ac_cv_func_sigsetmask='no'}
 ac_cv_func_sigstack=${ac_cv_func_sigstack='no'}
 ac_cv_func_sigvec=${ac_cv_func_sigvec='no'}
+ac_cv_func_sin=${ac_cv_func_sin='yes'}
 ac_cv_func_sincos=${ac_cv_func_sincos='yes'}
 ac_cv_func_sincosf=${ac_cv_func_sincosf='yes'}
 ac_cv_func_sincosl=${ac_cv_func_sincosl='yes'}
@@ -587,6 +614,8 @@ ac_cv_func_spawnve=${ac_cv_func_spawnve='no'}
 ac_cv_func_spawnvpe=${ac_cv_func_spawnvpe='no'}
 ac_cv_func_sqrtf=${ac_cv_func_sqrtf='yes'}
 ac_cv_func_sqrtl=${ac_cv_func_sqrtl='yes'}
+ac_cv_func_srand48=${ac_cv_func_srand48='yes'}
+ac_cv_func_srandom=${ac_cv_func_srandom='yes'}
 ac_cv_func_stat=${ac_cv_func_stat='yes'}
 ac_cv_func_stat_empty_string_bug=${ac_cv_func_stat_empty_string_bug='no'}
 ac_cv_func_statfs=${ac_cv_func_statfs='yes'}
@@ -606,6 +635,7 @@ ac_cv_func_strdup=${ac_cv_func_strdup='yes'}
 ac_cv_func_strerror=${ac_cv_func_strerror='yes'}
 ac_cv_func_strerror_r=${ac_cv_func_strerror_r='yes'}
 ac_cv_func_strerror_r_char_p=${ac_cv_func_strerror_r_char_p='no'}
+ac_cv_func_strfmon=${ac_cv_func_strfmon='yes'}
 ac_cv_func_strftime=${ac_cv_func_strftime='yes'}
 ac_cv_func_stricmp=${ac_cv_func_stricmp='no'}
 ac_cv_func_stricoll=${ac_cv_func_stricoll='no'}
@@ -1029,6 +1059,7 @@ ac_cv_have_u_int=${ac_cv_have_u_int='no'}
 ac_cv_have_u_intxx_t=${ac_cv_have_u_intxx_t='yes'}
 ac_cv_have_va_copy=${ac_cv_have_va_copy='yes'}
 ac_cv_header_alloca_h=${ac_cv_header_alloca_h='yes'}
+ac_cv_header_assert_h=${ac_cv_header_assert_h='yes'}
 ac_cv_header_argz_h=${ac_cv_header_argz_h='no'}
 ac_cv_header_arpa_inet_h=${ac_cv_header_arpa_inet_h='yes'}
 ac_cv_header_asm_cachectl_h=${ac_cv_header_asm_cachectl_h='no'}
@@ -1128,6 +1159,7 @@ ac_cv_header_pwd_h=${ac_cv_header_pwd_h='yes'}
 ac_cv_header_random_h=${ac_cv_header_random_h='no'}
 ac_cv_header_readpassphrase_h=${ac_cv_header_readpassphrase_h='no'}
 ac_cv_header_regex_h=${ac_cv_header_regex_h='yes'}
+ac_cv_header_resolv_h=${ac_cv_header_resolv_h='yes'}
 ac_cv_header_rpc_types_h=${ac_cv_header_rpc_types_h='no'}
 ac_cv_header_sched_h=${ac_cv_header_sched_h='yes'}
 ac_cv_header_search_h=${ac_cv_header_search_h='yes'}
@@ -1272,6 +1304,8 @@ ac_cv_header_wchar_h=${ac_cv_header_wchar_h='yes'}
 ac_cv_header_wctype_h=${ac_cv_header_wctype_h='yes'}
 ac_cv_header_xlocale_h=${ac_cv_header_xlocale_h='no'}
 ac_cv_header_zlib_h=${ac_cv_header_zlib_h='yes'}
+ac_cv_int_type_int32_t=${ac_cv_int_type_int32_t='yes'}
+ac_cv_int_type_uint32_t=${ac_cv_int_type_uint32_t='yes'}
 ac_cv_kpthread=${ac_cv_kpthread='no'}
 ac_cv_kthread=${ac_cv_kthread='no'}
 ac_cv_lib_PW_regcmp=${ac_cv_lib_PW_regcmp='no'}
@@ -1543,9 +1577,11 @@ ac_cv_type_uint16_t=${ac_cv_type_uint16_t='yes'}
 ac_cv_type_uint32_t=${ac_cv_type_uint32_t='yes'}
 ac_cv_type_uint64_t=${ac_cv_type_uint64_t='yes'}
 ac_cv_type_uint8_t=${ac_cv_type_uint8_t='yes'}
+ac_cv_type_uint=${ac_cv_type_uint='yes'}
 ac_cv_type_uint_least32_t=${ac_cv_type_uint_least32_t='yes'}
 ac_cv_type_uintmax_t=${ac_cv_type_uintmax_t='yes'}
 ac_cv_type_uintptr_t=${ac_cv_type_uintptr_t='yes'}
+ac_cv_type_ulong=${ac_cv_type_ulong='yes'}
 ac_cv_type_union_fpc_csr=${ac_cv_type_union_fpc_csr='no'}
 ac_cv_type_unsigned_long_long=${ac_cv_type_unsigned_long_long='yes'}
 ac_cv_type_unsigned_long_long_int=${ac_cv_type_unsigned_long_long_int='yes'}
