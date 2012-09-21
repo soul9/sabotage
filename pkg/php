@@ -23,16 +23,24 @@ json-c
 bzip2
 
 [build]
-#musl-git #needs crypt_r, currenlty fixed with hack during configure.
-
-CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE -DSTDC_HEADERS -I$butch_prefix/include "
-CFLAGS="$CFLAGS -DHAVE_STRLCPY -DHAVE_STRLCAT -DHAVE_STRTOK_R -DHAVE_POSIX_READDIR_R" \
-./configure -C ac_cv_func_crypt_r=0 --prefix="$butch_prefix" --enable-re2c-cgoto \
-  --with-curlwrappers --with-libxml-dir="$butch_prefix" --with-jpeg-dir="$butch_prefix" \
-  --with-png-dir="$butch_prefix" --with-openssl-dir="$butch_prefix" --with-sqlite \
-  --with-pcre-regex="$butch_prefix" --with-pcre-dir="$butch_prefix" --with-zlib="$butch_prefix" \
-  --with-zlib-dir="$butch_prefix" --with-curl="$butch_prefix" --with-bz2="$butch_prefix" \
-  --with-db4="$butch_prefix" -with-gettext="$butch_prefix" --with-gmp="$butch_prefix" \
-  --with-libedit="$butch_prefix" --with-freetype-dir="$butch_prefix" || exit 1
+pfx="$butch_prefix"
+# all the below *_cv_ tests fail because the php configure tests
+# use exit() but dont include stdlib.h. same for strcmp and string.h etc.
+CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE" ./configure -C  \
+  --prefix="$butch_prefix" --enable-re2c-cgoto \
+  --mandir="$butch_prefix"/share/man \
+  _cv_have_broken_glibc_fopen_append=no \
+  ac_cv_what_readdir_r=POSIX \
+  ac_cv_crypt_blowfish=yes ac_cv_crypt_md5=yes ac_cv_crypt_SHA256=yes \
+  ac_cv_crypt_SHA512=yes ac_cv_crypt_des=yes ac_cv_crypt_ext_des=yes \
+  ac_cv_pwrite=yes ac_cv_pread=yes \
+  --with-curlwrappers --with-libxml-dir="$pfx" --with-jpeg-dir="$pfx" \
+  --with-png-dir="$pfx" --with-openssl-dir="$pfx" --with-sqlite3 \
+  --with-pcre-regex="$pfx" --with-pcre-dir="$pfx" --with-zlib="$pfx" \
+  --with-zlib-dir="$pfx" --with-curl="$pfx" --with-bz2="$pfx" \
+  --with-db4="$pfx" --with-gmp="$pfx" \
+  --with-libedit="$pfx" --with-freetype-dir="$pfx" \
+  --enable-maintainer-zts \
+|| exit 1
 make -j$MAKE_THREADS || exit 1
-make INSTALLROOT="$butch_install_dir" install || exit 1
+make INSTALL_ROOT="$butch_install_dir" install || exit 1
