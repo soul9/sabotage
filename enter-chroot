@@ -20,11 +20,21 @@ chroot "$R" /bin/env -i \
     HOME=/root TERM="$TERM" PS1='\u:\w$ ' \
     /bin/sh --login
 
-umount "$R"/src/tarballs
-umount "$R"/dev/pts
-umount "$R"/dev/shm
-umount "$R"/dev
-umount "$R"/proc
+tryumount() {
+	dest="$1"
+	if ! umount "$dest" 2>/dev/null; then
+		echo "unmount failure ($dest), retrying in 1 sec..."
+		sleep 1
+		umount -f "$dest"
+	fi
+}
 
+tryumount "$R"/src/tarballs
+tryumount "$R"/dev/pts
+tryumount "$R"/dev/shm
+tryumount "$R"/dev
+tryumount "$R"/proc
+
+#echo empty line so we get a proper prompt back
 echo
 
