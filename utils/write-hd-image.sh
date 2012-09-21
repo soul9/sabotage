@@ -1,5 +1,9 @@
 #!/bin/sh
 
+calculate() {
+	printf "%s\n" "$1" | bc
+}
+
 echo_bold() {
 	tput bold
 	echo $@
@@ -92,12 +96,12 @@ part1_start_sector=2048
 part1_size_mb=100
 
 # second partition starts at $part1_start_sector + ($part1_size_mb * 1024 * (1024/512))
-part2_start_sector=`echo "$part1_start_sector + ($part1_size_mb * 1024 * (1024/512))" | bc`
+part2_start_sector=`calculate "$part1_start_sector + ($part1_size_mb * 1024 * 1024 / $bytes_per_sector)"`
 
 # ancient fdisk 2.17 (as used by debian 6) does not calculate cylinders automatically...
 imagesize_in_bytes=`wc -c $imagefile |  cut -d ' ' -f 1`
 
-cylinders=`echo "$imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per_sector)" | bc`
+cylinders=`calculate "$imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per_sector)"`
 
 # n - new partition
 # p - primary partition
@@ -113,23 +117,23 @@ cylinders=`echo "$imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per
 # w - write
 
 # byte positions
-part1_start=`echo "$bytes_per_sector * $part1_start_sector" | bc`
-part1_size=`echo "$part1_size_mb * 1024 * 1024" | bc`
+part1_start=`calculate "$bytes_per_sector * $part1_start_sector"`
+part1_size=`calculate "$part1_size_mb * 1024 * 1024"`
 
 # test if we're using the ancient version, it can't deal with -u=sectors flag
 # additionally, sending "u" to it as a keystroke will turn into sectors mode, while
 # the newer versions will turn into deprecated cylinder mode.
 # even worse, the old version will allocate one sector too much.
-echo q | fdisk -u=sectors "$imagefile" || olde_shit=1
+echo q | fdisk -u=sectors "$imagefile" 2>/dev/null || olde_shit=1
 if [ "$olde_shit" = "1" ] ; then
 	echo "ancient fdisk version detected, passing -u"
 	need_u_flag=-u
-	part2_start_sector=`echo "$part2_start_sector + 2" | bc`
-	part1_size=`echo "$part1_size + (2 * $bytes_per_sector)" | bc`
+	part2_start_sector=`calculate "$part2_start_sector + 2"`
+	part1_size=`calculate "$part1_size + (2 * $bytes_per_sector)"`
 fi
 
 # byte pos
-part2_start=`echo "$part1_start + $part1_size" | bc`
+part2_start=`calculate "$part1_start + $part1_size"`
 
 echo fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile"
 fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" "$need_u_flag" "$imagefile" << EOF
