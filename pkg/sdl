@@ -5,6 +5,9 @@ sha512=ac392d916e6953b0925a7cbb0f232affea33339ef69b47a0a7898492afb9784b93138986d
 [mirrors]
 http://www.libsdl.org/release/SDL-1.2.15.tar.gz
 
+[deps]
+libxext
+
 [build]
 
 cd src/video/fbcon
