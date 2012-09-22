@@ -13,7 +13,7 @@ libxft
 cairo
 
 [build]
-#patch -p1 < "$K/some.patch"
+patch -p1 < "$K/pango-querymodules-prefix.patch"
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
@@ -21,4 +21,4 @@ make DESTDIR="$butch_install_dir" install || exit 1
 echo query modules
 dest="$butch_install_dir""$butch_prefix"
 LD_LIBRARY_PATH="$dest"/lib \
-  "$dest"/bin/pango-querymodules > "$dest"/etc/pango/pango.modules || exit 1
+  "$dest"/bin/pango-querymodules prefix="$butch_install_dir" > "$dest"/etc/pango/pango.modules || exit 1
