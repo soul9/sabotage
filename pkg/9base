@@ -18,7 +18,7 @@ mbwc_fix() {
 }
 for i in n1.c t11.c n10.c mbwc.c ; do mbwc_fix $i ; done
 
-echo "PREFIX = /" >>config.mk
+echo "PREFIX = $butch_prefix" >>config.mk
 # the dc calculator, called by bc, assumes a signed char,
 # which is not true for ARM. it fails on "4 - 3" resp. "4 3 -ps."
 # without -fsigned-char.
@@ -37,5 +37,4 @@ do
   make -C $f DESTDIR="$butch_install_dir" install || exit 1
 done
 
-cd "$butch_install_dir/bin"
-ln -sf troff nroff
+ln -sf troff "$butch_install_dir""$butch_prefix"/bin/nroff
