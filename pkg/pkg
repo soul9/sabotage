@@ -13,6 +13,7 @@ file
 flex
 gdb
 git
+iptables
 less
 libao
 libjpeg
