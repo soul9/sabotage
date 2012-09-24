@@ -2,6 +2,7 @@
 musl
 pkgconf
 kernel-headers
+gnu-getopt
 
 [main]
 filesize=507123
@@ -11,10 +12,11 @@ sha512=3bf6db564359acafa738068980793129982318317bea69f21282d80f40dcb1e16938f8e29
 http://ftp.netfilter.org/pub/iptables/iptables-1.4.14.tar.bz2
 
 [build]
-# TODO
-exit 1
-CFLAGS="-D_GNU_SOURCE -DSTDC_HEADERS" ./configure -C --prefix="$butch_prefix" || exit 1
+patch -p1 < "$K/iptables-1.4.14-musl-fixes.patch" || exit 1
+GNU_GETOPT="-Dgetopt=gnu_getopt -Dgetopt_long=gnu_getopt_long -Dgetopt_long_only=gnu_getopt_long_only"
+CFLAGS="-D_GNU_SOURCE -DSTDC_HEADERS $GNU_GETOPT" LDFLAGS=-lgnu_getopt ./configure -C \
+  --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
-make install || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
 
 
