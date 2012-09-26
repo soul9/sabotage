@@ -28,14 +28,18 @@ archflags=
 [ "$A" = "x86_64" ] && archflags=--disable-multilib
 [ "$A" = "i386" ] && archflags=--disable-multilib
 
-./configure --prefix="$butch_prefix" --mandir="$butch_prefix"/share/man \
+./configure --prefix="$butch_prefix" \
+  --mandir="$butch_prefix"/share/man \
+  --infodir="$butch_prefix"/infoXXX \
   --disable-bootstrap --disable-shared --disable-nls $archflags || exit 1
 make CFLAGS="-DSTDC_HEADERS -Werror-implicit-function-declaration" LDFLAGS="-static" -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install-gcc || exit 1
 
-# rename gcc to rawcc so musl-gcc can call the *right* gcc
-mv "$butch_install_dir/bin/gcc" "$butch_install_dir/bin/rawcc"
-ln -sf "rawcc" "$butch_install_dir/bin/gcc"
+rm -rf "$butch_install_dir""$butch_prefix"/infoXXX
 
-[ "$A" = x86_64 ] && mv "$butch_install_dir/lib64/"* "$butch_install_dir/lib/" || true
+# rename gcc to rawcc so musl-gcc can call the *right* gcc
+mv "$butch_install_dir""$butch_prefix"/bin/gcc "$butch_install_dir""$butch_prefix"/bin/rawcc
+ln -sf "rawcc" "$butch_install_dir""$butch_prefix"/bin/gcc
+
+[ "$A" = x86_64 ] && mv "$butch_install_dir""$butch_prefix"/lib64/* "$butch_install_dir/""$butch_prefix"lib/ || true
 
