@@ -22,7 +22,9 @@ make -j$MAKE_THREADS -C libinstaller CC="$CC" || exit 1
 make -j$MAKE_THREADS -C extlinux CC="$CC" OPTFLAGS="-g -Os -D_GNU_SOURCE" LDFLAGS="-static" || exit 1
 make -j$MAKE_THREADS -C linux CC="$CC" OPTFLAGS="-g -Os -D_GNU_SOURCE" LDFLAGS="-static" || exit 1
 
-cp extlinux/extlinux $R/bin
-cp linux/syslinux $R/bin
-mkdir -p $R/lib/syslinux
-cp mbr/*mbr.bin $R/lib/syslinux
+dest="${butch_install_dir}${butch_prefix}"
+mkdir -p "$dest"/bin
+cp extlinux/extlinux "$dest"/bin
+cp linux/syslinux "$dest"/bin/
+mkdir -p "$dest"/lib/syslinux
+cp mbr/*mbr.bin "$dest"/lib/syslinux/
