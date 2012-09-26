@@ -31,3 +31,6 @@ make DESTDIR="$butch_install_dir" install || exit 1
 dest="${butch_prefix}${butch_install_dir}"/bin
 mkdir -p "$dest"
 cp $K/X "$dest"/
+
+# starting X as non-root needs suid bit on the "server"
+chmod +s "$dest"/Xfbdev || exit 1
