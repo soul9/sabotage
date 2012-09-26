@@ -7,9 +7,13 @@ filesize=985089
 sha512=12af732321a99320ea05e2692877c9d9631a83394ceecf559ab84874599f6d7646d353595288e2260ae0af83ae6faa1f5f33247e3eba80da6185e8168102629a
 
 [deps]
+gtk+2
+pkgconf
+perl
+cpan-XML-Parser
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
