@@ -1,0 +1,14 @@
+[mirrors]
+http://codu.org/~rofl/tarballs/libelf-compat-0.152c001.tar.bz2
+http://mirror.wzff.de/sabotage/tarballs/libelf-compat-0.152c001.tar.bz2
+
+[main]
+filesize=122231
+sha512=442ec322d3751f1e755a18c852ca5ade745387fb6b8526f40c451a8459eb31ac3bec091aceae5feddf91ded9deda5c359d83e92122bde6789b5324bdc47f6deb
+
+[deps]
+
+[build]
+sed -i 's@HEADERS = src/libelf.h@HEADERS = src/libelf.h src/gelf.h@' Makefile
+make -j$MAKE_THREADS || exit 1
+make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
