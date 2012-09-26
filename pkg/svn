@@ -17,5 +17,5 @@ http://archive.apache.org/dist/subversion/subversion-1.7.3.tar.bz2
 [build]
 CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
-make install || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
 
