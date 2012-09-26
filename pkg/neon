@@ -16,6 +16,6 @@ patch -p1 < "$K/neon-configure.patch" || exit 1
 patch -p1 < "$K/neon-ne_socket.patch" || exit 1
 CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" --with-ssl=openssl --enable-shared=yes || exit 1
 make -j$MAKE_THREADS || exit 1
-make install || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
 
 
