@@ -1,4 +1,5 @@
 [deps]
+root-perms
 config-cache
 9base
 binutils
