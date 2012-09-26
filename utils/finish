@@ -28,6 +28,7 @@ done
 
 cp "$K"/config.stage1 "$R"/src/config
 echo "export A=$A" >> "$R"/src/config
+[ -z "$MAKE_THREADS" ] || sed -i "s@MAKE_THREADS=1@MAKE_THREADS=$MAKE_THREADS@" "$R"/src/config
 
 echo nameserver 8.8.8.8 > "$R"/etc/resolv.conf
 ln -s /proc/mounts "$R"/etc/mtab
