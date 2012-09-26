@@ -4,9 +4,7 @@ Date: Sat, 13 Mar 2010 21:57:58 +0100
 Subject: [PATCH] Add Plural-Forms header to fi.po and remove fuzzy mark.
 
 ---
- .gitignore                                        |    1 +
  Makefile.am                                       |    8 +
- README.GIT                                        |    2 +-
  configure.ac                                      |    6 +-
  data/gnome-session/Makefile                       |    4 +
  data/gnome-session/openbox-gnome-fallback.session |    6 +
@@ -52,18 +50,6 @@ Subject: [PATCH] Add Plural-Forms header to fi.po and remove fuzzy mark.
  create mode 100644 obrender/button.c
  create mode 100644 obrender/button.h
 
-diff --git a/.gitignore b/.gitignore
-index 758f243..18e96d0 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -28,6 +28,7 @@ ltmain.sh
- m4/*.m4
- *.o
- *.orig
-+*.rej
- *.lo
- *.la
- missing
 diff --git a/Makefile.am b/Makefile.am
 index f59d3e7..1f7427c 100644
 --- a/Makefile.am
@@ -104,19 +90,6 @@ index f59d3e7..1f7427c 100644
  dist_noinst_DATA = \
  	data/rc.xsd \
  	data/menu.xsd \
-diff --git a/README.GIT b/README.GIT
-index dfed9c4..a6ad99b 100644
---- a/README.GIT
-+++ b/README.GIT
-@@ -3,7 +3,7 @@ To build Openbox from git you need:
- A C Compiler (GNU GCC 3.2+ suggested)
- -GNU Gettext 0.14.4
- -GNU Autoconf 2.50+
---GNU Automake 1.9 (no more, no less)
-+-GNU Automake 1.11+
- -GNU Libtool
- -Xlib library/headers (devel package)
- -Pkg-Config
 diff --git a/configure.ac b/configure.ac
 index 82c627f..a183309 100644
 --- a/configure.ac
