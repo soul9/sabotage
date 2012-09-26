@@ -44,6 +44,7 @@ sdl-ttf
 sdl-gfx
 strace
 svn
+tcpdump
 tomoyo
 wget
 wireless-tools
