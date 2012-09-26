@@ -6,8 +6,9 @@ musl
 relocate() {
 	local dir=$1
 	local backlinks=$2
+	[ -d $TC_PATH/$dir ] || return
 	mkdir -p $R/$dir
-	cd $TC_PATH/$dir
+	cd $TC_PATH/$dir || return
 	echo XXX $TC_PATH/$dir
 	for i in * ; do
 		if [ -d "$i" ] ; then
@@ -37,7 +38,7 @@ relocate etc ..
 #-L/lib -I/include additionally to the the paths in /opt/toolchain.
 
 ln -sf musl-gcc $R/bin/gcc
-ln -s $R/bin/gcc $R/bin/cc
+ln -sf $R/bin/gcc $R/bin/cc
 
 sed -i 's,gcc=gcc,gcc=rawcc,' $R/bin/musl-gcc
 
