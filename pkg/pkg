@@ -13,6 +13,7 @@ file
 flex
 gdb
 git
+gradm
 iptables
 less
 libao
@@ -43,6 +44,7 @@ sdl-ttf
 sdl-gfx
 strace
 svn
+tomoyo
 wget
 wireless-tools
 wpa-supplicant
