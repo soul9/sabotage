@@ -28,6 +28,7 @@ armflags=
 
 echo ac_cv_func_strsignal=yes > config.site
 ./configure --prefix="$butch_prefix" \
+--mandir="$butch_prefix"/share/man \
 --with-newlib --with-headers=no \
 --disable-bootstrap \
 --disable-shared \
