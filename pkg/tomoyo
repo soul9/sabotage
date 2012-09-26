@@ -1,5 +1,4 @@
 [deps]
-musl-git
 
 [main]
 filesize=210244
@@ -11,5 +10,6 @@ http://sourceforge.jp/frs/redir.php?m=jaist&f=/tomoyo/53357/tomoyo-tools-2.5.0-2
 
 [build]
 make -j$MAKE_THREADS CFLAGS="-D_GNU_SOURCE -D__WALL=0x40000000 -D_LARGEFILE64_SOURCE" || exit 1
-make install || exit 1
+make USRSBINDIR="$butch_prefix"/sbin USRLIBDIR="$butch_prefix"/lib MAN8="$butch_prefix"/share/man/man8 \
+  INSTALLDIR="$butch_install_dir" install || exit 1
 
