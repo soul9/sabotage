@@ -21,6 +21,7 @@ LDFLAGS="-lz -Wl,-rpath-link=$butch_prefix/lib" CFLAGS="-D_GNU_SOURCE -D_BSD_SOU
   CXXFLAGS="-DIPPROTO_MAX=256" \
   ./configure -C --prefix="$butch_prefix" \
     --without-subversion --without-nmap-update --without-zenmap \
+    --without-ndiff \
     ac_cv_working_getaddrinfo=yes ac_cv_working_getnameinfo=yes || exit 1
 
 make -j$MAKE_THREADS || exit 1
