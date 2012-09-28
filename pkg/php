@@ -23,6 +23,7 @@ json-c
 bzip2
 
 [build]
+[ -z "$butch_prefix" ] && butch_prefix=/
 pfx="$butch_prefix"
 # all the below *_cv_ tests fail because the php configure tests
 # use exit() but dont include stdlib.h. same for strcmp and string.h etc.
