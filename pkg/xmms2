@@ -10,10 +10,13 @@ sha512=478103d80264c0cb32912e828f74d0f5b2f10fe310f530a87ebecda7ca547a69e238cd572
 sqlite
 python
 libstdc++-dynamic
+glib
 
 [build]
-patch -p1 < "$K/xmms2-rtp.patch"
+# xmms2's waf is broken: when prefix is empty, it will not install any dso's into /lib
+[ -z "$butch_prefix" ] && butch_prefix=/
 
+patch -p1 < "$K/xmms2-rtp.patch"
 CFLAGS=-D_GNU_SOURCE ./waf configure --prefix="$butch_prefix" || exit 1
 ./waf build -j$MAKE_THREADS || exit 1
 ./waf install --destdir="$butch_install_dir" || exit 1
