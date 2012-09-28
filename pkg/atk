@@ -10,6 +10,7 @@ glib
 
 [build]
 patch -p1 < "$K/atk-hyperlink.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  --disable-glibtest --disable-silent-rules --enable-gtk-doc-html=no || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
