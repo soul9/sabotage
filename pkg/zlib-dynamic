@@ -17,4 +17,4 @@ CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
 #busybox mktemp -u is broken and returns empty string
 sed -i 's,mktemp -u,mktemp,g' Makefile
 make -j$MAKE_THREADS || exit 1
-make install DESTDIR="$butch_install_dir" || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1

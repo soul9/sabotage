@@ -19,9 +19,8 @@ make -j$MAKE_THREADS || exit 1
 
 # make install is broken
 ranlib libz.a
-mkdir -p "$butch_install_dir/lib"
-install -m644 libz.a "$butch_install_dir/lib/"
-mkdir -p "$butch_install_dir/include"
-install -m644 zlib.h zconf.h "$butch_install_dir/include/"
-
-skipdestdirfix=1
+dest="$butch_install_dir""$butch_prefix"
+mkdir -p "$dest"/lib
+install -m644 libz.a "$dest"/lib/
+mkdir -p "$dest"/include
+install -m644 zlib.h zconf.h "$dest"/include/
