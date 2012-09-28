@@ -12,7 +12,7 @@ sha512=0c4343c2abf5e13190a648a50d2e575d89553f94a119334a97662ccc39c46944db4b84028
 http://curl.haxx.se/download/curl-7.26.0.tar.lzma
 
 [build]
-CFLAGS="-Wl,-rpath-link=/lib -D_GNU_SOURCE" ./configure -C \
+CFLAGS="-Wl,-rpath-link=$butch_prefix/lib -D_GNU_SOURCE" ./configure -C \
   --prefix="$butch_prefix" \
   --with-ssl \
   --enable-ipv6 \
