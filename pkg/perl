@@ -9,6 +9,8 @@ sha512=d0bb91141ac4c5cc3d98dbeada130ae70c32cf59ac1a74991b5b1f52138b37f5cfa423393
 http://www.cpan.org/src/5.0/perl-5.16.0.tar.bz2
 
 [build]
+# with empty prefix, perl will disregard the prefix parameters entirely, failing to build
+[ -z "$butch_prefix" ] && butch_prefix=/
 
 sed -i 's,-fstack-protector,-fnostack-protector,g' ./Configure
 
