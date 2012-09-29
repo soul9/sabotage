@@ -8,9 +8,11 @@ http://download.oracle.com/berkeley-db/db-5.3.21.tar.gz
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch"
+patch -p1 < "$K/bdb-configure.patch"
 cd build_unix
-CFLAGS=-D_GNU_SOURCE ../dist/configure --prefix="$butch_prefix" --enable-compat185 \
-    --enable-shared --enable-static --enable-dbm || exit 1
+mv ../config.cache .
+CFLAGS="-D_GNU_SOURCE" ../dist/configure -C --prefix="$butch_prefix" --enable-compat185 \
+    --enable-shared --enable-static --enable-dbm \
+    db_cv_clock_monotonic=yes db_cv_build_sequence=yes db_cv_mmap_extend=yes || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
