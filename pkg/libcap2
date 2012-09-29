@@ -12,6 +12,6 @@ attr
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
 #CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS prefix="$butch_prefix" lib=lib CFLAGS=-D_GNU_SOURCE LDFLAGS=-Wl,-rpath-link="$butch_prefix"/lib || exit 1
+make -j$MAKE_THREADS prefix="$butch_prefix" lib=lib CFLAGS=-D_GNU_SOURCE || exit 1
 sed -i 's@$(SBINDIR)/setcap cap_setfcap=@LD_LIBRARY_PATH=$(LIBDIR) $(SBINDIR)/setcap cap_setfcap=@' progs/Makefile
 make FAKEROOT="$butch_install_dir" prefix="$butch_prefix" lib=lib install || exit 1
