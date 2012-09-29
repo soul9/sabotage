@@ -1,5 +1,5 @@
 [mirrors]
-http://mirror.wzff.de/sabotage/proxychains-4.1.tar.bz2
+http://mirror.wzff.de/sabotage/tarballs/proxychains-4.1.tar.bz2
 [main]
 filesize=22392
 sha512=23d735d553aa85c7068e8bfaf8175d6203cd4fd8859badc79308f627d66d0ec89c13b329771c47d190711e6196dc5ebacd03baa69fb3c6f69fed781acfaf688b
