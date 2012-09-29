@@ -1,30 +1,18 @@
-[main]
-filesize=613261
-sha512=5d37d3695105fc345ca269ab98cd991472e5de72f702c9a8a652a7d114a40eb99670c69a87ecb24bf64e96318fc0ee2bcb44c497d9d3d2a67378c99e4eb348fe
-tardir=jpeg-6b
-
 [mirrors]
-http://prdownloads.sourceforge.net/libjpeg/jpegsrc.v6b.tar.gz
+http://www.ijg.org/files/jpegsrc.v8d.tar.gz
+
+[main]
+filesize=991456
+sha512=7a8b4cff5b1caf6a7281c5dce4e1efa1b68360bd64dd2e619b60c9e1d49f22624bc8780b681bfab073e7b1d4b7f41008a464a58f0eeeacb0a40ff996d7eb5753
+tardir=jpeg-8d
 
 [deps]
-libjpeg
 
 [build]
-
-CFLAGS=-fPIC ./configure --prefix="$butch_prefix" \
+CFLAGS="-fPIC -include stdlib.h -include stdio.h" ./configure --prefix="$butch_prefix" \
   --disable-dso || exit 1
 
-sed -i -e 's, $(bindir), $(DESTDIR)/$(bindir),' Makefile
-sed -i -e 's, $(libdir), $(DESTDIR)/$(libdir),' Makefile
-sed -i -e 's, $(includedir), $(DESTDIR)/$(includedir),' Makefile
-sed -i -e 's, $(mandir), $(DESTDIR)/$(mandir),' Makefile
+make V=1 -j$MAKE_THREADS || exit 1
 
-mkdir -p "$butch_install_dir/bin"
-mkdir -p "$butch_install_dir/lib"
-mkdir -p "$butch_install_dir/include"
-mkdir -p "$butch_install_dir/man/man1"
-
-make -j$MAKE_THREADS || exit 1
+# this installs .so, .a (fPIC) and .h
 make DESTDIR="$butch_install_dir" install || exit 1
-make DESTDIR="$butch_install_dir" install-lib || exit 1
-make DESTDIR="$butch_install_dir" install-headers || exit 1
