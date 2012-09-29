@@ -2,9 +2,15 @@
 lib=$1
 tmpc=/tmp/rpath-check.c
 tmpb=/tmp/rpath-check
+tmpchk=/tmp/test.c
 
 if [ -z "$lib" ] ; then
 	echo run "$0 check" to start a check
+	echo run "$0 clear" to clean up temp files
+elif [ "$lib" = "clear" ] ; then
+	rm -f $tmpc
+	rm -f $tmpb
+	rm -f $tmpchk
 elif [ "$lib" = "check" ] ; then
 	cat << EOF > $tmpc
 	#include <stdio.h>
@@ -26,13 +32,15 @@ elif [ "$lib" = "check" ] ; then
 	}
 EOF
 	gcc -g -O0 $tmpc -o $tmpb || exit 1
+	touch $tmpchk
 
 	find /lib -name '*.so*' -exec $0 "{}" \;
 
 else
 	flags=`$tmpb $lib`
-	echo $lib
-	[ -z "$flags" ] || gcc test.c $flags 2>&1 | grep "needed by"
+	if [ ! -z "$flags" ] ; then
+		gcc $tmpchk $flags 2>&1 | grep "needed by"
+	fi
 fi
 
 
