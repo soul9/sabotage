@@ -25,12 +25,27 @@ $R/bin/patch -p1 < "$K/gdb-arm-wrapper.patch" || exit 1
 
 mkdir build
 cd build
+mv ../config.cache .
+# fixing implicit declaration in recursively called (by make) configure tests...
+cat << EOF >> config.cache
+bash_cv_must_reinstall_sighandlers=yes
+bash_cv_func_sigsetjmp=yes
+bash_cv_func_strcoll_broken=no 
+bash_cv_func_ctype_nonascii=no
+ac_cv_func_strncmp_works=yes
+ac_cv_c_stack_direction=-1
+EOF
+for culprit in readline libiberty ; do
+	mkdir -p $culprit
+	cp config.cache $culprit/
+done
 
 #-DUT_NAMESIZE=32
 #-Dfeof_unlocked=feof
-CC="$CC -static -L$R/lib -I$R/include -D_GNU_SOURCE -D_LARGEFILE64_SOURCE" ../configure -C \
+CC="$CC -static -D_GNU_SOURCE -D_LARGEFILE64_SOURCE" ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
-  --with-system-zlib=yes --enable-gdbserver=no --disable-sim || exit 1
+  --with-system-zlib=yes --enable-gdbserver=no --disable-sim \
+  || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install-gdb || exit 1
