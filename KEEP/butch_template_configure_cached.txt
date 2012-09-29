@@ -30,8 +30,13 @@ butch_root=$R
 [ "$butch_root" = "/" ] && butch_do_custom_prefix=false || butch_do_custom_prefix=true
 
 # butch_prefix is used in buildscripts to customize the prefix.
-# butch_install_dir musl be the same path or a child path of the prefix, otherwise it's UB.
+# butch_install_dir must be the same path or a child path of the prefix, otherwise it's UB.
 butch_prefix="$butch_root"
+
+# making the prefix empty instead of / seems like a good idea to not get ugly double slashes
+# when concatenating paths. however this leads to multiple issues in buggy packages,
+# and most notably; the linker will not put lib deps into DT_NEEDED, so we have to pass -rpath.
+# [ "$butch_prefix" = "/" ] && butch_prefix=
 
 butch_custom_destdir="$butch_prefix/opt/$butch_package_name"
 
