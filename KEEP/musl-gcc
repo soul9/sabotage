@@ -1,6 +1,6 @@
 #!/bin/sh
 
-libc_prefix="PPPP/"
+libc_prefix="PPPP"
 ldso_pathname="PPPP/lib/ld-musl-AAAA.so.1"
 gcc=rawcc
 libc_lib=$libc_prefix/lib
@@ -51,4 +51,4 @@ libgcc.a%%s %%:if-exists(libgcc_eh.a%%s)
 exec 3<"$tmp_specs"
 rm -f "$tmp_specs"
 
-exec "$gcc" -Werror-implicit-function-declaration -specs=/proc/self/fd/3 "$@"
+exec "$gcc" -Wl,-rpath=$libc_lib -Werror-implicit-function-declaration -specs=/proc/self/fd/3 "$@"
