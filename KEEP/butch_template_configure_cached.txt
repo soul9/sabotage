@@ -35,8 +35,8 @@ butch_prefix="$butch_root"
 
 # making the prefix empty instead of / seems like a good idea to not get ugly double slashes
 # when concatenating paths. however this leads to multiple issues in buggy packages,
-# and most notably; the linker will not put lib deps into DT_NEEDED, so we have to pass -rpath.
-# [ "$butch_prefix" = "/" ] && butch_prefix=
+# but these have been fixed now (see openssl-dynamic, perl, xcb-proto for reference).
+[ "$butch_prefix" = "/" ] && butch_prefix=
 
 butch_custom_destdir="$butch_prefix/opt/$butch_package_name"
 
