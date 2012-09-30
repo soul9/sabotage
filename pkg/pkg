@@ -5,6 +5,8 @@ automake
 bison
 busybox-man
 capchroot
+cpan-Data-Dump
+cpan-File-Slurp
 curl
 diffutils
 dropbear
