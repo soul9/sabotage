@@ -31,7 +31,7 @@ CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE" ./configure -C  \
   --prefix="$butch_prefix" --enable-re2c-cgoto \
   --mandir="$butch_prefix"/share/man \
   _cv_have_broken_glibc_fopen_append=no \
-  ac_cv_what_readdir_r=POSIX \
+  ac_cv_what_readdir_r=POSIX ac_cv_broken_sprintf=no \
   ac_cv_crypt_blowfish=yes ac_cv_crypt_md5=yes ac_cv_crypt_SHA256=yes \
   ac_cv_crypt_SHA512=yes ac_cv_crypt_des=yes ac_cv_crypt_ext_des=yes \
   ac_cv_pwrite=yes ac_cv_pread=yes \
