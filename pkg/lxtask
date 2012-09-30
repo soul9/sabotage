@@ -8,6 +8,7 @@ sha512=60a9b55880ee0a5b86043edacefb93b83caddbb045e781537b6fd04d2e3259e4fa5117fc8
 
 [deps]
 gtk+2
+intltool
 
 [build]
 patch -p1 < "$K/lxtask-types.patch"

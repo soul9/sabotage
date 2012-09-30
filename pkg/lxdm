@@ -10,6 +10,7 @@ sha512=8ed4a955a910def4db66958d1cb24976db178b8763199a024b6c2119894745e3646566c42
 glib
 gdk-pixbuf
 gtk+2
+intltool
 
 [build]
 patch -p1 < "$K/lxdm-backtrace.patch"

@@ -11,6 +11,7 @@ gtk+2
 pkgconf
 perl
 cpan-XML-Parser
+intltool
 
 [build]
 #patch -p1 < "$K/some.patch"
