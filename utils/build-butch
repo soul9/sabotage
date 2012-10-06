@@ -1,11 +1,11 @@
 #!/bin/sh
-
-tarxf http://mirror.wzff.de/butch/ butch-0.1.2 .tar.bz2 butch
-
 filesize='62924'
 sha512='61552086768fe81462566af09c9d42f6c20d546a18a9ef12ad68aa486a4c9bb0be16048686c86cbb6f9bf9ce71bbc948a8866ba7b3fa216c0f09090312c6c881'
-
 filename="$S"/butch-0.1.2.tar.bz2
+
+if [ -z "$BUTCH_BIN" ] ; then
+
+tarxf http://mirror.wzff.de/butch/ butch-0.1.2 .tar.bz2 butch
 
 read sz _ <<EOF
 $(du -b "$filename")
@@ -28,6 +28,11 @@ fi
 # this speeds up compilation a bit
 echo "CFLAGS=-O0 -g" > lib/config.mak
 ./build.sh
-cp butch/butch "$S"/butch.bin
+BUTCH_BIN=butch/butch
+# copy tarball ...
 cp "$filename" "$C"/
+
+fi
+
+cp "$BUTCH_BIN" "$S"/butch.bin
 
