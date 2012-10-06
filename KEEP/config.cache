@@ -415,11 +415,11 @@ ac_cv_func_isalpha=${ac_cv_func_isalpha='yes'}
 ac_cv_func_isascii=${ac_cv_func_isascii='yes'}
 ac_cv_func_isatty=${ac_cv_func_isatty='yes'}
 ac_cv_func_isblank=${ac_cv_func_isblank='yes'}
-ac_cv_func_isdigit=${ac_cv_func_isdigit='no'}
+ac_cv_func_isdigit=${ac_cv_func_isdigit='yes'}
 ac_cv_func_isinf=${ac_cv_func_isinf='no'}
 ac_cv_func_isnan=${ac_cv_func_isnan='no'}
-ac_cv_func_isprint=${ac_cv_func_isprint='no'}
-ac_cv_func_isspace=${ac_cv_func_isspace='no'}
+ac_cv_func_isprint=${ac_cv_func_isprint='yes'}
+ac_cv_func_isspace=${ac_cv_func_isspace='yes'}
 ac_cv_func_iswalnum=${ac_cv_func_iswalnum='yes'}
 ac_cv_func_iswblank=${ac_cv_func_iswblank='yes'}
 ac_cv_func_iswcntrl=${ac_cv_func_iswcntrl='yes'}
