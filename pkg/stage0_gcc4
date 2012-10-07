@@ -35,6 +35,7 @@ echo ac_cv_func_strsignal=yes > config.site
 --disable-shared \
 --disable-multilib \
 --disable-nls \
+--disable-tls \
 --disable-mudflap --disable-libmudflap --disable-libssp \
 --disable-libgomp \
 $armflags  || exit 1
