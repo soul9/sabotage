@@ -17,6 +17,9 @@ if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 	rm -rf butch
 	git clone https://github.com/rofl0r/butch
 fi
+# if on arm or mips, we only use one build thread to not exhaust memory
+[ "$A" = "arm" ] || [ "$A" = "mips" ] && sed -i \
+  's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
 echo "CFLAGS=-O0 -g" > lib/config.mak
 CC="$R/bin/musl-gcc -static" ./build.sh
 cp butch/butch $R/bin/butch

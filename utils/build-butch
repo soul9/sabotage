@@ -26,7 +26,12 @@ if [ "$sha" != "$sha512" ]; then
 fi
 
 # this speeds up compilation a bit
-echo "CFLAGS=-O0 -g" > lib/config.mak
+echo "CFLAGS=-O0" > butch/config.mak
+
+# if on arm or mips, we only use one build thread to not exhaust memory
+[ "$A" = "arm" ] || [ "$A" = "mips" ] && sed -i \
+  's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
+
 ./build.sh
 BUTCH_BIN=butch/butch
 # copy tarball ...
