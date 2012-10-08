@@ -15,6 +15,7 @@ export LOGPATH="$S/logs"
 export A=i386
 #export A=x86_64
 #export A=arm
+#export A=mips
 
 ## set the compiler environment
 export CC=gcc
@@ -50,3 +51,4 @@ export ARM_FPU=vfp
 # to the prefered destination anyway.
 # if you don't set BUTCH_BIN, it will be downloaded and built before stage0.
 # export BUTCH_BIN=$PWD/tarballs/butch-armv6l
+
