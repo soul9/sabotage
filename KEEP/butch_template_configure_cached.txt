@@ -82,7 +82,9 @@ if %BUTCH_HAVE_TARBALL ; then
 	fi
 	[ -d "$butch_build_root" ] || mkdir -p "$butch_build_root"
 	cd "$butch_build_root"
+	printf "%s: starting to untar\n" "`date`"
 	tar xf "$butch_cache_dir/%BUTCH_TARBALL" || (echo tarball error; exit 1)
+	printf "%s: untar done\n" "`date`"
 	cd "$butch_build_dir"
 
 	# this copies a config.cache template (gets installed by pkg/config-cache)
