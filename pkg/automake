@@ -7,6 +7,7 @@ sha512=7a47bc64597027cc84bc60e33aa1887f19797abdb4434b60d372409a69dc9dac07c5d4c6b
 
 [mirrors]
 ftp://ftp.gnu.org/pub/gnu/automake/automake-1.11.1.tar.bz2
+http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2
 
 [build]
 ./configure -C --prefix="$butch_prefix" || exit 1
