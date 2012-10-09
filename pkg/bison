@@ -8,6 +8,7 @@ http://gnu.mirrorcatalogs.com/bison/bison-2.4.3.tar.bz2
 http://spout.ussg.indiana.edu/gnu/bison/bison-2.4.3.tar.bz2
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 CFLAGS="-static" ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
 make -j$MAKE_THREADS  || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

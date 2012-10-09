@@ -14,6 +14,9 @@ xz-dynamic
 
 [build]
 #patch -p1 < "$K/some.patch"
+
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
+
 CFLAGS=-D_GNU_SOURCE LDFLAGS="-ljpeg -ltiff -lz -llzma -ljpeg" ./configure -C \
   --prefix="$butch_prefix" \
   --disable-nls || exit 1

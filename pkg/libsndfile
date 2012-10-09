@@ -10,6 +10,9 @@ libogg
 libvorbis
 
 [build]
+printf "all:\n\ttrue\n\ngenfiles:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > regtest/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > examples/Makefile.in
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

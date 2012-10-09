@@ -9,6 +9,8 @@ sha512=4afa838925983f8927f62c5499c61e0a4a7f2ed9e5b9074fddaf43b28317892d954e404a1
 http://tukaani.org/xz/xz-5.0.3.tar.bz2
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
+
 # the stage0 arm toolchain has a slightly broken libgcc (with external deps to libc)
 # this package is the only one that fails to build.
 # so let it depend on the stage1 toolchain. another fix could be to add -lc at the

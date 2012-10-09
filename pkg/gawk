@@ -7,6 +7,7 @@ http://ftpmirror.gnu.org/gawk/gawk-4.0.0.tar.bz2
 http://ftp.gnu.org/pub/gnu/gawk/gawk-4.0.0.tar.bz2
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 CC="$CC -static" ./configure -C --prefix="$butch_prefix" --libexecdir="$butch_prefix"/lib \
   --disable-nls ac_cv_header_dlfcn_h=no || exit 1
 make -j$MAKE_THREADS || exit 1

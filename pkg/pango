@@ -13,6 +13,7 @@ libxft
 cairo
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 patch -p1 < "$K/pango-querymodules-prefix.patch"
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1

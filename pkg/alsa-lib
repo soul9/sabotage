@@ -12,6 +12,7 @@ http://distfiles.lesslinux.org/alsa-lib-1.0.25.tar.bz2
 http://distfiles.exherbo.org/distfiles/alsa-lib-1.0.25.tar.bz2
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 rm -f src/compat/hsearch_r.c
 touch src/compat/hsearch_r.c
 

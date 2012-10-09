@@ -14,6 +14,7 @@ sha512=f17baa6e871c7df4dc61330e32e235906d9e4c842a70226b0833d2b64ab62811131b960eb
 ftp://ftp.x.org/pub/individual/xserver/xorg-server-1.9.5.tar.bz2
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 sed -i 's/termio.h/termios.h/' hw/xfree86/os-support/xf86_OSlib.h 
 # XXX implement me, for now cast float to int.
 sed -i 's/lroundf\?//' dix/getevents.c

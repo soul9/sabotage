@@ -10,6 +10,8 @@ ftp://ftp.gnu.org/pub/gnu/automake/automake-1.11.1.tar.bz2
 http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > lib/Automake/tests/Makefile.in
 ./configure -C --prefix="$butch_prefix" || exit 1
 make || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

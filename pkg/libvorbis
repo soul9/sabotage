@@ -9,6 +9,7 @@ libogg
 xz
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 # libvorbis wants emmintrin.h and similar stuff, which is in /include/gcc
 CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/gcc" \
   ./configure -C --prefix="$butch_prefix" || exit 1

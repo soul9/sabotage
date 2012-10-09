@@ -9,6 +9,7 @@ sha512=20316b4de66a1871bb9f802831b2262c54eaecf8d7c3696d3949f8464834c6aeca32d5738
 glib
 
 [build]
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 patch -p1 < "$K/atk-hyperlink.patch"
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
   --disable-glibtest --disable-silent-rules --enable-gtk-doc-html=no || exit 1
