@@ -67,9 +67,9 @@ cp -rv dest/include/* $R/include/
 #fix ext2 header...
 cp -f $K/ext2_fs.h $R/include/linux/
 
-# usually when using an ARM system you dont want to build a generic kernel
+# usually when using an ARM/MIPS system you dont want to build a generic kernel
 # you have to use a heavily patched vendor specific one
-if [ ! "$A" = "arm" ] ; then
+if [ ! "$A" = "arm" ] && [ ! "$A" = "mips" ] ; then
 
 #let make create dependencies, otherwise parallel build wont work
 make CC="$CC" HOSTCC="$HOSTCC" ARCH=$A HOSTCFLAGS=-D_GNU_SOURCE DISABLE_PAX_PLUGINS=y dep || exit 1
