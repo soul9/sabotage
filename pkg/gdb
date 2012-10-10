@@ -1,6 +1,6 @@
 [deps]
 kernel-headers
-ncurses
+termcap
 patch
 
 [main]
@@ -48,6 +48,7 @@ done
 CC="$CC -static -D_GNU_SOURCE -D_LARGEFILE64_SOURCE" ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
   --with-system-zlib=yes --enable-gdbserver=no --disable-sim \
+  --disable-tui \
   || exit 1
 
 make -j$MAKE_THREADS || exit 1
