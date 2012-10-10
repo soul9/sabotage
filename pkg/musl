@@ -40,6 +40,9 @@ make DESTDIR="$TC_PATH" install || exit 1
 [ "$STAGEU" = "1" ] && fixdestdir
 
 ln -sf  "$butch_prefix"/lib/libc.so "$TC_PATH/bin/ldd"
+[ -z "$MUSL_ENDIAN" ] || \
+  printf "#define __BYTE_ORDER %s\n" "$MUSL_ENDIAN" > "$TC_PATH"/include/bits/endian.h
+
 
 musl_gcc="$TC_PATH/bin/musl-gcc"
 
