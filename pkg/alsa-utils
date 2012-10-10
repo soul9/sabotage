@@ -1,7 +1,6 @@
 [deps]
 alsa-lib
 ncurses
-ncurses-dynamic
 
 [main]
 filesize=1132780

@@ -16,8 +16,9 @@ cp $K/ncurses-fallback.c ncurses/fallback.c
 
 # that </dev/ptmx is to fix an insanely stupid test for poll which
 # needs to block on fd 1 (which they assume to be a tty).
-CC="$CC -static -D_GNU_SOURCE" ./configure -C \
+CFLAGS="-D_GNU_SOURCE -O0 -fPIC" ./configure -C \
    --with-normal --without-tests \
+   --with-shared \
    --enable-sigwinch --with-fallbacks="linux vt100 xterm xterm256-color" \
    --prefix="$butch_prefix" --includedir="$butch_prefix"/include --mandir="$butch_prefix"/share/man \
    --disable-nls --without-dlsym --without-cxx-binding </dev/ptmx || exit 1

@@ -1,6 +1,6 @@
 [deps]
 relocate_toolchain
-ncurses-dynamic
+ncurses
 
 [main]
 filesize=15139737
