@@ -7,7 +7,7 @@ http://ftp.spline.de/pub/OpenBSD/OpenSSH/portable/openssh-6.0p1.tar.gz
 http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-6.0p1.tar.gz
 
 [deps]
-openssl-dynamic
+openssl
 
 [build]
 # fix implicit declarations

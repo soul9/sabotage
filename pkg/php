@@ -12,7 +12,7 @@ libedit
 re2c
 curl
 db
-openssl-dynamic
+openssl
 openssh
 libjpeg
 libpng

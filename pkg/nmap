@@ -10,7 +10,7 @@ pcre
 zlib-dynamic
 luajit
 libstdc++-dynamic
-openssl-dynamic
+openssl
 
 [build]
 patch -p1 < "$K/nmap-configure-pcap_suitable.patch" || exit 1

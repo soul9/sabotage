@@ -1,5 +1,5 @@
 [deps]
-openssl-dynamic
+openssl
 ncurses
 gzip
 ca-certificates
