@@ -7,10 +7,7 @@ ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz
 ftp://gd.tuwien.ac.at/pub/libxml/libxml2-2.8.0.tar.gz
 http://xmlsoft.org/sources/libxml2-2.8.0.tar.gz
 
-
 [deps]
-ncurses
-ncurses-dynamic
 zlib
 zlib-dynamic
 xz
