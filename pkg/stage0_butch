@@ -12,6 +12,7 @@ http://codu.org/~rofl/butch-0.1.2.tar.bz2
 http://mirror.wzff.de/butch/butch-0.1.2.tar.bz2
 
 [build]
+if [ -z "$BUTCH_BIN" ] ; then
 # set environment variable BUTCH_FROM_GIT to 1 if you want to test the latest butch
 if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 	rm -rf butch
@@ -21,5 +22,8 @@ fi
 [ "$A" = "arm" ] || [ "$A" = "mips" ] && sed -i \
   's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
 echo "CFLAGS=-O0 -g" > lib/config.mak
-CC="$R/bin/musl-gcc -static" ./build.sh
-cp butch/butch $R/bin/butch
+CC="$R/bin/musl-gcc -static" ./build.sh || exit 1
+cp butch/butch $R/bin/butch || exit 1
+else
+	cp "$BUTCH_BIN" $R/bin/butch || exit 1
+fi
