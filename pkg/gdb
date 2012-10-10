@@ -23,6 +23,9 @@ $R/bin/patch -p1 < "$K/gdb-amd64-debugreg.patch" || exit 1
 $R/bin/patch -p1 < "$K/gdb-arm-gentmap.patch" || exit 1
 $R/bin/patch -p1 < "$K/gdb-arm-wrapper.patch" || exit 1
 
+# fix mips build ...
+cp "$K"/gdb-sgidefs.h gdb/sgidefs.h
+
 mkdir build
 cd build
 mv ../config.cache .
