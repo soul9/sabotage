@@ -1,5 +1,5 @@
 [deps]
-ncurses
+termcap
 
 [main]
 filesize=307308
@@ -10,7 +10,8 @@ http://www.greenwoodsoftware.com/less/less-444.tar.gz
 
 [build]
 #configure is missing some includes... which lead to implicit declarations
-patch -p1 < "$K/less.patch"
+patch -p1 < "$K"/less.patch || exit 1
+patch -p1 < "$K"/less-implicit.patch || exit 1
 
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
