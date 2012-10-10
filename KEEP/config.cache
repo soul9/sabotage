@@ -1322,8 +1322,6 @@ ac_cv_header_sys_wait_h=${ac_cv_header_sys_wait_h='yes'}
 ac_cv_header_sys_xattr_h=yes
 ac_cv_header_sysexits_h=${ac_cv_header_sysexits_h='yes'}
 ac_cv_header_syslog_h=${ac_cv_header_syslog_h='yes'}
-ac_cv_header_term_h=${ac_cv_header_term_h='yes'}
-ac_cv_header_termcap_h=${ac_cv_header_termcap_h='yes'}
 ac_cv_header_termio_h=${ac_cv_header_termio_h='no'}
 ac_cv_header_termios_h=${ac_cv_header_termios_h='yes'}
 ac_cv_header_tgmath_h=${ac_cv_header_tgmath_h='yes'}
@@ -1393,10 +1391,6 @@ ac_cv_lib_rt_sched_yield=${ac_cv_lib_rt_sched_yield='yes'}
 ac_cv_lib_sec_acl_get=${ac_cv_lib_sec_acl_get='no'}
 ac_cv_lib_selinux_is_selinux_enabled=${ac_cv_lib_selinux_is_selinux_enabled='no'}
 ac_cv_lib_socket_socket=${ac_cv_lib_socket_socket='no'}
-ac_cv_lib_termcap_tgetent=${ac_cv_lib_termcap_tgetent='no'}
-ac_cv_lib_termlib_tgetent=${ac_cv_lib_termlib_tgetent='no'}
-ac_cv_lib_tinfo_tgetent=${ac_cv_lib_tinfo_tgetent='no'}
-ac_cv_lib_tinfo_tgoto=${ac_cv_lib_tinfo_tgoto='no'}
 ac_cv_lib_unknown___tgoto=${ac_cv_lib_unknown___tgoto='no'}
 ac_cv_lib_util_getloadavg=${ac_cv_lib_util_getloadavg='no'}
 ac_cv_lib_xcurses_initscr=${ac_cv_lib_xcurses_initscr='no'}
