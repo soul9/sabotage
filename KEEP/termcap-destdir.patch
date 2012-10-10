@@ -1,0 +1,43 @@
+--- termcap-1.3.1/Makefile.in
++++ termcap-1.3.1.patched/Makefile.in
+@@ -24,8 +24,8 @@
+ AR = ar
+ RANLIB = @RANLIB@
+ 
+-INSTALL = @INSTALL@
+-INSTALL_DATA = @INSTALL_DATA@
++INSTALL = install -D
++INSTALL_DATA = $(INSTALL) -m 644
+ 
+ MAKEINFO = makeinfo
+ 
+@@ -42,12 +42,6 @@
+ # Directory in which to install termcap.h.
+ includedir = $(prefix)/include
+ 
+-# Directory in which to optionally also install termcap.h,
+-# so compilers besides gcc can find it by default.
+-# If it is empty or not defined, termcap.h will only be installed in
+-# includedir. 
+-oldincludedir = /usr/include
+-
+ # Directory in which to install the documentation info files.
+ infodir = $(prefix)/info
+ 
+@@ -72,13 +66,10 @@
+ 	$(CC) -c $(CPPFLAGS) $(DEFS) -I. -I$(srcdir) $(CFLAGS) $<
+ 
+ install: all installdirs @installdata@
+-	$(INSTALL_DATA) libtermcap.a $(libdir)/libtermcap.a
+-	-$(RANLIB) $(libdir)/libtermcap.a
+-	cd $(srcdir); $(INSTALL_DATA) termcap.h $(includedir)/termcap.h
+-	-cd $(srcdir); test -z "$(oldincludedir)" || \
+-	  $(INSTALL_DATA) termcap.h $(oldincludedir)/termcap.h
++	$(INSTALL_DATA) libtermcap.a $(DESTDIR)$(libdir)/libtermcap.a
++	cd $(srcdir); $(INSTALL_DATA) termcap.h $(DESTDIR)$(includedir)/termcap.h
+ 	cd $(srcdir); for f in termcap.info*; \
+-	do $(INSTALL_DATA) $$f $(infodir)/$$f; done
++	do $(INSTALL_DATA) $$f $(DESTDIR)$(infodir)/$$f; done
+ 
+ uninstall: @uninstalldata@
+ 	rm -f $(libdir)/libtermcap.a $(includedir)/termcap.h
