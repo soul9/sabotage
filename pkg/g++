@@ -7,7 +7,3 @@ ftp://gd.tuwien.ac.at/gnu/gcc/releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
 http://gcc.cybermirror.org//releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
 http://gcc-uk.internet.bs/releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
 http://www.netgull.com/gcc/releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
-
-[build]
-true
-
