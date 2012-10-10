@@ -4,13 +4,14 @@ make
 gcc4
 xz
 
-[main]
-filesize=78955853
-sha512=94e2ed2165ce501d76c4947fa94288e0f8451092ca3a8360a1d34d8760a0304bbec00285bcde02b4a07aed698c7c78403f4cf82e2812154bbdb6dabd134dde34
-
 [mirrors]
-http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.3.4.tar.bz2
-http://kambing.ui.ac.id/linux/v3.0/linux-3.3.4.tar.bz2
+http://www.kernel.org/pub/linux/kernel/v3.x/linux-3.3.4.tar.xz
+http://kambing.ui.ac.id/linux/v3.0/linux-3.3.4.tar.xz
+
+[main]
+
+filesize=65856460
+sha512=a42f238f06278365969393db841d0d4ddc61a4d2093dda759c177366dc1f43e30a2c71309f07214fc881367ee0c185c819af929b5817185e83943894a8c1718e
 
 [build]
 # get into menuconfig using
