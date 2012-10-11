@@ -2,6 +2,7 @@
 kernel-headers
 termcap
 patch
+gettext
 
 [main]
 filesize=20614020
@@ -39,11 +40,15 @@ bash_cv_func_strcoll_broken=no
 bash_cv_func_ctype_nonascii=no
 ac_cv_func_strncmp_works=yes
 ac_cv_c_stack_direction=-1
+gt_cv_func_gnugettext1_libintl=yes
 EOF
-for culprit in readline libiberty ; do
+# readline and and libiberty have broken checks; but we have to copy config.cache
+# everywhere to get cache.
+for culprit in readline libiberty libdecnumber opcodes readline bfd ; do
 	mkdir -p $culprit
 	cp config.cache $culprit/
 done
+sed -i 's/noconfigdirs=""/noconfigdirs="intl"/' ../configure
 
 #-DUT_NAMESIZE=32
 #-Dfeof_unlocked=feof
