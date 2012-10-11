@@ -1,4 +1,5 @@
 #!/bin/sh
+printf "%s: start\n" "`date`"
 
 # ALL VARIABLES STARTING WITH % WILL BE REPLACED BY BUTCH
 # WITH VALUES TAKEN FROM THE PKG FILE.
@@ -117,11 +118,13 @@ fixdestdir() {
 	fi
 }
 
+printf "%s: start build\n" "`date`"
 # this will be replaced by the contents of the pkg's [build] section.
 # note that all critical commands in the buildscript should use || exit 1
 # so that it aborts on error!
 %BUTCH_BUILDSCRIPT
 
+printf "%s: end build\n" "`date`"
 echo "post buildscript phase..."
 
 # a package that doesn't want to be handled by the code below this line
@@ -189,4 +192,4 @@ if $have_files ; then
 
 fi
 
-
+printf "%s: done.\n" "`date`"
