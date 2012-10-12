@@ -3,6 +3,7 @@ kernel-headers
 termcap
 patch
 gettext
+readline
 
 [main]
 filesize=20614020
@@ -48,7 +49,9 @@ for culprit in readline libiberty libdecnumber opcodes readline bfd ; do
 	mkdir -p $culprit
 	cp config.cache $culprit/
 done
-sed -i 's/noconfigdirs=""/noconfigdirs="intl"/' ../configure
+sed -i 's/noconfigdirs=""/noconfigdirs="intl readline"/' ../configure
+# let's use libedit in lieu of readline and save us from the in-tree compile of the latter...
+ln -sf "$butch_prefix"/lib/libreadline.a readline/libreadline.a
 
 #-DUT_NAMESIZE=32
 #-Dfeof_unlocked=feof
