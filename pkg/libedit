@@ -6,12 +6,18 @@ sha512=64e83c2dc174da266e52f54ba87ca22e91145d69adffd2e676afbeb1c09b243d8a5bc2cce
 http://www.thrysoee.dk/editline/libedit-20120601-3.0.tar.gz
 
 [deps]
+termcap
 
 [build]
-patch -p0 src/editline/readline.h -i "$K/libedit_readlineh.patch"
+patch -p0 src/editline/readline.h -i "$K/libedit_readlineh.patch" || exit 1
+patch -p1 < "$K"/libedit_varargs.patch || exit 1
 #some crap assumptions for location of headers...
 mkdir -p examples/sys
 ln -s /include/errno.h examples/sys/errno.h
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D__STDC_ISO_10646__" ./configure -C --prefix="$butch_prefix" --enable-widec || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+# use libedit as a readline drop-in replacement (it has 10 KLOC less, 20 instead of 30)
+ln -sf libedit.a "$butch_install_dir""$butch_prefix"/lib/libreadline.a
+ln -sf libedit.so "$butch_install_dir""$butch_prefix"/lib/libreadline.so
