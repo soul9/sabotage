@@ -9,12 +9,12 @@ g++
 binutils
 
 [main]
-filesize=28252641
-sha512=a9812039b5588cd46d61b933e6d58b031397ff8ae0d7567d00845f9e71001fbe4dffdddc5076a78d5129216f9bd80c7e76b21605e4a6cb9a9149e5ef42664004
-tardir=gcc-4.5.3
+filesize=28265185
+sha512=82f81a6860155e78cecac846038ceb5a5ec68e399f3ab058c5d569745e47460761f162e92f627d0275a37ff24cbc6582a018b5057d57fc01107f615e59192451
+tardir=gcc-4.5.4
 
 [mirrors]
-http://ftpmirror.gnu.org/gcc/gcc-4.5.3/gcc-core-4.5.3.tar.bz2
+http://ftpmirror.gnu.org/gcc/gcc-4.5.4/gcc-core-4.5.4.tar.bz2
 
 [build]
 #busybox awk doesnt like the two calls to attribute_mode function which is commented out
@@ -26,7 +26,7 @@ sed -i '/   *attribute_mode/s@attr@#&@' gcc/config/i386/i386-builtin-types.awk
 
 dir=$PWD
 cd ..
-tar xf $C/gcc-g++-4.5.3.tar.bz2
+tar xf $C/gcc-g++-4.5.4.tar.bz2
 cd $dir
 #more g++ hackery
 sed -i 's,# include <syscall.h>,#include <sys/syscall.h>,' ./libstdc++-v3/libsupc++/guard.cc
@@ -103,7 +103,7 @@ if [[ ! -e ${TC_PATH}/${host_tuple} ]] ; then
 fi
 
 #remove gcc's stddef.h which is not compatible
-rm $TC_PATH/lib/gcc/$host_tuple/4.5.3/include/stddef.h
+rm $TC_PATH/lib/gcc/$host_tuple/4.5.4/include/stddef.h
 
 copy() {
 	printf "cp %s %s\n" "$1" "$2"
@@ -113,7 +113,7 @@ copy() {
 echo link gcc intrinsic headers into /include/gcc
 # this allows usage of -I/include/gcc for stuff that uses them
 mkdir -p  $TC_PATH/include/gcc
-for i in $TC_PATH/lib/gcc/$host_tuple/4.5.3/include/* ; do
+for i in $TC_PATH/lib/gcc/$host_tuple/4.5.4/include/* ; do
   header=`basename "$i"`
   # do not copy headers that exist in musl
   [ -e "$TC_PATH/include/$header" ] || copy "$i" "$TC_PATH/include/gcc/"

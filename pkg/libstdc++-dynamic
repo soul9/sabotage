@@ -3,20 +3,20 @@ g++
 relocate_toolchain
 
 [main]
-filesize=6475820
-sha512=7b84a57080befa90dc811f0c90efe70774886d33483694f4eb888b65b510c5c5663cdace88b1d0bd96336b4d59c9910a27acae1432821c451fa05b244224f240
-tardir=gcc-4.5.3
+filesize=6477571
+sha512=b69d538f3def569aa3792e0b4acb37ce71ead8dea0c7032b57d02d05bd2c9a32f3da3837a059f85b3efdeab0a275d7cbb66084cfbad91f5487c59d1103a9806c
+tardir=gcc-4.5.4
 
 [mirrors]
-ftp://gd.tuwien.ac.at/gnu/gcc/releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
-http://gcc.cybermirror.org//releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
-http://gcc-uk.internet.bs/releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
-http://www.netgull.com/gcc/releases/gcc-4.5.3/gcc-g++-4.5.3.tar.bz2
+ftp://gd.tuwien.ac.at/gnu/gcc/releases/gcc-4.5.4/gcc-g++-4.5.4.tar.bz2
+http://gcc.cybermirror.org//releases/gcc-4.5.4/gcc-g++-4.5.4.tar.bz2
+http://gcc-uk.internet.bs/releases/gcc-4.5.4/gcc-g++-4.5.4.tar.bz2
+http://www.netgull.com/gcc/releases/gcc-4.5.4/gcc-g++-4.5.4.tar.bz2
 
 [build]
 dir=$PWD
 cd ..
-tar xf $C/gcc-core-4.5.3.tar.bz2
+tar xf $C/gcc-core-4.5.4.tar.bz2
 cd $dir
 
 #more g++ hackery
@@ -43,4 +43,4 @@ find . -name 'libstdc++.so*' -exec cp -f "{}" /opt/toolchain/lib/ \;
 for i in /opt/toolchain/lib/libstdc++.so* ; do
 	ln -sf "..${i}" $R/lib/
 done
-#g++ -I /include/c+\+/4.5.3/ -L/lib test.cc
+#g++ -I /include/c+\+/4.5.4/ -L/lib test.cc
