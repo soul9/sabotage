@@ -92,7 +92,7 @@ fixdestdir
 
 #create a host_tuple dummy entry, so binutils stuff will get into /bin, etc
 lib_gcc=`$TC_PATH/bin/gcc -print-libgcc-file-name`
-lib_gcc_minus_filename=`echo $lib_gcc | sed 's,4\.5\.3.*,,'`
+lib_gcc_minus_filename=`echo $lib_gcc | sed 's,4\.5\.4.*,,'`
 host_tuple=`basename $lib_gcc_minus_filename`
 echo host tuple is $host_tuple
 
