@@ -19,5 +19,9 @@ make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 # use libedit as a readline drop-in replacement (it has 10 KLOC less, 20 instead of 30)
-ln -sf libedit.a "$butch_install_dir""$butch_prefix"/lib/libreadline.a
-ln -sf libedit.so "$butch_install_dir""$butch_prefix"/lib/libreadline.so
+dest="$butch_install_dir""$butch_prefix"
+ln -sf libedit.a "$dest"/lib/libreadline.a
+ln -sf libedit.so "$dest"/lib/libreadline.so
+mkdir -p "$dest"/include/readline
+touch "$dest"/include/readline/history.h
+ln -sf ../editline/readline.h "$dest"/include/readline/readline.h
