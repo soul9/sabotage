@@ -18,6 +18,8 @@ sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux.h
 sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux64.h
 sed -i 's@/lib64/ld-linux-x86-64.so.2@/lib/ld-musl-x86_64.so.1@' gcc/config/i386/linux64.h
 
+$K/bin/libibertyfix libiberty
+
 archflags=
 #[ "$A" = "arm" ] && archflags="--with-float=soft --enable-multilib --enable-interwork"
 # gcc 3.4.6 is broken, it emits code for __floatsisf, which according to linaro staff shouldn't be used

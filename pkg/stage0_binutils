@@ -10,6 +10,9 @@ stage0_busybox
 
 [build]
 patch -p1 < $K/binutils-arm.diff || exit 1
+
+$K/bin/libibertyfix libiberty
+
 CC="$R/bin/musl-gcc -static -D_LARGEFILE64_SOURCE" ./configure -C --prefix="$butch_prefix" \
   --disable-nls --disable-shared --disable-werror \
   --disable-install-libbfd || exit 1

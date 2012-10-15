@@ -30,6 +30,8 @@ $R/bin/patch -p1 < "$K/gdb-arm-wrapper.patch" || exit 1
 # fix mips build ...
 cp "$K"/gdb-sgidefs.h gdb/sgidefs.h
 
+libibertyfix libiberty
+
 mkdir build
 cd build
 mv ../config.cache .

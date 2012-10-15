@@ -28,6 +28,9 @@ dir=$PWD
 cd ..
 tar xf $C/gcc-g++-4.5.4.tar.bz2
 cd $dir
+
+libibertyfix libiberty
+
 #more g++ hackery
 sed -i 's,# include <syscall.h>,#include <sys/syscall.h>,' ./libstdc++-v3/libsupc++/guard.cc
 #sed -i 's,# define _GLIBCXX_USE_FUTEX,,' ./libstdc++-v3/libsupc++/guard.cc

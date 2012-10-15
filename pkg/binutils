@@ -12,6 +12,8 @@ http://ftp.gnu.org/gnu/binutils/binutils-2.22.tar.bz2
 patch -p1 < $K/binutils-arm.diff || exit 1
 patch -p1 < $K/binutils-as-needed.patch || exit 1
 
+libibertyfix libiberty
+
 #create directory structure for static toolchain
 TC_PATH="$butch_prefix/opt/toolchain"
 mkdir -p $TC_PATH
