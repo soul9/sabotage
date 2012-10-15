@@ -27,6 +27,7 @@ bzip2
 pfx="$butch_prefix"
 # all the below *_cv_ tests fail because the php configure tests
 # use exit() but dont include stdlib.h. same for strcmp and string.h etc.
+LDFLAGS="-Wl,--no-keep-memory" \
 CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE" ./configure -C  \
   --prefix="$butch_prefix" --enable-re2c-cgoto \
   --mandir="$butch_prefix"/share/man \
