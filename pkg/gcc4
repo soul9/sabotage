@@ -49,6 +49,10 @@ sed -i 's@/lib/ld-linux.so.2@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux.h
 sed -i 's@/lib/ld-linux.so.2@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux64.h
 sed -i 's@/lib/ld-linux.so.3@/lib/ld-musl-arm.so.1@' gcc/config/arm/linux-eabi.h
 sed -i 's@/lib/ld-linux.so.2@/lib/ld-musl-arm.so.1@' gcc/config/arm/linux-elf.h
+sed -i 's@/lib/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux.h
+sed -i 's@/lib/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
+sed -i 's@/lib64/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
+sed -i 's@/lib32/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
 sed -i 's@/lib64/ld-linux-x86-64.so.2@/lib/ld-musl-x86_64.so.1@' gcc/config/i386/linux64.h
 
 patch -p1 < $K/gcc-453-patch0.diff || exit 1
