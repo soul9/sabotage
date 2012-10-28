@@ -11,29 +11,16 @@ filesize=708966
 sha512=8116ed56d7b65d960b9ac68ad1ae6185cefadd00220809050d422d1145e051539ee1f445c2f19d49598ab30ca6843a75f1b2189449bc94f6137c26cf9be15162
 
 [build]
-cp "$K/musl.config.mak" config.mak
-sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
+TC_PATH="$butch_prefix"/opt/toolchain
+butch_install_dir="$TC_PATH"
+[ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
+
+CC="$TC_PATH/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-#patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
-
-#create directory structure for static toolchain
-TC_PATH="$butch_prefix"/opt/toolchain
-butch_install_dir="$TC_PATH"
-mkdir -p $TC_PATH
-SELF=`pwd`
-[ -z "$SELF" ] && exit 1
-
-if [[ ! -e $TC_PATH/usr ]] ; then
-        cd $TC_PATH
-        ln -sf . usr
-        cd $SELF
-fi
-
-make clean
 make CC="$TC_PATH/bin/gcc" -j$MAKE_THREADS || exit 1
 make DESTDIR="$TC_PATH" install || exit 1
 

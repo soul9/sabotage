@@ -10,15 +10,12 @@ filesize=708966
 sha512=8116ed56d7b65d960b9ac68ad1ae6185cefadd00220809050d422d1145e051539ee1f445c2f19d49598ab30ca6843a75f1b2189449bc94f6137c26cf9be15162
 
 [build]
-cp "$K/musl.config.mak" config.mak
 [ -z "$butch_prefix" ] && butch_prefix=/
-sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
-
-#patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.
-echo "SHARED_LIBS =" >> config.mak
+CC=$R/bin/gcc ./configure --disable-shared --enable-gcc-wrapper \
+  --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
@@ -27,13 +24,15 @@ echo "SHARED_LIBS =" >> config.mak
 make CC=$R/bin/gcc -j$MAKE_THREADS || exit 1
 make install DESTDIR="$butch_install_dir" || exit 1
 
+# generate a musl-gcc wrapper that is aware of our directory layout...
 echo '#!/bin/sh' > "$butch_install_dir/bin/musl-gcc"
 echo 'self=`readlink -f "$0"`' >> "$butch_install_dir/bin/musl-gcc"
 echo 'selfdir=`dirname "$self"`' >> "$butch_install_dir/bin/musl-gcc"
 echo 'exec "$selfdir/rawcc" "$@" -specs "$selfdir/../lib/musl-gcc.specs"' >> "$butch_install_dir/bin/musl-gcc"
 chmod +x "$butch_install_dir/bin/musl-gcc"
 
-
-sed -i 's,//,'"$R"'/,g' "$butch_install_dir/lib/musl-gcc.specs"
+# fix paths in spec file
+sed -i 's,/lib,'"$R"'/lib,g' "$butch_install_dir/lib/musl-gcc.specs"
+sed -i 's,/include,'"$R"'/include,g' "$butch_install_dir/lib/musl-gcc.specs"
 sed -i 's,/lib/ld-musl,/xxx/xxx/,' "$butch_install_dir/lib/musl-gcc.specs"
 
