@@ -14,8 +14,7 @@ cp "$K/musl.config.mak" config.mak
 [ -z "$butch_prefix" ] && butch_prefix=/
 sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
 
-# use clang workaround for asm constraints recognized by neither gcc3 nor clang
-[ "$A" = "mips" ] && sed -i 's@__clang__@__GNUC__@' arch/mips/pthread_arch.h
+#patch -p1 < "$K/musl-0.9.4-cumulative.patch" || exit 1
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.
