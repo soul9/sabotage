@@ -1,9 +1,16 @@
 [deps]
-kernel
+xz
+
+[mirrors]
+http://mirror.wzff.de/sabotage/tarballs/kernel-headers-3.3.4.tar.xz
+
+[main]
+filesize=679512
+sha512=c6272485066bfb25123db09cc145554931ab7f1a792fb64a4deefedfb1a91e7d83dea6eada384375853a1273550efd31187a7635da0acfcbe723a4e992f2928a
 
 [build]
-# placeholder for kernel headers.
-# currently only asserts that the kernel is installed,
-# which will take care of installing the headers.
+dest="$butch_install_dir""$butch_prefix"
+cp -r "$A"/include "$dest/" || exit 1
+#fix ext2 header...
+cp -f "$K"/ext2_fs.h "$dest"/include/linux/
 
-true

@@ -9,7 +9,6 @@ extlinux
 gawk
 gcc4
 gmp
-kernel
 m4
 make
 man

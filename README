@@ -43,15 +43,15 @@ DO NOT RUN SCRIPTS YOU HAVE NOT READ.
 % vi config        # set your MAKE_THREADS, etc
 % . config
 % butch install stage1
-% butch install xorg
+# and after that, feel free to install optional packages:
+# you can look at what's available using 'ls /src/pkg'
 
-etc.. you can look around in /src/pkg to see which additional useful
-packages you can find... install them using butch, i.e.
-% butch install nano
-% butch install gdb
+# if you want the default kernel (otherwise you have to build it yourself)
+% butch install kernel
 
-# butch install pkg           # additional stuff
-# butch install  xorg          # build X.org
+% butch install xorg # install everything needed to get xfbdev
+% butch install pkg # installs useful things, such as file, git, gdb ...
+% butch install world #installs almost everything
 
 Run "butch" and look at the usage information it outputs for further options.
 butch uses build templates, please take a look at KEEP/butch_template_configure_cached.txt
