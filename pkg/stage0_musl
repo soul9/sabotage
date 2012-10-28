@@ -27,9 +27,6 @@ echo "SHARED_LIBS =" >> config.mak
 
 make CC=$R/bin/gcc -j$MAKE_THREADS || exit 1
 make install DESTDIR="$butch_install_dir" || exit 1
-# fix endianness if necessary
-[ -z "$MUSL_ENDIAN" ] || \
-  printf "#define __BYTE_ORDER %s\n" "$MUSL_ENDIAN" > "$butch_install_dir"/include/bits/endian.h
 
 echo '#!/bin/sh' > "$butch_install_dir/bin/musl-gcc"
 echo 'self=`readlink -f "$0"`' >> "$butch_install_dir/bin/musl-gcc"

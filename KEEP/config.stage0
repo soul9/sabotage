@@ -17,11 +17,6 @@ export A=i386
 #export A=arm
 #export A=mips
 
-# if you use non-default endianess, i.e. little on mips, or big on arm, set one of these:
-#export MUSL_ENDIAN=__BIG_ENDIAN
-#export MUSL_ENDIAN=__LITTLE_ENDIAN
-
-
 ## set the compiler environment
 export CC=gcc
 export HOSTCC=gcc
