@@ -3,4 +3,7 @@
 # this will continue where you left.
 # in case you modified pkg/ or KEEP/ you'll have to copy it to $S/
 
+# this var is usually set by build-stage; omitting it results in build error of stage0_finish
+export H="$PWD"
+
 $S/butch.bin install stage0
