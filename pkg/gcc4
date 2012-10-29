@@ -58,7 +58,6 @@ sed -i 's@/lib64/ld-linux-x86-64.so.2@/lib/ld-musl-x86_64.so.1@' gcc/config/i386
 patch -p1 < $K/gcc-453-patch0.diff || exit 1
 if [ x$A = xarm ] ; then
 	patch -p1 < $K/gcc-453-patch1.diff || exit 1
-	patch -p1 < $K/gcc-453-patch2.diff || exit 1
 fi
 
 #create directory structure for static toolchain
