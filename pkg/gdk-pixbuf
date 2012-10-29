@@ -13,8 +13,6 @@ glib
 xz-dynamic
 
 [build]
-#patch -p1 < "$K/some.patch"
-
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 
 CFLAGS=-D_GNU_SOURCE LDFLAGS="-ljpeg -ltiff -lz -llzma -ljpeg" ./configure -C \
@@ -23,8 +21,6 @@ CFLAGS=-D_GNU_SOURCE LDFLAGS="-ljpeg -ltiff -lz -llzma -ljpeg" ./configure -C \
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
-[ "$STAGEU" = "1" ] && fixdestdir
-
-dest="$butch_install_dir"/include/gdk-pixbuf-2.0/gdk-pixbuf-xlib/
+dest="$butch_install_dir""$butch_prefix"/include/gdk-pixbuf-2.0/gdk-pixbuf-xlib/
 mkdir -p "$dest"
 cp -r contrib/gdk-pixbuf-xlib/*.h "$dest"

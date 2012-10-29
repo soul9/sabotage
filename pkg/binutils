@@ -37,8 +37,6 @@ CC="$CC -static -D_GNU_SOURCE -L$R/lib -I$R/include -D_LARGEFILE64_SOURCE" ./con
 make -j$MAKE_THREADS tooldir=$R || exit 1
 make DESTDIR=$TC_PATH install-gas install-ld install-binutils || exit 1
 
-fixdestdir
-
 cd $TC_PATH/bin/
 rm -f ld
 ln -sf ld.bfd ld

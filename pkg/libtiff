@@ -13,5 +13,4 @@ xz
 CFLAGS=-D_GNU_SOURCE LDFLAGS=-static ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-[ "$STAGEU" = "1" ] && fixdestdir
-rm -f "$butch_install_dir"/lib/libtiff.la
+rm -f "$butch_install_dir""$butch_prefix"/lib/libtiff.la

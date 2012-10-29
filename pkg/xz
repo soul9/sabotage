@@ -19,5 +19,4 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
-[ "$STAGEU" = "1" ] && fixdestdir
-rm "$butch_install_dir/lib/liblzma.la"
+rm "$butch_install_dir""$butch_prefix"/lib/liblzma.la
