@@ -1,10 +1,8 @@
 [deps]
-binutils
 gawk
 gcc4
 gmp
 m4
-make
 man
 mpc
 mpfr

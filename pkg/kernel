@@ -1,6 +1,4 @@
 [deps]
-binutils
-make
 gcc4
 xz
 

@@ -2,6 +2,7 @@
 musl
 
 [build]
+exit 0
 
 relocate() {
 	local dir=$1

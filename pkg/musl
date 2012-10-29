@@ -1,6 +1,5 @@
 [deps]
 gcc4
-binutils
 
 [mirrors]
 http://www.etalabs.net/musl/releases/musl-0.9.7.tar.gz
@@ -11,29 +10,24 @@ filesize=708966
 sha512=8116ed56d7b65d960b9ac68ad1ae6185cefadd00220809050d422d1145e051539ee1f445c2f19d49598ab30ca6843a75f1b2189449bc94f6137c26cf9be15162
 
 [build]
-TC_PATH="$butch_prefix"/opt/toolchain
-butch_install_dir="$TC_PATH"
 [ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
 
-CC="$TC_PATH/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
+CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-make CC="$TC_PATH/bin/gcc" -j$MAKE_THREADS || exit 1
-make DESTDIR="$TC_PATH" install || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
 
-[ "$STAGEU" = "1" ] && fixdestdir
+dest=$butch_install_dir$butch_prefix
+mkdir -p "$dest"/bin
+ln -sf  ../lib/libc.so "$dest"/bin/ldd
 
-ln -sf  "$butch_prefix"/lib/libc.so "$TC_PATH/bin/ldd"
-
-musl_gcc="$TC_PATH/bin/musl-gcc"
+musl_gcc="$dest/bin/musl-gcc"
 
 cp "$K/musl-gcc" "$musl_gcc"
 chmod +x "$musl_gcc"
 sed -i "s,AAAA,$A," "$musl_gcc"
 sed -i "s,PPPP,$butch_prefix," "$musl_gcc"
-
-#prevent custom buildscripts from messing with the toolchain
-exit 0

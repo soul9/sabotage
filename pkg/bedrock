@@ -2,7 +2,6 @@
 root-perms
 config-cache
 9base
-binutils
 busybox
 e2fsprogs
 extlinux
@@ -10,7 +9,6 @@ gawk
 gcc4
 gmp
 m4
-make
 man
 mpc
 mpfr
