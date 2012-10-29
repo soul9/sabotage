@@ -14,9 +14,13 @@ http://www.busybox.net/downloads/busybox-1.20.2.tar.bz2
 
 [ "$STAGEU" = "1" ] && exit 0
 
+# workarounds, since we dont use a butch build template yet
+butch_prefix=$R
+butch_install_dir=
+
 cp $K/busybox.stage0.config .config
 # we use stage0_patch to patch, because aboriginal uses the (formerly?) broken bb patch
-$R/bin/patch -p1 <$K/busybox.patch || exit 1
+$butch_prefix/bin/patch -p1 <$K/busybox.patch || exit 1
 
 # --sort-section renders busybox unusable on ARM: http://sourceware.org/bugzilla/show_bug.cgi?id=14156
 sed -i 's,SORT_SECTION=,SORT_SECTION= #,' scripts/trylink
@@ -30,14 +34,23 @@ if [ ! -z "$DEBUGBUILD" ] ; then
 fi
 
 make V=1 LDFLAGS=-static CFLAGS_busybox="$debugcflags -Wl,-z,muldefs -Werror-implicit-function-declaration" \
-HOSTCC="$HOSTCC" CC=$R/bin/musl-gcc -j$MAKE_THREADS || exit 1
+HOSTCC="$HOSTCC" CC=$butch_prefix/bin/musl-gcc -j$MAKE_THREADS || exit 1
 echo busybox build complete
-cp busybox $R/bin
-echo cp complete
-cd $R/bin
+dest=$butch_install_dir$butch_prefix
+mkdir -p "$dest"/bin
+
+busybox_bin=busybox
+# on armv4tl and mips, the stripped busybox binary is buggy - argv parsing is broken somehow:
+# this manifests when trying to use enter-chroot script which fails.
+[ "$A" = "arm" ] || [ "$A" = "mips" ] && busybox_bin=busybox_unstripped
+
+echo cp "$busybox_bin" "$dest"/bin/busybox
+cp "$busybox_bin" "$dest"/bin/busybox || exit 1
+
 echo check if busybox works:
-./busybox --list || exit 1
-for f in $(./busybox --list); do
-  ln -sf busybox $f | exit 1
+"$dest"/bin/busybox --list >/dev/null|| exit 1
+
+for f in $("$dest"/bin/busybox --list); do
+  echo ln -sf busybox "$dest"/bin/"$f"
+  ln -sf busybox "$dest"/bin/"$f" || exit 1
 done
-echo ln done
