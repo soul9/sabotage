@@ -54,3 +54,6 @@ export LOGPATH="$S/logs"
 
 # disable template which could mess up the build
 export BUTCH_BUILD_TEMPLATE="$K"/butch_template_configure_cached.txt
+
+# this is needed so packages can detect from which stage they're called
+export STAGE=0

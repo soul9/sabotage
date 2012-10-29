@@ -1,46 +1,33 @@
-[deps]
-
 [main]
 filesize=19973532
 sha512=ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74
 
 [mirrors]
-http://ftpmirror.gnu.org/binutils/binutils-2.22.tar.bz2
 http://ftp.gnu.org/gnu/binutils/binutils-2.22.tar.bz2
+http://ftpmirror.gnu.org/binutils/binutils-2.22.tar.bz2
+
+[deps]
+stage0_musl
 
 [build]
 patch -p1 < $K/binutils-arm.diff || exit 1
 patch -p1 < $K/binutils-as-needed.patch || exit 1
 
-libibertyfix libiberty
+$K/bin/libibertyfix libiberty
 
-#create directory structure for static toolchain
-TC_PATH="$butch_prefix/opt/toolchain"
-mkdir -p $TC_PATH
-butch_install_dir=$TC_PATH
-SELF=`pwd`
-[ -z "$SELF" ] && exit 1
+[ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
 
-if [[ ! -e $TC_PATH/usr ]] ; then
-        cd $TC_PATH
-        ln -sf . usr
-        cd $SELF
-fi
+#LDFLAGS="-Wl,-static -static-libgcc" \
+CC="$CC -static" \
+CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
+./configure -C --prefix="$butch_prefix" \
+  --disable-nls --disable-shared --disable-werror \
+  --disable-install-libbfd || exit 1
 
+make -j$MAKE_THREADS || exit 1
+# tooldir=/
+make DESTDIR=$butch_install_dir install-gas install-ld install-binutils || exit 1
 
-CC="$CC -static -D_GNU_SOURCE -L$R/lib -I$R/include -D_LARGEFILE64_SOURCE" ./configure -C \
-	--prefix="$butch_prefix" --disable-nls --disable-shared --disable-werror \
-	--with-build-sysroot="$butch_prefix" --with-sysroot="$butch_prefix" \
-	--disable-install-libbfd \
-	|| exit 1
-
-make -j$MAKE_THREADS tooldir=$R || exit 1
-make DESTDIR=$TC_PATH install-gas install-ld install-binutils || exit 1
-
-cd $TC_PATH/bin/
-rm -f ld
-ln -sf ld.bfd ld
-
-#prevent custom buildscripts from messing with the toolchain
-exit 0
-
+dest="$butch_install_dir""$butch_prefix"
+rm -f "$dest"/bin/ld
+ln -sf ld.bfd "$dest"/bin/ld

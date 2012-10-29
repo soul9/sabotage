@@ -19,3 +19,6 @@ export HOSTCC=gcc
 # this script will copy the config.cache template into the actual builddir
 # you can disable this line and then the configure cache won't get used.
 export BUTCH_BUILD_TEMPLATE="$K/butch_template_configure_cached.txt"
+
+# export so stage0 specific code paths are not taken in build scripts
+export STAGE=1

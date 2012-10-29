@@ -5,6 +5,6 @@ kernel-headers
 stage0_butch
 stage0_busybox
 stage0_patch
-stage0_binutils
+binutils
 stage0_make
 stage0_finish
