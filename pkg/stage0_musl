@@ -24,15 +24,20 @@ CC=$R/bin/gcc ./configure --disable-shared --enable-gcc-wrapper \
 make CC=$R/bin/gcc -j$MAKE_THREADS || exit 1
 make install DESTDIR="$butch_install_dir" || exit 1
 
+dest="$butch_install_dir""$butch_prefix"
+
 # generate a musl-gcc wrapper that is aware of our directory layout...
-echo '#!/bin/sh' > "$butch_install_dir/bin/musl-gcc"
-echo 'self=`readlink -f "$0"`' >> "$butch_install_dir/bin/musl-gcc"
-echo 'selfdir=`dirname "$self"`' >> "$butch_install_dir/bin/musl-gcc"
-echo 'exec "$selfdir/rawcc" "$@" -specs "$selfdir/../lib/musl-gcc.specs"' >> "$butch_install_dir/bin/musl-gcc"
-chmod +x "$butch_install_dir/bin/musl-gcc"
+cat << EOF > "$dest"/bin/musl-gcc
+#!/bin/sh 
+self=\`readlink -f "\$0"\`
+selfdir=\`dirname "\$self"\`/../../../bin
+exec "\$selfdir/rawcc" "\$@" -specs "\$selfdir/../lib/musl-gcc.specs"
+EOF
+
+chmod +x "$dest"/bin/musl-gcc
 
 # fix paths in spec file
-sed -i 's,/lib,'"$R"'/lib,g' "$butch_install_dir/lib/musl-gcc.specs"
-sed -i 's,/include,'"$R"'/include,g' "$butch_install_dir/lib/musl-gcc.specs"
-sed -i 's,/lib/ld-musl,/xxx/xxx/,' "$butch_install_dir/lib/musl-gcc.specs"
+sed -i 's,/lib,'"$butch_root_dir"'/lib,g' "$dest"/lib/musl-gcc.specs
+sed -i 's,/include,'"$butch_root_dir"'/include,g' "$dest"/lib/musl-gcc.specs
+sed -i 's,/lib/ld-musl,/xxx/xxx/,' "$dest"/lib/musl-gcc.specs
 

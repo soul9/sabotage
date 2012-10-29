@@ -24,22 +24,20 @@ butch_tarballs_used="$S/tarballs_used.txt"
 butch_created_tarball_dest="$S/dist/"
 
 butch_package_name=%BUTCH_PACKAGE_NAME
-butch_root=$R
-[ -z "$butch_root" ] && butch_root=/
-[ "$butch_root" = "///" ] && butch_root=/
-[ "$butch_root" = "//" ] && butch_root=/
-[ "$butch_root" = "/" ] && butch_do_custom_prefix=false || butch_do_custom_prefix=true
-
-# butch_prefix is used in buildscripts to customize the prefix.
-# butch_install_dir must be the same path or a child path of the prefix, otherwise it's UB.
-butch_prefix="$butch_root"
+butch_prefix=/
 
 # making the prefix empty instead of / seems like a good idea to not get ugly double slashes
 # when concatenating paths. however this leads to multiple issues in buggy packages,
 # but these have been fixed now (see openssl-dynamic, perl, xcb-proto for reference).
 [ "$butch_prefix" = "/" ] && butch_prefix=
-
-butch_custom_destdir="$butch_prefix/opt/$butch_package_name"
+# butch_root_dir contains the root path passed in $R.
+# once inside the chroot, it is /. we use the butch variable in case a script overwrites $R,
+# and in order to be able to swap it out easily once i decided to replace the variables with
+# a config file or so.
+# use it, if you need to reference something that lies in the directory structure.
+butch_root_dir="$R"
+butch_custom_destdir_base=/opt/$butch_package_name
+butch_custom_destdir="$butch_root_dir""$butch_custom_destdir_base"
 
 #currently passing a version from a package is not implemented.
 butch_package_version=0.0.0
@@ -47,8 +45,7 @@ butch_package_version=0.0.0
 # if we unlink busybox, nothing will work anymore
 [ "$butch_package_name" = "busybox" ] && butch_do_cleanup_custom_destdir=false
 
-# butch_install_dir is usually set to $R
-# it denotes the DESTDIR passed to make
+# butch_install_dir denotes the DESTDIR passed to make
 if $butch_do_custom_destdir ; then
 	butch_install_dir="$butch_custom_destdir"
 	if $butch_do_cleanup_custom_destdir ; then
@@ -68,7 +65,7 @@ butch_build_root="$S/build/$butch_package_name"
 butch_build_dir="$butch_build_root/%BUTCH_TARDIR"
 
 #this is the location of our optimized config.cache
-butch_configure_cache="$R/lib/config.cache"
+butch_configure_cache="$K/config.cache"
 
 [ -z "$CC" ]  && CC=cc
 
@@ -95,29 +92,6 @@ if %BUTCH_HAVE_TARBALL ; then
 	fi
 fi
 
-mv_or_recurse() {
-        local file="$1"
-        local destdir="$2"
-        local sourcedir="$3"
-        if [ -d "$destdir/$file" ] ; then
-                for target in "$sourcedir/$file/"* ; do
-                        local newfile=`basename "$target"`
-                        mv_or_recurse "$newfile" "$destdir/$file/" "$sourcedir/$file/"
-                done
-        else
-                echo mv "$sourcedir/$file" "$destdir/$file"
-                mv "$sourcedir/$file" "$destdir/$file"
-        fi
-}
-
-fixdestdir() {
-	if $butch_do_custom_prefix && [ -z $skipdestdirfix ] ; then
-	        for each in "$butch_install_dir/$butch_prefix"/* ; do
-        	        mv_or_recurse `basename "$each"` "$butch_install_dir/" "$butch_install_dir/$butch_prefix/"
-	        done
-	fi
-}
-
 printf "%s: start build\n" "`date`"
 # this will be replaced by the contents of the pkg's [build] section.
 # note that all critical commands in the buildscript should use || exit 1
@@ -135,22 +109,23 @@ cd "$butch_install_dir"
 [ `ls | wc -l` = "0" ] && have_files=false || have_files=true
 
 relocate() {
-	local target_root=$1
-	local dir=$2
-	local backlinks=$3
-	mkdir -p $butch_prefix/$dir
+	local dir=$1
+	local backlinks=$2
+	local target_root=$backlinks/"$butch_custom_destdir_base"/"$dir"
 	[ -d "$butch_install_dir/$dir" ] || return 0
+	echo mkdir -p "$butch_root_dir"/"$dir"
+	mkdir -p "$butch_root_dir"/"$dir"
+
 	cd "$butch_install_dir/$dir" || return 1
 	echo "relocating $butch_install_dir/$dir"
 	for i in * ; do
 		if [ -d "$i" ] ; then
 			local save="$PWD"
-			relocate "$target_root" "$dir/$i" "$backlinks/.."
+			relocate "$dir/$i" "$backlinks/.."
 			cd "$save"
 		elif [ -f "$i" ] || [ -L "$i" ] ; then
-			target="$target_root/$dir/$i"
-			echo "ln -sf $butch_install_dir/$dir/$i $target"
-			ln -sf "$butch_install_dir/$dir/$i" "$target"
+			echo ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
+			ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
 		else
 			echo "UNKNOWN object $i"
 		fi
@@ -179,7 +154,7 @@ if $have_files ; then
 		fi
 
 		for loc in bin sbin etc include lib libexec share var ; do
-			relocate "$butch_root" $loc ..
+			relocate $loc ..
 		done
 	fi
 	

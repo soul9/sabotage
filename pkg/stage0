@@ -1,7 +1,7 @@
 [deps]
 stage0_gcc3
 stage0_musl
-stage0_mini-kernel-headers
+kernel-headers
 stage0_butch
 stage0_busybox
 stage0_patch

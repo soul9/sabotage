@@ -9,7 +9,8 @@ stage0_musl
 ftp://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.gz
 
 [build]
-export CC="$R/bin/musl-gcc -static -D_GNU_SOURCE -Werror-implicit-function-declaration" 
-./configure --prefix=$R
+CC="$butch_root_dir/bin/musl-gcc -static" \
+  CFLAGS="-D_GNU_SOURCE -Werror-implicit-function-declaration" \
+  ./configure --prefix=$butch_prefix
 make -j$MAKE_THREADS
-make install
+make DESTDIR=$butch_install_dir install

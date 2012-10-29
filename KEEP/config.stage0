@@ -53,4 +53,4 @@ export S="$R"/src
 export LOGPATH="$S/logs"
 
 # disable template which could mess up the build
-unset BUTCH_BUILD_TEMPLATE
+export BUTCH_BUILD_TEMPLATE="$K"/butch_template_configure_cached.txt

@@ -13,10 +13,11 @@ patch -p1 < $K/binutils-arm.diff || exit 1
 
 $K/bin/libibertyfix libiberty
 
-CC="$R/bin/musl-gcc -static -D_LARGEFILE64_SOURCE" ./configure -C --prefix="$butch_prefix" \
+CC="$butch_root_dir/bin/musl-gcc -static -D_LARGEFILE64_SOURCE" ./configure -C --prefix="$butch_prefix" \
   --disable-nls --disable-shared --disable-werror \
   --disable-install-libbfd || exit 1
 #echo "#define __pid_t int" >include/features.h
 make CC="$R/bin/musl-gcc -static -D_GNU_SOURCE -Werror-implicit-function-declaration -D_LARGEFILE64_SOURCE" \
   -j$MAKE_THREADS || exit 1
-make DESTDIR=$R tooldir=/ install-gas install-ld install-binutils || exit 1
+# tooldir=/
+make DESTDIR=$butch_install_dir install-gas install-ld install-binutils || exit 1

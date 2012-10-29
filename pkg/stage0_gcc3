@@ -37,11 +37,13 @@ archflags=
 make CFLAGS="-DSTDC_HEADERS -Werror-implicit-function-declaration" LDFLAGS="-static" -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install-gcc || exit 1
 
-rm -rf "$butch_install_dir""$butch_prefix"/infoXXX
+dest="$butch_install_dir""$butch_prefix"
+
+rm -rf "$dest"/infoXXX
 
 # rename gcc to rawcc so musl-gcc can call the *right* gcc
-mv "$butch_install_dir""$butch_prefix"/bin/gcc "$butch_install_dir""$butch_prefix"/bin/rawcc
-ln -sf "rawcc" "$butch_install_dir""$butch_prefix"/bin/gcc
+mv "$dest"/bin/gcc "$dest"/bin/rawcc
+ln -sf "rawcc" "$dest"/bin/gcc
 
-[ "$A" = x86_64 ] && mv "$butch_install_dir""$butch_prefix"/lib64/* "$butch_install_dir/""$butch_prefix"lib/ || true
+[ "$A" = "x86_64" ] && mv "$dest"/lib64/* "$dest"lib/ || true
 
