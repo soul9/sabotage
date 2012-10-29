@@ -1,15 +1,5 @@
-## set paths
-# K is the directory where patches and configs are kept
-# C is the directory to place the downloaded tarballs
-# S is the directory to extract tarballs and place sources for building stage0
-# R is the directory underwhich the new filesystem will be created
-# LOGPATH is the directory to place logfiles of builds
-export K="$PWD/KEEP"
-export C="$PWD/tarballs"
+## set path to builddir (where you want your chroot).
 export SABOTAGE_BUILDDIR="/tmp/sabotage"
-export S="$SABOTAGE_BUILDDIR"/src
-export R="$SABOTAGE_BUILDDIR"/root
-export LOGPATH="$S/logs"
 
 ## set your arch, or try `uname -m`
 export A=i386
@@ -26,9 +16,6 @@ export HOSTCC=gcc
 ## stage0 builds in less than 2minutes using -j9 on an AMD 8core
 export MAKE_THREADS=1
 
-# disable template which could mess up the build
-unset BUTCH_BUILD_TEMPLATE
-
 #    ARM SPECIFIC STUFF    #
 
 ## set your ARM floating point emulation [softfp/hard]
@@ -36,12 +23,12 @@ unset BUTCH_BUILD_TEMPLATE
 ## currently only softfp is supported by the stage0 compiler 
 ## (hardfp is only marginally faster anyway)
 export ARM_FLOAT_MODE=softfp
-# export ARM_FLOAT_MODE=hard
+#export ARM_FLOAT_MODE=hard
 
 # set your ARM fpu type [vfp/neon/?]
 ## currently only vfp is supported
 export ARM_FPU=vfp
-# export ARM_FPU=neon
+#export ARM_FPU=neon
 
 # you can use a prebuilt butch to speed the build up a bit
 # or in case you use aboriginal, with its uclibc toolchain lacking the
@@ -50,5 +37,20 @@ export ARM_FPU=vfp
 # i personally put it into the tarballs dir since i always copy that one
 # to the prefered destination anyway.
 # if you don't set BUTCH_BIN, it will be downloaded and built before stage0.
-# export BUTCH_BIN=$PWD/tarballs/butch-armv6l
+#export BUTCH_BIN=$PWD/tarballs/butch-armv6l
 
+# internal paths
+# you should leave these all as-is, this is the intended way.
+# K is the directory where patches and configs are kept
+# C is the directory to place the downloaded tarballs
+# S is the directory to extract tarballs and place sources for building stage0
+# R is the directory underwhich the new filesystem will be created
+# LOGPATH is the directory to place logfiles of builds
+export K="$PWD/KEEP"
+export C="$PWD/tarballs"
+export R="$SABOTAGE_BUILDDIR"
+export S="$R"/src
+export LOGPATH="$S/logs"
+
+# disable template which could mess up the build
+unset BUTCH_BUILD_TEMPLATE
