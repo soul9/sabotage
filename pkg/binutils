@@ -17,7 +17,7 @@ $K/bin/libibertyfix libiberty
 
 [ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
 
-#LDFLAGS="-Wl,-static -static-libgcc" \
+LDFLAGS="-Wl,-static" \
 CC="$CC -static" \
 CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
 ./configure -C --prefix="$butch_prefix" \
