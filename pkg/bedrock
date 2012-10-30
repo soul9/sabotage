@@ -1,6 +1,5 @@
 [deps]
 root-perms
-config-cache
 9base
 busybox
 e2fsprogs
