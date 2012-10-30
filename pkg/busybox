@@ -1,26 +1,36 @@
-[deps]
-musl
-kernel-headers
-
 [main]
 filesize=2186738
 sha512=089b67cd920f332daf910711739b1e55ba4c76cfa2122dfe5464432e0d76d3af8327837ebc3cc9954deef3e8f766d16a1928aecb2c169fe3de5a722eea7ea3dd
+
+[deps]
+kernel-headers
+patch
+stage0_musl
 
 [mirrors]
 http://www.busybox.net/downloads/busybox-1.20.2.tar.bz2
 
 [build]
-[ "$STAGEU" = "1" ] && exit 0
 
-cp "$K/busybox.stage1.config" .config
-patch -p1 < "$K/busybox.patch" || exit 1
-patch -p1 < "$K/busybox-blowfish.patch" || exit 1
+[ "$STAGE" = "U" ] && exit 0
+if [ "$STAGE" = "0" ] ; then
+	CC="$butch_root_dir"/bin/musl-gcc
+	PATCH="$butch_root_dir"/bin/patch
+else
+	PATH=patch
+fi
+
+cp $K/busybox.stage1.config .config
+"$PATCH" -p1 < "$K/busybox.patch" || exit 1
+"$PATCH" -p1 < "$K/busybox-blowfish.patch" || exit 1
+
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
 sed -i 's,__inline,,' ./scripts/kconfig/zconf.hash.c_shipped
 
 # --sort-section renders busybox unusable on ARM: http://sourceware.org/bugzilla/show_bug.cgi?id=14156
 sed -i 's,SORT_SECTION=,SORT_SECTION= #,' scripts/trylink
+
 
 if [ ! -z "$DEBUGBUILD" ] ; then
 	debugcflags="-O0 -g"
@@ -29,14 +39,31 @@ if [ ! -z "$DEBUGBUILD" ] ; then
 	sed -i 's/CONFIG_NO_DEBUG_LIB=y/# CONFIG_NO_DEBUG_LIB is not set/' .config
 fi
 
+# alternative:
+# make KBUILD_VERBOSE=1 CC="$CC" HOSTCC="$HOSTCC" \
+# HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS || exit 1
 
-make KBUILD_VERBOSE=1 CC="$CC" HOSTCC="$HOSTCC" \
-     HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS || exit 1
+make V=1 LDFLAGS=-static \
+CFLAGS_busybox="$debugcflags -Wl,-z,muldefs -Werror-implicit-function-declaration" \
+HOSTCC="$CC" CC=$CC HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
+echo busybox build complete
 
-mkdir -p "$butch_install_dir/bin/"
-cp busybox "$butch_install_dir/bin/" || exit 1
-cd "$butch_install_dir/bin/" || exit 1
-./busybox --list >/dev/null || (echo "busybox binary: no list" ; exit 1)
-for f in $(./busybox --list); do
-  [ ! -f "$R/bin/$f" ] || readlink "$R/bin/$f" | grep "busybox" && ln -sf busybox $f
+dest=$butch_install_dir$butch_prefix
+mkdir -p "$dest"/bin
+
+busybox_bin=busybox
+# on armv4tl and mips, the stripped busybox binary is buggy - argv parsing is broken somehow:
+# this manifests when trying to use enter-chroot script which fails.
+[ "$A" = "arm" ] || [ "$A" = "mips" ] && busybox_bin=busybox_unstripped
+
+echo cp "$busybox_bin" "$dest"/bin/busybox
+cp "$busybox_bin" "$dest"/bin/busybox || exit 1
+
+echo check if busybox works:
+"$dest"/bin/busybox --list >/dev/null|| exit 1
+
+for f in $("$dest"/bin/busybox --list); do
+	#  echo ln -sf busybox "$dest"/bin/"$f"
+	[ ! -f "$butch_root_dir/bin/$f" ] && \
+	  ln -sf busybox "$dest"/bin/"$f" || exit 1
 done

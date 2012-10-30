@@ -3,7 +3,7 @@ stage0_gcc
 stage0_musl
 kernel-headers
 butch
-stage0_busybox
+busybox
 patch
 binutils
 make
