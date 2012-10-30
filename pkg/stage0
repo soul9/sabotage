@@ -4,7 +4,7 @@ stage0_musl
 kernel-headers
 stage0_butch
 stage0_busybox
-stage0_patch
+patch
 binutils
 stage0_make
 stage0_finish

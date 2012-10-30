@@ -2,10 +2,19 @@
 filesize=303692
 sha512=26d528000c207118b239716d629805ff61a898cc5f5417a67bf50a32303ea1a896d7dd26c9e02193367d3f0e0954b510ab1e3887fb3069fbdeac6b1acd9ae7cc
 
+[deps]
+stage0_musl
+
 [mirrors]
 ftp://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.gz
+http://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.gz
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ "$STAGE" = "0" ] && CC="$butch_root_dir/bin/musl-gcc"
+
+CC="$CC -static" \
+CFLAGS="-D_GNU_SOURCE -Werror-implicit-function-declaration" \
+  ./configure -C --prefix=$butch_prefix || exit 1
+
 make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make DESTDIR=$butch_install_dir install || exit 1
