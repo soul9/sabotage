@@ -11,6 +11,7 @@ libjpeg-dynamic
 libpng
 glib
 xz-dynamic
+perl
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in

@@ -8,6 +8,7 @@ tardir=libcap-2.22
 
 [deps]
 attr
+perl
 
 [build]
 make -j$MAKE_THREADS prefix="$butch_prefix" lib=lib CFLAGS=-D_GNU_SOURCE || exit 1
