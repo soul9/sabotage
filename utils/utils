@@ -24,10 +24,12 @@ download() {
 
 # use as: tarxf http://server/path/to/ file-1 .tar.gz [dirname]
 tarxf() {
-  cd "$S"
+  cd "$C"
   [ -f "$2$3" ] || download "$1$2$3" "$2$3"
+  mkdir -p "$S/build/$2"
+  cd "$S/build/$2"
   rm -rf "${4:-$2}"
-  tar xf "$2$3"
+  tar xf "$C/$2$3"
   cd "${4:-$2}"
 }
 

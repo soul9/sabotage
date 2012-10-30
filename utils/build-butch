@@ -1,7 +1,7 @@
 #!/bin/sh
 filesize='63408'
 sha512='d0e22f1d2fbce4af80f9d0ad9f540d41246c2f605f8d1e971c6266247fe41231e00419ddba2cb977a5f7813d977124b81b00738727f7d13055b2acccfeedde46'
-filename="$S"/butch-0.1.3.tar.bz2
+filename="$C"/butch-0.1.3.tar.bz2
 
 if [ -z "$BUTCH_BIN" ] ; then
 
@@ -34,8 +34,6 @@ echo "CFLAGS=-O0" > butch/config.mak
 
 ./build.sh
 BUTCH_BIN=butch/butch
-# copy tarball ...
-cp "$filename" "$C"/
 
 fi
 
