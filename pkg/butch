@@ -1,15 +1,15 @@
+[mirrors]
+http://mirror.wzff.de/butch/butch-0.1.4.tar.bz2
+https://github.com/downloads/rofl0r/butch/butch-0.1.4.tar.bz2
+http://codu.org/~rofl/butch-0.1.4.tar.bz2
+
 [main]
-filesize=63408
-sha512=d0e22f1d2fbce4af80f9d0ad9f540d41246c2f605f8d1e971c6266247fe41231e00419ddba2cb977a5f7813d977124b81b00738727f7d13055b2acccfeedde46
+filesize=63800
+sha512=b784f19541f536b79471f92216c4969c7d78575f61696424156468275e457e68fcf71a78354f762c66292ba1dcb8f5133dc962b2ab653bd00334a458ba89cdb9
 tardir=butch
 
 [deps]
 stage0_musl
-
-[mirrors]
-https://github.com/downloads/rofl0r/butch/butch-0.1.3.tar.bz2
-http://codu.org/~rofl/butch-0.1.3.tar.bz2
-http://mirror.wzff.de/butch/butch-0.1.3.tar.bz2
 
 [build]
 dest=$butch_install_dir$butch_prefix
