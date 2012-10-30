@@ -1,5 +1,5 @@
 [deps]
-stage0_gcc3
+stage0_gcc
 
 [mirrors]
 http://www.etalabs.net/musl/releases/musl-0.9.7.tar.gz
