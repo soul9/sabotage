@@ -12,7 +12,7 @@ man
 mpc
 mpfr
 musl
-relocate_toolchain
+dynamic-toolchain
 xz
 zlib
 capchroot

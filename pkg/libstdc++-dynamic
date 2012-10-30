@@ -1,6 +1,6 @@
 [deps]
 g++
-relocate_toolchain
+dynamic-toolchain
 
 [main]
 filesize=6477571

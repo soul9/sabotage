@@ -1,8 +1,10 @@
 [deps]
-relocate_toolchain
+dynamic-toolchain
 git
 
 [build]
+#FIXME clean up obsolete $R and /opt/toolchain usage
+
 dest="$S/build/"
 if [ -d "$dest/musl-git" ] ; then
 	cd "$dest/musl-git"

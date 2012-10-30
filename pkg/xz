@@ -1,5 +1,5 @@
 [deps]
-relocate_toolchain
+dynamic-toolchain
 
 [main]
 filesize=1025913
