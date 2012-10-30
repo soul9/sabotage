@@ -6,5 +6,9 @@ stage0_butch
 stage0_busybox
 patch
 binutils
-stage0_make
-stage0_finish
+make
+
+[build]
+
+"$H"/utils/finish || exit 1
+
