@@ -149,7 +149,6 @@ if $have_files ; then
 	if $butch_do_relocate ; then
 		# now we make a symlink from each file into butch_prefix
 		echo relocating...
-		fixdestdir
 
 		if [ -d usr ] ; then
 			mv usr/* .
