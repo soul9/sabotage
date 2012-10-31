@@ -54,7 +54,6 @@ sed -i 's@/lib32/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
 sed -i 's@/lib64/ld-linux-x86-64.so.2@/lib/ld-musl-x86_64.so.1@' gcc/config/i386/linux64.h
 
 patch -p1 < $K/gcc-453-patch0.diff || exit 1
-patch -p1 < $K/gcc-454-libgcc_hidden.patch || exit 1
 
 if [ x$A = xarm ] ; then
 	patch -p1 < $K/gcc-453-patch1.diff || exit 1
@@ -64,7 +63,7 @@ export CC="$CC -static -D_GNU_SOURCE"
 
 CFLAGS="-O0 -s" LDFLAGS="-Wl,--no-keep-memory" \
 ./configure -C --with-newlib --with-headers=no --prefix="$butch_prefix" \
-  --disable-multilib --disable-nls --disable-shared --disable-mudflap \
+  --disable-multilib --disable-nls --disable-mudflap \
   --disable-libmudflap --disable-libssp --disable-libgomp \
   --disable-debug --disable-bootstrap \
   --enable-lto --with-system-zlib \
