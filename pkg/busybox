@@ -43,9 +43,9 @@ fi
 # make KBUILD_VERBOSE=1 CC="$CC" HOSTCC="$HOSTCC" \
 # HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS || exit 1
 
-make V=1 LDFLAGS=-static \
+make V=1 LDFLAGS=-static HOSTLDFLAGS=-static \
 CFLAGS_busybox="$debugcflags -Wl,-z,muldefs -Werror-implicit-function-declaration" \
-HOSTCC="$CC" CC=$CC HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
+HOSTCC="$CC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
 echo busybox build complete
 
 dest=$butch_install_dir$butch_prefix
@@ -62,8 +62,20 @@ cp "$busybox_bin" "$dest"/bin/busybox || exit 1
 echo check if busybox works:
 "$dest"/bin/busybox --list >/dev/null|| exit 1
 
+trylink() {
+	printf "trying to link busybox to %s ... " "$1"
+	if ! ln -sf busybox "$1" ; then
+		echo FAIL
+		exit 1
+	else
+		echo OK
+	fi
+}
+
 for f in $("$dest"/bin/busybox --list); do
-	#  echo ln -sf busybox "$dest"/bin/"$f"
+	#echo ln -sf busybox "$dest"/bin/"$f"
 	[ ! -f "$butch_root_dir/bin/$f" ] && \
-	  ln -sf busybox "$dest"/bin/"$f" || exit 1
+	  trylink "$dest"/bin/"$f"
 done
+
+echo symlinks done.
