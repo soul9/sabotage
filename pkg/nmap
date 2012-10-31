@@ -9,7 +9,7 @@ libpcap
 pcre
 zlib-dynamic
 luajit
-libstdc++-dynamic
+dynamic-toolchain
 openssl
 
 [build]

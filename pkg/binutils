@@ -21,7 +21,7 @@ LDFLAGS="-Wl,-static" \
 CC="$CC -static" \
 CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
 ./configure -C --prefix="$butch_prefix" \
-  --disable-nls --disable-shared --disable-werror \
+  --disable-nls --disable-werror \
   --disable-install-libbfd || exit 1
 
 make -j$MAKE_THREADS || exit 1

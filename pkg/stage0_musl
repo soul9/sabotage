@@ -14,7 +14,7 @@ sha512=8116ed56d7b65d960b9ac68ad1ae6185cefadd00220809050d422d1145e051539ee1f445c
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
 #we do not want anything in stage0 to be dynamically linked.
-CC=$R/bin/gcc ./configure --disable-shared --enable-gcc-wrapper \
+CC=$R/bin/gcc ./configure --enable-gcc-wrapper \
   --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 
 # enable debug libc when DEBUGBUILD is set
@@ -40,4 +40,20 @@ chmod +x "$dest"/bin/musl-gcc
 sed -i 's,/lib,'"$butch_root_dir"'/lib,g' "$dest"/lib/musl-gcc.specs
 sed -i 's,/include,'"$butch_root_dir"'/include,g' "$dest"/lib/musl-gcc.specs
 sed -i 's,/lib/ld-musl,/xxx/xxx/,' "$dest"/lib/musl-gcc.specs
+
+if false ; then
+
+# in order to build gcc4 in stage1 without --disable-shared, we need a libc.so
+# present. emutls(_s).o and unwind-dw2-fde-glibc(_s).o depend on having
+# a fPIC compatible malloc implementation ready to link. since at least emutls
+# is completely unused, and the other probably as well, we present a fake
+# libc.so and use the linker flag --allow-shlib-undefined to circumvent the
+# issue of the non-presence of the required symbols.
+
+touch empty.c
+$CC -c empty.c -o empty.o || exit 1
+$CC -shared -Wl,-soname=libc.so empty.o -o libc.so || exit 1
+cp libc.so "$dest"/lib/ || exit 1
+
+fi
 
