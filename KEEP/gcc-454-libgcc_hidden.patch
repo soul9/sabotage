@@ -1,0 +1,21 @@
+when --disable-shared is used, libgcc is built without hidden visibility.
+in combination with 2 other bugs, this leads to miscompilation of
+musl libc.so on mips.
+these 3 issues combined are:
+1. gcc emitting useless .globl
+2. gas generating OBJECT symbol rather than unknown type when it sees .globl without .type
+3. libgcc.a symbols not getting hidden visibility like they should
+
+this patch fixes 3).
+
+--- gcc-4.5.4.org/libgcc/Makefile.in
++++ gcc-4.5.4/libgcc/Makefile.in
+@@ -291,6 +291,8 @@
+ gen-hide-list = echo > \$@
+ endif
+ 
++vis_hide = @vis_hide@
++
+ ifneq ($(EXTRA_PARTS),)
+   extra-parts = libgcc-extra-parts
+   INSTALL_PARTS = $(EXTRA_PARTS)
