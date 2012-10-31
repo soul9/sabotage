@@ -42,8 +42,10 @@ butch_custom_destdir="$butch_root_dir""$butch_custom_destdir_base"
 #currently passing a version from a package is not implemented.
 butch_package_version=0.0.0
 
-# if we unlink busybox, nothing will work anymore
+# if we unlink busybox, gcc4 or binutils, nothing will work anymore
 [ "$butch_package_name" = "busybox" ] && butch_do_cleanup_custom_destdir=false
+[ "$butch_package_name" = "gcc4" ] && butch_do_cleanup_custom_destdir=false
+[ "$butch_package_name" = "binutils" ] && butch_do_cleanup_custom_destdir=false
 
 # butch_install_dir denotes the DESTDIR passed to make
 if $butch_do_custom_destdir ; then
