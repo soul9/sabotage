@@ -108,23 +108,15 @@ for i in $dest/lib/gcc/$host_tuple/4.5.4/include/* ; do
   [ -e "$dest/include/$header" ] || copy "$i" "$dest/include/gcc/"
 done
 
-# install musl specs file. this prevents libgcc_s from being used.
+# fix specs file. this prevents libgcc_s from being used.
 # not only is it slower, it'll cause assertion errors in ld.
 # the default location for this file is relative from the gcc
 # binary used, "gccdir"/lib/gcc/$host_tuple/$gcc-version/specs
 # the second default path is "gccdir"/lib/gcc/specs. we use
 # the latter to use less movable parts.
-if false ; then
-  # gcc doesnt like the first line of the specs file,
-  # but without that line gcc -E spits out weird statistics.
-  # thus we have to resort to using gcc's spec with lgcc_s removed.
-  cp "$K"/musl-gcc.specs "$dest"/lib/gcc/specs || exit 1
-  sed -i "s,AAAA,$A," "$dest"/lib/gcc/specs
-else
-  "$dest"/bin/gcc -dumpspecs > "$dest"/lib/gcc/specs || exit 1
-#  sed -i 's, --as-needed -lgcc_s --no-as-needed, -lgcc_eh,' "$dest"/lib/gcc/specs
-  sed -i 's,-lgcc_s,-lgcc_eh,' "$dest"/lib/gcc/specs
-fi
+
+"$dest"/bin/gcc -dumpspecs > "$dest"/lib/gcc/specs || exit 1
+sed -i 's,-lgcc_s,-lgcc_eh,' "$dest"/lib/gcc/specs
 
 if [ "$A" = x86_64 ] ; then
 	mv "$dest"/lib64/* "$dest"/lib/ || true
