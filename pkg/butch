@@ -16,7 +16,7 @@ dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
 
 printf "LDFLAGS = -static\n" > butch/config.mak
-[ -z "$BUILD_DEBUG" ] || printf "CFLAGS += -g\n" >> butch/config.mak
+[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g\n" >> butch/config.mak
 echo "CFLAGS=-O0" >> butch/config.mak
 
 if [ -z "$BUTCH_BIN" ] ; then
