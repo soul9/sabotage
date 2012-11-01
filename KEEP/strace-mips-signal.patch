@@ -1,0 +1,10 @@
+--- strace-4.6.org/signal.c	2012-11-01 22:15:18.729535138 +0000
++++ strace-4.6/signal.c	2012-11-01 22:15:59.729481792 +0000
+@@ -83,6 +83,7 @@
+ #endif /* LINUX && SPARC64 */
+ 
+ #if defined (SPARC) || defined (SPARC64) || defined (MIPS)
++#include <asm/ptrace.h>
+ typedef struct {
+ 	struct pt_regs		si_regs;
+ 	int			si_mask;

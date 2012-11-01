@@ -1,0 +1,11 @@
+--- strace-4.6.org/system.c	2012-11-01 22:15:18.753535118 +0000
++++ strace-4.6/system.c	2012-11-01 22:24:54.953075078 +0000
+@@ -2342,7 +2342,7 @@
+ #endif /* UNIXWARE > 2 */
+ 
+ #ifdef MIPS
+-
++#include <asm/sysmips.h>
+ #ifndef __NEW_UTS_LEN
+ #define __NEW_UTS_LEN 64
+ #endif
