@@ -1,6 +1,7 @@
 [mirrors]
 http://kent.dl.sourceforge.net/project/pcmanfm/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/PCManFM/pcmanfm-1.0rc1.tar.gz
 http://switch.dl.sourceforge.net/project/pcmanfm/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/PCManFM/pcmanfm-1.0rc1.tar.gz
+http://mirror.wzff.de/sabotage/tarballs/pcmanfm-1.0rc1.tar.gz
 
 [main]
 filesize=447192
