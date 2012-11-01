@@ -69,6 +69,7 @@ imagefile="$1"
 contents="$2"
 [ -z "$contents" ] && usage
 [ ! -f "$contents" ] && [ ! -d "$contents" ] && die "failed to access $contents"
+[ -d "$contents" ] && [ ! -d "$contents"/src ] && die "$contents does not contain a valid directory layout"
 
 imagesize="$3"
 [ -z "$imagesize" ] && usage
@@ -80,6 +81,9 @@ for mbr_bin in mbr.bin /usr/lib/syslinux/mbr.bin /usr/share/syslinux/mbr.bin
 	do [ -f "$mbr_bin" ] && break ; done
 
 [ -z "$mbr_bin" ] && die 'Could not find mbr.bin'
+
+echo_bold "0) rm the image file"
+[ -f "$imagefile" ] && rm -f "$imagefile"
 
 echo_bold "1) make the image file"
 dd if=/dev/zero of="$imagefile" bs=1 count=0 seek="$imagesize" || die "Failed to create $imagefile"
