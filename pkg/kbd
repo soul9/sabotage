@@ -13,6 +13,9 @@ bison
 
 [build]
 # fix build errors on non-glibc (first patch) and other things as described by LFS
+# see http://www.linuxfromscratch.org/lfs/view/stable/chapter07/console.html
+# for further reference on how this package is supposed to be used, we only use it
+# to strip the keymaps off.
 for p in kbd.patch kbd-1.15.3-upstream_fixes-1.patch kbd-1.15.3-backspace-1.patch ; do
 	patch -p1 < "$K"/$p || exit 1
 done
@@ -101,6 +104,8 @@ mkdir -p "$fs"/bin
 cat << EOF > "$fs"/bin/loadkeys
 #!/bin/sh
 echo 'use loadkmap < /share/kmap/layout.kmap to change keyboard layout'
+echo "available keyboard layouts are:"
+find /share/kmap -name '*.kmap' | sort
 exit 1
 EOF
 chmod +x "$fs"/bin/loadkeys
