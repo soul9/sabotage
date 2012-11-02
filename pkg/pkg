@@ -48,6 +48,7 @@ strace
 svn
 tcpdump
 tomoyo
+tmux
 wget
 wireless-tools
 wpa-supplicant
