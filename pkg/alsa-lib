@@ -16,7 +16,10 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 rm -f src/compat/hsearch_r.c
 touch src/compat/hsearch_r.c
 
-patch -p1 < "$K/alsa-lib_pcm_h.patch"
+patch -p1 < "$K"/alsa-lib_pcm_h.patch || exit 1
+if [ "$A" = "mips" ] ; then
+	patch -p1 < "$K"/alsa-lib_mips_atomic.patch || exit 1
+fi
 
 FU=include/global.h
 sed -i 's,#include <time.h>,#include <sys/time.h>,' $FU || exit 1
