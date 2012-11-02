@@ -13,10 +13,14 @@ else
   mouse=event3
 fi
 
-Xfbdev -retro  :0 -keybd evdev,,device=/dev/input/$keyb \
-  -mouse evdev,,device=/dev/input/$mouse &
-
 export DISPLAY=:0
+
+exec Xfbdev -retro  :0 -keybd evdev,,device=/dev/input/$keyb \
+  -mouse evdev,,device=/dev/input/$mouse
+
+# once X is running, use "startlxde" in the terminal that shows up.
+
+# --- unreachable code --- #
 
 sleep 3
 
