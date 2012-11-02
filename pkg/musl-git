@@ -3,8 +3,6 @@ dynamic-toolchain
 git
 
 [build]
-#FIXME clean up obsolete $R and /opt/toolchain usage
-
 dest="$S/build/"
 if [ -d "$dest/musl-git" ] ; then
 	cd "$dest/musl-git"
@@ -23,15 +21,7 @@ sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-TC_PATH=$R/opt/toolchain
-
 make clean
 make CC="rawcc" -j$MAKE_THREADS || exit 1
-make DESTDIR="$TC_PATH" install || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
 
-musl_gcc="$TC_PATH/bin/musl-gcc"
-
-cp "$K/musl-gcc" "$musl_gcc"
-chmod +x "$musl_gcc"
-sed -i "s,AAAA,$A," "$musl_gcc"
-sed -i "s,PPPP,$R," "$musl_gcc"
