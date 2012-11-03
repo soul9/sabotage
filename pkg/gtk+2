@@ -22,18 +22,19 @@ libxrender
 sed -i 's#l \(gtk-.*\).sgml#& -o \1#' docs/{faq,tutorial}/Makefile.in
 sed -i 's#.*@man_#man_#' docs/reference/gtk/Makefile.in
 
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > gdk/tests/Makefile.in
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > gtk/tests/Makefile.in
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > modules/other/gail/tests/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > gdk/tests/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > gtk/tests/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > tests/Makefile.in
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > modules/other/gail/tests/Makefile.in
 
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g"
 
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"\
+CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix"\
  --disable-rebuilds  --disable-glibtest || exit 1
 
 echo '#include <string.h>' >> config.h
-printf 'all:\n\ttrue\n\ninstall:\n\ttrue' > demos/Makefile
-printf 'all:\n\ttrue\n\ninstall:\n\ttrue' > tests/Makefile
+printf 'all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue' > demos/Makefile
+printf 'all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue' > tests/Makefile
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
