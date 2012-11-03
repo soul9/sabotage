@@ -26,9 +26,46 @@ see the wiki page "boostrap to hd image" or utils/write-hd-image.sh
 
     butch prefetch stage0 stage1 pkg xorg gdb
 
+  the file in which butch keeps track of what is installed is /src/pkg/installed.dat
+  with the default template, butch will use /opt/packagename as DESTDIR for installs.
+  the contents of that dir will then be symlinked into / in a stow-ish manner.
+
+  use "butch-unlink" command to remove symlinks to a specific package.
+  use "relocate.sh" command to create symlinks for a pkg which is unlinked.
+
 == Bootstrapping the system
 
 see README.
+
+== first steps
+
+* keyboard layout
+for the linux console:
+execute "loadkeys" command, and follow the instructions.
+
+for X:
+edit /etc/xinitrc (or copy it to ~/.xinitrc and edit that one)
+there's a commented line suggesting how to change setxkbmap invokation.
+uncomment and change the 2-letter country code to your country.
+
+starting X:
+- be sure to edit /bin/X and enable qemu or vbox settings, 
+  otherwise your controls won't work!
+- execute "startx"
+
+getting a dhcp ip address:
+- execute "dhclient eth0"
+
+setting a static ip address:
+- ifconfig eth0 192.168.0.2 netmask 255.255.255.0
+- route add default gw 192.168.0.1
+  you can put that into a script which is automatically started from /etc/rc.local
+
+generate sshd keys
+- butch install sshd-keys
+
+start sshd
+- /bin/sshd
 
 == System Administration
 
