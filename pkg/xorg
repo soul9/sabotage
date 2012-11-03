@@ -33,6 +33,7 @@ recordproto
 renderproto
 resourceproto
 scrnsaverproto
+setxkbmap
 st
 twm
 util-macros
