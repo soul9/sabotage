@@ -14,14 +14,28 @@ xz-dynamic
 perl
 
 [build]
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-
-CFLAGS=-D_GNU_SOURCE LDFLAGS="-ljpeg -ltiff -lz -llzma -ljpeg" ./configure -C \
+printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > tests/Makefile.in
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g"
+CFLAGS="-D_GNU_SOURCE $debugflags" LDFLAGS="-ljpeg -ltiff -lz -llzma -ljpeg" ./configure -C \
   --prefix="$butch_prefix" \
   --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
-dest="$butch_install_dir""$butch_prefix"/include/gdk-pixbuf-2.0/gdk-pixbuf-xlib/
-mkdir -p "$dest"
-cp -r contrib/gdk-pixbuf-xlib/*.h "$dest"
+dest="$butch_install_dir""$butch_prefix"
+dest2="$dest"/include/gdk-pixbuf-2.0/gdk-pixbuf-xlib/
+mkdir -p "$dest2"
+cp -r contrib/gdk-pixbuf-xlib/*.h "$dest2"
+
+# make fails to generate the file loaders.cache which is crucial to have, 
+# otherwise gdk-pixbuf will not function at all and only print misleading
+# "Couldn't recognize the image file format ..." error messages
+# the makefile uses gdk-pixbuf-query-loaders on libpixbufloader-*.la,
+#  and since these point to prefix, the referenced .so files are not found.
+
+LD_LIBRARY_PATH="$butch_prefix/lib:$dest/lib" \
+"$dest"/bin/gdk-pixbuf-query-loaders "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-*.so \
+  > "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache || exit 1
+
+sed -i 's,^"'"$dest"',",g' "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache || exit 1
+
