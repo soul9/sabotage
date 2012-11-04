@@ -14,6 +14,7 @@ intltool
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g"
+CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
