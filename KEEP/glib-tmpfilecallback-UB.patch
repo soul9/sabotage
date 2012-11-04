@@ -1,0 +1,11 @@
+--- glib-2.32.2/glib/gfileutils.c	2012-04-12 23:39:20.000000000 +0000
++++ glib-2.32.2-patched/glib/gfileutils.c	2012-11-04 22:26:39.000000000 +0000
+@@ -1315,7 +1315,7 @@
+  * get_tmp_file based on the mkstemp implementation from the GNU C library.
+  * Copyright (C) 1991,92,93,94,95,96,97,98,99 Free Software Foundation, Inc.
+  */
+-typedef gint (*GTmpFileCallback) (gchar *, gint, gint);
++typedef gint (*GTmpFileCallback) (gchar *, gint, ...);
+ 
+ static gint
+ get_tmp_file (gchar            *tmpl,
