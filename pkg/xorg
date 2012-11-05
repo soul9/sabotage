@@ -48,6 +48,7 @@ xinit
 xkbcomp
 xkeyboard-config
 xlogo
+xmodmap
 xorg-server
 xproto
 xterm
