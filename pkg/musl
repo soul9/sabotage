@@ -10,6 +10,8 @@ filesize=708966
 sha512=8116ed56d7b65d960b9ac68ad1ae6185cefadd00220809050d422d1145e051539ee1f445c2f19d49598ab30ca6843a75f1b2189449bc94f6137c26cf9be15162
 
 [build]
+patch -p1 < "$K"/musl-097-cumul.patch || exit 1
+
 [ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
 
 CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
