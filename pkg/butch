@@ -1,30 +1,28 @@
 [mirrors]
-http://mirror.wzff.de/butch/butch-0.1.4.tar.bz2
-https://github.com/downloads/rofl0r/butch/butch-0.1.4.tar.bz2
-http://codu.org/~rofl/butch-0.1.4.tar.bz2
+http://mirror.wzff.de/butch/butch-0.1.5.tar.bz2
+https://github.com/downloads/rofl0r/butch/butch-0.1.5.tar.bz2
+http://codu.org/~rofl/butch-0.1.5.tar.bz2
 
 [main]
-filesize=63800
-sha512=b784f19541f536b79471f92216c4969c7d78575f61696424156468275e457e68fcf71a78354f762c66292ba1dcb8f5133dc962b2ab653bd00334a458ba89cdb9
+filesize=63762
+sha512=10af6b9a0ee7ef01e81a9e09231bc1dbcb40c38943bd494e4defdeafbfb49aa86f9e92416887f9cc64e7373b079088af55b82fa3259ae563b02a0145c6821ee3
 tardir=butch
 
 [deps]
 stage0_musl
 
 [build]
-dest=$butch_install_dir$butch_prefix
-mkdir -p "$dest"/bin
-
-printf "LDFLAGS = -static\n" > butch/config.mak
-[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g\n" >> butch/config.mak
-echo "CFLAGS=-O0" >> butch/config.mak
-
 if [ -z "$BUTCH_BIN" ] ; then
 	# set environment variable BUTCH_FROM_GIT to 1 if you want to test the latest butch
 	if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 		rm -rf butch
 		git clone https://github.com/rofl0r/butch
 	fi
+
+	# prepare build config...
+	printf "LDFLAGS = -static\n" > butch/config.mak
+	[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g\n" >> butch/config.mak
+	echo "CFLAGS=-O0" >> butch/config.mak
 
 	if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
 		# if on arm or mips, we only use one build thread to not exhaust memory
@@ -33,10 +31,16 @@ if [ -z "$BUTCH_BIN" ] ; then
 		# do not check checksum, since it can take ages on machines that slow	
 		echo "CFLAGS += -DDISABLE_CHECKSUM" >> butch/config.mak
 	fi
+
+	# and build
 	[ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
 	CC="$CC -static" ./build.sh || exit 1
-
-	cp butch/butch "$dest"/bin/butch || exit 1
-else
-	cp "$BUTCH_BIN" "$dest"/bin/butch || exit 1
+	BUTCH_BIN=butch/butch
 fi
+
+# "make install"
+dest=$butch_install_dir$butch_prefix
+mkdir -p "$dest"/bin
+cp -f "$BUTCH_BIN" "$dest"/bin/butch || exit 1
+
+
