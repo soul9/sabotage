@@ -1,6 +1,6 @@
-diff -ur binutils-2.22.orig//bfd/elf-bfd.h binutils-2.22//bfd/elf-bfd.h
---- binutils-2.22.orig//bfd/elf-bfd.h	2012-04-18 01:35:58.138000025 +0000
-+++ binutils-2.22//bfd/elf-bfd.h	2012-04-18 01:38:02.835000025 +0000
+diff -ur binutils-2.22.orig/bfd/elf-bfd.h binutils-2.22/bfd/elf-bfd.h
+--- binutils-2.22.orig/bfd/elf-bfd.h	2012-04-18 01:35:58.138000025 +0000
++++ binutils-2.22/bfd/elf-bfd.h	2012-04-18 01:38:02.835000025 +0000
 @@ -168,6 +168,8 @@
    /* Symbol has a non-weak reference from a non-shared object (other than
       the object in which it is defined).  */
@@ -10,9 +10,9 @@ diff -ur binutils-2.22.orig//bfd/elf-bfd.h binutils-2.22//bfd/elf-bfd.h
    /* Dynamic symbol has been adjustd.  */
    unsigned int dynamic_adjusted : 1;
    /* Symbol needs a copy reloc.  */
-diff -ur binutils-2.22.orig//bfd/elflink.c binutils-2.22//bfd/elflink.c
---- binutils-2.22.orig//bfd/elflink.c	2012-04-18 01:35:58.147000025 +0000
-+++ binutils-2.22//bfd/elflink.c	2012-04-18 01:44:37.442000025 +0000
+diff -ur binutils-2.22.orig/bfd/elflink.c binutils-2.22/bfd/elflink.c
+--- binutils-2.22.orig/bfd/elflink.c	2012-04-18 01:35:58.147000025 +0000
++++ binutils-2.22/bfd/elflink.c	2012-04-18 01:44:37.442000025 +0000
 @@ -4351,7 +4351,9 @@
  		  if (h->def_dynamic)
  		    {
