@@ -1,11 +1,13 @@
 #!/bin/sh
-filesize='63408'
-sha512='d0e22f1d2fbce4af80f9d0ad9f540d41246c2f605f8d1e971c6266247fe41231e00419ddba2cb977a5f7813d977124b81b00738727f7d13055b2acccfeedde46'
-filename="$C"/butch-0.1.3.tar.bz2
+filesize='63762'
+sha512='10af6b9a0ee7ef01e81a9e09231bc1dbcb40c38943bd494e4defdeafbfb49aa86f9e92416887f9cc64e7373b079088af55b82fa3259ae563b02a0145c6821ee3'
+version=0.1.5
+
+filename="$C"/butch-$version.tar.bz2
 
 if [ -z "$BUTCH_BIN" ] ; then
 
-tarxf http://mirror.wzff.de/butch/ butch-0.1.3 .tar.bz2 butch
+tarxf http://mirror.wzff.de/butch/ butch-$version .tar.bz2 butch
 
 read sz _ <<EOF
 $(du -b "$filename")
