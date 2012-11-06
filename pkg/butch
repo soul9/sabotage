@@ -12,31 +12,29 @@ tardir=butch
 stage0_musl
 
 [build]
-if [ -z "$BUTCH_BIN" ] ; then
-	# set environment variable BUTCH_FROM_GIT to 1 if you want to test the latest butch
-	if [ ! -z "$BUTCH_FROM_GIT" ] ; then
-		rm -rf butch
-		git clone https://github.com/rofl0r/butch
-	fi
-
-	# prepare build config...
-	printf "LDFLAGS = -static\n" > butch/config.mak
-	[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g\n" >> butch/config.mak
-	echo "CFLAGS=-O0" >> butch/config.mak
-
-	if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
-		# if on arm or mips, we only use one build thread to not exhaust memory
-		sed -i \
-		  's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
-		# do not check checksum, since it can take ages on machines that slow	
-		echo "CFLAGS += -DDISABLE_CHECKSUM" >> butch/config.mak
-	fi
-
-	# and build
-	[ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
-	CC="$CC -static" ./build.sh || exit 1
-	BUTCH_BIN=butch/butch
+# set environment variable BUTCH_FROM_GIT to 1 if you want to test the latest butch
+if [ ! -z "$BUTCH_FROM_GIT" ] ; then
+	rm -rf butch
+	git clone https://github.com/rofl0r/butch
 fi
+
+# prepare build config...
+printf "LDFLAGS = -static\n" > butch/config.mak
+[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g\n" >> butch/config.mak
+echo "CFLAGS=-O0" >> butch/config.mak
+
+if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
+	# if on arm or mips, we only use one build thread to not exhaust memory
+	sed -i \
+	  's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
+	# do not check checksum, since it can take ages on machines that slow	
+	echo "CFLAGS += -DDISABLE_CHECKSUM" >> butch/config.mak
+fi
+
+# and build
+[ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
+CC="$CC -static" ./build.sh || exit 1
+BUTCH_BIN=butch/butch
 
 # "make install"
 dest=$butch_install_dir$butch_prefix
