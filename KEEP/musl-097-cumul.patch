@@ -756,3 +756,21 @@ index 92bf7ff..38e8a1e 100644
 -- 
 1.7.3.4
 
+diff --git a/src/ldso/mips/dlsym.s b/src/ldso/mips/dlsym.s
+index b1ea98b..c57b972 100644
+--- a/src/ldso/mips/dlsym.s
++++ b/src/ldso/mips/dlsym.s
+@@ -8,8 +8,9 @@ dlsym:
+ 	move $6, $ra
+ 	lw $25, %call16(__dlsym)($gp)
+ 	addiu $sp, $sp, -16
+-	jalr $25
+ 	sw $ra, 12($sp)
++	jalr $25
++	nop
+ 	lw $ra, 12($sp)
+ 	jr $ra
+ 	addiu $sp, $sp, 16
+-- 
+1.7.3.4
+
