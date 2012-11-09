@@ -10,6 +10,8 @@ musl
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-CFLAGS="-D_GNU_SOURCE -Dcpu_set_t=int" ./configure -C --prefix="$butch_prefix" || exit 1
+cp $K/eina_cpu.c src/lib/
+cp $K/eina_sched.c src/lib/
+CFLAGS="-D_GNU_SOURCE" ./configure --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
