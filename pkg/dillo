@@ -1,0 +1,16 @@
+[mirrors]
+http://www.dillo.org/download/dillo-3.0.2.tar.bz2
+
+[main]
+filesize=640894
+sha512=510b8d7201f73a60c44ced752fddad1ee9083042771da991e8267a118eb639704aa13113ff884f52bd4027ebcd6ab76042a9cebd1d50d1fcab22c5605b9cedf4
+
+[deps]
+fltk13
+libpng
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
