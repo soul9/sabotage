@@ -4,6 +4,7 @@ pkg
 xorg
 lxde
 bsdtar
+dillo
 netsurf
 nmap
 php
