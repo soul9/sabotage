@@ -23,6 +23,7 @@ CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
+[ "$butch_prefix" = "/" ] && butch_prefix=
 dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
 ln -sf  ../lib/libc.so "$dest"/bin/ldd
@@ -37,4 +38,4 @@ sed -i "s,PPPP,$butch_prefix," "$musl_gcc"
 #create dynlinker path file which only contains /lib
 #this should speed up dynamic linker path search
 mkdir -p "$dest"/etc
-printf "%s" "$butch_prefix"/lib > "$dest"/etc/ld-musl-$A.path
+printf "%s\n" "$butch_prefix"/lib > "$dest"/etc/ld-musl-$A.path
