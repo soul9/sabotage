@@ -8,9 +8,11 @@ sha512=510b8d7201f73a60c44ced752fddad1ee9083042771da991e8267a118eb639704aa13113f
 [deps]
 fltk13
 libpng
+openssl
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  --enable-ssl || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
