@@ -6,7 +6,7 @@ sha512=b2d7dba02f801112248fb3c361b134b852820ea4704c86bfb178687d503779a887eeeff06
 http://downloads.sourceforge.net/sourceforge/libpng/libpng-1.5.11.tar.xz
 
 [deps]
-zlib
+zlib-dynamic
 
 [build]
 #patch -p1 < "$K/some.patch"
