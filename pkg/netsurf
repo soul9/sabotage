@@ -1,0 +1,22 @@
+[mirrors]
+http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-2.9-full-src.tar.gz
+[main]
+filesize=4621932
+sha512=8dfd4d845f5255ee4420c6d4454594eb34dda129096b4d6acb72bd00e976042e7caf80b075ed39d3d3bf3b070c297f73f889075200bd7fb3d2467ca8154c07f0
+tardir=netsurf-2.9
+
+[deps]
+libpng
+curl
+libxml2
+cairo
+gtk+2
+libglade
+libmng
+liblcms
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-I$butch_prefix/include/cairo/" make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
