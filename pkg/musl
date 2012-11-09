@@ -33,3 +33,8 @@ cp "$K/musl-gcc" "$musl_gcc"
 chmod +x "$musl_gcc"
 sed -i "s,AAAA,$A," "$musl_gcc"
 sed -i "s,PPPP,$butch_prefix," "$musl_gcc"
+
+#create dynlinker path file which only contains /lib
+#this should speed up dynamic linker path search
+mkdir -p "$dest"/etc
+printf "%s" "$butch_prefix"/lib > "$dest"/etc/ld-musl-$A.path
