@@ -24,8 +24,11 @@
 # include <pthread.h>
 # ifdef __linux__
 /* musl specific modifications */
-#define pthread_setschedparam pthread_attr_setschedparam
-#define pthread_getschedparam pthread_attr_getschedparam
+/*struct sched_param { int sched_priority; };*/
+int pthread_getschedparam(pthread_t pthread_id, int *pol,
+			  struct sched_param *param) { }
+int pthread_setschedparam(pthread_t pthread_id, int pol,
+			  const struct sched_param *param) { }
 /* end of musl-specific modifications */
 #  include <sched.h>
 #  include <sys/time.h>
@@ -57,7 +60,7 @@ eina_sched_prio_drop(void)
    pthread_t pthread_id;
 
    pthread_id = pthread_self();
-/*   ret = pthread_getschedparam(pthread_id, &pol, &param); */
+   ret = pthread_getschedparam(pthread_id, &pol, &param); 
    if (ret)
      {
         EINA_LOG_ERR("Unable to query sched parameters");
@@ -75,7 +78,7 @@ eina_sched_prio_drop(void)
              param.sched_priority = 1;
           }
 
-/*        pthread_setschedparam(pthread_id, pol, &param); */
+        pthread_setschedparam(pthread_id, pol, &param); 
      }
 # ifdef __linux__
    else
