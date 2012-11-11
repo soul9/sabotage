@@ -26,9 +26,13 @@
 /* musl specific modifications */
 /*struct sched_param { int sched_priority; };*/
 int pthread_getschedparam(pthread_t pthread_id, int *pol,
-			  struct sched_param *param) { }
+			  struct sched_param *param) {
+			  return 0;  
+			  }
 int pthread_setschedparam(pthread_t pthread_id, int pol,
-			  const struct sched_param *param) { }
+			  const struct sched_param *param) {
+			  return 0;
+			  }
 /* end of musl-specific modifications */
 #  include <sched.h>
 #  include <sys/time.h>
