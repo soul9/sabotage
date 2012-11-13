@@ -13,7 +13,7 @@ relocate() {
                         local save="$PWD"
                         relocate "$target_root" "$dir/$i" "$backlinks/.."
                         cd "$save"
-                elif [ -f "$i" ] ; then
+                elif [ -f "$i" ] || [ -L "$i" ] ; then
                         target="$target_root/$dir/$i"
                         echo "ln -sf $backlinks/$butch_install_dir/$dir/$i $target"
                         ln -sf "$backlinks/$butch_install_dir/$dir/$i" "$target"
