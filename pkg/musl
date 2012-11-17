@@ -15,6 +15,12 @@ patch -p1 < "$K"/musl-097-cumul.patch || exit 1
 [ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
 
 CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
+if [ $Ax = powerpcx ] ; then
+cat << EOF >> config.mak
+LDFLAGS += -Wl,--secure-plt
+CFLAGS += -msecure-plt
+EOF
+fi
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
