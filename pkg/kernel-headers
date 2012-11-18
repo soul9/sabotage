@@ -1,11 +1,10 @@
 [deps]
 
 [mirrors]
-http://mirror.wzff.de/sabotage/tarballs/kernel-headers-3.3.4.tar.bz2
-
+http://mirror.wzff.de/sabotage/tarballs/kernel-headers-3.3.4-1.tar.gz
 [main]
-filesize=2059143
-sha512=e3e8f85f35f9060c0beb698e7a0f8ed63be7208e3a68213db68922aa4d9e017e6b38a5059c0bc2d6dd5524ba46c209ccfb194c8c0eb234745599b6215c131516
+filesize=3350751
+sha512=62805c6433521df2ba9d741f1e23452f03d205b2472e11b27cfe91b37b0c0ed353de6a803803f142d214ea734817dca9c49e0d08988e9011c52882f7a5243a86
 
 [build]
 dest="$butch_install_dir""$butch_prefix"
