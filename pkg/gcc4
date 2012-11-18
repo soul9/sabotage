@@ -75,7 +75,7 @@ CFLAGS="-O0 -s" LDFLAGS="-Wl,--no-keep-memory" \
   --enable-lto --with-system-zlib \
   --with-target-libiberty=no --with-target-zlib=no \
   --enable-languages=c,c++ --enable-clocale=generic \
-  "$config_arch_flags" || exit 1
+  $config_arch_flags || exit 1
 
 
 make -j$MAKE_THREADS BOOT_LDFLAGS="-static" LDFLAGS="-static" || exit 1
