@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 		die("file to small");
 
 	size_t pages = (len/pagesize)-1;
-	unsigned int swap[129];
+	unsigned int swap[129] = {0};
 
 	// Write header.  Note that older kernel versions checked signature
 	// on disk (not in cache) during swapon, so sync after writing.
