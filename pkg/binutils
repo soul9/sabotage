@@ -17,12 +17,17 @@ $K/bin/libibertyfix libiberty
 
 [ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
 
+config_arch_flags=
+if [ x$A = xpowerpc ] ; then
+        config_arch_flags="--enable-secureplt"
+fi
+
 LDFLAGS="-Wl,-static" \
 CC="$CC -static" \
 CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
 ./configure -C --prefix="$butch_prefix" \
   --disable-nls --disable-werror \
-  --disable-install-libbfd || exit 1
+  --disable-install-libbfd $config_arch_flags || exit 1
 
 make -j$MAKE_THREADS || exit 1
 # tooldir=/
@@ -30,4 +35,12 @@ make DESTDIR=$butch_install_dir install-gas install-ld install-binutils || exit 
 
 dest="$butch_install_dir""$butch_prefix"
 rm -f "$dest"/bin/ld
-ln -sf ld.bfd "$dest"/bin/ld
+if [ x$A = xpowerpc ] ; then
+	cat << EOF > "$dest"/bin/ld
+#!/bin/sh
+ld.bfd --secure-plt \$@
+EOF
+	chmod +x "$dest"/bin/ld
+else
+	ln -sf ld.bfd "$dest"/bin/ld
+fi
