@@ -61,9 +61,9 @@ patch -p1 < $K/gcc-453-patch0.diff || exit 1
 config_arch_flags=
 config_arch_target_cflags=
 config_arch_target_ldflags=
-if [ x$A = xarm ] ; then
+if [ "$A" = "arm" ] ; then
 	patch -p1 < $K/gcc-453-patch1.diff || exit 1
-elif [ x$A = xpowerpc ] ; then
+elif [ "$A" = "powerpc" ] ; then
 	config_arch_flags="--enable-secureplt --with-long-double-64"
 	config_arch_target_cflags="-Wl,--secure-plt"
 	config_arch_target_ldflags="-Wl,--secure-plt"
