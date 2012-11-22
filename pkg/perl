@@ -12,6 +12,9 @@ http://www.cpan.org/src/5.0/perl-5.16.0.tar.bz2
 # with empty prefix, perl will disregard the prefix parameters entirely, failing to build
 [ -z "$butch_prefix" ] && butch_prefix=/
 
+debug_flags=
+[ "$DEBUGBUILD" = "1" ] && debug_flags="-Doptimize=-O0 -DEBUGGING=-g"
+
 sed -i 's,-fstack-protector,-fnostack-protector,g' ./Configure
 
 CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE' \
@@ -26,7 +29,7 @@ CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE' \
   -Dscriptdir="$butch_prefix"/bin \
   -Dsitescript="$butch_prefix"/bin \
   -Dvendorscript="$butch_prefix"/bin \
-  -Dinc_version_list=none \
+  -Dinc_version_list=none $debug_flags \
   -Dman1dir="$butch_prefix"/share/man/man1 -Dman1ext=1perl \
   -Dman3dir="$butch_prefix"/share/man/man3 -Dman3ext=3perl || exit 1
 
