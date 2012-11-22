@@ -10,15 +10,16 @@ http://ftpmirror.gnu.org/binutils/binutils-2.22.tar.bz2
 stage0_musl
 
 [build]
-patch -p1 < $K/binutils-arm.diff || exit 1
-patch -p1 < $K/binutils-as-needed.patch || exit 1
+patch -p1 < "$K"/binutils-arm.diff || exit 1
+patch -p1 < "$K"/binutils-as-needed.patch || exit 1
+patch -p1 < "$K"/binutils222-ppc-textrel.patch || exit 1
 
 $K/bin/libibertyfix libiberty
 
 [ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
 
 config_arch_flags=
-if [ x$A = xpowerpc ] ; then
+if [ "$A" = "powerpc" ] ; then
         config_arch_flags="--enable-secureplt"
 fi
 
