@@ -12,6 +12,5 @@ glib
 [build]
 #patch -p1 < "$K/some.patch"
 CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
-printf "%s\n" '#define pthread_setschedparam(A,B,C) 0' >> src/config.h
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
