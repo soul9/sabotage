@@ -1,5 +1,5 @@
 This is sabotage, an experimental distribution based on musl libc and busybox.
-Currently sabotage supports i386 and x86_64, MIPS and ARM(v4t+).
+Currently sabotage supports i386 and x86_64, MIPS, PowerPC32 and ARM(v4t+).
 
 Requirements:
 - ~4G free disk space

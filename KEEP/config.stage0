@@ -6,6 +6,7 @@ export A=i386
 #export A=x86_64
 #export A=arm
 #export A=mips
+#export A=powerpc
 
 ## set the compiler environment
 export CC=gcc
