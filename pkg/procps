@@ -1,0 +1,60 @@
+[mirrors]
+http://ftp.de.debian.org/debian/pool/main/p/procps/procps_3.3.4.orig.tar.xz
+
+[main]
+filesize=523268
+sha512=a8b1bc197df5ec3f03be3fced99caaf2215100f555a6cf94e7dcde25e9d413b921f7a736b466c1538229ae84956410ceb3d33679c97cf87e53624466512d2c9c
+tardir=procps-ng-3.3.4
+
+[deps]
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+cat << EOF > include/error.h
+#include <stdio.h>
+#include <string.h>
+#define HAVE_PROGRAM_INVOCATION_SHORT_NAME
+#define PROGRAM_NAME "procps"
+
+static char *program_invocation_name = PROGRAM_NAME;
+static char *program_invocation_short_name = PROGRAM_NAME;
+
+#define error(status, errnum, ...) \
+  do { fflush(stdout); \
+       dprintf(2, PROGRAM_NAME ": "); \
+       dprintf(2, __VA_ARGS__); \
+       if(errnum) dprintf(2, ": %s", strerror(errnum)); \
+       dprintf(2, "\n"); \
+       if(status) exit(status); \
+  } while(0)
+
+#define error_at_line(status, errnum, fn, line, ...) \
+  do { fflush(stdout); \
+       dprintf(2, PROGRAM_NAME ": %s:%d", fn, (int) line); \
+       dprintf(2, __VA_ARGS__); \
+       if(errnum) dprintf(2, ": %s", strerror(errnum)); \
+       dprintf(2, "\n"); \
+       if(status) exit(status); \
+  } while(0)
+
+
+EOF
+mkdir -p include/sys
+cat << EOF > include/sys/dir.h
+#include <dirent.h>
+#define direct dirent
+EOF
+
+cat << EOF > include/values.h
+#define _GNU_SOURCE
+#include <limits.h>
+#include <float.h>
+#include <sys/types.h>
+#define MAXINT INT_MAX
+#define MAXFLOAT FLT_MAX
+typedef suseconds_t useconds_t;
+EOF
+
+CFLAGS="-D_GNU_SOURCE -DGLOB_TILDE=0 -DAF_INET6=10 -DAF_INET=2" ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
