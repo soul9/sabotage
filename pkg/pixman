@@ -12,7 +12,8 @@ sha512=f60a3b1620b8dcc74b357efe34578881e4441cc72117c94ac96132fe417d15e03f2f71fba
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
-CFLAGS="-DPIXMAN_NO_TLS" ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-DPIXMAN_NO_TLS" ./configure -C --prefix="$butch_prefix" \
+  --disable-loongson-mmi || exit 1
 sed -i -e '/TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR/d' -e '/TOOLCHAIN_SUPPORTS__THREAD/d' config.h
 make -j$MAKE_THREADS  || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
