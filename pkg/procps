@@ -55,6 +55,10 @@ cat << EOF > include/values.h
 typedef suseconds_t useconds_t;
 EOF
 
-CFLAGS="-D_GNU_SOURCE -DGLOB_TILDE=0 -DAF_INET6=10 -DAF_INET=2" ./configure -C --prefix="$butch_prefix" || exit 1
+STRIP=true CFLAGS="-O0 -g -D_GNU_SOURCE -DGLOB_TILDE=0 -DAF_INET6=10 -DAF_INET=2" ./configure \
+  -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+mv $dest/usr/bin/* $dest/bin/
