@@ -9,8 +9,6 @@ dynamic-toolchain
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-mkdir -p sys
-cp "$K"/mtio.h sys
 gnulibfix lib # by default gnulib builds 230/389 C-files.
 dir=$PWD
 
