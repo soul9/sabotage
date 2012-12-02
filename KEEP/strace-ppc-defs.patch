@@ -1,0 +1,14 @@
+--- strace-4.6.org/defs.h	2012-12-02 21:51:28.299011407 +0000
++++ strace-4.6/defs.h	2012-12-02 22:04:43.942225312 +0000
+@@ -155,11 +155,6 @@
+ #define ptrace xptrace
+ #include <sys/ptrace.h>
+ #undef ptrace
+-#ifdef POWERPC
+-#define __KERNEL__
+-#include <asm/ptrace.h>
+-#undef __KERNEL__
+-#endif
+ #endif /* !LINUXSPARC */
+ #endif /* !SVR4 */
+ 
