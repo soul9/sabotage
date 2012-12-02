@@ -54,11 +54,16 @@ done
 sed -i 's/noconfigdirs=""/noconfigdirs="intl readline"/' ../configure
 # let's use libedit in lieu of readline and save us from the in-tree compile of the latter...
 ln -sf "$butch_prefix"/lib/libreadline.a readline/libreadline.a
+archflags=
+if [ "$A" = "powerpc" ] ; then
+	cp "$K"/ppc-regs.h . || exit 1
+	archflags="-include $PWD/ppc-regs.h"
+fi
 
 #-DUT_NAMESIZE=32
 #-Dfeof_unlocked=feof
 CC="$CC -static -D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
-CFLAGS="-O0" \
+CFLAGS="-O0 $archflags" \
 ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
   --with-system-zlib=yes --enable-gdbserver=no --disable-sim \
