@@ -39,6 +39,7 @@ sed -i 's,gcc_no_link=yes,gcc_no_link=no,' ./libstdc++-v3/configure
 #and even more g++ hackery
 mv ./libstdc\+\+-v3/config/os/gnu-linux ./libstdc\+\+-v3/config/os/gnu-linux.org
 cp -r ./libstdc\+\+-v3/config/os/generic ./libstdc\+\+-v3/config/os/gnu-linux
+cp ./libstdc++-v3/config/os/gnu-linux.org/arm-eabi-extra.ver ./libstdc++-v3/config/os/gnu-linux/
 #g++ hackery done
 
 sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
