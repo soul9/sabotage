@@ -10,7 +10,7 @@ filesize=731480
 sha512=be7cb360caafee374dbc96a8423eda2172680a5ae78e176a0ac76f027a5424d2d428ac9e39f698bf1a3b23ca5acd6bcbb8f6345c62321512a27096ddba536d14
 
 [build]
-
+patch -p1 < "$K"/musl-098-cumul.patch || exit 1
 [ -z "$butch_prefix" ] && butch_prefix=/
 
 #disable building shared libs. the mere presence of libc.so messes up stuff.
