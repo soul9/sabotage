@@ -1,0 +1,31 @@
+--- qemu-1.3.0.org/qga/commands-posix.c	2012-12-06 17:56:50.792000003 +0000
++++ qemu-1.3.0/qga/commands-posix.c	2012-12-06 18:06:11.729000003 +0000
+@@ -33,7 +33,9 @@
+ #if defined(__linux__)
+ #include <mntent.h>
+ #include <linux/fs.h>
++#if defined(__GLIBC__)
+ #include <ifaddrs.h>
++#endif
+ #include <arpa/inet.h>
+ #include <sys/socket.h>
+ #include <net/if.h>
+@@ -778,6 +780,10 @@
+  */
+ GuestNetworkInterfaceList *qmp_guest_network_get_interfaces(Error **errp)
+ {
++#ifndef __GLIBC__
++    error_set(errp, QERR_UNSUPPORTED);
++    return NULL;
++#else
+     GuestNetworkInterfaceList *head = NULL, *cur_item = NULL;
+     struct ifaddrs *ifap, *ifa;
+     char err_msg[512];
+@@ -933,6 +939,7 @@
+     freeifaddrs(ifap);
+     qapi_free_GuestNetworkInterfaceList(head);
+     return NULL;
++#endif
+ }
+ 
+ #else /* defined(__linux__) */
