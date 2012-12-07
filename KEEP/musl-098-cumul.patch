@@ -1,4 +1,4 @@
-0.9.8 upto d1b6fc6ecc5
+0.9.8 upto 2ad9cf52e
 diff --git a/arch/arm/bits/mman.h b/arch/arm/bits/mman.h
 index 03f961e..2f23d44 100644
 --- a/arch/arm/bits/mman.h
@@ -1129,6 +1129,32 @@ index e4650e4..ad913c5 100644
  {
  	*policy = a->_a_policy;
  	return 0;
+-- 
+1.7.3.4
+
+diff --git a/src/malloc/aligned_alloc.c b/src/malloc/aligned_alloc.c
+index d623420..158dba4 100644
+--- a/src/malloc/aligned_alloc.c
++++ b/src/malloc/aligned_alloc.c
+@@ -31,8 +31,6 @@ void *aligned_alloc(size_t align, size_t len)
+ 		return NULL;
+ 
+ 	header = ((size_t *)mem)[-1];
+-	end = mem + (header & -8);
+-	footer = ((size_t *)end)[-2];
+ 	new = (void *)((uintptr_t)mem + align-1 & -align);
+ 
+ 	if (!(header & 7)) {
+@@ -41,6 +39,9 @@ void *aligned_alloc(size_t align, size_t len)
+ 		return new;
+ 	}
+ 
++	end = mem + (header & -8);
++	footer = ((size_t *)end)[-2];
++
+ 	((size_t *)mem)[-1] = header&7 | new-mem;
+ 	((size_t *)new)[-2] = footer&7 | new-mem;
+ 	((size_t *)new)[-1] = header&7 | end-new;
 -- 
 1.7.3.4
 
