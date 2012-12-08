@@ -20,11 +20,10 @@ xOYAoJ+P5nlWXzGjEi/AjevPrZVp5zU1
 =0XCv
 -----END PGP SIGNATURE-----
 
-the same License holds for build-scripts, patches and documentation,
-originating from rofl0r, with the following addition:
+The same License applies to build-scripts, patches and documentation,
+originating from other contributors, as far as applicable by law.
 
-The origin of the work must not be misrepesented.
-Thus, when using patches or recipes made by rofl0r, the following
-line shall be added as a comment:
+Giving credits is not required, but appreciated.
+If you want to do so, please add the following line as a comment:
 
 # taken from https://github.com/rofl0r/sabotage
