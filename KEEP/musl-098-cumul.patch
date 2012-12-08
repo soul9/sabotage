@@ -1,4 +1,4 @@
-0.9.8 upto 2ad9cf52e
+0.9.8 upto 34aa169d
 diff --git a/arch/arm/bits/mman.h b/arch/arm/bits/mman.h
 index 03f961e..2f23d44 100644
 --- a/arch/arm/bits/mman.h
@@ -1155,6 +1155,97 @@ index d623420..158dba4 100644
  	((size_t *)mem)[-1] = header&7 | new-mem;
  	((size_t *)new)[-2] = footer&7 | new-mem;
  	((size_t *)new)[-1] = header&7 | end-new;
+-- 
+1.7.3.4
+
+--- a/src/malloc/malloc.c
++++ b/src/malloc/malloc.c
+@@ -196,7 +196,11 @@ static int init_malloc(size_t n)
+ 		return 0;
+ 	}
+ 
+-	mal.brk = __brk(0) + 2*SIZE_ALIGN-1 & -SIZE_ALIGN;
++	mal.brk = __brk(0);
++#ifdef SHARED
++	mal.brk = mal.brk + PAGE_SIZE-1 & -PAGE_SIZE;
++#endif
++	mal.brk = mal.brk + 2*SIZE_ALIGN-1 & -SIZE_ALIGN;
+ 
+ 	c = expand_heap(n);
+ 
+-- 
+1.7.3.4
+
+diff --git a/crt/arm/crti.s b/crt/arm/crti.s
+index 0dd978a..2f658b7 100644
+--- a/crt/arm/crti.s
++++ b/crt/arm/crti.s
+@@ -1,9 +1,27 @@
+ .section .init
+ .global _init
+ _init:
+-	push {lr}
++	push {r0,r1,r2,r4,r5,lr}
++
++.weak __fini_array_start
++.weak __fini_array_end
+ 
+ .section .fini
+ .global _fini
+ _fini:
+-	push {lr}
++	push {r4,r5,r6,lr}
++	adr lr, 1f
++	ldr r4, 2f
++	ldr r5, 2f+4
++	add r4, r4, lr
++	add r5, r5, lr
++1:	adr lr, 1b
++	cmp r4, r5
++	beq 3f
++	ldmia r4!, {r3}
++	tst r3,#1
++	moveq pc,r3
++	bx r3
++2:	.word __fini_array_start-1b
++	.word __fini_array_end-1b
++3:	
+diff --git a/crt/arm/crtn.s b/crt/arm/crtn.s
+index 5d5d645..928e068 100644
+--- a/crt/arm/crtn.s
++++ b/crt/arm/crtn.s
+@@ -1,11 +1,29 @@
++.weak __init_array_start
++.weak __init_array_end
++
+ .section .init
+-	pop {lr}
++	adr lr, 1f
++	ldr r4, 2f
++	ldr r5, 2f+4
++	add r4, r4, lr
++	add r5, r5, lr
++1:	adr lr, 1b
++	cmp r4, r5
++	beq 3f
++	ldmia r4!, {r3}
++	ldm sp, {r0,r1,r2}
++	tst r3,#1
++	moveq pc,r3
++	bx r3
++3:	pop {r0,r1,r2,r4,r5,lr}
+ 	tst lr,#1
+ 	moveq pc,lr
+ 	bx lr
++2:	.word __init_array_start-1b
++	.word __init_array_end-1b
+ 
+ .section .fini
+-	pop {lr}
++	pop {r4,r5,r6,lr}
+ 	tst lr,#1
+ 	moveq pc,lr
+ 	bx lr
 -- 
 1.7.3.4
 
