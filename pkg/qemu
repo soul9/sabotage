@@ -13,6 +13,8 @@ libx11
 [build]
 patch -p1 < "$K"/qemu-ifaddrs.patch || exit 1
 patch -p1 < "$K"/qemu-syscall.patch || exit 1
+patch -p1 < "$K"/qemu-mmap.patch || exit 1
+patch -p1 < "$K"/qemu-arm-user-exec.patch || exit 1
 
 CFLAGS="-D_GNU_SOURCE -Dflock64=flock -D__SIGRTMIN=32 -D__SIGRTMAX=\(NSIG-1\) -DF_SETLKW64=F_SETLKW -DF_GETLK64=F_GETLK -DF_SETLK64=F_SETLK" \
 ./configure --prefix="$butch_prefix" \
@@ -20,5 +22,6 @@ CFLAGS="-D_GNU_SOURCE -Dflock64=flock -D__SIGRTMIN=32 -D__SIGRTMAX=\(NSIG-1\) -D
   --disable-vnc \
   --disable-bluez \
   --enable-sdl || exit 1
+
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
