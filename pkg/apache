@@ -1,0 +1,14 @@
+[mirrors]
+http://mirror.switch.ch/mirror/apache/dist//httpd/httpd-2.4.3.tar.bz2
+
+[main]
+filesize=4559279
+sha512=d4501ae69aacb75d960bc8cb61c9e1ff52e6e42a37c37ca84c839262e183ca2f305794da28266aa2119d211ba0f4531705f66330079ab594c05e92ae8196d1ab
+
+[deps]
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
