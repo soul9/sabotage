@@ -1,0 +1,19 @@
+[mirrors]
+http://ftp.postgresql.org/pub/source/v9.2.2/postgresql-9.2.2.tar.bz2
+
+[main]
+filesize=16222148
+sha512=147690b168838b7d45cc805882cb6ef628cbf656ff115d32ab76c4ad38b06aa00223f728bf0e5befcdd27cc4e27a917493d857f1f29006952f0ff07da6615808
+
+[deps]
+python
+openssl
+libxml2
+libxslt
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  -enable-thread-safety --docdir=/share/doc/postgresql-9.2.2 || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
