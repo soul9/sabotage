@@ -11,17 +11,22 @@ sdl
 libx11
 
 [build]
+
+# WARNING this package needs more than 512 MB ram to build
+
 patch -p1 < "$K"/qemu-ifaddrs.patch || exit 1
 patch -p1 < "$K"/qemu-syscall.patch || exit 1
 patch -p1 < "$K"/qemu-mmap.patch || exit 1
 patch -p1 < "$K"/qemu-arm-user-exec.patch || exit 1
 
-CFLAGS="-D_GNU_SOURCE -Dflock64=flock -D__SIGRTMIN=32 -D__SIGRTMAX=\(NSIG-1\) -DF_SETLKW64=F_SETLKW -DF_GETLK64=F_GETLK -DF_SETLK64=F_SETLK" \
+CFLAGS="-D_GNU_SOURCE -Dflock64=flock -D__SIGRTMIN=32 -D__SIGRTMAX=\(NSIG-1\)"
+CFLAGS="$CFLAGS -DF_SETLKW64=F_SETLKW -DF_GETLK64=F_GETLK -DF_SETLK64=F_SETLK"
+CFLAGS="$CFLAGS -O2 -g0" \
 ./configure --prefix="$butch_prefix" \
   --disable-werror \
   --disable-vnc \
   --disable-bluez \
   --enable-sdl || exit 1
 
-make -j$MAKE_THREADS || exit 1
+make -j$MAKE_THREADS V=1 || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
