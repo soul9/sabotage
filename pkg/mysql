@@ -1,0 +1,81 @@
+[mirrors]
+http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-5.5.28.tar.gz
+
+[main]
+filesize=24739429
+sha512=61b20e7ae11ef0fc53d199a6a177a34a95e0a7cf17cd574e7ed75d2e51e62da8178184333adb0805b6bbe7649355ae2062ac36c70faa23acfbc419aaa47a7365
+
+[deps]
+cmake
+ncurses
+readline
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+
+
+mkdir build && cd build
+
+cmake \
+  -DCMAKE_INSTALL_PREFIX=$butch_prefix \
+  -DINSTALL_DOCDIR=share/doc/mysql \
+  -DINSTALL_DOCREADMEDIR=share/doc/mysql \
+  -DINSTALL_INCLUDEDIR=include/mysql \
+  -DINSTALL_INFODIR=share/info \
+  -DINSTALL_MANDIR=share/man \
+  -DINSTALL_MYSQLDATADIR=$butch_prefix/srv/mysql \
+  -DINSTALL_MYSQLSHAREDIR=share/mysql \
+  -DINSTALL_MYSQLTESTDIR=share/mysql/test \
+  -DINSTALL_PLUGINDIR=lib/mysql \
+  -DINSTALL_SBINDIR=sbin \
+  -DINSTALL_SCRIPTDIR=bin \
+  -DINSTALL_SQLBENCHDIR=share/mysql/bench \
+  -DINSTALL_SUPPORTFILESDIR=share/mysql/support \
+  -DMYSQL_DATADIR=/srv/mysql \
+  -DMYSQL_UNIX_ADDR=/var/run/mysql/mysql.sock \
+  -DSYSCONFDIR=/etc \
+  -DWITH_PARTITION_STORAGE_ENGINE=OFF \
+  -DWITH_PERFSCHEMA_STORAGE_ENGINE=OFF \
+  -DWITH_ATOMIC_LOCKS=ON \
+  -DWITH_SSL=system \
+  -DWITH_ZLIB=system \
+  -DWITH_PIC=ON \
+  -DENABLE_PROFILING=OFF \
+  -DWITH_DEBUG=OFF \
+  -DWITH_UNIT_TESTS=OFF \
+  -DMANUFACTURER=YourMOM \
+  -DWITH_EXTRA_CHARSETS=none \
+  -DCMAKE_BUILD_TYPE=MinSizeRel \
+  -DCMAKE_C_FLAGS="-D__STDC_ISO_10646__ -DSHM_R=0400 -DSHM_W=0400" \
+  -DWITH_READLINE=system \
+  -DWITH_LIBEDIT=OFF \
+      .. || exit 1
+
+sed -i 's@/\* #undef DEFAULT_CHARSET_HOME \*/@#define DEFAULT_CHARSET_HOME ""@' include/config.h
+sed -i 's@/\* #undef DEFAULT_CHARSET_HOME \*/@#define DEFAULT_CHARSET_HOME ""@' include/my_config.h
+
+sed -i 's@/\* #undef DEFAULT_MYSQL_HOME \*/@#define DEFAULT_MYSQL_HOME ""@' include/config.h
+sed -i 's@/\* #undef DEFAULT_MYSQL_HOME \*/@#define DEFAULT_MYSQL_HOME ""@' include/my_config.h
+
+make -j$MAKE_THREADS V=1 || exit 1
+
+#  -DWITH_READLINE=OFF \
+#  -DWITH_LIBEDIT=system \
+
+# possible CMAKE_BUILD_TYPEs: Debug, Release, RelWithDebInfo and MinSizeRel
+
+SEGMENTS="Client Server IniFiles ManPages SharedLibraries"
+SEGMENTS="$SEGMENTS Development Documentation Info Readme"
+
+# FIXME: the cmake crap doesnt know how to install into DESTDIR
+
+for segment in $SEGMENTS; do
+   cmake DESTDIR=$butch_install_dir -DCMAKE_INSTALL_COMPONENT=$segment -P cmake_install.cmake
+done
+
+unset SEGMENTS
+
+
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+#make -j$MAKE_THREADS || exit 1
+#make DESTDIR="$butch_install_dir" install || exit 1
