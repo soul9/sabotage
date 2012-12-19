@@ -1,0 +1,47 @@
+diff --git a/include/link.h b/include/link.h
+index d5160e7..c30431e 100644
+--- a/include/link.h
++++ b/include/link.h
+@@ -3,6 +3,7 @@
+ 
+ #include <elf.h>
+ #define __NEED_size_t
++#define __NEED_uint32_t
+ #include <bits/alltypes.h>
+ 
+ #if UINTPTR_MAX > 0xffffffff
+@@ -11,6 +12,9 @@
+ #define ElfW(type) Elf32_ ## type
+ #endif
+ 
++/* this is the same everywhere except alpha and s390 */
++typedef uint32_t Elf_Symndx;
++
+ struct dl_phdr_info {
+ 	ElfW(Addr) dlpi_addr;
+ 	const char *dlpi_name;
+@@ -22,6 +26,21 @@ struct dl_phdr_info {
+ 	void *dlpi_tls_data;
+ };
+ 
++struct link_map {
++	ElfW(Addr) l_addr;
++	char *l_name;
++	ElfW(Dyn) *l_ld;
++	struct link_map *l_next, *l_prev;
++};
++
++struct r_debug {
++	int r_version;
++	struct link_map *r_map;
++	ElfW(Addr) r_brk;
++	enum { RT_CONSISTENT, RT_ADD, RT_DELETE } r_state;
++	ElfW(Addr) r_ldbase;
++};
++
+ int dl_iterate_phdr(int (*)(struct dl_phdr_info *, size_t, void *), void *);
+ 
+ #endif
+-- 
+1.7.3.4
+
