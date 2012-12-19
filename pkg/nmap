@@ -8,16 +8,14 @@ sha512=0b44542a0e33629d077c64129bac7e00b05b4e65a83b181b84fb5460a7da083bb29be0077
 libpcap
 pcre
 zlib-dynamic
-luajit
+lua
 dynamic-toolchain
 openssl
 
 [build]
 patch -p1 < "$K/nmap-configure-pcap_suitable.patch" || exit 1
 patch -p1 < "$K/nmap-nbase_h.patch" || exit 1
-find . -name 'configure' -exec sed -i 's@-llua@-lluajit-5.1@' "{}" \;
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
-  CPPFLAGS="-I$butch_prefix/include/luajit-2.0/" \
   CXXFLAGS="-DIPPROTO_MAX=256" \
   ./configure -C --prefix="$butch_prefix" \
     --without-subversion --without-nmap-update --without-zenmap \
