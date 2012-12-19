@@ -13,3 +13,42 @@ echo "export PREFIX = $butch_prefix" > config.mak
 echo "export DESTDIR = $butch_install_dir" >> config.mak
 make CFLAGS=-D_GNU_SOURCE Q= -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+
+mkdir -p "$dest"/include/lua
+( cd "$dest"/include/luajit-2.0/
+  for i in *.h ; do
+	ln -sf ../luajit-2.0/"$i" "$dest"/include/lua/
+  done
+)
+
+ln -s libluajit-5.1.so.2.0.0 "$dest"/lib/liblua.so
+ln -s libluajit-5.1.a "$dest"/lib/liblua.a
+
+cat << EOF > "$dest"/lib/pkgconfig/lua.pc
+majver=5
+minver=1
+relver=0
+version=\${majver}.\${minver}.\${relver}
+abiver=5.1
+
+prefix=$butch_prefix
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+libname=lua
+includedir=\${prefix}/include/lua
+
+INSTALL_LMOD=\${prefix}/share/lua/\${abiver}
+INSTALL_CMOD=${prefix}/lib/lua/${abiver}
+
+Name: lua
+Description: Just-in-time compiler for Lua
+URL: http://luajit.org
+Version: \${version}
+Requires:
+Libs: -L\${libdir} -l$\{libname}
+Libs.private: -Wl,-E -lm -ldl
+Cflags: -I\${includedir}
+
+EOF
