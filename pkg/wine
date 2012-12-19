@@ -1,0 +1,46 @@
+[mirrors]
+http://heanet.dl.sourceforge.net/project/wine/Source/wine-1.5.19.tar.bz2
+http://surfnet.dl.sourceforge.net/project/wine/Source/wine-1.5.19.tar.bz2
+http://switch.dl.sourceforge.net/project/wine/Source/wine-1.5.19.tar.bz2
+
+[main]
+filesize=21013509
+sha512=aefc05cb0ce6b41a7a70861fd85c5f5d30501f61923620837f3a8124b039e1eedaea75d261116b26770b64a21b27a4ee13133a07a36157bebd2cbeddd110de27
+
+[deps]
+openal
+flex
+bison
+alsa-lib
+ncurses
+libjpeg
+libpng
+libx11
+freetype
+kernel-headers
+
+[build]
+if [ "$A" = "x86_64" ] ; then
+	printf "warning: building wine 64 bit (not compatible to win32)\n"
+	configflags=--enable-win64
+elif [ "$A" = "i386" ] ; then 
+	configflags=
+else
+	printf "error: wine can only be compiled on x86 platforms\n"
+	exit 1
+fi
+
+patch -p1 < "$K"/wine-file_h.patch || exit 1
+patch -p1 < "$K"/wine-iphlpapi.patch || exit 1
+patch -p1 < "$K"/wine-getdents.patch || exit 1
+patch -p1 < "$K"/wine-ipx.patch || exit 1
+
+CFLAGS="-DHAVE_LINK_H -DNETDB_INTERNAL=-1" ./configure -C \
+  --prefix="$butch_prefix" \
+  --disable-win16 $configflags --disable-tests \
+  --libdir="$butch_prefix"/lib --mandir="$butch_prefix"/share/man \
+  || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
+
