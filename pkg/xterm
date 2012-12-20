@@ -27,3 +27,5 @@ make DESTDIR="$butch_install_dir" install || exit 1
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/share/applications/
 cp -f xterm.desktop "$dest"/share/applications/
+# replace the ugly 70ies xterm icon with a nice one
+sed -i 's@xterm-color_48x48@terminal@' "$dest"/share/applications/xterm.desktop
