@@ -17,12 +17,13 @@ if [ "$STAGE" = "0" ] ; then
 	CC="$butch_root_dir"/bin/musl-gcc
 	PATCH="$butch_root_dir"/bin/patch
 else
-	PATH=patch
+	PATCH=patch
 fi
 
-cp $K/busybox.stage1.config .config
-"$PATCH" -p1 < "$K/busybox.patch" || exit 1
-"$PATCH" -p1 < "$K/busybox-blowfish.patch" || exit 1
+cp "$K"/busybox.stage1.config .config
+"$PATCH" -p1 < "$K"/busybox.patch || exit 1
+"$PATCH" -p1 < "$K"/busybox-blowfish.patch || exit 1
+"$PATCH" -p1 < "$K"/busybox-unzip.patch || exit 1
 
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
