@@ -1,10 +1,10 @@
 [mirrors]
-http://codu.org/~rofl/gettext-tiny-0.0.1.tar.bz2
-http://mirror.wzff.de/sabotage/tarballs/gettext-tiny-0.0.1.tar.bz2
+http://mirror.wzff.de/sabotage/tarballs/gettext-tiny-0.0.2.tar.bz2
+http://codu.org/~rofl/tarballs/gettext-tiny-0.0.2.tar.bz2
 
 [main]
-filesize=7995
-sha512=8315771fefc9fee5cd893d360bb0bf5089e78ea5061ee7b07e65858295d2f8f428e843e22c96fe2e7da75cb9e3ccfb0c70d83c323cda4385dd8a762f765fda57
+filesize=8522
+sha512=a4542f60fdbcc9b1403a65860b79d1f2cdae87e053c3f46da4358fd402b553806564e084e052f02cbfe8ae0376738a11b9aa1abdb5db3fb8ab1008f938091be3
 
 [deps]
 
