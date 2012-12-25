@@ -15,9 +15,10 @@ http://www.cpan.org/src/5.0/perl-5.16.0.tar.bz2
 debug_flags=
 [ "$DEBUGBUILD" = "1" ] && debug_flags="-Doptimize=-O0 -DEBUGGING=-g"
 
+
 sed -i 's,-fstack-protector,-fnostack-protector,g' ./Configure
 
-CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE' \
+CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE -fPIC' \
   -Dprefix="$butch_prefix" -Dvendorprefix="$butch_prefix" \
   -Dinstallprefix="$butch_install_dir"/ \
   -Dprivlib="$butch_prefix"/share/perl5/core_perl \
