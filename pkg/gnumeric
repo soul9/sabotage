@@ -1,0 +1,17 @@
+[mirrors]
+http://ftp.gnome.org/pub/gnome/sources/gnumeric/1.10/gnumeric-1.10.15.tar.bz2
+[main]
+filesize=18577516
+sha512=4978e633d364de14b615532ff202825298f032a29b27b721fcb99da041a8c15c3fa0eb416a8d4c68dd08a304aa2306c980f3e45ed509d0394e41ecb2558bf69f
+
+[deps]
+gtk+2
+goffice
+gettext
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+sed -i 's@install-data-hook-omf:@install-data-hook-omf:\n\ttrue\n\nfoobar:@' doc/C/Makefile
+make DESTDIR="$butch_install_dir" install || exit 1
