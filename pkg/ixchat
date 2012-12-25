@@ -1,0 +1,20 @@
+[mirrors]
+http://mirror.wzff.de/sabotage/tarballs/ixchat-3.0.0.tar.xz
+http://codu.org/~rofl/tarballs/ixchat-3.0.0.tar.xz
+
+[main]
+filesize=405376
+sha512=474d61eadeb45a41c536cb52c298d7ce30d30ae2a83cb0af4d3f308a2aa63a21a60c267bd70924fe53fc9e1eba017065ddec43bf63f3ff60f3aaf74441be8071
+
+[deps]
+gtk+2
+openssl
+perl
+python
+xz
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
