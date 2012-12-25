@@ -1,9 +1,17 @@
+[mirrors]
+http://download.savannah.gnu.org/releases/leafpad/leafpad-0.8.18.tar.gz
+
+[main]
+filesize=289079
+sha512=315f5541dfe8d519ea832ad8b13b034a5ac173f8b9c0de7e3f774780b4ef42f2fab29e3ef847a1c15daf544f85308b14f53a79d568ca4e89f5840ce8bd675bc4
+
 [deps]
+gtk+2
 
 [build]
-# TODO
-exit 0
 #patch -p1 < "$K/some.patch"
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-#make -j$MAKE_THREADS || exit 1
-#make DESTDIR="$butch_install_dir" install || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  --disable-nls || exit 1
+chmod +x install-sh
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
