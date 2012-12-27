@@ -1,0 +1,29 @@
+[mirrors]
+ftp://ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.4.tar.gz
+
+[main]
+filesize=43988710
+sha512=65221342c658334b9fbf175a98047853a3216c495397b419c2ee0be2011c4b1189183957b366ed4fa1fed7dd912e0a1d70ee1fcff42a8d6e4871598bdcfafbfb
+
+[deps]
+libpng
+libmng
+libtiff
+libjpeg
+openssl
+sqlite
+
+[build]
+for p in qt434-libpng15.patch  qt434-musl.patch  qt434-openssl101.patch ; do
+	patch -p1 < "$K"/"$p" || exit 1
+done
+
+CFLAGS=-D_GNU_SOURCE ./configure -prefix "$butch_prefix"/ \
+  -confirm-license \
+  -release                 \
+  -nomake examples         \
+  -nomake demos            \
+  -no-separate-debug-info || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make INSTALL_ROOT="$butch_install_dir" install || exit 1
