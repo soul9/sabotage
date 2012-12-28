@@ -8,19 +8,13 @@
  
  #include <linux/unistd.h>
  
-@@ -107,13 +108,14 @@
+@@ -107,7 +108,8 @@
  void
  direct_trap( const char *domain, int sig )
  {
+-     sigval_t val;
 +
-+#ifndef DIRECT_BUILD_NO_SIGQUEUE
-      sigval_t val;
++     union sigval val;
  
       D_LOG( Direct_Trap, VERBOSE, "Raising signal %d from %s...\n", sig, domain );
  
-      val.sival_int = direct_gettid();
- 
--#ifndef DIRECT_BUILD_NO_SIGQUEUE
-      sigqueue( direct_gettid(), sig, val );
- #endif
- //     direct_tgkill( direct_getpid(), direct_gettid(), sig );

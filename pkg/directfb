@@ -12,7 +12,7 @@ patch -p1 < "$K"/directfb-sigval.patch || exit 1
 patch -p1 < "$K"/directfb-comparfn.patch || exit 1
 patch -p1 < "$K"/directfb-matrox.patch || exit 1
 
-CFLAGS="-D_GNU_SOURCE -DDIRECT_BUILD_NO_SIGQUEUE" ./configure -C --prefix="$butch_prefix" \
+CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" \
   --disable-silent-rules || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
