@@ -1,0 +1,15 @@
+[mirrors]
+http://www.stunnel.org/downloads/stunnel-4.54.tar.gz
+
+[main]
+filesize=535202
+sha512=50533d7d7c33788aadc353321d96935dc41d078a096076d007238b9890fcb32a0d0c99bc69415c4e77122ce37fbfcd2c527b2fc37bc903f3b044ccff341880fd
+
+[deps]
+openssl
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
