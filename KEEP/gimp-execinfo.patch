@@ -1,0 +1,22 @@
+--- gimp-2.8.2.org/app/base/base-utils.c	2013-01-02 21:54:13.771000002 +0000
++++ gimp-2.8.2/app/base/base-utils.c	2013-01-02 21:56:56.492000002 +0000
+@@ -33,8 +33,10 @@
+ /* For get_backtrace() */
+ #include <stdlib.h>
+ #include <string.h>
++#ifdef __GLIBC__
+ #include <execinfo.h>
+ #endif
++#endif
+ 
+ #include "base-utils.h"
+ 
+@@ -112,7 +114,7 @@
+ char *
+ get_backtrace (void)
+ {
+-#ifdef G_OS_UNIX
++#ifdef __GLIBC__
+   void     *functions[MAX_FUNC];
+   char    **function_names;
+   int       n_functions;

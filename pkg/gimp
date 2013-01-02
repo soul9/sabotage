@@ -1,0 +1,21 @@
+[mirrors]
+http://mirrors.zerg.biz/gimp/v2.8/gimp-2.8.2.tar.bz2
+
+[main]
+filesize=20161424
+sha512=82a15072aba97d41a7dd74920f5db4e89442ff83841ac614f6fadfd964bdb8d3ae478ac0ba2e906bcf4569c8de00a1616fd6d626032f093060f28df3655d9111
+
+[deps]
+babl
+gegl
+gtk+2
+glib
+atk
+gdk-pixbuf
+
+[build]
+patch -p1 < "$K"/gimp-execinfo.patch || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  --disable-python || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
