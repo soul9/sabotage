@@ -1,4 +1,5 @@
 [deps]
+python
 
 [main]
 tardir=ca-certificates-20120623
