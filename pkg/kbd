@@ -28,7 +28,8 @@ sed -i 's/\(RESIZECONS_PROGS=\)yes/\1no/' configure &&
 sed -i 's/resizecons.8 //' man/man8/Makefile.in &&
 touch -d '2011-05-07 08:30' configure.ac
 
-CFLAGS="-D_GNU_SOURCE -DSIGIOT=SIGABRT" ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE -DSIGIOT=SIGABRT" ./configure -C --prefix="$butch_prefix" \
+  --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
