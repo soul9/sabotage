@@ -1,0 +1,20 @@
+[mirrors]
+http://ftp.gnome.org/pub/GNOME/sources/atkmm/2.22/atkmm-2.22.6.tar.xz
+
+[main]
+filesize=562892
+sha512=69d5b3b2131658d7ffd5be86bcb0a5966fe9446a7cae1138cb2849d5ccf64f58fc9cc16cc7cb2c5b883bb441966980c8acaa7566d23771f9334919ca27c28942
+
+[deps]
+atk
+pkgconf
+
+[build]
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+
+for i in doc ; do
+        printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
+done
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
