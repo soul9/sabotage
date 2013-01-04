@@ -6,9 +6,18 @@ filesize=2210986
 sha512=2e47238d36239bcbaa2aee6ad87b1bee199f208afc9665d0041f7f244bc3219b6c98cf00af95e4651a5a627f3bd76e644c06a555eb95481e92856c04f45cdfec
 
 [deps]
+pkgconf
+libx11
+libtiff
+libjpeg
+libpng
+freetype
+fontconfig
+cairo
+glib
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+--enable-xpdf-headers --enable-zlib || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
