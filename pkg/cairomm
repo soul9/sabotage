@@ -1,0 +1,20 @@
+[mirrors]
+http://www.cairographics.org/releases/cairomm-1.10.0.tar.gz
+
+[main]
+filesize=1089577
+sha512=974b1c078c8d7b82f8d026e384811c016fa95cb62942fc12717edd993cb1660bc004bee5f8ce31c0540ef8d4105a2d86cd461ed3f5e996fd3faf65dfb37ac9e2
+
+[deps]
+cairo
+pkgconf
+
+[build]
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+
+for i in tests docs examples ; do
+        printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
+done
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
