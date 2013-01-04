@@ -17,6 +17,7 @@ cairo
 glib
 
 [build]
+# https://bugs.freedesktop.org/show_bug.cgi?id=12925
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
 --enable-xpdf-headers --enable-zlib || exit 1
 make -j$MAKE_THREADS || exit 1
