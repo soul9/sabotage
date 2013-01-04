@@ -1,0 +1,23 @@
+[mirrors]
+http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.3/libsigc++-2.3.1.tar.xz
+
+[main]
+filesize=3458088
+sha512=8c9aa63c56e978ec3e38fda9919ffbba173b97342d0e19d0ae3126e9edb97aa1d42e79897a65b054044e87604f67f1f804db8d7a8e3dc68540b1441188b8a1ef
+
+[deps]
+pkgconf
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+--disable-silent-rules\
+--disable-documentation \
+|| exit 1
+
+for i in tests docs examples ; do
+	printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
+done
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
