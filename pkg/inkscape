@@ -23,7 +23,7 @@ popt
 [build]
 # https://bugs.launchpad.net/altlinux/+source/inkscape/+bug/910335
 sed -i 's@sys/fcntl.h@fcntl.h@' src/color-profile.cpp
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+CXXFLAGS="-D_GNU_SOURCE -O0 -g0" ./configure -C --prefix="$butch_prefix" \
 --disable-nls \
 --disable-silent-rules \
 --enable-poppler-cairo \
