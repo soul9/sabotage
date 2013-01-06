@@ -27,7 +27,7 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > tests/Makefile.in
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > modules/other/gail/tests/Makefile.in
 
-[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g"
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
 
 CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix"\
  --disable-rebuilds  --disable-glibtest || exit 1

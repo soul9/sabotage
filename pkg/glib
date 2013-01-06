@@ -19,7 +19,7 @@ for p in glib-gtimer-varargs glib-tmpfilecallback-UB glib-skip-tests ; do
 done
 
 this_dir="$PWD"
-[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g"
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
 
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Dloff_t=off_t $debugflags" ./configure -C \
   --prefix="$butch_prefix" --disable-modular-tests --disable-selinux --disable-fam \
