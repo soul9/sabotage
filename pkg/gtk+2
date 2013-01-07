@@ -27,6 +27,13 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > tests/Makefile.in
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > modules/other/gail/tests/Makefile.in
 
+# remove obfuscated symbols
+printf '#!/bin/sh\ntrue\n' > gtk/makegtkalias.pl
+for i in gtk/gtkaliasdef.c gtk/gtkalias.h ; do
+        rm -f "$i" && touch "$i"
+done
+
+
 [ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
 
 CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix"\
