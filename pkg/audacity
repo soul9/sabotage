@@ -13,7 +13,8 @@ wxgtk
 
 [build]
 patch -p1 < "$K"/audacity-timeb.patch || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  --disable-sse || exit 1
 # audacity does weird things with msgfmt & xgettext
 printf "install:\n\ttrue\n\nclean:\n\ttrue\n" > locale/Makefile
 make -j$MAKE_THREADS || exit 1
