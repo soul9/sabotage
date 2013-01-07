@@ -17,7 +17,8 @@ gtk+2
 glib
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+patch -p1 < "$K"/sweep-default-device.patch || exit 1
+
 CFLAGS=-D_GNU_SOURCE LDFLAGS="-lgmodule-2.0" ./configure -C \
   --prefix="$butch_prefix" || exit 1
 
