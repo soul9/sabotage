@@ -10,10 +10,17 @@ gtk+2
 poppler-data
 poppler
 gnome-icon-theme-fake
+shared-mime-info
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+patch -p1 < "$K"/evince-schemas.patch || exit 1
+patch -p1 < "$K"/evince-segfault.patch || exit 1
+patch -p1 < "$K"/evince-segfault2.patch || exit 1
+
+debugflags=
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
+
+CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix" \
 --without-keyring \
 --without-gconf \
 --without-gtk-unix-print \

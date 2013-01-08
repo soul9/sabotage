@@ -1,0 +1,11 @@
+--- evince-2.32.0.org/backend/pdf/ev-poppler.cc	2013-01-08 08:57:54.874000002 +0000
++++ evince-2.32.0/backend/pdf/ev-poppler.cc	2013-01-08 10:05:39.393000002 +0000
+@@ -678,7 +678,7 @@
+ 		      "mod-date", &(info->modified_date),
+ 		      "linearized", &(info->linearized),
+ 		      "metadata", &metadata,
+-		      NULL);
++		      (void*) 0);
+ 
+ 	if (metadata != NULL) {
+ 		pdf_document_parse_metadata (metadata, info);
