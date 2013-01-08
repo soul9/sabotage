@@ -1,0 +1,26 @@
+[mirrors]
+http://freedesktop.org/~hadess/shared-mime-info-1.0.tar.xz
+
+[main]
+filesize=496700
+sha512=d4b8ad9a982519681fa0fb5b25d8e6b5c4701bca96785b2729e34330a75668c65b0303ad882c7a1928f48cafc7e5a5803f4bdee4db3cfd76dd58e61435c7e6ca
+
+[deps]
+glib
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+
+mkdir .deps
+touch .deps/update_mime_database-update-mime-database.Tpo
+
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+
+sed -i 's@$(AM_V_at)$(am__mv) $(DEPDIR)/update_mime_database-update-mime-database.Tpo@#@' Makefile
+
+for i in po ; do
+        printf 'check:\n\ttrue\n\nall:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n\n' > "$i"/Makefile
+done
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
