@@ -7,20 +7,25 @@ sha512=ec43243e5b487d3101f6906bb156ed64c0b9778c13a50257602286df1b581340470558c2d
 
 [deps]
 gtk+2
+glib
 poppler-data
 poppler
 gnome-icon-theme-fake
 shared-mime-info
 
 [build]
-patch -p1 < "$K"/evince-schemas.patch || exit 1
+# https://bugzilla.gnome.org/show_bug.cgi?id=637055
+patch -p1 < "$K"/evince-scroll.patch || exit 1
+# https://bugzilla.gnome.org/show_bug.cgi?id=638312
+patch -p1 < "$K"/evince-quit-crash.patch || exit 1
 patch -p1 < "$K"/evince-segfault.patch || exit 1
 patch -p1 < "$K"/evince-segfault2.patch || exit 1
 
 debugflags=
 [ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
 
-CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix" \
+CFLAGS="-D_GNU_SOURCE $debugflags" \
+./configure -C --prefix="$butch_prefix" \
 --without-keyring \
 --without-gconf \
 --without-gtk-unix-print \
@@ -35,6 +40,16 @@ CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix" \
 --disable-nautilus \
 --disable-thumbnailer \
 --disable-previewer \
+--disable-silent-rules \
 || exit 1
+
+printf '#define HAVE_POPPLER_DOCUMENT_IS_LINEARIZED\n' >> config.h
+
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+# evince uses some braindamaged "GSettings schemas"
+# without compiling this stuff, it won't even start up
+# GSETTINGS_BACKEND=keyfile env var may be needed to save settings
+
+glib-compile-schemas "$butch_install_dir""$butch_prefix"/share/glib-2.0/schemas || exit 1
