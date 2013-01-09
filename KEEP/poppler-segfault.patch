@@ -1,11 +1,11 @@
 --- poppler-0.22.0.org/poppler/GlobalParams.cc	2013-01-09 15:10:49.947000004 +0000
-+++ poppler-0.22.0/poppler/GlobalParams.cc	2013-01-09 16:39:39.574000002 +0000
++++ poppler-0.22.0/poppler/GlobalParams.cc	2013-01-09 16:54:48.168000002 +0000
 @@ -1088,10 +1088,10 @@
    
    const char *lang = getFontLang(font);
    
 -  p = FcPatternBuild(NULL,
-+  p = FcPatternBuild((void*) 0,
++  p = FcPatternBuild(0,
                      FC_FAMILY, FcTypeString, family,
                      FC_LANG, FcTypeString, lang,
 -                    NULL);
