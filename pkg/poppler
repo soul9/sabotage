@@ -17,8 +17,13 @@ cairo
 glib
 
 [build]
+patch -p1 < "$K"/poppler-segfault.patch || exit 1
+
 # https://bugs.freedesktop.org/show_bug.cgi?id=12925
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+debug_flags=
+[ "$DEBUGBUILD" = "1" ] && debug_flags="-O0 -g3"
+
+CXXFLAGS="-D_GNU_SOURCE $debug_flags" ./configure -C --prefix="$butch_prefix" \
 --enable-xpdf-headers --enable-zlib || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
