@@ -40,8 +40,13 @@ CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix"\
  --disable-rebuilds  --disable-glibtest || exit 1
 
 echo '#include <string.h>' >> config.h
-printf 'all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue' > demos/Makefile
-printf 'all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue' > tests/Makefile
+
+for i in demos tests po po-properties ; do
+  printf 'all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue' \
+    > "$i"/Makefile
+done
+
+
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
