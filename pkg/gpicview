@@ -11,6 +11,7 @@ gtk+2
 libjpeg-dynamic
 cpan-XML-Parser
 intltool
+shared-mime-info
 
 [build]
 #patch -p1 < "$K/some.patch"
