@@ -12,10 +12,30 @@ gtk+2
 glib
 atk
 gdk-pixbuf
+shared-mime-info
 
 [build]
+# with empty prefix, gimp references share/... instead of /share/...
+[ -z "$butch_prefix" ] && butch_prefix=/
+
 patch -p1 < "$K"/gimp-execinfo.patch || exit 1
+
+# disable the gimp head in the toolbox by default
+patch -p1 < "$K"/gimp-toolbox-wilber.patch || exit 1
+
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
-  --disable-python || exit 1
+  --mandir="$butch_prefix"/share/man \
+  --disable-python \
+  --disable-alsatest \
+  --disable-nls \
+  --disable-silent-rules \
+  --disable-glibtest \
+|| exit 1
+
+for i in po po-plug-ins po-python po-libgimp po-script-fu po-tips ; do
+	printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
+done
+
+
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
