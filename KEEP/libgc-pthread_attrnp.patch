@@ -1,0 +1,35 @@
+diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
+index fff56ca..f928f16 100644
+--- a/include/private/gcconfig.h
++++ b/include/private/gcconfig.h
+@@ -1233,6 +1233,7 @@
+ #      undef STACK_GRAN
+ #      define STACK_GRAN 0x10000
+ #      define HEURISTIC1
++#      define NO_PTHREAD_GETATTR_NP
+ #      define GETPAGESIZE() 65536
+ #      ifndef MAX_NACL_GC_THREADS
+ #        define MAX_NACL_GC_THREADS 1024
+diff --git a/os_dep.c b/os_dep.c
+index 0585802..669ff58 100644
+--- a/os_dep.c
++++ b/os_dep.c
+@@ -1173,7 +1173,7 @@ struct o32_obj {
+   ptr_t GC_get_main_stack_base(void)
+   {
+     ptr_t result;
+-#   if defined(LINUX) && !defined(NACL) \
++#   if defined(LINUX) && !defined(NO_PTHREAD_GETATTR_NP) \
+        && (defined(USE_GET_STACKBASE_FOR_MAIN) \
+            || (defined(THREADS) && !defined(REDIRECT_MALLOC)))
+       pthread_attr_t attr;
+@@ -1245,7 +1245,8 @@ struct o32_obj {
+ # define GET_MAIN_STACKBASE_SPECIAL
+ #endif /* !AMIGA, !BEOS, !OPENBSD, !OS2, !Windows */
+ 
+-#if (defined(GC_LINUX_THREADS) || defined(PLATFORM_ANDROID)) && !defined(NACL)
++#if (defined(GC_LINUX_THREADS) || defined(PLATFORM_ANDROID)) \
++    && !defined(NO_PTHREAD_GETATTR_NP)
+ 
+ # include <pthread.h>
+   /* extern int pthread_getattr_np(pthread_t, pthread_attr_t *); */
