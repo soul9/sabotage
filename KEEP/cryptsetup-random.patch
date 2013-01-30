@@ -1,0 +1,10 @@
+--- cryptsetup-1.6.0.org/lib/random.c	2013-01-30 19:45:47.143000003 +0000
++++ cryptsetup-1.6.0/lib/random.c	2013-01-30 19:49:16.064000003 +0000
+@@ -23,6 +23,7 @@
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <assert.h>
++#include <sys/select.h>
+ 
+ #include "libcryptsetup.h"
+ #include "internal.h"

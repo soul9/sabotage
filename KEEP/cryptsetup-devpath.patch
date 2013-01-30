@@ -1,0 +1,10 @@
+--- cryptsetup-1.6.0.org/lib/utils_devpath.c	2013-01-30 19:45:47.142000003 +0000
++++ cryptsetup-1.6.0/lib/utils_devpath.c	2013-01-30 19:46:23.918000003 +0000
+@@ -28,6 +28,7 @@
+ #include <dirent.h>
+ #include <fcntl.h>
+ #include <errno.h>
++#include <limits.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include "utils_dm.h"
