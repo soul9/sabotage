@@ -8,6 +8,7 @@ capchroot
 cpan-Data-Dump
 cpan-File-Slurp
 curl
+cryptsetup
 diffutils
 dropbear
 expat
@@ -15,6 +16,7 @@ file
 flex
 gdb
 git
+gnupg
 gradm
 iptables
 kbd
@@ -24,6 +26,7 @@ libjpeg
 libpng
 lighttpd
 luajit
+lvm
 lynx
 nano
 ncurses
@@ -46,6 +49,7 @@ sdl-net
 sdl-ttf
 sdl-gfx
 strace
+stunnel
 svn
 tcpdump
 tomoyo
