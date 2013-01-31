@@ -2,15 +2,12 @@
 stage1
 pkg
 xorg
+gui
 lxde
 bsdtar
-dillo
-netsurf
 nmap
 patchelf
 php
 phoronix-testsuite
-gnumeric
-ixchat
 
 
