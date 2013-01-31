@@ -9,11 +9,13 @@ sha512=2d1b5289d79fa70af1958f77a04cf2d5e426e22b429f05f76c47eb93d50ab3a18ce75e85c
 
 [deps]
 libuuid
-libgcrypt
+openssl
+popt
 
 [build]
 patch -p1 < "$K"/cryptsetup-devpath.patch || exit 1
 patch -p1 < "$K"/cryptsetup-random.patch || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+  --with-crypto_backend=openssl || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
