@@ -7,6 +7,7 @@ sha512=d4b8ad9a982519681fa0fb5b25d8e6b5c4701bca96785b2729e34330a75668c65b0303ad8
 
 [deps]
 glib
+libxml2
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
