@@ -11,6 +11,7 @@ sha512=2d1b5289d79fa70af1958f77a04cf2d5e426e22b429f05f76c47eb93d50ab3a18ce75e85c
 libuuid
 openssl
 popt
+libdevmapper
 
 [build]
 patch -p1 < "$K"/cryptsetup-devpath.patch || exit 1
