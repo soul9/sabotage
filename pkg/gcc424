@@ -35,7 +35,7 @@ echo ac_cv_func_strsignal=yes > config.site
 --disable-libgomp \
 $armflags  || exit 1
 make CFLAGS="-D_GNU_SOURCE -DSTDC_HEADERS -DHAVE_STRSIGNAL -DHAVE_GETRLIMIT \
- -DHAVE_GETRLIMIT" LDFLAGS="-static" -j$MAKE_THREADS || exit 1
+ -DHAVE_GETRLIMIT -O0 -g0" LDFLAGS="-static" -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install-gcc || exit 1
 
 rm -rf "$butch_install_dir""$butch_prefix"/infoXXX
