@@ -1,0 +1,26 @@
+--- a/crt/arm/crti.s
++++ b/crt/arm/crti.s
+@@ -5,6 +5,8 @@ _init:
+ 
+ .weak __fini_array_start
+ .weak __fini_array_end
++.hidden __fini_array_start
++.hidden __fini_array_end
+ 
+ .section .fini
+ .global _fini
+diff --git a/crt/arm/crtn.s b/crt/arm/crtn.s
+index 928e068..eb0e883 100644
+--- a/crt/arm/crtn.s
++++ b/crt/arm/crtn.s
+@@ -1,5 +1,7 @@
+ .weak __init_array_start
+ .weak __init_array_end
++.hidden __init_array_start
++.hidden __init_array_end
+ 
+ .section .init
+ 	adr lr, 1f
+-- 
+1.7.3.4
+
