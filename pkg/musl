@@ -11,6 +11,7 @@ sha512=0dbc1e5ac28c9f4592b82ce9017a8d0b12ff719ae88a5a9c26d3948bf8123d08bc42ad168
 
 [build]
 patch -p1 < "$K"/musl-099-arm-dynlinker-segv.patch || exit 1
+patch -p1 < "$K"/musl-099-arm-atexit.patch || exit 1
 
 [ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
 

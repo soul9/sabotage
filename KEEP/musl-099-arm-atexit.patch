@@ -1,0 +1,27 @@
+From 6df71e7e24ef1b217974028cc6bc2459c774390c Mon Sep 17 00:00:00 2001
+From: rofl0r <retnyg@gmx.net>
+Date: Wed, 6 Feb 2013 09:10:49 +0100
+Subject: [PATCH] arm __aeabi_atexit
+
+---
+ src/exit/atexit.c |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/src/exit/atexit.c b/src/exit/atexit.c
+index c31f3dc..77254fb 100644
+--- a/src/exit/atexit.c
++++ b/src/exit/atexit.c
+@@ -74,3 +74,10 @@ int atexit(void (*func)(void))
+ {
+ 	return __cxa_atexit(call, (void *)(uintptr_t)func, 0);
+ }
++
++#ifdef __ARM_EABI__
++int __aeabi_atexit (void *obj, void (*func) (void *), void *d)
++{
++	return __cxa_atexit (func, obj, d);
++}
++#endif
+-- 
+1.7.3.4
+
