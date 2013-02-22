@@ -1,15 +1,15 @@
 [mirrors]
-http://mirror.wzff.de/sabotage/tarballs/proxychains-4.4.tar.bz2
-http://codu.org/~rofl/tarballs/proxychains-4.4.tar.bz2
+http://surfnet.dl.sourceforge.net/project/proxychains-ng/proxychains-4.5.tar.bz2
+http://switch.dl.sourceforge.net/project/proxychains-ng/proxychains-4.5.tar.bz2
+http://heanet.dl.sourceforge.net/project/proxychains-ng/proxychains-4.5.tar.bz2
 
 [main]
-filesize=26786
-sha512=c8c65b17f88472b9b5439fc44ac1d87939d5aa035811649306742bb824493127e9c49754184c1abc58bc32b6ae7c1b98264f83b527e0b96332a7397f209b5797
+filesize=27292
+sha512=be783324c49a0b90f5735375ec91e99996d5c3a10587253dcfda4b62a1ffd38b9a7bb91fb6a3993fbb7ab546df715e36fe92378e7ac7085c2f0c22605f05c945
 
 [deps]
 
 [build]
 CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
-make DESTDIR="$butch_install_dir" install-config || exit 1
+make DESTDIR="$butch_install_dir" install install-config || exit 1
