@@ -4,12 +4,14 @@ perl
 patch
 
 [mirrors]
-http://openssl.org/source/openssl-1.0.1c.tar.gz
+http://www.openssl.org/source/openssl-1.0.1e.tar.gz
 [main]
-filesize=4457113
-sha512=14f766daab0828a2f07c65d6da8469a4a5a2b839ff3da188538c4e2db3e3e2f37217fb37e269617fb438463b75fb77dab0b155f36831ff48edbc9e7f2903ebd3
+filesize=4459777
+sha512=c76857e439431b2ef6f2aa123997e53f82b9c3c964d4d765d7cc6c0c20b37a21adf578f9b759b2b65ae3925454c432a01b7de0cd320ece7181dc292e00d3244e
 
 [build]
+# https://github.com/entoo/portage/tree/gentoo.org/dev-libs/openssl
+
 # if prefix is empty, openssl will install stuff into $destdir/etc ...
 [ -z "$butch_prefix" ] && butch_prefix=/
 
@@ -18,6 +20,10 @@ epatch() {
 	echo applying patch "$1"
 	patch -p1 < "$1" || exit 1
 }
+epatch0() {
+	echo applying patch "$1"
+	patch -p0 < "$1" || exit 1
+}
 die() {
 	[ -z "$1" ] || printf "%s\n" "$*"
 	exit 1
@@ -25,12 +31,11 @@ die() {
 FILESDIR="$K"
 PN=openssl
 epatch "${FILESDIR}"/${PN}-1.0.0a-ldflags.patch #327421
-epatch "${FILESDIR}"/${PN}-1.0.0d-fbsd-amd64.patch #363089
 epatch "${FILESDIR}"/${PN}-1.0.0d-windres.patch #373743
 epatch "${FILESDIR}"/${PN}-1.0.0h-pkg-config.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-parallel-build.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-x32.patch
-epatch "${FILESDIR}"/${PN}-1.0.1-ipv6.patch
+epatch0 "${FILESDIR}"/${PN}-1.0.1e-ipv6.patch
 
 # disable fips in the build
 # make sure the man pages are suffixed #302165
