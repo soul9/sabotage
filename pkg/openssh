@@ -1,10 +1,10 @@
-[main]
-filesize=1126034
-sha512=4fe1f7e0d5e572575b11253916354b333a7eca558720885d5dceb7c89dc5da81cd57feaa4be756dfa4f3e9ef508e5f460e5fda221765191b1c02ae37431a444e
-
 [mirrors]
-http://ftp.spline.de/pub/OpenBSD/OpenSSH/portable/openssh-6.0p1.tar.gz
-http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-6.0p1.tar.gz
+http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-6.1p1.tar.gz
+http://ftp.spline.de/pub/OpenBSD/OpenSSH/portable/openssh-6.1p1.tar.gz
+
+[main]
+filesize=1134820
+sha512=1cd58f18b047fa92a3155fa215d69c04e1f03914488a21bcda5434899df6055567e59f77063f0080b0cb437bb2396d3bf4050ed0c5ea2d1dc20d6fd928d5a76c
 
 [deps]
 openssl
