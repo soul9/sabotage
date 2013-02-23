@@ -4,21 +4,21 @@ openssl
 ca-certificates
 zlib-dynamic
 
-[main]
-filesize=1996532
-sha512=0c4343c2abf5e13190a648a50d2e575d89553f94a119334a97662ccc39c46944db4b84028ea62e6200b75734616e10fd14f61abd1318248ef014501a2d4bf0b4
-
 [mirrors]
-http://curl.haxx.se/download/curl-7.26.0.tar.lzma
+http://curl.haxx.se/download/curl-7.29.0.tar.lzma
+
+[main]
+filesize=2100412
+sha512=0a3548ba9e5e2da8f8ad02ee1a6d3c391168c9d95c798fa4e95e73925344747affa4d1ea1da53172395092de083676b1b91aec101b870f333436176eaa834e89
 
 [build]
-CFLAGS="-D_GNU_SOURCE" ./configure -C \
+CPPFLAGS="-D_GNU_SOURCE" \
+./configure -C \
   --prefix="$butch_prefix" \
   --with-ssl \
   --enable-ipv6 \
   --with-ca-path="$butch_prefix"/etc/ssl/certs \
   --with-random=/dev/urandom || exit 1
-
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
