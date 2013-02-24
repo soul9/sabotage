@@ -21,7 +21,7 @@ gethash() {
 }
 
 fn=tarballs/`geturlfilename "$url"`
-wget -O "$fn" "$url"
+wget --no-check-certificate -O "$fn" "$url"
 
 echo [mirrors]
 echo "$url"
