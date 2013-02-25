@@ -3,14 +3,15 @@ kernel-headers
 flex
 bison
 
-[main]
-filesize=77722
-sha512=683304786f45c21c095d41c207656e22d70b6c51accacd2bc8959cd068d2968c6ed2d018adc5989b2a58d4c86def00ff5d5f452134483b2bbf143e98f081d4c0
-tardir=gradm2
-
 [mirrors]
-http://grsecurity.net/test/gradm-2.9-201202232055.tar.gz
-http://mirror.wzff.de/sabotage/tarballs/gradm-2.9-201202232055.tar.gz
+https://grsecurity.net/test/gradm-2.9.1-201301041755.tar.gz
+http://codu.org/~rofl/tarballs/gradm-2.9.1-201301041755.tar.gz
+http://mirror.wzff.de/sabotage/tarballs/gradm-2.9.1-201301041755.tar.gz
+
+[main]
+filesize=80369
+sha512=167b39b37dc3c4de65d5b9a9df2c85954853588551fe399febd67896deb9d03d0884ef1ea91fa06ae60b852d2e6171de2819eadd23f13dcf8bafd488d4581d56
+tardir=gradm2
 
 [build]
 make -j$MAKE_THREADS CFLAGS="-include sys/socket.h -D_GNU_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -D_LARGEFILE64_SOURCE" || exit 1
