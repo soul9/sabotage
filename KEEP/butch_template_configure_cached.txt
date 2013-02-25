@@ -84,7 +84,10 @@ if %BUTCH_HAVE_TARBALL ; then
 	[ -d "$butch_build_root" ] || mkdir -p "$butch_build_root"
 	cd "$butch_build_root"
 	printf "%s: starting to untar\n" "`date`"
-	tar xf "$butch_cache_dir/%BUTCH_TARBALL" || (echo tarball error; exit 1)
+	if ! tar xf "$butch_cache_dir/%BUTCH_TARBALL" ; then
+		echo "tarball error"
+		exit 1
+	fi
 	printf "%s: untar done\n" "`date`"
 	cd "$butch_build_dir"
 
