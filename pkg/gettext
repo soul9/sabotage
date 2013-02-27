@@ -9,6 +9,7 @@ sha512=a4542f60fdbcc9b1403a65860b79d1f2cdae87e053c3f46da4358fd402b553806564e084e
 [deps]
 
 [build]
+patch -p1 < "$K"/gettext-tiny-const.patch || exit 1
 echo prefix="$butch_prefix" > config.mak
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
