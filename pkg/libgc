@@ -7,6 +7,7 @@ sha512=5b342754a1efeef0cf78983b7a0e48a36495beac04fc881ab356b26dc153b343e940ec7af
 tardir=gc-7.2
 
 [deps]
+dynamic-toolchain
 
 [build]
 patch -p0 < "$K"/libgc-configure.patch || exit 1
@@ -17,11 +18,13 @@ patch -p1 < "$K"/libgc-pthread_attrnp.patch || exit 1
 
 touch include/execinfo.h
 
-CFLAGS="-D_GNU_SOURCE -DNO_GETCONTEXT -DNO_PTHREAD_GETATTR_NP -O0 -D__GLIBC__=2 -D__GLIBC_MINOR__=16" \
+CFLAGS="-D_GNU_SOURCE -DUSE_PROC_FOR_LIBRARIES -DNO_GETCONTEXT -DNO_PTHREAD_GETATTR_NP" \
   ./configure -C --prefix="$butch_prefix" \
+  --enable-cplusplus \
   --disable-threads \
 || exit 1
 #  --enable-threads=pthreads \
+
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
