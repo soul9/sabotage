@@ -25,6 +25,8 @@ mkdir -p "$dest"/include/lua
 
 ln -s libluajit-5.1.so.2.0.0 "$dest"/lib/liblua.so
 ln -s libluajit-5.1.a "$dest"/lib/liblua.a
+ln -s libluajit-5.1.so.2.0.0 "$dest"/lib/libluajit-5.1.so.2
+ln -s libluajit-5.1.so.2.0.0 "$dest"/lib/libluajit-5.1.so
 
 cat << EOF > "$dest"/lib/pkgconfig/lua.pc
 majver=5
