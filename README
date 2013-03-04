@@ -19,7 +19,11 @@ or use a ready-to-boot disk image either for netinstall or with sets
 included (put it on an USB stick, burning a CD will not work), to be
 found at:
 
-           http://mirror.wzff.de/sabotage/
+           http://mirror.wzff.de/sabotage/ 
+
+	   or
+	   http://foss.aueb.gr/mirrors/linux/sabotage/
+
 
 You also can netboot the install kernel directly (use pxelinux from
 somewhere).
@@ -125,7 +129,7 @@ CONTACT
 There is a mailinglist sabotage@lists.openwall.com, mail
 sabotage-subscribe@lists.openwall.com and follow instructions to get
 on it.  Archives are at http://openwall.com/lists/sabotage/
-You can also /join #musl on irc.freenode.net for realtime help.
+You can also /join #sabotage or #musl on irc.freenode.net for realtime help.
 
 
 
