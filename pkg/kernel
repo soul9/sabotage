@@ -5,7 +5,8 @@ grsec
 
 [mirrors]
 http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.8.tar.xz
-http://kambing.ui.ac.id/linux/v3.0/linux-3.8.tar.xz
+http://www.linux-mips.org/pub/linux/mips/kernel/v3.0/linux-3.8.tar.xz
+http://pkgs.fedoraproject.org/repo/pkgs/kernel/linux-3.8.tar.xz/1c738edfc54e7c65faeb90c436104e2f/linux-3.8.tar.xz
 
 [main]
 filesize=70989468
