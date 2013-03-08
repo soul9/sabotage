@@ -1,0 +1,91 @@
+--- Python-2.7.3.org/Modules/getpath.c	2013-03-07 18:45:16.083000003 +0000
++++ Python-2.7.3/Modules/getpath.c	2013-03-08 21:09:01.422000003 +0000
+@@ -5,6 +5,7 @@
+ 
+ #include <sys/types.h>
+ #include <string.h>
++#include <stdio.h>
+ 
+ #ifdef __APPLE__
+ #include <mach-o/dyld.h>
+@@ -135,8 +136,13 @@
+ reduce(char *dir)
+ {
+     size_t i = strlen(dir);
++    if(i == 1 && dir[0] == '/') {
++	dir[0] = 0;
++	return;
++    }
+     while (i > 0 && dir[i] != SEP)
+         --i;
++    if(i == 0 && dir[0] == '/') i = 1;
+     dir[i] = '\0';
+ }
+ 
+@@ -267,7 +273,7 @@
+     /* If PYTHONHOME is set, we believe it unconditionally */
+     if (home) {
+         char *delim;
+-        strncpy(prefix, home, MAXPATHLEN);
++        snprintf(prefix, MAXPATHLEN, "%s", home);
+         delim = strchr(prefix, DELIM);
+         if (delim)
+             *delim = '\0';
+@@ -290,7 +296,13 @@
+             return -1;
+     }
+ 
+-    /* Search from argv0_path, until root is found */
++    /* Search from argv0_path, until root is found 
++     * judging from the path of the currently running
++     * program about where the prefix is completely
++     * bogus unless we're running the python interpreter
++     * itself.
++     */
++    if(!strstr(argv0_path, "python")) goto skip_argv0_madness;
+     copy_absolute(prefix, argv0_path);
+     do {
+         n = strlen(prefix);
+@@ -301,9 +313,15 @@
+         prefix[n] = '\0';
+         reduce(prefix);
+     } while (prefix[0]);
++    skip_argv0_madness:
+ 
+     /* Look at configure's PREFIX */
+-    strncpy(prefix, PREFIX, MAXPATHLEN);
++    if(strlen(PREFIX))
++	snprintf(prefix, MAXPATHLEN, "%s", PREFIX);
++    else {
++       prefix[0] = '/';
++       prefix[1] = 0;
++    }
+     joinpath(prefix, lib_python);
+     joinpath(prefix, LANDMARK);
+     if (ismodule(prefix))
+@@ -344,6 +362,7 @@
+     }
+ 
+     /* Search from argv0_path, until root is found */
++    if(!strstr(argv0_path, "python")) goto skip_argv0_madness;
+     copy_absolute(exec_prefix, argv0_path);
+     do {
+         n = strlen(exec_prefix);
+@@ -354,9 +373,16 @@
+         exec_prefix[n] = '\0';
+         reduce(exec_prefix);
+     } while (exec_prefix[0]);
++    skip_argv0_madness:
+ 
+     /* Look at configure's EXEC_PREFIX */
+-    strncpy(exec_prefix, EXEC_PREFIX, MAXPATHLEN);
++    if(strlen(EXEC_PREFIX))
++        snprintf(exec_prefix, MAXPATHLEN, "%s", EXEC_PREFIX);
++    else {
++       exec_prefix[0] = '/';
++       exec_prefix[1] = 0;
++    }
++
+     joinpath(exec_prefix, lib_python);
+     joinpath(exec_prefix, "lib-dynload");
+     if (isdir(exec_prefix))

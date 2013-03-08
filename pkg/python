@@ -18,7 +18,19 @@ sha512=1fc5866b7bdbd3d6b89d92797ea4ad612a3dd6b77c4b9dde9feae64ce6c70013ea1b4d208
 # the prefix equals "/"
 [ "$butch_prefix" = "/" ] && butch_prefix=
 
+# python can't deal with prefix= or prefix=/ correctly.
+# it will emit empty PREFIX and EXEC_PREFIX macros into pyconfig.h
+patch -p1 < "$K"/python273-pathsearch.patch || exit 1
+
+debugflags=
+[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
+
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -fPIC" ./configure -C --prefix="$butch_prefix" \
   --with-system-expat --with-system-ffi || exit 1
-make -j$MAKE_THREADS  || exit 1
+
+# python does not use the user CFLAGS as last element, so they override our
+# optimization and debug level with their hardcoded one.
+# thus the usage of EXTRA_CFLAGS to get into the last position.
+EXTRA_CFLAGS="$debugflags" make -j$MAKE_THREADS  || exit 1
+
 make DESTDIR="$butch_install_dir" install || exit 1
