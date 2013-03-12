@@ -109,7 +109,6 @@ ac_cv_broken_poll=${ac_cv_broken_poll='no'}
 ac_cv_broken_sem_getvalue=${ac_cv_broken_sem_getvalue='no'}
 ac_cv_buggy_getaddrinfo=${ac_cv_buggy_getaddrinfo='no'}
 ac_cv_c99=${ac_cv_c99='yes'}
-ac_cv_c_char_unsigned=${ac_cv_c_char_unsigned='no'}
 ac_cv_c_compiler_gnu=${ac_cv_c_compiler_gnu='yes'}
 ac_cv_c_const=${ac_cv_c_const='yes'}
 ac_cv_c_inline=${ac_cv_c_inline='inline'}
