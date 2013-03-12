@@ -10,9 +10,13 @@ http://ftpmirror.gnu.org/gmp/gmp-5.0.2.tar.bz2
 ftp://ftp.gmplib.org/pub/gmp-5.0.2/gmp-5.0.2.tar.bz2
 
 [build]
+# force correct ABI detection on x86 (could fail if a 64bit kernel is used)
+abihack=
+[ "$A" = "i386" ] && abihack="ABI=32"
+
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 CC="$CC -static" CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Wno-implicit" ./configure -C \
-  --prefix="$butch_prefix" --disable-shared || exit 1
+  --prefix="$butch_prefix" --disable-shared $abihack || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
