@@ -10,7 +10,13 @@ sha512=2cad30347fb310dc605c46bacd9da117f447a5cabedd8fefdb24ab5de641429e5ec5ce8af
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+# patch from debian: http://patch-tracker.debian.org/package/libmad
+patch -p1 < "$K"/libmad-mips-asm.patch || exit 1
+
+# there are other debian patches that may be interesting, also:
+# http://m.baert.free.fr/contrib/docs/libmad/ (documentation patch)
+# AVR32 patch http://www.mars.org/pipermail/mad-dev/2010-March/001410.html
+
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
