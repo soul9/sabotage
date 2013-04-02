@@ -1,0 +1,26 @@
+[mirrors]
+http://nodejs.org/dist/v0.10.2/node-v0.10.2.tar.gz
+
+[main]
+filesize=12813547
+sha512=88615b4450ff10e70f4f53ec159518c1385da747e44dfb6c42dcf386c41b62048a9b77838036cf620202da1812c60893809f6aca2202e90b20158eb0f00aa60a
+
+[deps]
+dynamic-toolchain
+python
+
+[build]
+patch -p1 < "$K"/nodejs-nameser_compat.h || exit 1
+patch -p1 < "$K"/nodejs-openssl_termios.h || exit 1
+patch -p1 < "$K"/nodejs-uv.patch || exit 1
+patch -p1 < "$K"/nodejs-uv_ifaddrs.patch || exit 1
+
+[ -z "$butch_prefix" ] && butch_prefix=/
+
+CFLAGS="-D_GNU_SOURCE" CXXFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
+
+# the python configure script does not care about C(XX)FLAGS being passed
+sed -i "s@cflags': \[\]@cflags': ['-D_GNU_SOURCE -D_BSD_SOURCE -Duseconds_t=unsigned']@" config.gypi
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
