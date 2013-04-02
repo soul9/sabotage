@@ -1,0 +1,14 @@
+[mirrors]
+http://rsync.samba.org/ftp/rsync/rsync-3.0.9.tar.gz
+
+[main]
+filesize=792725
+sha512=b08f9525d7af981b6010e99cc1fa2e39fea94db317a5078ad687adf2716160b0f67b9fad6d9e5b7db63749f031c925fe3b47599379a14a5565c71be85987d5ff
+
+[deps]
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
