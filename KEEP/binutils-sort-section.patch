@@ -1,0 +1,18 @@
+http://sourceware.org/bugzilla/show_bug.cgi?id=14156
+--- binutils-2.22/ld/ldlang.c	2011-11-21 09:29:38.000000000 +0000
++++ binutils-2.22.patched/ld/ldlang.c	2013-04-02 17:00:37.003000002 +0000
+@@ -3538,8 +3538,12 @@
+ 
+ 	    case lang_wild_statement_enum:
+ 	      sec = s->wild_statement.section_list;
+-	      for (sec = s->wild_statement.section_list; sec != NULL;
+-		   sec = sec->next)
++	      /* Don't sort .init/.fini sections.  */
++	      if (sec == NULL
++		  || strcmp (sec->spec.name, ".init") == 0
++		  || strcmp (sec->spec.name, ".fini") == 0)
++		break;
++	      for (; sec != NULL; sec = sec->next)
+ 		{
+ 		  switch (sec->spec.sorted)
+ 		    {
