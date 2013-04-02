@@ -1,21 +1,18 @@
-[main]
-filesize=1581421
-sha512=34d4b15fc6d46508b5b93a3bf63e4de9de7a72fa3da56fba4815bacbd2df9e683b3f710d71baee492dfb6d3cfb2c6a454f39e3b752649e1024cd160f96fad0a9
-
 [mirrors]
-http://matt.ucc.asn.au/dropbear/releases/dropbear-2012.55.tar.bz2
+http://matt.ucc.asn.au/dropbear/releases/dropbear-2013.56.tar.bz2
+
+[main]
+filesize=1578454
+sha512=dd6ef30a21564b9532a6a9845dedcdab8af759a3272cfffb7856f41adc46f5e168ace4c0f448ed6e1ee0ec3628941cf4de2a244a737a341bf359cc7e4ecd2a97
 
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch"
 CPPFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
 CFLAGS="-Os -s -ftree-dce -fdata-sections -ffunction-sections" \
 LDFLAGS="-static -Wl,--gc-sections" ./configure -C --prefix="$butch_prefix" || exit 1
 
 # TODO : edit generated options.h
-
-sed -i 's@#include "tomcrypt.h"@#include "tomcrypt.h"\n#define mp_read_unsigned_bin(a, b, c) ltc_mp.unsigned_read(a, b, c)\n#define mp_prime_is_prime(a, b, c)   ltc_mp.isprime(a, c)@' libtomcrypt/src/math/rand_prime.c
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
