@@ -1,7 +1,7 @@
 #!/bin/sh
-filesize='63762'
-sha512='10af6b9a0ee7ef01e81a9e09231bc1dbcb40c38943bd494e4defdeafbfb49aa86f9e92416887f9cc64e7373b079088af55b82fa3259ae563b02a0145c6821ee3'
-version=0.1.5
+filesize='65001'
+sha512='1be8ad50c1c2430213bacdba3958d35344c81b05c8aba1bc8805cd577161467bcf8515ae61e0663fab4009563b6d6b8464179fe023a7983e0f40a855cdb15ad8'
+version=0.2.1
 
 filename="$C"/butch-$version.tar.bz2
 

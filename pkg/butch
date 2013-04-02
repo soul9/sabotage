@@ -1,11 +1,10 @@
 [mirrors]
-http://mirror.wzff.de/butch/butch-0.1.5.tar.bz2
-https://github.com/downloads/rofl0r/butch/butch-0.1.5.tar.bz2
-http://codu.org/~rofl/butch-0.1.5.tar.bz2
+http://codu.org/~rofl/butch-0.2.1.tar.bz2
+http://mirror.wzff.de/butch/butch-0.2.1.tar.bz2
 
 [main]
-filesize=63762
-sha512=10af6b9a0ee7ef01e81a9e09231bc1dbcb40c38943bd494e4defdeafbfb49aa86f9e92416887f9cc64e7373b079088af55b82fa3259ae563b02a0145c6821ee3
+filesize=65001
+sha512=1be8ad50c1c2430213bacdba3958d35344c81b05c8aba1bc8805cd577161467bcf8515ae61e0663fab4009563b6d6b8464179fe023a7983e0f40a855cdb15ad8
 tardir=butch
 
 [deps]
@@ -20,7 +19,7 @@ fi
 
 # prepare build config...
 printf "LDFLAGS = -static\n" > butch/config.mak
-[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g\n" >> butch/config.mak
+[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g3\n" >> butch/config.mak
 echo "CFLAGS=-O0" >> butch/config.mak
 
 if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
