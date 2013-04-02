@@ -42,6 +42,7 @@ proxychains
 psmisc
 python
 perl
+rsync
 sdl
 sdl-image
 sdl-mixer
