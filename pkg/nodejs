@@ -14,6 +14,7 @@ patch -p1 < "$K"/nodejs-nameser_compat.h || exit 1
 patch -p1 < "$K"/nodejs-openssl_termios.h || exit 1
 patch -p1 < "$K"/nodejs-uv.patch || exit 1
 patch -p1 < "$K"/nodejs-uv_ifaddrs.patch || exit 1
+patch -p1 < "$K"/nodejs-i386.patch || exit 1
 
 [ -z "$butch_prefix" ] && butch_prefix=/
 
