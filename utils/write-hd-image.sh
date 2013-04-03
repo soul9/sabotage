@@ -57,6 +57,10 @@ run_echo() {
 	"$@"
 }
 
+isemptydir() {
+	if [ $(ls "$1" | wc -l) = "0" ] ; then true ; else false ; fi
+}
+
 mountdir=
 
 which extlinux 2>&1 > /dev/null || die 'extlinux must be in PATH (try installing syslinux)'
@@ -70,6 +74,9 @@ contents="$2"
 [ -z "$contents" ] && usage
 [ ! -f "$contents" ] && [ ! -d "$contents" ] && die "failed to access $contents"
 [ -d "$contents" ] && [ ! -d "$contents"/src ] && die "$contents does not contain a valid directory layout"
+if ! isemptydir "$contents/proc" || ! isemptydir "$contents/sys" || ! isemptydir "$contents/dev" ; then
+	die "$contents was not properly unmounted! (check sys/ dev/ proc/)"
+fi
 
 imagesize="$3"
 [ -z "$imagesize" ] && usage
