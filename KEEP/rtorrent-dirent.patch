@@ -1,0 +1,17 @@
+--- rtorrent-0.9.3.org/src/input/path_input.cc	2013-04-04 02:47:03.427000003 +0000
++++ rtorrent-0.9.3/src/input/path_input.cc	2013-04-04 02:51:02.538000002 +0000
+@@ -43,12 +43,8 @@
+ 
+ #include <sys/types.h>
+ 
+-#ifdef __sun__
+-  #include <dirent.h>
+-  #include <sys/stat.h>
+-#else
+-  #include <sys/dir.h>
+-#endif
++#include <dirent.h>
++#include <sys/stat.h>
+ 
+ #include "path_input.h"
+ 
