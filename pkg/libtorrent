@@ -1,0 +1,17 @@
+[mirrors]
+http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.3.tar.gz
+
+[main]
+filesize=732847
+sha512=40f504db26d52b0c65fc1008c7b1465bde0e316c776028c5448bf15c6fd38389fad780b0c200933e51f63974a43942603e0103d45a98a3dd57f23f01a306ef25
+
+[deps]
+dynamic-toolchain
+libsigc++
+curl
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
