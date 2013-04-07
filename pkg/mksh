@@ -16,12 +16,11 @@ case $- in
 esac
 set -e
 
-CFLAGS='-Os -ftree-dce' LDSTATIC=-static \
+CFLAGS='-Os -ftree-dce -fdata-sections -ffunction-sections -Wl,--gc-sections' LDSTATIC=-static LDFLAGS="-Wl,--gc-sections" \
     sh Build.sh -r -M
 
 make -j$MAKE_THREADS -f - all <<'EOF'
 include Makefrag.inc
-CFLAGS+=	-flto=jobserver
 VPATH=		.
 all: $(PROG)
 $(PROG): $(OBJS_BP)
