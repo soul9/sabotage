@@ -14,6 +14,9 @@ libx11
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-CXXFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
+debugflags=
+test "$DEBUGBUILD" = "1" && debugflags="-g -O0"
+CXXFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix" || exit 1
+sed -i 's@.SILENT:@@' makeinclude
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
