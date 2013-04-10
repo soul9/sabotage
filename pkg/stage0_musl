@@ -13,8 +13,6 @@ sha512=0dbc1e5ac28c9f4592b82ce9017a8d0b12ff719ae88a5a9c26d3948bf8123d08bc42ad168
 patch -p1 < "$K"/musl-099-arm-dynlinker-segv.patch || exit 1
 [ -z "$butch_prefix" ] && butch_prefix=/
 
-#disable building shared libs. the mere presence of libc.so messes up stuff.
-#we do not want anything in stage0 to be dynamically linked.
 CC=$R/bin/gcc ./configure --enable-gcc-wrapper \
   --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 
