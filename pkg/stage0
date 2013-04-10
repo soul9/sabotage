@@ -9,6 +9,8 @@ binutils
 make
 
 [build]
+# do not rebuild stage0 packages once we're past that stage 
+test "$STAGE" = "0" || exit 0
 
 "$H"/utils/finish || exit 1
 
