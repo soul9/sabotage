@@ -9,6 +9,7 @@ tardir=gcc-3.4.6
 http://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-3.4.6.tar.bz2
 
 [build]
+VERSION=3.4.6
 #apparently some control freak gcc used by ubuntu enforces that the mode arg is set in open calls
 sed -i 's@O_CREAT@O_CREAT, 0770@' gcc/collect2.c
 
@@ -17,6 +18,14 @@ sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux.h
 sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux64.h
 sed -i 's@/lib64/ld-linux-x86-64.so.2@/lib/ld-musl-x86_64.so.1@' gcc/config/i386/linux64.h
+sed -i 's@/lib/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux.h
+sed -i 's@/lib/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
+sed -i 's@/lib64/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
+sed -i 's@/lib32/ld.so.1@/lib/ld-musl-mips.so.1@' gcc/config/mips/linux64.h
+sed -i 's@/lib/ld.so.1@/lib/ld-musl-powerpc.so.1@g' gcc/config/rs6000/sysv4.h
+sed -i 's@/lib/ld.so.1@/lib/ld-musl-powerpc.so.1@g' gcc/config/rs6000/linux64.h
+sed -i 's@/lib64/ld64.so.1@/lib/ld-musl-powerpc64.so.1@g' gcc/config/rs6000/linux64.h
+
 
 $K/bin/libibertyfix libiberty
 
@@ -47,3 +56,4 @@ ln -sf "rawcc" "$dest"/bin/gcc
 
 [ "$A" = "x86_64" ] && mv "$dest"/lib64/* "$dest"lib/ || true
 
+ln -sf rawcc "$dest"/bin/gcc-$VERSION
