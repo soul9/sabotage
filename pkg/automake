@@ -1,13 +1,12 @@
 [deps]
 autoconf
 
-[main]
-filesize=1066685
-sha512=7a47bc64597027cc84bc60e33aa1887f19797abdb4434b60d372409a69dc9dac07c5d4c6bbe389083b8ee9d063e181273d55c12d409524915ffa553b1ecad464
-
 [mirrors]
-ftp://ftp.gnu.org/pub/gnu/automake/automake-1.11.1.tar.bz2
-http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2
+http://ftp.gnu.org/gnu/automake/automake-1.13.tar.xz
+
+[main]
+filesize=1421396
+sha512=e938422378e302dc32725a5bde98a7f2867c6fb6507361e3233ce22a17c7f04d11fd21f3c6e45548f2255817b871e347e312de3b263cad545b12befb6e7476ca
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
