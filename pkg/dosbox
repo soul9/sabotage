@@ -1,0 +1,19 @@
+[mirrors]
+http://switch.dl.sourceforge.net/project/dosbox/dosbox/0.74/dosbox-0.74.tar.gz
+
+[main]
+filesize=1265711
+sha512=4a6ff4c658997a495119d200ec6ad37649da940814a4b14fca0dd29a99142026e324695b7aa9d2946efc2abf9067a819d911e43778efe905ed10ddf9b9f2dd3d
+
+[deps]
+dynamic-toolchain
+sdl
+alsa-lib
+zlib
+libpng
+
+[build]
+patch -p1 < "$K"/dosbox.patch || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
