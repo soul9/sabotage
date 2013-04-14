@@ -16,9 +16,6 @@ cat << EOF > include/error.h
 #define HAVE_PROGRAM_INVOCATION_SHORT_NAME
 #define PROGRAM_NAME "procps"
 
-static char *program_invocation_name = PROGRAM_NAME;
-static char *program_invocation_short_name = PROGRAM_NAME;
-
 #define error(status, errnum, ...) \
   do { fflush(stdout); \
        dprintf(2, PROGRAM_NAME ": "); \
@@ -45,15 +42,6 @@ cat << EOF > include/sys/dir.h
 #define direct dirent
 EOF
 
-cat << EOF > include/values.h
-#define _GNU_SOURCE
-#include <limits.h>
-#include <float.h>
-#include <sys/types.h>
-#define MAXINT INT_MAX
-#define MAXFLOAT FLT_MAX
-typedef suseconds_t useconds_t;
-EOF
 
 STRIP=true CFLAGS="-O0 -g -D_GNU_SOURCE -DGLOB_TILDE=0 -DAF_INET6=10 -DAF_INET=2" ./configure \
   -C --prefix="$butch_prefix" || exit 1
