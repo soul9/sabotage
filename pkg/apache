@@ -9,6 +9,14 @@ sha512=d4501ae69aacb75d960bc8cb61c9e1ff52e6e42a37c37ca84c839262e183ca2f305794da2
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C \
+  --prefix="$butch_prefix" \
+  --sysconfdir="$butch_prefix"/etc \
+  --bindir="$butch_prefix"/bin \
+  --mandir="$butch_prefix"/share/man \
+  --localstatedir="$butch_prefix"/var \
+  --datadir="$butch_prefix"/srv/www \
+  --libexecdir="$butch_prefix"/libexec/apache \
+  --exec-prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
