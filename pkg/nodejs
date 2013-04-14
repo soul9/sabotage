@@ -21,7 +21,7 @@ patch -p1 < "$K"/nodejs-i386.patch || exit 1
 CFLAGS="-D_GNU_SOURCE" CXXFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
 
 # the python configure script does not care about C(XX)FLAGS being passed
-sed -i "s@cflags': \[\]@cflags': ['-D_GNU_SOURCE -D_BSD_SOURCE -Duseconds_t=unsigned']@" config.gypi
+sed -i "s@cflags': \[\]@cflags': ['-D_GNU_SOURCE -D_BSD_SOURCE']@" config.gypi
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
