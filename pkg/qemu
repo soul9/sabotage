@@ -14,7 +14,6 @@ libx11
 
 # WARNING this package needs more than 512 MB ram to build
 
-patch -p1 < "$K"/qemu-ifaddrs.patch || exit 1
 patch -p1 < "$K"/qemu-syscall.patch || exit 1
 patch -p1 < "$K"/qemu-mmap.patch || exit 1
 patch -p1 < "$K"/qemu-arm-user-exec.patch || exit 1
