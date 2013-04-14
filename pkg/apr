@@ -12,6 +12,7 @@ http://www.eu.apache.org/dist/apr/apr-1.4.6.tar.bz2
 http://www.apache.org/dist/apr/apr-1.4.6.tar.bz2
 
 [build]
+patch -p1 < "$K"/apr-tm_gmtoff.patch || exit 1
 CFLAGS="-include stdlib.h -include pwd.h -D_GNU_SOURCE -DSTDC_HEADERS" ./configure -C \
   --prefix="$butch_prefix" --datadir="$butch_prefix"/share/apr \
   apr_cv_accept4=yes ac_cv_func_inet_addr=yes ac_cv_func_inet_network=yes \

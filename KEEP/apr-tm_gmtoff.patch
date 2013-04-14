@@ -1,0 +1,11 @@
+--- apr-1.4.6.org/include/apr_time.h	2013-04-14 07:44:51.705000003 +0000
++++ apr-1.4.6/include/apr_time.h	2013-04-14 07:46:08.397000004 +0000
+@@ -90,6 +90,8 @@
+ /** @see apr_time_exp_t */
+ typedef struct apr_time_exp_t apr_time_exp_t;
+ 
++#include <time.h>
++
+ /**
+  * a structure similar to ANSI struct tm with the following differences:
+  *  - tm_usec isn't an ANSI field
