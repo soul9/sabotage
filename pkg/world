@@ -9,5 +9,13 @@ nmap
 patchelf
 php
 phoronix-testsuite
-
-
+procps
+qemu
+boost
+dosbox
+mksh
+nodejs
+rtorrent
+ruby
+lamp
+nginx
