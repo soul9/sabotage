@@ -9,19 +9,24 @@ xz
 
 [build]
 patch -p1 < "$K/libnl-tiny_if_h.patch"
-sed -i 's@CFLAGS=-O2@CFLAGS?=-O2@' src/Makefile
+
+cp "$K"/libnl-tiny-src-Makefile src/Makefile
+
 CFLAGS=-fPIC make -C src -j$MAKE_THREADS || exit 1
+make -C src libnl-tiny.a || exit 1
 
 echo installing headers
 dest="$butch_install_dir/"include/libnl-tiny
 mkdir -p "$dest"
 cp -rf src/include/* "$dest/" || exit 1
 
-echo installing dll
+echo installing libs
 dest="$butch_install_dir/"lib
 mkdir -p "$dest"
 cp -f src/libnl-tiny.so "$dest/" || exit 1
+cp -f src/libnl-tiny.a "$dest/" || exit 1
 ln -sf libnl-tiny.so "$dest/"libnl.so
+ln -sf libnl-tiny.a "$dest/"libnl.a
 
 echo installing pkgconfig
 dest="$butch_install_dir/"lib/pkgconfig
