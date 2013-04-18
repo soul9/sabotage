@@ -1,0 +1,15 @@
+[mirrors]
+http://www.lysator.liu.se/~nisse/archive/nettle-2.6.tar.gz
+
+[main]
+filesize=1385695
+sha512=edee4b7ecd34d7db8636650e59916c358a9be323128b4b7ad6eb4088a0a09a6744d0ebf382b23143fbcee3d40b148f43a54f25759141b16ba0befc3c46740b80
+
+[deps]
+gmp
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
