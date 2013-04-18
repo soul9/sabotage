@@ -1,12 +1,12 @@
 [deps]
-musl
-
-[main]
-filesize=13568573
-sha512=d0bb91141ac4c5cc3d98dbeada130ae70c32cf59ac1a74991b5b1f52138b37f5cfa4233935afed4a16edfc9df784df6b3c538240dc654b82bac1fcb8efe3c3a1
+dynamic-toolchain
 
 [mirrors]
-http://www.cpan.org/src/5.0/perl-5.16.0.tar.bz2
+http://www.cpan.org/src/5.0/perl-5.16.3.tar.bz2
+
+[main]
+filesize=13724906
+sha512=c30cda0af9463942e40b5d70a95e69b0640bf0b79d9d9dfa1a61d9d8b9ee05f553fd240be4c8b3c60a1def66c80453e49e865c27d3dd0b686f5c004e1ff58d92
 
 [build]
 # with empty prefix, perl will disregard the prefix parameters entirely, failing to build
