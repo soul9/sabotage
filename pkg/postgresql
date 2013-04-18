@@ -1,9 +1,9 @@
 [mirrors]
-http://ftp.postgresql.org/pub/source/v9.2.2/postgresql-9.2.2.tar.bz2
+http://ftp.postgresql.org/pub/source/v9.2.4/postgresql-9.2.4.tar.bz2
 
 [main]
-filesize=16222148
-sha512=147690b168838b7d45cc805882cb6ef628cbf656ff115d32ab76c4ad38b06aa00223f728bf0e5befcdd27cc4e27a917493d857f1f29006952f0ff07da6615808
+filesize=16395184
+sha512=1f347a8e75f4c350cc1ee2e0406b1b696f8e82cd259bb17404113874516fdf4c395517962a5320d5c386994cae7ebe7dbdbbeb7ae79c76d6d506ce5bda662c3e
 
 [deps]
 python
