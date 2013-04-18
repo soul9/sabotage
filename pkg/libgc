@@ -12,19 +12,17 @@ dynamic-toolchain
 [build]
 patch -p0 < "$K"/libgc-configure.patch || exit 1
 patch -p1 < "$K"/libgc-os_dep.patch || exit 1
-patch -p1 < "$K"/libgc-pthread_attrnp.patch || exit 1
 
 # -DUSE_PROC_FOR_LIBRARIES
 
 touch include/execinfo.h
 
-CFLAGS="-D_GNU_SOURCE -DUSE_PROC_FOR_LIBRARIES -DNO_GETCONTEXT -DNO_PTHREAD_GETATTR_NP" \
+CFLAGS="-D_GNU_SOURCE -DUSE_PROC_FOR_LIBRARIES -DNO_GETCONTEXT" \
   ./configure -C --prefix="$butch_prefix" \
   --enable-cplusplus \
-  --disable-threads \
+  --enable-threads=pthreads \
 || exit 1
-#  --enable-threads=pthreads \
-
+#  --disable-threads \
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
