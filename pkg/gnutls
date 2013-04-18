@@ -1,0 +1,16 @@
+[mirrors]
+ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/gnutls-3.1.9.1.tar.xz
+
+[main]
+filesize=5058704
+sha512=53a68240ca6e01fdcb4907a72a7ed574b02f9a0bcde26199d17c9468323ab21aed1e7b0be0a196ac55c0a8831328292142c2a46583f839232ffedb7b6723e618
+tardir=gnutls-3.1.9
+
+[deps]
+libnettle
+
+[build]
+#patch -p1 < "$K/some.patch" || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
