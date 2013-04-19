@@ -4,14 +4,14 @@ xz
 grsec
 
 [mirrors]
-http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.8.6.tar.xz
-ftp://ftp.kernel.org/pub/linux/kernel/v3.0/linux-3.8.6.tar.xz
-http://ftp.free.fr/pub/linux/kernel/v3.0/linux-3.8.6.tar.xz
-http://ftp.heanet.ie/mirrors/linux/kernel/v3.0/linux-3.8.6.tar.xz
+http://www.kernel.org/pub/linux/kernel/v3.0/linux-3.8.8.tar.xz
+ftp://ftp.kernel.org/pub/linux/kernel/v3.0/linux-3.8.8.tar.xz
+http://ftp.free.fr/pub/linux/kernel/v3.0/linux-3.8.8.tar.xz
+http://ftp.heanet.ie/mirrors/linux/kernel/v3.0/linux-3.8.8.tar.xz
 
 [main]
-filesize=70996924
-sha512=95d432f231f150680cefba9542c0adab28ae81f7c9b77f571ee530788326e8dab8f8070ec797204bd5799bba821ab688c9464603c7441af4f61597e5a27d8cbe
+filesize=70996968
+sha512=e4ba66fea6b8fb19ad3e8defbea2e26c61645600c501fc2b3c12aea9de6dfe00f7e5870fc6eb33b29585d5bb4e3c65c8ebc1b9bb841f11cb487b36a6b01dff7f
 
 [build]
 # get into menuconfig using
@@ -38,9 +38,11 @@ dopatch "$K"/linux-3.8-trap.patch
 dopatch "$K"/linux-3.8-posix_sed.patch
 
 if [ -z "$DISABLE_GRSEC" ] ; then
-	tar xf "$C"/grsecurity-2.9.1-3.8.6-201304061345.patch.tar.xz
+	patchname=grsecurity-2.9.1-3.8.8-201304181923.patch
+	tar xf "$C"/"$patchname".tar.xz || exit 1
+	ln -sf "$patchname" grsec.patch
 	patch -p1 < "$K"/grsecurity-2.91_201304061345_vs_perl_removal.patch || exit 1 #patch patch
-	dopatch grsecurity-2.9.1-3.8.6-201304061345.patch
+	dopatch grsec.patch
 	# the patch is buggy and adds some includes that are non-existing at all points.
 	dopatch "$K"/grsecurity-2.91patch.patch
 fi
