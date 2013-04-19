@@ -1,5 +1,5 @@
 [mirrors]
-http://cdn.mysql.com/Downloads/MySQL-5.5/mysql-5.5.28.tar.gz
+http://downloads.mysql.com/archives/mysql-5.5/mysql-5.5.28.tar.gz
 
 [main]
 filesize=24739429
