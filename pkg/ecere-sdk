@@ -19,6 +19,7 @@ libxrender
 freetype
 fontconfig
 sqlite
+x11-font-dejavu
 
 [build]
 patch -p1 < "$K"/ecere-sabotage.patch || exit 1
