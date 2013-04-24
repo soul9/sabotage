@@ -26,6 +26,8 @@ butch_created_tarball_dest="$S/dist/"
 butch_package_name=%BUTCH_PACKAGE_NAME
 butch_prefix=/
 
+filelist="$butch_filelists/$butch_package_name.txt"
+
 # making the prefix empty instead of / seems like a good idea to not get ugly double slashes
 # when concatenating paths. however this leads to multiple issues in buggy packages,
 # but these have been fixed now (see openssl-dynamic, perl, xcb-proto for reference).
@@ -53,6 +55,13 @@ if $butch_do_custom_destdir ; then
 	butch_install_dir="$butch_custom_destdir"
 	if $butch_do_cleanup_custom_destdir ; then
 		rm -rf "$butch_custom_destdir"
+		if [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
+		(
+			# remove left-over symlinks
+			cd "$butch_prefix"/
+			cat "$filelist" | xargs rm
+		)
+		fi
 	fi
 else
 	butch_install_dir=""
@@ -145,7 +154,6 @@ if $have_files ; then
 	# e.g.
 	if [ "$butch_do_filelists" ] ; then
 		mkdir -p "$butch_filelists"
-		filelist="$butch_filelists/$butch_package_name.txt"
 		echo "creating filelist $filelist"
 		find . -type f > "$filelist"
 	fi
