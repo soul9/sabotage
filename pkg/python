@@ -20,6 +20,8 @@ sha512=1fc5866b7bdbd3d6b89d92797ea4ad612a3dd6b77c4b9dde9feae64ce6c70013ea1b4d208
 
 # python can't deal with prefix= or prefix=/ correctly.
 # it will emit empty PREFIX and EXEC_PREFIX macros into pyconfig.h
+# additionally it searches for stuff only relative to its own binary.
+# this doesn't work well with our symlink relocation strategy.
 patch -p1 < "$K"/python273-pathsearch.patch || exit 1
 
 debugflags=

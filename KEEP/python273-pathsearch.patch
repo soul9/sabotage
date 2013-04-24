@@ -1,5 +1,5 @@
---- Python-2.7.3.org/Modules/getpath.c	2013-03-07 18:45:16.083000003 +0000
-+++ Python-2.7.3/Modules/getpath.c	2013-03-08 21:09:01.422000003 +0000
+--- Python-2.7.3.org/Modules/getpath.c
++++ Python-2.7.3/Modules/getpath.c
 @@ -5,6 +5,7 @@
  
  #include <sys/types.h>
@@ -89,3 +89,46 @@
      joinpath(exec_prefix, lib_python);
      joinpath(exec_prefix, "lib-dynload");
      if (isdir(exec_prefix))
+@@ -574,6 +600,12 @@
+     bufsz += strlen(zip_path) + 1;
+     bufsz += strlen(exec_prefix) + 1;
+ 
++#define PYTHONSUCKS PREFIX "/lib/python" VERSION ":" \
++                    EXEC_PREFIX "/lib/python" VERSION "/lib-dynload:" \
++                    PREFIX "/lib/python" VERSION "/site-packages"
++
++    bufsz += strlen(PYTHONSUCKS) + 1;
++
+     /* This is the only malloc call in this file */
+     buf = (char *)PyMem_Malloc(bufsz);
+ 
+@@ -592,10 +624,6 @@
+         else
+             buf[0] = '\0';
+ 
+-        /* Next is the default zip path */
+-        strcat(buf, zip_path);
+-        strcat(buf, delimiter);
+-
+         /* Next goes merge of compile-time $PYTHONPATH with
+          * dynamically located prefix.
+          */
+@@ -622,8 +650,17 @@
+         }
+         strcat(buf, delimiter);
+ 
++        /* Next is the default prefix path. if we don't add this,
++           python will stupidly search for modules only in it's *DESTDIR* instead of prefix
++           this is fundamentally incompatible with the way sabotage relocates
++           packages */
++        strcat(buf, PYTHONSUCKS);
++
+         /* Finally, on goes the directory for dynamic-load modules */
+-        strcat(buf, exec_prefix);
++	if(strlen(exec_prefix)) {
++		strcat(buf, delimiter);
++	        strcat(buf, exec_prefix);
++	}
+ 
+         /* And publish the results */
+         module_search_path = buf;
