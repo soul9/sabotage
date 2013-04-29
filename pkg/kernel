@@ -67,12 +67,8 @@ make V=1 ARCH=$A allnoconfig HOSTCFLAGS="-D_GNU_SOURCE" \
 make V=1 ARCH=$A HOSTCFLAGS=-D_GNU_SOURCE INSTALL_HDR_PATH=dest \
   DISABLE_PAX_PLUGINS=y headers_install || exit 1
 
+# remove junk from kernel headers
 find dest/include \( -name .install -o -name ..install.cmd \) -delete
-
-# FIXME clean up $R usage
-cp -rv dest/include/* $R/include/
-#fix ext2 header...
-cp -f $K/ext2_fs.h $R/include/linux/
 
 # usually when using an ARM/MIPS system you dont want to build a generic kernel
 # you have to use a heavily patched vendor specific one
