@@ -12,4 +12,5 @@ CC="$CC -static" ./configure -C --prefix="$butch_prefix" --libexecdir="$butch_pr
   --disable-nls ac_cv_header_dlfcn_h=no || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-ln -sf gawk $R/bin/awk
+dest="$butch_install_dir""$butch_prefix
+ln -sf gawk "$dest"/bin/awk

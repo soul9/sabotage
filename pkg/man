@@ -2,5 +2,7 @@
 busybox
 
 [build]
-cp $K/man.config $R/etc/
+dest="$butch_destdir""$butch_prefix"
+mkdir -p "$dest"/etc
+cp "$K"/man.config "$dest"/etc/
 

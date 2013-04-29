@@ -10,7 +10,8 @@ http://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-CC="$CC -static -L$R/lib -I$R/include" ./configure -C --prefix="$butch_prefix" --disable-shared || exit 1
+CC="$CC -static" ./configure -C --prefix="$butch_prefix" --disable-shared || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm -f $R/lib/libmpfr.la
+dest="$butch_install_dir""$butch_prefix"
+rm -f "$dest"/lib/libmpfr.la

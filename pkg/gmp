@@ -22,5 +22,6 @@ CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Wno-implicit" \
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm -f $R/lib/libgmp.la
+dest="$butch_install_dir""$butch_prefix"
+rm -f "$dest"/lib/libgmp.la
 
