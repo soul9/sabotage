@@ -1,9 +1,9 @@
 [mirrors]
-http://downloads.mysql.com/archives/mysql-5.5/mysql-5.5.28.tar.gz
+http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.11.tar.gz
 
 [main]
-filesize=24739429
-sha512=61b20e7ae11ef0fc53d199a6a177a34a95e0a7cf17cd574e7ed75d2e51e62da8178184333adb0805b6bbe7649355ae2062ac36c70faa23acfbc419aaa47a7365
+filesize=35458544
+sha512=d87d9eba5d86a5e4b4defff5755eaff4e76041520398b63dfc6bdd11604d46877ef0c57cced169d6d1fd03cb679c165b6731c6f48eceea70e48d5fc5bad7e2ab
 
 [deps]
 cmake
@@ -11,8 +11,8 @@ ncurses
 readline
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-
+patch -p1 < "$K"/mysql-srv_buf_size.patch || exit 1
+patch -p1 < "$K"/mysql-libedit.patch || exit 1
 
 mkdir build && cd build
 
@@ -47,8 +47,8 @@ cmake \
   -DWITH_EXTRA_CHARSETS=none \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
   -DCMAKE_C_FLAGS="-D__STDC_ISO_10646__ -DSHM_R=0400 -DSHM_W=0400" \
-  -DWITH_READLINE=system \
-  -DWITH_LIBEDIT=OFF \
+  -DWITH_READLINE=OFF \
+  -DWITH_LIBEDIT=system \
       .. || exit 1
 
 sed -i 's@/\* #undef DEFAULT_CHARSET_HOME \*/@#define DEFAULT_CHARSET_HOME ""@' include/config.h
@@ -57,7 +57,7 @@ sed -i 's@/\* #undef DEFAULT_CHARSET_HOME \*/@#define DEFAULT_CHARSET_HOME ""@' 
 sed -i 's@/\* #undef DEFAULT_MYSQL_HOME \*/@#define DEFAULT_MYSQL_HOME ""@' include/config.h
 sed -i 's@/\* #undef DEFAULT_MYSQL_HOME \*/@#define DEFAULT_MYSQL_HOME ""@' include/my_config.h
 
-make -j$MAKE_THREADS V=1 || exit 1
+make -j$MAKE_THREADS VERBOSE=1 || exit 1
 
 #  -DWITH_READLINE=OFF \
 #  -DWITH_LIBEDIT=system \
