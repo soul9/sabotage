@@ -1,6 +1,6 @@
 --- a/scripts/kconfig/lxdialog/check-lxdialog.sh
 +++ b/scripts/kconfig/lxdialog/check-lxdialog.sh
-@@ -4,32 +4,13 @@
+@@ -4,33 +4,13 @@
  # What library to link
  ldflags()
  {
@@ -14,7 +14,7 @@
 -		done
 -	done
 -	exit 1
-+	echo -lncurses
++echo -lncurses
  }
  
  # Where is ncurses.h?
@@ -22,8 +22,9 @@
  {
 -	if [ -f /usr/include/ncursesw/curses.h ]; then
 -		echo '-I/usr/include/ncursesw -DCURSES_LOC="<ncursesw/curses.h>"'
+-		echo ' -DNCURSES_WIDECHAR=1'
 -	elif [ -f /usr/include/ncurses/ncurses.h ]; then
- 		echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>"'
+-		echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>"'
 -	elif [ -f /usr/include/ncurses/curses.h ]; then
 -		echo '-I/usr/include/ncurses -DCURSES_LOC="<ncurses/curses.h>"'
 -	elif [ -f /usr/include/ncurses.h ]; then
@@ -31,6 +32,7 @@
 -	else
 -		echo '-DCURSES_LOC="<curses.h>"'
 -	fi
++echo '-DCURSES_LOC="<ncurses.h>"'
  }
  
  # Temp file, try to clean up after us
