@@ -10,8 +10,9 @@ filesize=743749
 sha512=a31b4dc367672dd3056476b4e7a5c7affd81d33ead2427e043b94da8251167d93178af5ef43ad962354d18eb260435bb3968a3a8f2f684c89d0bc74a32304936
 
 [build]
-
 [ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
+
+patch -p1 < "$K"/musl-0910-inttypes.patch || exit 1
 
 CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 if [ "$A" = "powerpc" ] ; then
