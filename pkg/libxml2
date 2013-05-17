@@ -1,11 +1,11 @@
-[main]
-filesize=4915203
-sha512=e36ca96e5ba18f767346f1310c43d3c8c9a35c53252de18ad63ebce7f1f8df7ae40dd0719b2c6d78f5a64e61be154eec63a36ae738d29e93a9139c524a289ad4
-
 [mirrors]
-ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz
-ftp://gd.tuwien.ac.at/pub/libxml/libxml2-2.8.0.tar.gz
-http://xmlsoft.org/sources/libxml2-2.8.0.tar.gz
+ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz
+ftp://gd.tuwien.ac.at/pub/libxml/libxml2-2.9.1.tar.gz
+http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz
+
+[main]
+filesize=5172503
+sha512=7b10de749485bc2eb2108063e97d89e70d6fbb78b1bf195ab5528c8c64e79483d55223a49d95934f4e00b00e906c18bdd34344703ffe158dcf08096905a44c1b
 
 [deps]
 zlib
@@ -14,7 +14,7 @@ xz
 xz-dynamic
 
 [build]
-patch -p1 < "$K/libxml2-pthread.patch"
+patch -p1 < "$K"/libxml2-pthread.patch
 CFLAGS="-D_GNU_SOURCE -fPIC" ./configure -C --prefix="$butch_prefix" --enable-shared --without-iconv --without-iso8859x --without-legacy --without-python || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
