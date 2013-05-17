@@ -3,13 +3,12 @@ openssl
 pcre
 zlib
 
-[main]
-filesize=730332
-sha512=7de56e3ea081c3e24a763a1b69285c54e3577f8c3801090cfee35544073c96d559b67e88e4a6c88c280aadb5e53e3761ff1681f5fbbb59bd33b8a7d98b11d9d5
-tardir=nginx-1.2.7
-
 [mirrors]
-http://nginx.org/download/nginx-1.2.7.tar.gz
+http://nginx.org/download/nginx-1.4.1.tar.gz
+
+[main]
+filesize=767107
+sha512=174902d24a60b609688600761374e4ba42e0444439ead84c79ff2e82d0233f8759b57a0b76b82a1f571e38ecce0d7059dc2f057672a7004b6f0060968b4b981e
 
 [build]
 patch -p1 < "$K"/nginx.patch || exit 1
