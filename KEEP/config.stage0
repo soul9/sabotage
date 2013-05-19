@@ -11,7 +11,6 @@ export A=i386
 ## set the compiler environment
 export CC=gcc
 export HOSTCC=gcc
-#export CROSS_COMPILE=armv6l
 
 ## set your core count for faster builds, this is passed as -jXXX to make
 ## stage0 builds in less than 2minutes using -j9 on an AMD 8core
