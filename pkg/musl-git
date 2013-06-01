@@ -14,14 +14,23 @@ else
 	cd musl-git
 fi
 
-cp "$K/musl.config.mak" config.mak
-sed -i "s,#BUTCH_PREFIX#,$butch_prefix," config.mak
+./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
+if [ "$A" = "powerpc" ] ; then
+cat << EOF >> config.mak
+LDFLAGS += -Wl,--secure-plt
+CFLAGS += -msecure-plt
+EOF
+fi
+
+# enable debug libc when DEBUGBUILD is set
+[ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
+[ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
 make clean
-make CC="rawcc" -j$MAKE_THREADS || exit 1
+make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
