@@ -45,10 +45,9 @@ butch_custom_destdir="$butch_root_dir""$butch_custom_destdir_base"
 butch_package_version=0.0.0
 
 # if we unlink busybox, gcc4 or binutils, nothing will work anymore
-[ "$butch_package_name" = "busybox" ] && butch_do_cleanup_custom_destdir=false
-[ "$butch_package_name" = "coreutils" ] && butch_do_cleanup_custom_destdir=false
-[ "$butch_package_name" = "gcc454" ] && butch_do_cleanup_custom_destdir=false
-[ "$butch_package_name" = "binutils" ] && butch_do_cleanup_custom_destdir=false
+for i in busybox coreutils gcc454 binutils musl-git ; do
+	[ "$butch_package_name" = "$i" ] && butch_do_cleanup_custom_destdir=false
+done
 
 # butch_install_dir denotes the DESTDIR passed to make
 if $butch_do_custom_destdir ; then
