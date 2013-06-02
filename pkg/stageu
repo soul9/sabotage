@@ -3,7 +3,6 @@ gawk
 gcc4
 gmp
 m4
-man
 mpc
 mpfr
 musl
