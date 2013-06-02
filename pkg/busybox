@@ -27,6 +27,7 @@ cp "$K"/busybox.stage1.config .config
 "$PATCH" -p1 < "$K"/busybox-xz-bugfix1.patch || exit 1
 "$PATCH" -p1 < "$K"/busybox-xz-bugfix2.patch || exit 1
 "$PATCH" -p1 < "$K"/busybox-xz-bugfix3.patch || exit 1
+"$PATCH" -p1 < "$K"/busybox-man || exit 1
 
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
