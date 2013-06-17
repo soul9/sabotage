@@ -1,16 +1,11 @@
 [deps]
 dynamic-toolchain
 
-[main]
-filesize=560351
-sha512=b1c073ad26684e354f7c522c14655840592e03872bc0a94690f89cae2ff88f146fce1dad252ff27a889dac4a32ff9f8ab63ba940671f9da89e9ba3e19f1bf58d
-
 [mirrors]
-http://zlib.net/zlib-1.2.7.tar.gz
-http://ftp.fifi.org/ImageMagick/delegates/zlib-1.2.7.tar.gz
-http://gentoo.netnitco.net/distfiles/zlib-1.2.7.tar.gz
-http://gentoo.tiscali.nl/distfiles/zlib-1.2.7.tar.gz
-http://prdownloads.sourceforge.net/libpng/zlib-1.2.7.tar.gz
+http://download.sourceforge.net/project/libpng/zlib/1.2.8/zlib-1.2.8.tar.xz
+[main]
+filesize=450776
+sha512=405fbb4fc9ca8a59f34488205f403e77d4f184b08d344efbec6a8f558cac0512ee6cda1dc01b7913d61d9bed04cc710e61db1081bb8782c139fcb727f586fa54
 
 [build]
 CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
