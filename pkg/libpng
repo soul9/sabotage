@@ -1,9 +1,8 @@
-[main]
-filesize=705772
-sha512=b2d7dba02f801112248fb3c361b134b852820ea4704c86bfb178687d503779a887eeeff060f1b42a3df1c2f2df433f072eb0d0ff086a191bd55957e1b48cc9b6
-
 [mirrors]
-http://downloads.sourceforge.net/sourceforge/libpng/libpng-1.5.11.tar.xz
+http://downloads.sourceforge.net/sourceforge/libpng/libpng-1.5.16.tar.xz
+[main]
+filesize=720024
+sha512=3dc1b73c51264a3322cb28214f4c9c25c1a014f9db765d45eac204eb94d1902c8a0ef024b3aeaef2f65b877ca9e8a94da6204ecaab8f1140dee1f6d0dd6b67aa
 
 [deps]
 zlib-dynamic
