@@ -1462,6 +1462,8 @@ gl_cv_func_iswcntrl_works=yes
 gl_cv_func_dup2_works=yes
 gl_cv_func_fcntl_f_dupfd_works=yes
 gl_cv_func_fseeko=yes
+# the following flag, according to fseeko.m4, is needed to skip the fseeko replacement
+gl_cv_func_fflush_stdin=yes
 gl_cv_func_gettimeofday_clobber=no
 gl_cv_func_gettimeofday_posix_signature=yes
 gl_cv_func_lseek_pipe=yes
