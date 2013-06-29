@@ -14,11 +14,13 @@ openssl
 sqlite
 
 [build]
-for p in qt434-libpng15.patch  qt434-musl.patch  qt434-openssl101.patch ; do
-	patch -p1 < "$K"/"$p" || exit 1
+for p in qt434-libpng15  qt434-musl  qt434-openssl101 qt434-gcc47 ; do
+	patch -p1 < "$K"/"$p".patch || exit 1
 done
 
-CFLAGS=-D_GNU_SOURCE ./configure -prefix "$butch_prefix"/ \
+# Wno-parentheses has no effect...
+CXXFLAGS="-D_GNU_SOURCE -Wno-ignored-qualifiers -Wno-unused-but-set-variable -fno-strict-aliasing" \
+./configure -prefix "$butch_prefix"/ \
   -confirm-license \
   -release                 \
   -nomake examples         \
