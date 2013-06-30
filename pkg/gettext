@@ -1,15 +1,14 @@
 [mirrors]
-http://mirror.wzff.de/sabotage/tarballs/gettext-tiny-0.0.2.tar.bz2
-http://codu.org/~rofl/tarballs/gettext-tiny-0.0.2.tar.bz2
+http://mirror.wzff.de/sabotage/tarballs/gettext-tiny-0.0.3.tar.bz2
+http://codu.org/~rofl/tarballs/gettext-tiny-0.0.3.tar.bz2
 
 [main]
-filesize=8522
-sha512=a4542f60fdbcc9b1403a65860b79d1f2cdae87e053c3f46da4358fd402b553806564e084e052f02cbfe8ae0376738a11b9aa1abdb5db3fb8ab1008f938091be3
+filesize=8908
+sha512=ee2a2cf41bd97e6358a0f1877b68be08582e95fae94286e79dec4db64f954c28474f5e0b49f91279fdd5b1eb024e5c000410d8f45ffa02537f472f7e7e6bccdd
 
 [deps]
 
 [build]
-patch -p1 < "$K"/gettext-tiny-const.patch || exit 1
 echo prefix="$butch_prefix" > config.mak
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
