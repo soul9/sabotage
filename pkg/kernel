@@ -45,8 +45,6 @@ if [ -z "$DISABLE_GRSEC" ] ; then
 	ln -sf "$patchname" grsec.patch
 	patch -p1 < "$K"/grsecurity-2.91_201304061345_vs_perl_removal.patch || exit 1 #patch patch
 	dopatch grsec.patch
-	# the patch is buggy and adds some includes that are non-existing at all points.
-	dopatch "$K"/grsecurity-2.91patch.patch
 fi
 
 export ARCH=$A
@@ -65,12 +63,6 @@ cat "$linux_config" > my.config
 
 make V=1 ARCH=$A allnoconfig HOSTCFLAGS="-D_GNU_SOURCE" \
   KCONFIG_ALLCONFIG=my.config DISABLE_PAX_PLUGINS=y || exit 1
-
-make V=1 ARCH=$A HOSTCFLAGS=-D_GNU_SOURCE INSTALL_HDR_PATH=dest \
-  DISABLE_PAX_PLUGINS=y headers_install || exit 1
-
-# remove junk from kernel headers
-find dest/include \( -name .install -o -name ..install.cmd \) -delete
 
 # usually when using an ARM/MIPS system you dont want to build a generic kernel
 # you have to use a heavily patched vendor specific one
@@ -100,5 +92,15 @@ fi
 cp $kpath $R/boot/vmlinuz
 
 fi
+
+# "build" headers into dest/
+# we need to build them after the kernel because grsec assumes this order
+# otherwise some generated headers won't be found
+make V=1 ARCH=$A HOSTCFLAGS=-D_GNU_SOURCE INSTALL_HDR_PATH=dest \
+  DISABLE_PAX_PLUGINS=y headers_install || exit 1
+
+# remove junk from kernel headers
+find dest/include \( -name .install -o -name ..install.cmd \) -delete
+
 
 exit 0
