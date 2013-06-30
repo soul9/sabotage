@@ -14,18 +14,52 @@ openssl
 sqlite
 
 [build]
-for p in qt434-libpng15  qt434-musl  qt434-openssl101 qt434-gcc47 ; do
-	patch -p1 < "$K"/"$p".patch || exit 1
+
+# TODO: add security patches, for example 
+# http://qt.gitorious.org/qt/qt/commit/9a982779eabc4fafafe18dc9ad1b44fb2425563c
+# http://qt.gitorious.org/qt/qt/commit/d28c9e9105f4b3f638bfa7492af10ce7d4f1c644
+# and other CA loading patches from 2010-now
+
+for p in libpng15 musl openssl101 gcc47 iconv qmake ; do
+	patch -p1 < "$K"/qt434-"$p".patch || exit 1
 done
+
+debugflags=
+[ "$DEBUGBUILD" = "1" ] && debugflags="-no-optimized-qmake -debug"
 
 # Wno-parentheses has no effect...
 CXXFLAGS="-D_GNU_SOURCE -Wno-ignored-qualifiers -Wno-unused-but-set-variable -fno-strict-aliasing" \
-./configure -prefix "$butch_prefix"/ \
+./configure \
+  -prefix "$butch_prefix"/ \
+  -plugindir "$butch_prefix"/share/qt4/plugins \
+  -translationdir "$butch_prefix"/share/qt4/translations \
+  -docdir "$butch_prefix"/share/qt4/docs \
   -confirm-license \
   -release                 \
   -nomake examples         \
   -nomake demos            \
+  -no-qt3support $debugflags \
   -no-separate-debug-info || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make INSTALL_ROOT="$butch_install_dir" install || exit 1
+
+cat << EOF > /dev/null
+to debug qt4 strings, we need to paste the following into gdb
+
+define printq4stringdata
+    set $d = ('QString::Data'*) $arg0
+    set $i = 0
+    # abort after a '-1' character, to avoid going on forever when printing a garbage string
+    while $i < $d->size && ($i == 0 || (char)$d->data[$i-1] != -1)
+        printf "%c", (char)($d->data[$i++] & 0xff)
+    end
+    printf "\n"
+end
+define printq4string
+    printq4stringdata ($arg0).d
+end
+
+then use printq4string myqstring
+( taken from https://raw.github.com/wyuka/kdesdk/master/scripts/kde-devel-gdb )
+EOF
