@@ -1,7 +1,8 @@
 [mirrors]
-http://mirror.wzff.de/sabotage/tarballs/grsecurity-2.9.1-3.9.2-201305142035.patch.tar.xz
-http://codu.org/~rofl/tarballs/grsecurity-2.9.1-3.9.2-201305142035.patch.tar.xz
+http://mirror.wzff.de/sabotage/tarballs/grsecurity-2.9.1-3.9.8-201306272057.patch.tar.xz 
+http://codu.org/~rofl/tarballs/grsecurity-2.9.1-3.9.8-201306272057.patch.tar.xz
 
 [main]
-filesize=652168
-sha512=4d0e3b6b134458a1143615530bee0d9f725dc326d6661163363df1dd84e9d89faccf4d19fcd420be0ac8853c166a00c6bc7e27a9b631f22d8f159138eec990ee
+filesize=665688
+sha512=d771b8a95c30900d875f8681e70685293bc22fbf835fcdfff55d609f83d9394b106a70af282ac67cf31d437a4f09fb4e7cce405b66bf130a04ae9c5492785e15
+
