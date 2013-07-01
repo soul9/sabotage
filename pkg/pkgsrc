@@ -2,7 +2,6 @@
 dynamic-toolchain
 openssh
 patch
-arpaftph
 bsdtar-dynamic
 
 [main]

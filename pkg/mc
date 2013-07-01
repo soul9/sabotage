@@ -7,7 +7,6 @@ sha512=48fb6f010c61bac1b0af82713a6951032298e152cd51756a2442fdd1b1a54937545399725
 
 [deps]
 ncurses
-arpaftph
 glib
 
 [build]
