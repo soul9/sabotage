@@ -26,6 +26,9 @@ if [ ! -f "$butch_prefix"/lib/libc.so ] ; then
 	exit 1
 fi
 
+patch -p1 < "$K"/gcc473-unwind-dliterate.patch || exit 1
+patch -p1 < "$K"/gcc473-dliterate-configure-var.patch || exit 1
+
 #busybox awk doesnt like the two calls to attribute_mode function which is commented out
 sed -i '/   *attribute_mode/s@attr@#&@' gcc/config/i386/i386-builtin-types.awk
 
@@ -83,7 +86,7 @@ export CC="$CC -static -D_GNU_SOURCE"
 
 CFLAGS="-O0 -s" LDFLAGS="-Wl,--no-keep-memory" \
 CFLAGS_FOR_TARGET="$config_arch_target_cflags" LDFLAGS_FOR_TARGET="$config_arch_target_ldflags" \
-./configure -C --with-newlib --with-headers=no --prefix="$butch_prefix" \
+./configure -C --with-headers=no --prefix="$butch_prefix" \
   --disable-multilib --disable-nls --disable-mudflap \
   --disable-libmudflap --disable-libssp --disable-libgomp \
   --disable-debug --disable-bootstrap \
@@ -91,6 +94,7 @@ CFLAGS_FOR_TARGET="$config_arch_target_cflags" LDFLAGS_FOR_TARGET="$config_arch_
   --with-system-zlib \
   --with-target-libiberty=no --with-target-zlib=no \
   --enable-languages=c,c++ --enable-clocale=generic \
+  gcc_cv_target_dl_iterate_phdr=yes \
   $config_arch_flags || exit 1
 
 
