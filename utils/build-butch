@@ -9,9 +9,11 @@ if [ -z "$BUTCH_BIN" ] ; then
 
 tarxf http://mirror.wzff.de/butch/ butch-$version .tar.bz2 butch
 
-read sz _ <<EOF
-$(du -b "$filename")
-EOF
+getfilesize() {
+	wc -c "$1" | cut -d " " -f 1
+}
+
+sz=$(getfilesize "$filename")
 
 if [ "$sz" != "$filesize" ]; then
     printf -- "error: build-butch: wrong filesize. got: %d expected: %d\n" "$sz" "$filesize"
