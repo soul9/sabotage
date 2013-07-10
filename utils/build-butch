@@ -20,9 +20,14 @@ if [ "$sz" != "$filesize" ]; then
     exit 1
 fi
 
+if ! which sha512sum > /dev/null ; then
+	echo "warning: sha512sum utility not found, disabling hash check"
+	sha="$sha512"
+else
 read sha _ <<EOF
 $(sha512sum "$filename")
 EOF
+fi
 
 if [ "$sha" != "$sha512" ]; then
     printf -- "error: build-butch: hash doesn't match.\n"
