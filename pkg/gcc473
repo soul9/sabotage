@@ -94,7 +94,6 @@ CFLAGS_FOR_TARGET="$config_arch_target_cflags" LDFLAGS_FOR_TARGET="$config_arch_
   --with-system-zlib \
   --with-target-libiberty=no --with-target-zlib=no \
   --enable-languages=c,c++ --enable-clocale=generic \
-  gcc_cv_target_dl_iterate_phdr=yes \
   $config_arch_flags || exit 1
 
 
