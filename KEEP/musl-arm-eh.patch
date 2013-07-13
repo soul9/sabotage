@@ -109,3 +109,21 @@ index 0000000..77c4472
 -- 
 1.7.3.4
 
+diff --git a/src/env/__init_tls.c b/src/env/__init_tls.c
+index eb2a6e4..a4704f0 100644
+--- a/src/env/__init_tls.c
++++ b/src/env/__init_tls.c
+@@ -26,9 +26,9 @@ void *__copy_tls(unsigned char *mem)
+ 	mem += libc.tls_size - sizeof(struct pthread);
+ 	mem -= (uintptr_t)mem & (align-1);
+ 	td = (pthread_t)mem;
+-	td->dtv = dtv;
+ 	mem -= size;
+ #endif
++	td->dtv = dtv;
+ 	dtv[1] = mem;
+ 	memcpy(mem, image, len);
+ 	return td;
+-- 
+1.7.3.4
+
