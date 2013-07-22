@@ -15,12 +15,14 @@ stage0_musl
 if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 	rm -rf butch
 	git clone https://github.com/rofl0r/butch
+else
+	patch -p1 < "$K"/butch-021-memory_corruption.patch || exit 1
 fi
 
 # prepare build config...
 printf "LDFLAGS = -static\n" > butch/config.mak
 [ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g3\n" >> butch/config.mak
-echo "CFLAGS=-O0" >> butch/config.mak
+echo "CFLAGS += -O0" >> butch/config.mak
 
 if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
 	# if on arm or mips, we only use one build thread to not exhaust memory
