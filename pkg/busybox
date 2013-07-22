@@ -20,15 +20,20 @@ else
 	PATCH=patch
 fi
 
+dopatch() {
+	echo "applying patch $1"
+	"$PATCH" -p1 < "$1"
+}
+
 cp "$K"/busybox.stage1.config .config
-"$PATCH" -p1 < "$K"/busybox.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-blowfish.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-unzip.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-xz-bugfix1.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-xz-bugfix2.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-xz-bugfix3.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-man.patch || exit 1
-"$PATCH" -p1 < "$K"/busybox-sed.patch || exit 1
+dopatch "$K"/busybox.patch || exit 1
+dopatch "$K"/busybox-blowfish.patch || exit 1
+dopatch "$K"/busybox-unzip.patch || exit 1
+dopatch "$K"/busybox-xz-bugfix1.patch || exit 1
+dopatch "$K"/busybox-xz-bugfix2.patch || exit 1
+dopatch "$K"/busybox-xz-bugfix3.patch || exit 1
+dopatch "$K"/busybox-man.patch || exit 1
+dopatch "$K"/busybox-sed.patch || exit 1
 
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
