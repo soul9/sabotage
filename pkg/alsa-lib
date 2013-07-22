@@ -17,6 +17,7 @@ rm -f src/compat/hsearch_r.c
 touch src/compat/hsearch_r.c
 
 patch -p1 < "$K"/alsa-lib_pcm_h.patch || exit 1
+patch -p1 < "$K"/alsa-lib_mixed_types.patch || exit 1
 if [ "$A" = "mips" ] ; then
 	patch -p1 < "$K"/alsa-lib_mips_atomic.patch || exit 1
 fi
