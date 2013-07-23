@@ -1,0 +1,4846 @@
+Subject: [PATCH] cumulative patch from 0.9.11 to 8327ae0cb23b799bc55a45e0d4bd95f5a2b1cdf1
+--- a/Makefile
++++ b/Makefile
+@@ -37,7 +37,8 @@ CFLAGS_ALL_SHARED = $(CFLAGS_ALL) -fPIC -DSHARED
+ AR      = $(CROSS_COMPILE)ar
+ RANLIB  = $(CROSS_COMPILE)ranlib
+ 
+-ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH))
++ARCH_INCLUDES = $(wildcard arch/$(ARCH)/bits/*.h)
++ALL_INCLUDES = $(sort $(wildcard include/*.h include/*/*.h) $(GENH) $(ARCH_INCLUDES:arch/$(ARCH)/%=include/%))
+ 
+ EMPTY_LIB_NAMES = m rt pthread crypt util xnet resolv dl
+ EMPTY_LIBS = $(EMPTY_LIB_NAMES:%=lib/lib%.a)
+@@ -48,7 +49,7 @@ TOOL_LIBS = lib/musl-gcc.specs
+ ALL_LIBS = $(CRT_LIBS) $(STATIC_LIBS) $(SHARED_LIBS) $(EMPTY_LIBS) $(TOOL_LIBS)
+ ALL_TOOLS = tools/musl-gcc
+ 
+-LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH).so.1
++LDSO_PATHNAME = $(syslibdir)/ld-musl-$(ARCH)$(SUBARCH).so.1
+ 
+ -include config.mak
+ 
+@@ -72,10 +73,10 @@ include/bits:
+ 	@test "$(ARCH)" || { echo "Please set ARCH in config.mak before running make." ; exit 1 ; }
+ 	ln -sf ../arch/$(ARCH)/bits $@
+ 
+-include/bits/alltypes.h.sh: include/bits
++include/bits/alltypes.h.in: include/bits
+ 
+-include/bits/alltypes.h: include/bits/alltypes.h.sh
+-	sh $< > $@
++include/bits/alltypes.h: include/bits/alltypes.h.in include/alltypes.h.in tools/mkalltypes.sed
++	sed -f tools/mkalltypes.sed include/bits/alltypes.h.in include/alltypes.h.in > $@
+ 
+ src/ldso/dynlink.lo: arch/$(ARCH)/reloc.h
+ 
+@@ -124,6 +125,9 @@ $(DESTDIR)$(libdir)/%.so: lib/%.so
+ $(DESTDIR)$(libdir)/%: lib/%
+ 	install -D -m 644 $< $@
+ 
++$(DESTDIR)$(includedir)/bits/%: arch/$(ARCH)/bits/%
++	install -D -m 644 $< $@
++
+ $(DESTDIR)$(includedir)/%: include/%
+ 	install -D -m 644 $< $@
+ 
+diff --git a/arch/arm/bits/alltypes.h.in b/arch/arm/bits/alltypes.h.in
+new file mode 100644
+index 0000000..764a246
+--- /dev/null
++++ b/arch/arm/bits/alltypes.h.in
+@@ -0,0 +1,22 @@
++#define _Addr int
++#define _Int64 long long
++
++TYPEDEF __builtin_va_list va_list;
++TYPEDEF __builtin_va_list __isoc_va_list;
++
++#ifndef __cplusplus
++TYPEDEF unsigned wchar_t;
++#endif
++TYPEDEF unsigned wint_t;
++
++TYPEDEF float float_t;
++TYPEDEF double double_t;
++
++TYPEDEF long time_t;
++TYPEDEF long suseconds_t;
++
++TYPEDEF struct { union { int __i[9]; unsigned __s[9]; } __u; } pthread_attr_t;
++TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
++TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
++TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
++TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+diff --git a/arch/arm/bits/alltypes.h.sh b/arch/arm/bits/alltypes.h.sh
+deleted file mode 100755
+index 748b873..0000000
+--- a/arch/arm/bits/alltypes.h.sh
++++ /dev/null
+@@ -1,127 +0,0 @@
+-#!/bin/sh
+-sed -e << EOF \
+-'/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
+-typedef \1 \2;\
+-#define __DEFINED_\2\
+-#endif\
+-/
+-/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
+-struct \1 \2;\
+-#define __DEFINED_struct_\1\
+-#endif\
+-/
+-/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
+-union \1 \2;\
+-#define __DEFINED_union_\1\
+-#endif\
+-/'
+-
+-TYPEDEF unsigned size_t;
+-TYPEDEF int ssize_t;
+-TYPEDEF int ptrdiff_t;
+-
+-TYPEDEF __builtin_va_list va_list;
+-TYPEDEF __builtin_va_list __isoc_va_list;
+-
+-#ifndef __cplusplus
+-TYPEDEF unsigned wchar_t;
+-#endif
+-TYPEDEF int wint_t;
+-TYPEDEF const int * wctrans_t;
+-TYPEDEF unsigned long wctype_t;
+-
+-TYPEDEF signed char int8_t;
+-TYPEDEF short       int16_t;
+-TYPEDEF int         int32_t;
+-TYPEDEF long long   int64_t;
+-
+-TYPEDEF unsigned char      uint8_t;
+-TYPEDEF unsigned short     uint16_t;
+-TYPEDEF unsigned int       uint32_t;
+-TYPEDEF unsigned long long uint64_t;
+-
+-TYPEDEF unsigned short     __uint16_t;
+-TYPEDEF unsigned int       __uint32_t;
+-TYPEDEF unsigned long long __uint64_t;
+-
+-TYPEDEF int8_t    int_fast8_t;
+-TYPEDEF int       int_fast16_t;
+-TYPEDEF int       int_fast32_t;
+-TYPEDEF int64_t   int_fast64_t;
+-
+-TYPEDEF unsigned char      uint_fast8_t;
+-TYPEDEF unsigned int       uint_fast16_t;
+-TYPEDEF unsigned int       uint_fast32_t;
+-TYPEDEF uint64_t           uint_fast64_t;
+-
+-TYPEDEF long          intptr_t;
+-TYPEDEF unsigned long uintptr_t;
+-
+-TYPEDEF long long          intmax_t;
+-TYPEDEF unsigned long long uintmax_t;
+-
+-TYPEDEF float float_t;
+-TYPEDEF double double_t;
+-
+-TYPEDEF long time_t;
+-TYPEDEF int suseconds_t;
+-TYPEDEF unsigned useconds_t;
+-STRUCT timeval { time_t tv_sec; int tv_usec; };
+-STRUCT timespec { time_t tv_sec; long tv_nsec; };
+-
+-TYPEDEF int pid_t;
+-TYPEDEF int id_t;
+-TYPEDEF int uid_t;
+-TYPEDEF int gid_t;
+-TYPEDEF int key_t;
+-
+-TYPEDEF struct __pthread * pthread_t;
+-TYPEDEF int pthread_once_t;
+-TYPEDEF int pthread_key_t;
+-TYPEDEF int pthread_spinlock_t;
+-
+-TYPEDEF struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
+-TYPEDEF unsigned pthread_mutexattr_t;
+-TYPEDEF unsigned pthread_condattr_t;
+-TYPEDEF unsigned pthread_barrierattr_t;
+-TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+-
+-TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
+-TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
+-TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
+-TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+-
+-TYPEDEF long long off_t;
+-
+-TYPEDEF unsigned int mode_t;
+-
+-TYPEDEF unsigned int nlink_t;
+-TYPEDEF unsigned long long ino_t;
+-TYPEDEF long long dev_t;
+-TYPEDEF long blksize_t;
+-TYPEDEF long long blkcnt_t;
+-TYPEDEF unsigned long long fsblkcnt_t;
+-TYPEDEF unsigned long long fsfilcnt_t;
+-
+-TYPEDEF void * timer_t;
+-TYPEDEF int clockid_t;
+-TYPEDEF long clock_t;
+-
+-TYPEDEF struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
+-TYPEDEF struct __siginfo siginfo_t;
+-
+-TYPEDEF unsigned int socklen_t;
+-TYPEDEF unsigned short sa_family_t;
+-TYPEDEF unsigned short in_port_t;
+-TYPEDEF unsigned int in_addr_t;
+-STRUCT in_addr { in_addr_t s_addr; };
+-
+-TYPEDEF struct __FILE_s FILE;
+-
+-TYPEDEF int nl_item;
+-
+-TYPEDEF struct __locale * locale_t;
+-
+-STRUCT iovec { void *iov_base; size_t iov_len; };
+-
+-EOF
+diff --git a/arch/arm/bits/stdint.h b/arch/arm/bits/stdint.h
+index 8e21a8c..43d3d59 100644
+--- a/arch/arm/bits/stdint.h
++++ b/arch/arm/bits/stdint.h
+@@ -1,17 +1,16 @@
+-#define INT_FAST8_MIN   INT8_MIN
++typedef int32_t int_fast16_t;
++typedef int32_t int_fast32_t;
++typedef uint32_t uint_fast16_t;
++typedef uint32_t uint_fast32_t;
++
+ #define INT_FAST16_MIN  INT32_MIN
+ #define INT_FAST32_MIN  INT32_MIN
+-#define INT_FAST64_MIN  INT64_MIN
+ 
+-#define INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX  INT32_MAX
+ #define INT_FAST32_MAX  INT32_MAX
+-#define INT_FAST64_MAX  INT64_MAX
+ 
+-#define UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX UINT32_MAX
+ #define UINT_FAST32_MAX UINT32_MAX
+-#define UINT_FAST64_MAX UINT64_MAX
+ 
+ #define INTPTR_MIN      INT32_MIN
+ #define INTPTR_MAX      INT32_MAX
+diff --git a/arch/arm/reloc.h b/arch/arm/reloc.h
+index b41314d..264b7ab 100644
+--- a/arch/arm/reloc.h
++++ b/arch/arm/reloc.h
+@@ -1,7 +1,20 @@
+ #include <string.h>
+ #include <elf.h>
++#include <endian.h>
+ 
+-#define ETC_LDSO_PATH "/etc/ld-musl-arm.path"
++#if __BYTE_ORDER == __BIG_ENDIAN
++#define ENDIAN_SUFFIX "eb"
++#else
++#define ENDIAN_SUFFIX ""
++#endif
++
++#if __SOFTFP__
++#define FP_SUFFIX ""
++#else
++#define FP_SUFFIX "hf"
++#endif
++
++#define LDSO_ARCH "arm" ENDIAN_SUFFIX FP_SUFFIX
+ 
+ #define IS_COPY(x) ((x)==R_ARM_COPY)
+ #define IS_PLT(x) ((x)==R_ARM_JUMP_SLOT)
+@@ -39,3 +52,5 @@ static inline void do_single_reloc(
+ 		break;
+ 	}
+ }
++
++#define NO_LEGACY_INITFINI
+diff --git a/arch/arm/src/find_exidx.c b/arch/arm/src/find_exidx.c
+new file mode 100644
+index 0000000..77c4472
+--- /dev/null
++++ b/arch/arm/src/find_exidx.c
+@@ -0,0 +1,42 @@
++#define _GNU_SOURCE
++#include <link.h>
++#include <stdint.h>
++
++struct find_exidx_data {
++	uintptr_t pc, exidx_start;
++	int exidx_len;
++};
++
++static int find_exidx(struct dl_phdr_info *info, size_t size, void *ptr)
++{
++	struct find_exidx_data *data = ptr;
++	const ElfW(Phdr) *phdr = info->dlpi_phdr;
++	uintptr_t addr, exidx_start = 0;
++	int i, match = 0, exidx_len = 0;
++
++	for (i = info->dlpi_phnum; i > 0; i--, phdr++) {
++		addr = info->dlpi_addr + phdr->p_vaddr;
++		switch (phdr->p_type) {
++		case PT_LOAD:
++			match |= data->pc >= addr && data->pc < addr + phdr->p_memsz;
++			break;
++		case PT_ARM_EXIDX:
++			exidx_start = addr;
++			exidx_len = phdr->p_memsz;
++			break;
++		}
++	}
++	data->exidx_start = exidx_start;
++	data->exidx_len = exidx_len;
++	return match;
++}
++
++uintptr_t __gnu_Unwind_Find_exidx(uintptr_t pc, int *pcount)
++{
++	struct find_exidx_data data;
++	data.pc = pc;
++	if (dl_iterate_phdr(find_exidx, &data) <= 0)
++		return 0;
++	*pcount = data.exidx_len / 8;
++	return data.exidx_start;
++}
+diff --git a/arch/i386/bits/alltypes.h.in b/arch/i386/bits/alltypes.h.in
+new file mode 100644
+index 0000000..04fd1cb
+--- /dev/null
++++ b/arch/i386/bits/alltypes.h.in
+@@ -0,0 +1,36 @@
++#define _Addr int
++#define _Int64 long long
++
++#if __GNUC__ >= 3
++TYPEDEF __builtin_va_list va_list;
++TYPEDEF __builtin_va_list __isoc_va_list;
++#else
++TYPEDEF struct __va_list * va_list;
++TYPEDEF struct __va_list * __isoc_va_list;
++#endif
++
++#ifndef __cplusplus
++#ifdef __WCHAR_TYPE__
++TYPEDEF __WCHAR_TYPE__ wchar_t;
++#else
++TYPEDEF long wchar_t;
++#endif
++#endif
++TYPEDEF unsigned wint_t;
++
++#if defined(__FLT_EVAL_METHOD__) && __FLT_EVAL_METHOD__ == 0
++TYPEDEF float float_t;
++TYPEDEF double double_t;
++#else
++TYPEDEF long double float_t;
++TYPEDEF long double double_t;
++#endif
++
++TYPEDEF long time_t;
++TYPEDEF long suseconds_t;
++
++TYPEDEF struct { union { int __i[9]; unsigned __s[9]; } __u; } pthread_attr_t;
++TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
++TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
++TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
++TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+diff --git a/arch/i386/bits/alltypes.h.sh b/arch/i386/bits/alltypes.h.sh
+deleted file mode 100755
+index 85776a8..0000000
+--- a/arch/i386/bits/alltypes.h.sh
++++ /dev/null
+@@ -1,141 +0,0 @@
+-#!/bin/sh
+-sed -e << EOF \
+-'/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
+-typedef \1 \2;\
+-#define __DEFINED_\2\
+-#endif\
+-/
+-/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
+-struct \1 \2;\
+-#define __DEFINED_struct_\1\
+-#endif\
+-/
+-/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
+-union \1 \2;\
+-#define __DEFINED_union_\1\
+-#endif\
+-/'
+-
+-TYPEDEF unsigned size_t;
+-TYPEDEF int ssize_t;
+-TYPEDEF int ptrdiff_t;
+-
+-#if __GNUC__ >= 3
+-TYPEDEF __builtin_va_list va_list;
+-TYPEDEF __builtin_va_list __isoc_va_list;
+-#else
+-TYPEDEF struct __va_list * va_list;
+-TYPEDEF struct __va_list * __isoc_va_list;
+-#endif
+-
+-#ifndef __cplusplus
+-#ifdef __WCHAR_TYPE__
+-TYPEDEF __WCHAR_TYPE__ wchar_t;
+-#else
+-TYPEDEF long wchar_t;
+-#endif
+-#endif
+-TYPEDEF long wint_t;
+-TYPEDEF const int * wctrans_t;
+-TYPEDEF unsigned long wctype_t;
+-
+-TYPEDEF signed char int8_t;
+-TYPEDEF short       int16_t;
+-TYPEDEF int         int32_t;
+-TYPEDEF long long   int64_t;
+-
+-TYPEDEF unsigned char      uint8_t;
+-TYPEDEF unsigned short     uint16_t;
+-TYPEDEF unsigned int       uint32_t;
+-TYPEDEF unsigned long long uint64_t;
+-
+-TYPEDEF unsigned short     __uint16_t;
+-TYPEDEF unsigned int       __uint32_t;
+-TYPEDEF unsigned long long __uint64_t;
+-
+-TYPEDEF int8_t    int_fast8_t;
+-TYPEDEF int       int_fast16_t;
+-TYPEDEF int       int_fast32_t;
+-TYPEDEF int64_t   int_fast64_t;
+-
+-TYPEDEF unsigned char      uint_fast8_t;
+-TYPEDEF unsigned int       uint_fast16_t;
+-TYPEDEF unsigned int       uint_fast32_t;
+-TYPEDEF uint64_t           uint_fast64_t;
+-
+-TYPEDEF long          intptr_t;
+-TYPEDEF unsigned long uintptr_t;
+-
+-TYPEDEF long long          intmax_t;
+-TYPEDEF unsigned long long uintmax_t;
+-
+-#if defined(__FLT_EVAL_METHOD__) && __FLT_EVAL_METHOD__ == 0
+-TYPEDEF float float_t;
+-TYPEDEF double double_t;
+-#else
+-TYPEDEF long double float_t;
+-TYPEDEF long double double_t;
+-#endif
+-
+-TYPEDEF long time_t;
+-TYPEDEF int suseconds_t;
+-TYPEDEF unsigned useconds_t;
+-STRUCT timeval { time_t tv_sec; int tv_usec; };
+-STRUCT timespec { time_t tv_sec; long tv_nsec; };
+-
+-TYPEDEF int pid_t;
+-TYPEDEF int id_t;
+-TYPEDEF int uid_t;
+-TYPEDEF int gid_t;
+-TYPEDEF int key_t;
+-
+-TYPEDEF struct __pthread * pthread_t;
+-TYPEDEF int pthread_once_t;
+-TYPEDEF int pthread_key_t;
+-TYPEDEF int pthread_spinlock_t;
+-
+-TYPEDEF struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
+-TYPEDEF unsigned pthread_mutexattr_t;
+-TYPEDEF unsigned pthread_condattr_t;
+-TYPEDEF unsigned pthread_barrierattr_t;
+-TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+-
+-TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
+-TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
+-TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
+-TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+-
+-TYPEDEF long long off_t;
+-
+-TYPEDEF unsigned int mode_t;
+-
+-TYPEDEF unsigned int nlink_t;
+-TYPEDEF unsigned long long ino_t;
+-TYPEDEF long long dev_t;
+-TYPEDEF long blksize_t;
+-TYPEDEF long long blkcnt_t;
+-TYPEDEF unsigned long long fsblkcnt_t;
+-TYPEDEF unsigned long long fsfilcnt_t;
+-
+-TYPEDEF void * timer_t;
+-TYPEDEF int clockid_t;
+-TYPEDEF long clock_t;
+-
+-TYPEDEF struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
+-TYPEDEF struct __siginfo siginfo_t;
+-
+-TYPEDEF unsigned int socklen_t;
+-TYPEDEF unsigned short sa_family_t;
+-TYPEDEF unsigned short in_port_t;
+-TYPEDEF unsigned int in_addr_t;
+-STRUCT in_addr { in_addr_t s_addr; };
+-
+-TYPEDEF struct __FILE_s FILE;
+-
+-TYPEDEF int nl_item;
+-
+-TYPEDEF struct __locale * locale_t;
+-
+-STRUCT iovec { void *iov_base; size_t iov_len; };
+-
+-EOF
+diff --git a/arch/i386/bits/stdint.h b/arch/i386/bits/stdint.h
+index 8e21a8c..d1b2712 100644
+--- a/arch/i386/bits/stdint.h
++++ b/arch/i386/bits/stdint.h
+@@ -1,23 +1,20 @@
+-#define INT_FAST8_MIN   INT8_MIN
++typedef int32_t int_fast16_t;
++typedef int32_t int_fast32_t;
++typedef uint32_t uint_fast16_t;
++typedef uint32_t uint_fast32_t;
++
+ #define INT_FAST16_MIN  INT32_MIN
+ #define INT_FAST32_MIN  INT32_MIN
+-#define INT_FAST64_MIN  INT64_MIN
+ 
+-#define INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX  INT32_MAX
+ #define INT_FAST32_MAX  INT32_MAX
+-#define INT_FAST64_MAX  INT64_MAX
+ 
+-#define UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX UINT32_MAX
+ #define UINT_FAST32_MAX UINT32_MAX
+-#define UINT_FAST64_MAX UINT64_MAX
+ 
+ #define INTPTR_MIN      INT32_MIN
+ #define INTPTR_MAX      INT32_MAX
+ #define UINTPTR_MAX     UINT32_MAX
+ #define PTRDIFF_MIN     INT32_MIN
+ #define PTRDIFF_MAX     INT32_MAX
+-#define SIG_ATOMIC_MIN  INT32_MIN
+-#define SIG_ATOMIC_MAX  INT32_MAX
+ #define SIZE_MAX        UINT32_MAX
+diff --git a/arch/i386/reloc.h b/arch/i386/reloc.h
+index da0bc05..3923b54 100644
+--- a/arch/i386/reloc.h
++++ b/arch/i386/reloc.h
+@@ -1,7 +1,7 @@
+ #include <string.h>
+ #include <elf.h>
+ 
+-#define ETC_LDSO_PATH "/etc/ld-musl-i386.path"
++#define LDSO_ARCH "i386"
+ 
+ #define IS_COPY(x) ((x)==R_386_COPY)
+ #define IS_PLT(x) ((x)==R_386_JMP_SLOT)
+diff --git a/arch/microblaze/bits/alltypes.h.in b/arch/microblaze/bits/alltypes.h.in
+new file mode 100644
+index 0000000..eb842aa
+--- /dev/null
++++ b/arch/microblaze/bits/alltypes.h.in
+@@ -0,0 +1,22 @@
++#define _Addr int
++#define _Int64 long long
++
++TYPEDEF __builtin_va_list va_list;
++TYPEDEF __builtin_va_list __isoc_va_list;
++
++#ifndef __cplusplus
++TYPEDEF int wchar_t;
++#endif
++TYPEDEF unsigned wint_t;
++
++TYPEDEF float float_t;
++TYPEDEF double double_t;
++
++TYPEDEF long time_t;
++TYPEDEF long suseconds_t;
++
++TYPEDEF struct { union { int __i[9]; unsigned __s[9]; } __u; } pthread_attr_t;
++TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
++TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
++TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
++TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+diff --git a/arch/microblaze/bits/alltypes.h.sh b/arch/microblaze/bits/alltypes.h.sh
+deleted file mode 100755
+index a5acd49..0000000
+--- a/arch/microblaze/bits/alltypes.h.sh
++++ /dev/null
+@@ -1,127 +0,0 @@
+-#!/bin/sh
+-sed -e << EOF \
+-'/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
+-typedef \1 \2;\
+-#define __DEFINED_\2\
+-#endif\
+-/
+-/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
+-struct \1 \2;\
+-#define __DEFINED_struct_\1\
+-#endif\
+-/
+-/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
+-union \1 \2;\
+-#define __DEFINED_union_\1\
+-#endif\
+-/'
+-
+-TYPEDEF unsigned size_t;
+-TYPEDEF int ssize_t;
+-TYPEDEF int ptrdiff_t;
+-
+-TYPEDEF __builtin_va_list va_list;
+-TYPEDEF __builtin_va_list __isoc_va_list;
+-
+-#ifndef __cplusplus
+-TYPEDEF int wchar_t;
+-#endif
+-TYPEDEF int wint_t;
+-TYPEDEF const int * wctrans_t;
+-TYPEDEF unsigned long wctype_t;
+-
+-TYPEDEF signed char int8_t;
+-TYPEDEF short       int16_t;
+-TYPEDEF int         int32_t;
+-TYPEDEF long long   int64_t;
+-
+-TYPEDEF unsigned char      uint8_t;
+-TYPEDEF unsigned short     uint16_t;
+-TYPEDEF unsigned int       uint32_t;
+-TYPEDEF unsigned long long uint64_t;
+-
+-TYPEDEF unsigned short     __uint16_t;
+-TYPEDEF unsigned int       __uint32_t;
+-TYPEDEF unsigned long long __uint64_t;
+-
+-TYPEDEF int8_t    int_fast8_t;
+-TYPEDEF int       int_fast16_t;
+-TYPEDEF int       int_fast32_t;
+-TYPEDEF int64_t   int_fast64_t;
+-
+-TYPEDEF unsigned char      uint_fast8_t;
+-TYPEDEF unsigned int       uint_fast16_t;
+-TYPEDEF unsigned int       uint_fast32_t;
+-TYPEDEF uint64_t           uint_fast64_t;
+-
+-TYPEDEF long          intptr_t;
+-TYPEDEF unsigned long uintptr_t;
+-
+-TYPEDEF long long          intmax_t;
+-TYPEDEF unsigned long long uintmax_t;
+-
+-TYPEDEF float float_t;
+-TYPEDEF double double_t;
+-
+-TYPEDEF long time_t;
+-TYPEDEF int suseconds_t;
+-TYPEDEF unsigned useconds_t;
+-STRUCT timeval { time_t tv_sec; int tv_usec; };
+-STRUCT timespec { time_t tv_sec; long tv_nsec; };
+-
+-TYPEDEF int pid_t;
+-TYPEDEF int id_t;
+-TYPEDEF int uid_t;
+-TYPEDEF int gid_t;
+-TYPEDEF int key_t;
+-
+-TYPEDEF struct __pthread * pthread_t;
+-TYPEDEF int pthread_once_t;
+-TYPEDEF int pthread_key_t;
+-TYPEDEF int pthread_spinlock_t;
+-
+-TYPEDEF struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
+-TYPEDEF unsigned pthread_mutexattr_t;
+-TYPEDEF unsigned pthread_condattr_t;
+-TYPEDEF unsigned pthread_barrierattr_t;
+-TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+-
+-TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
+-TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
+-TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
+-TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+-
+-TYPEDEF long long off_t;
+-
+-TYPEDEF unsigned int mode_t;
+-
+-TYPEDEF unsigned int nlink_t;
+-TYPEDEF unsigned long long ino_t;
+-TYPEDEF long long dev_t;
+-TYPEDEF long blksize_t;
+-TYPEDEF long long blkcnt_t;
+-TYPEDEF unsigned long long fsblkcnt_t;
+-TYPEDEF unsigned long long fsfilcnt_t;
+-
+-TYPEDEF void * timer_t;
+-TYPEDEF int clockid_t;
+-TYPEDEF long clock_t;
+-
+-TYPEDEF struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
+-TYPEDEF struct __siginfo siginfo_t;
+-
+-TYPEDEF unsigned int socklen_t;
+-TYPEDEF unsigned short sa_family_t;
+-TYPEDEF unsigned short in_port_t;
+-TYPEDEF unsigned int in_addr_t;
+-STRUCT in_addr { in_addr_t s_addr; };
+-
+-TYPEDEF struct __FILE_s FILE;
+-
+-TYPEDEF int nl_item;
+-
+-TYPEDEF struct __locale * locale_t;
+-
+-STRUCT iovec { void *iov_base; size_t iov_len; };
+-
+-EOF
+diff --git a/arch/microblaze/bits/stdint.h b/arch/microblaze/bits/stdint.h
+index 8e21a8c..43d3d59 100644
+--- a/arch/microblaze/bits/stdint.h
++++ b/arch/microblaze/bits/stdint.h
+@@ -1,17 +1,16 @@
+-#define INT_FAST8_MIN   INT8_MIN
++typedef int32_t int_fast16_t;
++typedef int32_t int_fast32_t;
++typedef uint32_t uint_fast16_t;
++typedef uint32_t uint_fast32_t;
++
+ #define INT_FAST16_MIN  INT32_MIN
+ #define INT_FAST32_MIN  INT32_MIN
+-#define INT_FAST64_MIN  INT64_MIN
+ 
+-#define INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX  INT32_MAX
+ #define INT_FAST32_MAX  INT32_MAX
+-#define INT_FAST64_MAX  INT64_MAX
+ 
+-#define UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX UINT32_MAX
+ #define UINT_FAST32_MAX UINT32_MAX
+-#define UINT_FAST64_MAX UINT64_MAX
+ 
+ #define INTPTR_MIN      INT32_MIN
+ #define INTPTR_MAX      INT32_MAX
+diff --git a/arch/microblaze/reloc.h b/arch/microblaze/reloc.h
+index 81add5e..60f7422 100644
+--- a/arch/microblaze/reloc.h
++++ b/arch/microblaze/reloc.h
+@@ -1,7 +1,14 @@
+ #include <string.h>
+ #include <elf.h>
++#include <endian.h>
+ 
+-#define ETC_LDSO_PATH "/etc/ld-musl-microblaze.path"
++#if __BYTE_ORDER == __LITTLE_ENDIAN
++#define ENDIAN_SUFFIX "el"
++#else
++#define ENDIAN_SUFFIX ""
++#endif
++
++#define LDSO_ARCH "microblaze" ENDIAN_SUFFIX
+ 
+ #define IS_COPY(x) ((x)==R_MICROBLAZE_COPY)
+ #define IS_PLT(x) ((x)==R_MICROBLAZE_JUMP_SLOT)
+diff --git a/arch/mips/bits/alltypes.h.in b/arch/mips/bits/alltypes.h.in
+new file mode 100644
+index 0000000..eb842aa
+--- /dev/null
++++ b/arch/mips/bits/alltypes.h.in
+@@ -0,0 +1,22 @@
++#define _Addr int
++#define _Int64 long long
++
++TYPEDEF __builtin_va_list va_list;
++TYPEDEF __builtin_va_list __isoc_va_list;
++
++#ifndef __cplusplus
++TYPEDEF int wchar_t;
++#endif
++TYPEDEF unsigned wint_t;
++
++TYPEDEF float float_t;
++TYPEDEF double double_t;
++
++TYPEDEF long time_t;
++TYPEDEF long suseconds_t;
++
++TYPEDEF struct { union { int __i[9]; unsigned __s[9]; } __u; } pthread_attr_t;
++TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
++TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
++TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
++TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+diff --git a/arch/mips/bits/alltypes.h.sh b/arch/mips/bits/alltypes.h.sh
+deleted file mode 100755
+index a5acd49..0000000
+--- a/arch/mips/bits/alltypes.h.sh
++++ /dev/null
+@@ -1,127 +0,0 @@
+-#!/bin/sh
+-sed -e << EOF \
+-'/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
+-typedef \1 \2;\
+-#define __DEFINED_\2\
+-#endif\
+-/
+-/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
+-struct \1 \2;\
+-#define __DEFINED_struct_\1\
+-#endif\
+-/
+-/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
+-union \1 \2;\
+-#define __DEFINED_union_\1\
+-#endif\
+-/'
+-
+-TYPEDEF unsigned size_t;
+-TYPEDEF int ssize_t;
+-TYPEDEF int ptrdiff_t;
+-
+-TYPEDEF __builtin_va_list va_list;
+-TYPEDEF __builtin_va_list __isoc_va_list;
+-
+-#ifndef __cplusplus
+-TYPEDEF int wchar_t;
+-#endif
+-TYPEDEF int wint_t;
+-TYPEDEF const int * wctrans_t;
+-TYPEDEF unsigned long wctype_t;
+-
+-TYPEDEF signed char int8_t;
+-TYPEDEF short       int16_t;
+-TYPEDEF int         int32_t;
+-TYPEDEF long long   int64_t;
+-
+-TYPEDEF unsigned char      uint8_t;
+-TYPEDEF unsigned short     uint16_t;
+-TYPEDEF unsigned int       uint32_t;
+-TYPEDEF unsigned long long uint64_t;
+-
+-TYPEDEF unsigned short     __uint16_t;
+-TYPEDEF unsigned int       __uint32_t;
+-TYPEDEF unsigned long long __uint64_t;
+-
+-TYPEDEF int8_t    int_fast8_t;
+-TYPEDEF int       int_fast16_t;
+-TYPEDEF int       int_fast32_t;
+-TYPEDEF int64_t   int_fast64_t;
+-
+-TYPEDEF unsigned char      uint_fast8_t;
+-TYPEDEF unsigned int       uint_fast16_t;
+-TYPEDEF unsigned int       uint_fast32_t;
+-TYPEDEF uint64_t           uint_fast64_t;
+-
+-TYPEDEF long          intptr_t;
+-TYPEDEF unsigned long uintptr_t;
+-
+-TYPEDEF long long          intmax_t;
+-TYPEDEF unsigned long long uintmax_t;
+-
+-TYPEDEF float float_t;
+-TYPEDEF double double_t;
+-
+-TYPEDEF long time_t;
+-TYPEDEF int suseconds_t;
+-TYPEDEF unsigned useconds_t;
+-STRUCT timeval { time_t tv_sec; int tv_usec; };
+-STRUCT timespec { time_t tv_sec; long tv_nsec; };
+-
+-TYPEDEF int pid_t;
+-TYPEDEF int id_t;
+-TYPEDEF int uid_t;
+-TYPEDEF int gid_t;
+-TYPEDEF int key_t;
+-
+-TYPEDEF struct __pthread * pthread_t;
+-TYPEDEF int pthread_once_t;
+-TYPEDEF int pthread_key_t;
+-TYPEDEF int pthread_spinlock_t;
+-
+-TYPEDEF struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
+-TYPEDEF unsigned pthread_mutexattr_t;
+-TYPEDEF unsigned pthread_condattr_t;
+-TYPEDEF unsigned pthread_barrierattr_t;
+-TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+-
+-TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
+-TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
+-TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
+-TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+-
+-TYPEDEF long long off_t;
+-
+-TYPEDEF unsigned int mode_t;
+-
+-TYPEDEF unsigned int nlink_t;
+-TYPEDEF unsigned long long ino_t;
+-TYPEDEF long long dev_t;
+-TYPEDEF long blksize_t;
+-TYPEDEF long long blkcnt_t;
+-TYPEDEF unsigned long long fsblkcnt_t;
+-TYPEDEF unsigned long long fsfilcnt_t;
+-
+-TYPEDEF void * timer_t;
+-TYPEDEF int clockid_t;
+-TYPEDEF long clock_t;
+-
+-TYPEDEF struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
+-TYPEDEF struct __siginfo siginfo_t;
+-
+-TYPEDEF unsigned int socklen_t;
+-TYPEDEF unsigned short sa_family_t;
+-TYPEDEF unsigned short in_port_t;
+-TYPEDEF unsigned int in_addr_t;
+-STRUCT in_addr { in_addr_t s_addr; };
+-
+-TYPEDEF struct __FILE_s FILE;
+-
+-TYPEDEF int nl_item;
+-
+-TYPEDEF struct __locale * locale_t;
+-
+-STRUCT iovec { void *iov_base; size_t iov_len; };
+-
+-EOF
+diff --git a/arch/mips/bits/stdint.h b/arch/mips/bits/stdint.h
+index 8e21a8c..43d3d59 100644
+--- a/arch/mips/bits/stdint.h
++++ b/arch/mips/bits/stdint.h
+@@ -1,17 +1,16 @@
+-#define INT_FAST8_MIN   INT8_MIN
++typedef int32_t int_fast16_t;
++typedef int32_t int_fast32_t;
++typedef uint32_t uint_fast16_t;
++typedef uint32_t uint_fast32_t;
++
+ #define INT_FAST16_MIN  INT32_MIN
+ #define INT_FAST32_MIN  INT32_MIN
+-#define INT_FAST64_MIN  INT64_MIN
+ 
+-#define INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX  INT32_MAX
+ #define INT_FAST32_MAX  INT32_MAX
+-#define INT_FAST64_MAX  INT64_MAX
+ 
+-#define UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX UINT32_MAX
+ #define UINT_FAST32_MAX UINT32_MAX
+-#define UINT_FAST64_MAX UINT64_MAX
+ 
+ #define INTPTR_MIN      INT32_MIN
+ #define INTPTR_MAX      INT32_MAX
+diff --git a/arch/mips/reloc.h b/arch/mips/reloc.h
+index f5e9c77..4c035f3 100644
+--- a/arch/mips/reloc.h
++++ b/arch/mips/reloc.h
+@@ -1,7 +1,14 @@
+ #include <string.h>
+ #include <elf.h>
++#include <endian.h>
+ 
+-#define ETC_LDSO_PATH "/etc/ld-musl-mips.path"
++#if __BYTE_ORDER == __LITTLE_ENDIAN
++#define ENDIAN_SUFFIX "el"
++#else
++#define ENDIAN_SUFFIX ""
++#endif
++
++#define LDSO_ARCH "mips" ENDIAN_SUFFIX
+ 
+ #define IS_COPY(x) ((x)==R_MIPS_COPY)
+ #define IS_PLT(x) 1
+diff --git a/arch/powerpc/bits/alltypes.h.in b/arch/powerpc/bits/alltypes.h.in
+new file mode 100644
+index 0000000..1c3fe28
+--- /dev/null
++++ b/arch/powerpc/bits/alltypes.h.in
+@@ -0,0 +1,22 @@
++#define _Addr int
++#define _Int64 long long
++
++TYPEDEF __builtin_va_list va_list;
++TYPEDEF __builtin_va_list __isoc_va_list;
++
++#ifndef __cplusplus
++TYPEDEF long wchar_t;
++#endif
++TYPEDEF unsigned wint_t;
++
++TYPEDEF float float_t;
++TYPEDEF double double_t;
++
++TYPEDEF long time_t;
++TYPEDEF long suseconds_t;
++
++TYPEDEF struct { union { int __i[9]; unsigned __s[9]; } __u; } pthread_attr_t;
++TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
++TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
++TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
++TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+diff --git a/arch/powerpc/bits/alltypes.h.sh b/arch/powerpc/bits/alltypes.h.sh
+deleted file mode 100755
+index 77d335b..0000000
+--- a/arch/powerpc/bits/alltypes.h.sh
++++ /dev/null
+@@ -1,127 +0,0 @@
+-#!/bin/sh
+-sed -e << EOF \
+-'/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
+-typedef \1 \2;\
+-#define __DEFINED_\2\
+-#endif\
+-/
+-/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
+-struct \1 \2;\
+-#define __DEFINED_struct_\1\
+-#endif\
+-/
+-/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
+-union \1 \2;\
+-#define __DEFINED_union_\1\
+-#endif\
+-/'
+-
+-TYPEDEF unsigned size_t;
+-TYPEDEF int ssize_t;
+-TYPEDEF int ptrdiff_t;
+-
+-TYPEDEF __builtin_va_list va_list;
+-TYPEDEF __builtin_va_list __isoc_va_list;
+-
+-#ifndef __cplusplus
+-TYPEDEF long wchar_t;
+-#endif
+-TYPEDEF int wint_t;
+-TYPEDEF const int * wctrans_t;
+-TYPEDEF unsigned long wctype_t;
+-
+-TYPEDEF signed char int8_t;
+-TYPEDEF short       int16_t;
+-TYPEDEF int         int32_t;
+-TYPEDEF long long   int64_t;
+-
+-TYPEDEF unsigned char      uint8_t;
+-TYPEDEF unsigned short     uint16_t;
+-TYPEDEF unsigned int       uint32_t;
+-TYPEDEF unsigned long long uint64_t;
+-
+-TYPEDEF unsigned short     __uint16_t;
+-TYPEDEF unsigned int       __uint32_t;
+-TYPEDEF unsigned long long __uint64_t;
+-
+-TYPEDEF int8_t    int_fast8_t;
+-TYPEDEF int       int_fast16_t;
+-TYPEDEF int       int_fast32_t;
+-TYPEDEF int64_t   int_fast64_t;
+-
+-TYPEDEF unsigned char      uint_fast8_t;
+-TYPEDEF unsigned int       uint_fast16_t;
+-TYPEDEF unsigned int       uint_fast32_t;
+-TYPEDEF uint64_t           uint_fast64_t;
+-
+-TYPEDEF int intptr_t;
+-TYPEDEF unsigned uintptr_t;
+-
+-TYPEDEF long long          intmax_t;
+-TYPEDEF unsigned long long uintmax_t;
+-
+-TYPEDEF float float_t;
+-TYPEDEF double double_t;
+-
+-TYPEDEF long time_t;
+-TYPEDEF int suseconds_t;
+-TYPEDEF unsigned useconds_t;
+-STRUCT timeval { time_t tv_sec; int tv_usec; };
+-STRUCT timespec { time_t tv_sec; long tv_nsec; };
+-
+-TYPEDEF int pid_t;
+-TYPEDEF int id_t;
+-TYPEDEF int uid_t;
+-TYPEDEF int gid_t;
+-TYPEDEF int key_t;
+-
+-TYPEDEF struct __pthread * pthread_t;
+-TYPEDEF int pthread_once_t;
+-TYPEDEF int pthread_key_t;
+-TYPEDEF int pthread_spinlock_t;
+-
+-TYPEDEF struct { union { int __i[9]; size_t __s[9]; } __u; } pthread_attr_t;
+-TYPEDEF unsigned pthread_mutexattr_t;
+-TYPEDEF unsigned pthread_condattr_t;
+-TYPEDEF unsigned pthread_barrierattr_t;
+-TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+-
+-TYPEDEF struct { union { int __i[6]; void *__p[6]; } __u; } pthread_mutex_t;
+-TYPEDEF struct { union { int __i[12]; void *__p[12]; } __u; } pthread_cond_t;
+-TYPEDEF struct { union { int __i[8]; void *__p[8]; } __u; } pthread_rwlock_t;
+-TYPEDEF struct { union { int __i[5]; void *__p[5]; } __u; } pthread_barrier_t;
+-
+-TYPEDEF long long off_t;
+-
+-TYPEDEF unsigned int mode_t;
+-
+-TYPEDEF unsigned int nlink_t;
+-TYPEDEF unsigned long long ino_t;
+-TYPEDEF unsigned long long dev_t;
+-TYPEDEF unsigned long blksize_t;
+-TYPEDEF unsigned long long blkcnt_t;
+-TYPEDEF unsigned long long fsblkcnt_t;
+-TYPEDEF unsigned long long fsfilcnt_t;
+-
+-TYPEDEF void * timer_t;
+-TYPEDEF int clockid_t;
+-TYPEDEF long clock_t;
+-
+-TYPEDEF struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
+-TYPEDEF struct __siginfo siginfo_t;
+-
+-TYPEDEF unsigned int socklen_t;
+-TYPEDEF unsigned short sa_family_t;
+-TYPEDEF unsigned short in_port_t;
+-TYPEDEF unsigned int in_addr_t;
+-STRUCT in_addr { in_addr_t s_addr; };
+-
+-TYPEDEF struct __FILE_s FILE;
+-
+-TYPEDEF int nl_item;
+-
+-TYPEDEF struct __locale * locale_t;
+-
+-STRUCT iovec { void *iov_base; size_t iov_len; };
+-
+-EOF
+diff --git a/arch/powerpc/bits/stdint.h b/arch/powerpc/bits/stdint.h
+index 8e21a8c..43d3d59 100644
+--- a/arch/powerpc/bits/stdint.h
++++ b/arch/powerpc/bits/stdint.h
+@@ -1,17 +1,16 @@
+-#define INT_FAST8_MIN   INT8_MIN
++typedef int32_t int_fast16_t;
++typedef int32_t int_fast32_t;
++typedef uint32_t uint_fast16_t;
++typedef uint32_t uint_fast32_t;
++
+ #define INT_FAST16_MIN  INT32_MIN
+ #define INT_FAST32_MIN  INT32_MIN
+-#define INT_FAST64_MIN  INT64_MIN
+ 
+-#define INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX  INT32_MAX
+ #define INT_FAST32_MAX  INT32_MAX
+-#define INT_FAST64_MAX  INT64_MAX
+ 
+-#define UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX UINT32_MAX
+ #define UINT_FAST32_MAX UINT32_MAX
+-#define UINT_FAST64_MAX UINT64_MAX
+ 
+ #define INTPTR_MIN      INT32_MIN
+ #define INTPTR_MAX      INT32_MAX
+diff --git a/arch/powerpc/reloc.h b/arch/powerpc/reloc.h
+index 113dfa1..80b9ebc 100644
+--- a/arch/powerpc/reloc.h
++++ b/arch/powerpc/reloc.h
+@@ -1,7 +1,7 @@
+ #include <string.h>
+ #include <elf.h>
+ 
+-#define ETC_LDSO_PATH "/etc/ld-musl-powerpc.path"
++#define LDSO_ARCH "powerpc" ENDIAN_SUFFIX
+ 
+ #define IS_COPY(x) ((x)==R_PPC_COPY)
+ #define IS_PLT(x) ((x)==R_PPC_JMP_SLOT)
+diff --git a/arch/x86_64/bits/alltypes.h.in b/arch/x86_64/bits/alltypes.h.in
+new file mode 100644
+index 0000000..b9bff86
+--- /dev/null
++++ b/arch/x86_64/bits/alltypes.h.in
+@@ -0,0 +1,27 @@
++#define _Addr long
++#define _Int64 long
++
++TYPEDEF __builtin_va_list va_list;
++TYPEDEF __builtin_va_list __isoc_va_list;
++
++#ifndef __cplusplus
++TYPEDEF int wchar_t;
++#endif
++TYPEDEF unsigned wint_t;
++
++#if defined(__FLT_EVAL_METHOD__) && __FLT_EVAL_METHOD__ == 2
++TYPEDEF long double float_t;
++TYPEDEF long double double_t;
++#else
++TYPEDEF float float_t;
++TYPEDEF double double_t;
++#endif
++
++TYPEDEF long time_t;
++TYPEDEF long suseconds_t;
++
++TYPEDEF struct { union { int __i[14]; unsigned long __s[7]; } __u; } pthread_attr_t;
++TYPEDEF struct { union { int __i[10]; void *__p[5]; } __u; } pthread_mutex_t;
++TYPEDEF struct { union { int __i[12]; void *__p[6]; } __u; } pthread_cond_t;
++TYPEDEF struct { union { int __i[14]; void *__p[7]; } __u; } pthread_rwlock_t;
++TYPEDEF struct { union { int __i[8]; void *__p[4]; } __u; } pthread_barrier_t;
+diff --git a/arch/x86_64/bits/alltypes.h.sh b/arch/x86_64/bits/alltypes.h.sh
+deleted file mode 100755
+index d3550f5..0000000
+--- a/arch/x86_64/bits/alltypes.h.sh
++++ /dev/null
+@@ -1,126 +0,0 @@
+-#!/bin/sh
+-sed -e << EOF \
+-'/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
+-typedef \1 \2;\
+-#define __DEFINED_\2\
+-#endif\
+-/
+-/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
+-struct \1 \2;\
+-#define __DEFINED_struct_\1\
+-#endif\
+-/
+-/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
+-union \1 \2;\
+-#define __DEFINED_union_\1\
+-#endif\
+-/'
+-
+-TYPEDEF unsigned long size_t;
+-TYPEDEF long ssize_t;
+-TYPEDEF long ptrdiff_t;
+-TYPEDEF __builtin_va_list va_list;
+-TYPEDEF __builtin_va_list __isoc_va_list;
+-
+-#ifndef __cplusplus
+-TYPEDEF int wchar_t;
+-#endif
+-TYPEDEF int wint_t;
+-TYPEDEF const int * wctrans_t;
+-TYPEDEF unsigned long wctype_t;
+-
+-TYPEDEF signed char int8_t;
+-TYPEDEF short       int16_t;
+-TYPEDEF int         int32_t;
+-TYPEDEF long        int64_t;
+-
+-TYPEDEF unsigned char      uint8_t;
+-TYPEDEF unsigned short     uint16_t;
+-TYPEDEF unsigned int       uint32_t;
+-TYPEDEF unsigned long      uint64_t;
+-
+-TYPEDEF unsigned short     __uint16_t;
+-TYPEDEF unsigned int       __uint32_t;
+-TYPEDEF unsigned long      __uint64_t;
+-
+-TYPEDEF int8_t    int_fast8_t;
+-TYPEDEF int       int_fast16_t;
+-TYPEDEF int       int_fast32_t;
+-TYPEDEF int64_t   int_fast64_t;
+-
+-TYPEDEF unsigned char      uint_fast8_t;
+-TYPEDEF unsigned int       uint_fast16_t;
+-TYPEDEF unsigned int       uint_fast32_t;
+-TYPEDEF uint64_t           uint_fast64_t;
+-
+-TYPEDEF long          intptr_t;
+-TYPEDEF unsigned long uintptr_t;
+-
+-TYPEDEF long          intmax_t;
+-TYPEDEF unsigned long uintmax_t;
+-
+-TYPEDEF float float_t;
+-TYPEDEF double double_t;
+-
+-TYPEDEF long time_t;
+-TYPEDEF long suseconds_t;
+-TYPEDEF unsigned useconds_t;
+-STRUCT timeval { time_t tv_sec; long tv_usec; };
+-STRUCT timespec { time_t tv_sec; long tv_nsec; };
+-
+-TYPEDEF int pid_t;
+-TYPEDEF int id_t;
+-TYPEDEF unsigned int uid_t;
+-TYPEDEF unsigned int gid_t;
+-TYPEDEF int key_t;
+-
+-TYPEDEF struct __pthread * pthread_t;
+-TYPEDEF int pthread_once_t;
+-TYPEDEF int pthread_key_t;
+-TYPEDEF int pthread_spinlock_t;
+-
+-TYPEDEF struct { union { int __i[14]; size_t __s[7]; } __u; } pthread_attr_t;
+-TYPEDEF unsigned pthread_mutexattr_t;
+-TYPEDEF unsigned pthread_condattr_t;
+-TYPEDEF unsigned pthread_barrierattr_t;
+-TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
+-
+-TYPEDEF struct { union { int __i[10]; void *__p[5]; } __u; } pthread_mutex_t;
+-TYPEDEF struct { union { int __i[12]; void *__p[6]; } __u; } pthread_cond_t;
+-TYPEDEF struct { union { int __i[14]; void *__p[7]; } __u; } pthread_rwlock_t;
+-TYPEDEF struct { union { int __i[8]; void *__p[4]; } __u; } pthread_barrier_t;
+-
+-TYPEDEF long off_t;
+-
+-TYPEDEF unsigned int mode_t;
+-
+-TYPEDEF unsigned long nlink_t;
+-TYPEDEF unsigned long ino_t;
+-TYPEDEF unsigned long dev_t;
+-TYPEDEF long blksize_t;
+-TYPEDEF long blkcnt_t;
+-TYPEDEF unsigned long fsblkcnt_t;
+-TYPEDEF unsigned long fsfilcnt_t;
+-
+-TYPEDEF void * timer_t;
+-TYPEDEF int clockid_t;
+-TYPEDEF long clock_t;
+-
+-TYPEDEF struct { unsigned long __bits[128/sizeof(long)]; } sigset_t;
+-TYPEDEF struct __siginfo siginfo_t;
+-
+-TYPEDEF unsigned int socklen_t;
+-TYPEDEF unsigned short sa_family_t;
+-TYPEDEF unsigned short in_port_t;
+-TYPEDEF unsigned int in_addr_t;
+-STRUCT in_addr { in_addr_t s_addr; };
+-
+-TYPEDEF struct __FILE_s FILE;
+-
+-TYPEDEF int nl_item;
+-
+-TYPEDEF struct __locale * locale_t;
+-
+-STRUCT iovec { void *iov_base; size_t iov_len; };
+-
+-EOF
+diff --git a/arch/x86_64/bits/stdint.h b/arch/x86_64/bits/stdint.h
+index 878e4de..495e1e4 100644
+--- a/arch/x86_64/bits/stdint.h
++++ b/arch/x86_64/bits/stdint.h
+@@ -1,17 +1,16 @@
+-#define INT_FAST8_MIN   INT8_MIN
++typedef int32_t int_fast16_t;
++typedef int32_t int_fast32_t;
++typedef uint32_t uint_fast16_t;
++typedef uint32_t uint_fast32_t;
++
+ #define INT_FAST16_MIN  INT32_MIN
+ #define INT_FAST32_MIN  INT32_MIN
+-#define INT_FAST64_MIN  INT64_MIN
+ 
+-#define INT_FAST8_MAX   INT8_MAX
+ #define INT_FAST16_MAX  INT32_MAX
+ #define INT_FAST32_MAX  INT32_MAX
+-#define INT_FAST64_MAX  INT64_MAX
+ 
+-#define UINT_FAST8_MAX  UINT8_MAX
+ #define UINT_FAST16_MAX UINT32_MAX
+ #define UINT_FAST32_MAX UINT32_MAX
+-#define UINT_FAST64_MAX UINT64_MAX
+ 
+ #define INTPTR_MIN      INT64_MIN
+ #define INTPTR_MAX      INT64_MAX
+diff --git a/arch/x86_64/reloc.h b/arch/x86_64/reloc.h
+index 38a6073..28cf7cc 100644
+--- a/arch/x86_64/reloc.h
++++ b/arch/x86_64/reloc.h
+@@ -2,7 +2,7 @@
+ #include <string.h>
+ #include <elf.h>
+ 
+-#define ETC_LDSO_PATH "/etc/ld-musl-x86_64.path"
++#define LDSO_ARCH "x86_64"
+ 
+ #define IS_COPY(x) ((x)==R_X86_64_COPY)
+ #define IS_PLT(x) ((x)==R_X86_64_JUMP_SLOT)
+diff --git a/configure b/configure
+index 96f93b2..b679986 100755
+--- a/configure
++++ b/configure
+@@ -54,6 +54,21 @@ stripdir () {
+ while eval "fnmatch '*/' \"\${$1}\"" ; do eval "$1=\${$1%/}" ; done
+ }
+ 
++trycppif () {
++printf "checking preprocessor condition %s... " "$1"
++echo "typedef int x;" > "$tmpc"
++echo "#if $1" >> "$tmpc"
++echo "#error yes" >> "$tmpc"
++echo "#endif" >> "$tmpc"
++if $CC $2 -c -o /dev/null "$tmpc" >/dev/null 2>&1 ; then
++printf "false\n"
++return 1
++else
++printf "true\n"
++return 0
++fi
++}
++
+ tryflag () {
+ printf "checking whether compiler accepts %s... " "$2"
+ echo "typedef int x;" > "$tmpc"
+@@ -310,6 +325,23 @@ test -z "$LIBCC" && try_libcc=`$CC -print-file-name=libpcc.a 2>/dev/null` \
+                  && tryldflag LIBCC "$try_libcc"
+ printf "using compiler runtime libraries: %s\n" "$LIBCC"
+ 
++# Figure out arch variants for archs with variants
++SUBARCH=
++t="$CFLAGS_C99FSE $CPPFLAGS $CFLAGS_AUTO $CFLAGS"
++
++if test "$ARCH" = "arm" ; then
++trycppif __ARMEB__ "$t" && SUBARCH=${SUBARCH}eb
++trycppif __SOFTFP__ "$t" || SUBARCH=${SUBARCH}hf
++fi
++
++test "$ARCH" = "mips" && trycppif "_MIPSEL || __MIPSEL || __MIPSEL__" "$t" \
++&& SUBARCH=${SUBARCH}el
++
++test "$ARCH" = "microblaze" && trycppif __MICROBLAZEEL__ "$t" \
++&& SUBARCH=${SUBARCH}el
++
++test "$SUBARCH" \
++&& printf "configured for %s variant: %s\n" "$ARCH" "$ARCH$SUBARCH"
+ 
+ printf "creating config.mak... "
+ 
+@@ -320,6 +352,7 @@ cat << EOF
+ # This version of config.mak was generated by configure
+ # Any changes made here will be lost if configure is re-run
+ ARCH = $ARCH
++SUBARCH = $SUBARCH
+ prefix = $prefix
+ exec_prefix = $exec_prefix
+ bindir = $bindir
+diff --git a/crt/arm/Scrt1.s b/crt/arm/Scrt1.s
+new file mode 100644
+index 0000000..a54859a
+--- /dev/null
++++ b/crt/arm/Scrt1.s
+@@ -0,0 +1,30 @@
++.weak _init
++.weak _fini
++.global _start
++_start:
++	mov fp,#0
++	mov lr,#0
++
++	ldr a2,[sp],#4
++	mov a3,sp
++	str fp,[sp,#-4]!
++	str a1,[sp,#-4]!
++
++	adr ip,2f
++	ldr a4,2f+4
++	add a4,a4,ip
++	str a4,[sp,#-4]!
++	ldr a4,2f+8
++	add a4,a4,ip
++
++	ldr a1,2f
++	add ip,ip,a1
++	ldr a1,2f+12
++	ldr a1,[ip,a1]
++
++	bl __libc_start_main(PLT)
++1:	b 1b
++2:	.word _GLOBAL_OFFSET_TABLE_-2b
++	.word _fini-2b
++	.word _init-2b
++	.word main(GOT)
+diff --git a/crt/arm/crti.s b/crt/arm/crti.s
+index 35ae6ae..0d479cd 100644
+--- a/crt/arm/crti.s
++++ b/crt/arm/crti.s
+@@ -1,29 +1,9 @@
+ .section .init
+ .global _init
+ _init:
+-	push {r0,r1,r2,r4,r5,lr}
+-
+-.weak __fini_array_start
+-.weak __fini_array_end
+-.hidden __fini_array_start
+-.hidden __fini_array_end
++	push {r0,lr}
+ 
+ .section .fini
+ .global _fini
+ _fini:
+-	push {r4,r5,r6,lr}
+-	adr lr, 1f
+-	ldr r4, 2f
+-	ldr r5, 2f+4
+-	add r4, r4, lr
+-	add r5, r5, lr
+-1:	adr lr, 1b
+-	cmp r4, r5
+-	beq 3f
+-	ldmia r4!, {r3}
+-	tst r3,#1
+-	moveq pc,r3
+-	bx r3
+-2:	.word __fini_array_start-1b
+-	.word __fini_array_end-1b
+-3:	
++	push {r0,lr}
+diff --git a/crt/arm/crtn.s b/crt/arm/crtn.s
+index eb0e883..1b626c0 100644
+--- a/crt/arm/crtn.s
++++ b/crt/arm/crtn.s
+@@ -1,31 +1,11 @@
+-.weak __init_array_start
+-.weak __init_array_end
+-.hidden __init_array_start
+-.hidden __init_array_end
+-
+ .section .init
+-	adr lr, 1f
+-	ldr r4, 2f
+-	ldr r5, 2f+4
+-	add r4, r4, lr
+-	add r5, r5, lr
+-1:	adr lr, 1b
+-	cmp r4, r5
+-	beq 3f
+-	ldmia r4!, {r3}
+-	ldm sp, {r0,r1,r2}
+-	tst r3,#1
+-	moveq pc,r3
+-	bx r3
+-3:	pop {r0,r1,r2,r4,r5,lr}
++	pop {r0,lr}
+ 	tst lr,#1
+ 	moveq pc,lr
+ 	bx lr
+-2:	.word __init_array_start-1b
+-	.word __init_array_end-1b
+ 
+ .section .fini
+-	pop {r4,r5,r6,lr}
++	pop {r0,lr}
+ 	tst lr,#1
+ 	moveq pc,lr
+ 	bx lr
+diff --git a/include/alltypes.h.in b/include/alltypes.h.in
+new file mode 100644
+index 0000000..f3481fc
+--- /dev/null
++++ b/include/alltypes.h.in
+@@ -0,0 +1,66 @@
++TYPEDEF unsigned _Addr size_t;
++TYPEDEF unsigned _Addr uintptr_t;
++TYPEDEF _Addr ptrdiff_t;
++TYPEDEF _Addr ssize_t;
++TYPEDEF _Addr intptr_t;
++TYPEDEF _Addr regoff_t;
++
++TYPEDEF signed char     int8_t;
++TYPEDEF short           int16_t;
++TYPEDEF int             int32_t;
++TYPEDEF _Int64          int64_t;
++TYPEDEF _Int64          intmax_t;
++TYPEDEF unsigned char   uint8_t;
++TYPEDEF unsigned short  uint16_t;
++TYPEDEF unsigned int    uint32_t;
++TYPEDEF unsigned _Int64 uint64_t;
++TYPEDEF unsigned _Int64 uintmax_t;
++
++TYPEDEF unsigned mode_t;
++TYPEDEF unsigned nlink_t;
++TYPEDEF _Int64 off_t;
++TYPEDEF unsigned _Int64 ino_t;
++TYPEDEF unsigned _Int64 dev_t;
++TYPEDEF long blksize_t;
++TYPEDEF _Int64 blkcnt_t;
++TYPEDEF unsigned _Int64 fsblkcnt_t;
++TYPEDEF unsigned _Int64 fsfilcnt_t;
++
++TYPEDEF unsigned long wctype_t;
++
++TYPEDEF void * timer_t;
++TYPEDEF int clockid_t;
++TYPEDEF long clock_t;
++STRUCT timeval { time_t tv_sec; suseconds_t tv_usec; };
++STRUCT timespec { time_t tv_sec; long tv_nsec; };
++
++TYPEDEF int pid_t;
++TYPEDEF unsigned id_t;
++TYPEDEF unsigned uid_t;
++TYPEDEF unsigned gid_t;
++TYPEDEF int key_t;
++TYPEDEF unsigned useconds_t;
++
++#ifdef __cplusplus
++TYPEDEF unsigned long pthread_t;
++#else
++TYPEDEF struct __pthread * pthread_t;
++#endif
++TYPEDEF int pthread_once_t;
++TYPEDEF unsigned pthread_key_t;
++TYPEDEF int pthread_spinlock_t;
++TYPEDEF struct { unsigned __attr; } pthread_mutexattr_t;
++TYPEDEF struct { unsigned __attr; } pthread_condattr_t;
++TYPEDEF struct { unsigned __attr; } pthread_barrierattr_t;
++TYPEDEF struct { unsigned __attr[2]; } pthread_rwlockattr_t;
++
++TYPEDEF struct _IO_FILE FILE;
++
++TYPEDEF struct __locale_struct * locale_t;
++
++TYPEDEF struct __sigset_t { unsigned long __bits[128/sizeof(long)]; } sigset_t;
++
++STRUCT iovec { void *iov_base; size_t iov_len; };
++
++TYPEDEF unsigned socklen_t;
++TYPEDEF unsigned short sa_family_t;
+diff --git a/include/arpa/inet.h b/include/arpa/inet.h
+index e47a41f..5dcadaa 100644
+--- a/include/arpa/inet.h
++++ b/include/arpa/inet.h
+@@ -7,16 +7,6 @@ extern "C" {
+ 
+ #include <features.h>
+ #include <netinet/in.h>
+-#include <inttypes.h>
+-
+-#define __NEED_socklen_t
+-#define __NEED_in_addr_t
+-#define __NEED_in_port_t
+-#define __NEED_uint16_t
+-#define __NEED_uint32_t
+-#define __NEED_struct_in_addr
+-
+-#include <bits/alltypes.h>
+ 
+ uint32_t htonl(uint32_t);
+ uint16_t htons(uint16_t);
+diff --git a/include/dirent.h b/include/dirent.h
+index d445f80..5aa8510 100644
+--- a/include/dirent.h
++++ b/include/dirent.h
+@@ -15,7 +15,7 @@ extern "C" {
+ 
+ #include <bits/alltypes.h>
+ 
+-typedef struct __DIR_s DIR;
++typedef struct __dirstream DIR;
+ 
+ struct dirent
+ {
+diff --git a/include/langinfo.h b/include/langinfo.h
+index b9c5569..c6349ad 100644
+--- a/include/langinfo.h
++++ b/include/langinfo.h
+@@ -5,7 +5,8 @@
+ extern "C" {
+ #endif
+ 
+-#define __NEED_nl_item
++#include <nl_types.h>
++
+ #define __NEED_locale_t
+ 
+ #include <bits/alltypes.h>
+diff --git a/include/math.h b/include/math.h
+index 0142815..c029156 100644
+--- a/include/math.h
++++ b/include/math.h
+@@ -9,9 +9,6 @@ extern "C" {
+ 
+ #define __NEED_float_t
+ #define __NEED_double_t
+-#define __NEED___uint16_t
+-#define __NEED___uint32_t
+-#define __NEED___uint64_t
+ #include <bits/alltypes.h>
+ 
+ #if 100*__GNUC__+__GNUC_MINOR__ >= 303
+@@ -43,14 +40,14 @@ int __fpclassify(double);
+ int __fpclassifyf(float);
+ int __fpclassifyl(long double);
+ 
+-static __inline __uint32_t __FLOAT_BITS(float __f)
++static __inline unsigned __FLOAT_BITS(float __f)
+ {
+-	union {float __f; __uint32_t __i;} __u = {__f};
++	union {float __f; unsigned __i;} __u = {__f};
+ 	return __u.__i;
+ }
+-static __inline __uint64_t __DOUBLE_BITS(double __f)
++static __inline unsigned long long __DOUBLE_BITS(double __f)
+ {
+-	union {double __f; __uint64_t __i;} __u = {__f};
++	union {double __f; unsigned long long __i;} __u = {__f};
+ 	return __u.__i;
+ }
+ 
+@@ -61,22 +58,22 @@ static __inline __uint64_t __DOUBLE_BITS(double __f)
+ 
+ #define isinf(x) ( \
+ 	sizeof(x) == sizeof(float) ? (__FLOAT_BITS(x) & 0x7fffffff) == 0x7f800000 : \
+-	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & (__uint64_t)-1>>1) == (__uint64_t)0x7ff<<52 : \
++	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & -1ULL>>1) == 0x7ffULL<<52 : \
+ 	__fpclassifyl(x) == FP_INFINITE)
+ 
+ #define isnan(x) ( \
+ 	sizeof(x) == sizeof(float) ? (__FLOAT_BITS(x) & 0x7fffffff) > 0x7f800000 : \
+-	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & (__uint64_t)-1>>1) > (__uint64_t)0x7ff<<52 : \
++	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & -1ULL>>1) > 0x7ffULL<<52 : \
+ 	__fpclassifyl(x) == FP_NAN)
+ 
+ #define isnormal(x) ( \
+ 	sizeof(x) == sizeof(float) ? ((__FLOAT_BITS(x)+0x00800000) & 0x7fffffff) >= 0x01000000 : \
+-	sizeof(x) == sizeof(double) ? ((__DOUBLE_BITS(x)+((__uint64_t)1<<52)) & (__uint64_t)-1>>1) >= (__uint64_t)1<<53 : \
++	sizeof(x) == sizeof(double) ? ((__DOUBLE_BITS(x)+(1ULL<<52)) & -1ULL>>1) >= 1ULL<<53 : \
+ 	__fpclassifyl(x) == FP_NORMAL)
+ 
+ #define isfinite(x) ( \
+ 	sizeof(x) == sizeof(float) ? (__FLOAT_BITS(x) & 0x7fffffff) < 0x7f800000 : \
+-	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & (__uint64_t)-1>>1) < (__uint64_t)0x7ff<<52 : \
++	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & -1ULL>>1) < 0x7ffULL<<52 : \
+ 	__fpclassifyl(x) > FP_INFINITE)
+ 
+ int __signbit(double);
+diff --git a/include/netdb.h b/include/netdb.h
+index 3cda711..8a7013a 100644
+--- a/include/netdb.h
++++ b/include/netdb.h
+@@ -6,15 +6,12 @@ extern "C" {
+ #endif
+ 
+ #include <features.h>
++#include <netinet/in.h>
+ 
+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+ #define __NEED_size_t
+-#endif
+-
+-#define __NEED_socklen_t
+-#define __NEED_uint32_t
+-
+ #include <bits/alltypes.h>
++#endif
+ 
+ struct addrinfo
+ {
+diff --git a/include/netinet/ether.h b/include/netinet/ether.h
+index c5179d5..d64c9ef 100644
+--- a/include/netinet/ether.h
++++ b/include/netinet/ether.h
+@@ -4,11 +4,11 @@
+ #include <netinet/if_ether.h>
+ 
+ char *ether_ntoa (const struct ether_addr *);
+-
+ struct ether_addr *ether_aton (const char *);
+-
+ char *ether_ntoa_r (const struct ether_addr *, char *);
+-
+ struct ether_addr *ether_aton_r (const char *, struct ether_addr *);
++int ether_line(const char *, struct ether_addr *, char *);
++int ether_ntohost(char *, const struct ether_addr *);
++int ether_hostton(const char *, struct ether_addr *);
+ 
+ #endif
+diff --git a/include/netinet/in.h b/include/netinet/in.h
+index fcab298..d886fc2 100644
+--- a/include/netinet/in.h
++++ b/include/netinet/in.h
+@@ -6,16 +6,12 @@ extern "C" {
+ #endif
+ 
+ #include <features.h>
++#include <inttypes.h>
++#include <sys/socket.h>
+ 
+-#define __NEED_in_addr_t
+-#define __NEED_in_port_t
+-#define __NEED_sa_family_t
+-#define __NEED_struct_in_addr
+-#define __NEED_uint8_t
+-#define __NEED_uint16_t
+-#define __NEED_uint32_t
+-
+-#include <bits/alltypes.h>
++typedef uint16_t in_port_t;
++typedef uint32_t in_addr_t;
++struct in_addr { in_addr_t s_addr; };
+ 
+ struct sockaddr_in
+ {
+diff --git a/include/nl_types.h b/include/nl_types.h
+index ca61efb..7c2d48e 100644
+--- a/include/nl_types.h
++++ b/include/nl_types.h
+@@ -8,10 +8,8 @@ extern "C" {
+ #define NL_SETD 1
+ #define NL_CAT_LOCALE 1
+ 
+-#define __NEED_nl_item
+-#include <bits/alltypes.h>
+-
+-typedef long nl_catd;
++typedef int nl_item;
++typedef void *nl_catd;
+ 
+ nl_catd catopen (const char *, int);
+ char *catgets (nl_catd, int, int, const char *);
+diff --git a/include/paths.h b/include/paths.h
+index e0d1fff..2284870 100644
+--- a/include/paths.h
++++ b/include/paths.h
+@@ -6,27 +6,18 @@
+ 
+ #define	_PATH_BSHELL	"/bin/sh"
+ #define	_PATH_CONSOLE	"/dev/console"
+-#define	_PATH_CSHELL	"/bin/csh"
+-#define	_PATH_DEVDB	"/var/run/dev.db"
+ #define	_PATH_DEVNULL	"/dev/null"
+-#define	_PATH_DRUM	"/dev/drum"
+-#define	_PATH_GSHADOW	"/etc/gshadow"
+ #define	_PATH_KLOG	"/proc/kmsg"
+-#define	_PATH_KMEM	"/dev/kmem"
+ #define	_PATH_LASTLOG	"/var/log/lastlog"
+ #define	_PATH_MAILDIR	"/var/mail"
+ #define	_PATH_MAN	"/usr/share/man"
+-#define	_PATH_MEM	"/dev/mem"
+ #define	_PATH_MNTTAB	"/etc/fstab"
+ #define	_PATH_MOUNTED	"/etc/mtab"
+ #define	_PATH_NOLOGIN	"/etc/nologin"
+-#define	_PATH_PRESERVE	"/var/lib"
+-#define	_PATH_RWHODIR	"/var/spool/rwho"
+ #define	_PATH_SENDMAIL	"/usr/sbin/sendmail"
+ #define	_PATH_SHADOW	"/etc/shadow"
+ #define	_PATH_SHELLS	"/etc/shells"
+ #define	_PATH_TTY	"/dev/tty"
+-#define	_PATH_UNIX	"/boot/vmlinux"
+ #define _PATH_UTMP	"/dev/null/utmp"
+ #define	_PATH_VI	"/usr/bin/vi"
+ #define _PATH_WTMP	"/dev/null/wtmp"
+diff --git a/include/regex.h b/include/regex.h
+index ea9b894..dce2177 100644
+--- a/include/regex.h
++++ b/include/regex.h
+@@ -7,13 +7,12 @@ extern "C" {
+ 
+ #include <features.h>
+ 
++#define __NEED_regoff_t
+ #define __NEED_size_t
+ 
+ #include <bits/alltypes.h>
+ 
+-typedef long regoff_t;
+-
+-typedef struct {
++typedef struct re_pattern_buffer {
+ 	size_t re_nsub;
+ 	void *__opaque, *__padding[4];
+ 	size_t __nsub2;
+diff --git a/include/scsi/scsi_ioctl.h b/include/scsi/scsi_ioctl.h
+new file mode 100644
+index 0000000..22df7fe
+--- /dev/null
++++ b/include/scsi/scsi_ioctl.h
+@@ -0,0 +1,11 @@
++#ifndef _SCSI_IOCTL_H
++#define _SCSI_IOCTL_H
++#define SCSI_IOCTL_SEND_COMMAND 1
++#define SCSI_IOCTL_TEST_UNIT_READY 2
++#define SCSI_IOCTL_BENCHMARK_COMMAND 3
++#define SCSI_IOCTL_SYNC 4
++#define SCSI_IOCTL_START_UNIT 5
++#define SCSI_IOCTL_STOP_UNIT 6
++#define SCSI_IOCTL_DOORLOCK 0x5380
++#define SCSI_IOCTL_DOORUNLOCK 0x5381
++#endif
+diff --git a/include/signal.h b/include/signal.h
+index 242b4ad..ee20372 100644
+--- a/include/signal.h
++++ b/include/signal.h
+@@ -12,7 +12,6 @@ extern "C" {
+  || defined(_BSD_SOURCE)
+ 
+ #ifdef _GNU_SOURCE
+-#define __siginfo siginfo
+ #define __ucontext ucontext
+ #endif
+ 
+@@ -25,7 +24,6 @@ extern "C" {
+ #define __NEED_time_t
+ #define __NEED_clock_t
+ #define __NEED_sigset_t
+-#define __NEED_siginfo_t
+ 
+ #include <bits/alltypes.h>
+ 
+@@ -77,19 +75,7 @@ extern "C" {
+ #define CLD_STOPPED 5
+ #define CLD_CONTINUED 6
+ 
+-struct sigaction {
+-	union {
+-		void (*sa_handler)(int);
+-		void (*sa_sigaction)(int, siginfo_t *, void *);
+-	} __sa_handler;
+-	sigset_t sa_mask;
+-	int sa_flags;
+-	void (*sa_restorer)(void);	
+-};
+-#define sa_handler   __sa_handler.sa_handler
+-#define sa_sigaction __sa_handler.sa_sigaction
+-
+-typedef struct {
++typedef struct sigaltstack {
+ 	void *ss_sp;
+ 	int ss_flags;
+ 	size_t ss_size;
+@@ -100,7 +86,7 @@ union sigval {
+ 	void *sival_ptr;
+ };
+ 
+-struct __siginfo {
++typedef struct {
+ 	int si_signo, si_errno, si_code;
+ 	union {
+ 		char __pad[128 - 2*sizeof(int) - sizeof(long)];
+@@ -126,7 +112,7 @@ struct __siginfo {
+ 			int si_fd;
+ 		} __sigpoll;
+ 	} __si_fields;
+-};
++} siginfo_t;
+ #define si_pid     __si_fields.__sigchld.si_pid
+ #define si_uid     __si_fields.__sigchld.si_uid
+ #define si_status  __si_fields.__sigchld.si_status
+@@ -141,6 +127,18 @@ struct __siginfo {
+ #define si_ptr     __si_fields.__rt.si_sigval.sival_ptr
+ #define si_int     __si_fields.__rt.si_sigval.sival_int
+ 
++struct sigaction {
++	union {
++		void (*sa_handler)(int);
++		void (*sa_sigaction)(int, siginfo_t *, void *);
++	} __sa_handler;
++	sigset_t sa_mask;
++	int sa_flags;
++	void (*sa_restorer)(void);	
++};
++#define sa_handler   __sa_handler.sa_handler
++#define sa_sigaction __sa_handler.sa_sigaction
++
+ struct sigevent {
+ 	union sigval sigev_value;
+ 	int sigev_signo;
+diff --git a/include/stdint.h b/include/stdint.h
+index 7628404..ad6aaea 100644
+--- a/include/stdint.h
++++ b/include/stdint.h
+@@ -11,16 +11,6 @@
+ #define __NEED_uint32_t
+ #define __NEED_uint64_t
+ 
+-#define __NEED_int_fast8_t
+-#define __NEED_int_fast16_t
+-#define __NEED_int_fast32_t
+-#define __NEED_int_fast64_t
+-
+-#define __NEED_uint_fast8_t
+-#define __NEED_uint_fast16_t
+-#define __NEED_uint_fast32_t
+-#define __NEED_uint_fast64_t
+-
+ #define __NEED_intptr_t
+ #define __NEED_uintptr_t
+ 
+@@ -29,11 +19,17 @@
+ 
+ #include <bits/alltypes.h>
+ 
++typedef int8_t int_fast8_t;
++typedef int64_t int_fast64_t;
++
+ typedef int8_t  int_least8_t;
+ typedef int16_t int_least16_t;
+ typedef int32_t int_least32_t;
+ typedef int64_t int_least64_t;
+ 
++typedef uint8_t uint_fast8_t;
++typedef uint64_t uint_fast64_t;
++
+ typedef uint8_t  uint_least8_t;
+ typedef uint16_t uint_least16_t;
+ typedef uint32_t uint_least32_t;
+@@ -54,16 +50,25 @@ typedef uint64_t uint_least64_t;
+ #define UINT32_MAX (0xffffffff)
+ #define UINT64_MAX (0xffffffffffffffff)
+ 
++#define INT_FAST8_MIN   INT8_MIN
++#define INT_FAST64_MIN  INT64_MIN
++
+ #define INT_LEAST8_MIN   INT8_MIN
+ #define INT_LEAST16_MIN  INT16_MIN
+ #define INT_LEAST32_MIN  INT32_MIN
+ #define INT_LEAST64_MIN  INT64_MIN
+ 
++#define INT_FAST8_MAX   INT8_MAX
++#define INT_FAST64_MAX  INT64_MAX
++
+ #define INT_LEAST8_MAX   INT8_MAX
+ #define INT_LEAST16_MAX  INT16_MAX
+ #define INT_LEAST32_MAX  INT32_MAX
+ #define INT_LEAST64_MAX  INT64_MAX
+ 
++#define UINT_FAST8_MAX  UINT8_MAX
++#define UINT_FAST64_MAX UINT64_MAX
++
+ #define UINT_LEAST8_MAX  UINT8_MAX
+ #define UINT_LEAST16_MAX UINT16_MAX
+ #define UINT_LEAST32_MAX UINT32_MAX
+@@ -73,8 +78,8 @@ typedef uint64_t uint_least64_t;
+ #define INTMAX_MAX  INT64_MAX
+ #define UINTMAX_MAX UINT64_MAX
+ 
+-#define WINT_MIN INT32_MIN
+-#define WINT_MAX INT32_MAX
++#define WINT_MIN 0
++#define WINT_MAX UINT32_MAX
+ 
+ #if L'\0'-1 > 0
+ #define WCHAR_MAX (0xffffffffu+L'\0')
+@@ -84,6 +89,9 @@ typedef uint64_t uint_least64_t;
+ #define WCHAR_MIN (-1-0x7fffffff+L'\0')
+ #endif
+ 
++#define SIG_ATOMIC_MIN  INT32_MIN
++#define SIG_ATOMIC_MAX  INT32_MAX
++
+ #include <bits/stdint.h>
+ 
+ #define INT8_C(c)  c
+diff --git a/include/stdio.h b/include/stdio.h
+index fe7ff51..cd60bb5 100644
+--- a/include/stdio.h
++++ b/include/stdio.h
+@@ -38,12 +38,12 @@ extern "C" {
+ #define _IONBF 2
+ 
+ #define BUFSIZ 1024
+-#define FILENAME_MAX 4095
++#define FILENAME_MAX 4096
+ #define FOPEN_MAX 1000
+ #define TMP_MAX 10000
+ #define L_tmpnam 20
+ 
+-typedef union {
++typedef union _G_fpos64_t {
+ 	char __opaque[16];
+ 	double __align;
+ } fpos_t;
+diff --git a/include/sys/resource.h b/include/sys/resource.h
+index ff8ee20..0cfbcf4 100644
+--- a/include/sys/resource.h
++++ b/include/sys/resource.h
+@@ -6,10 +6,9 @@ extern "C" {
+ #endif
+ 
+ #include <features.h>
++#include <sys/time.h>
+ 
+ #define __NEED_id_t
+-#define __NEED_time_t
+-#define __NEED_struct_timeval
+ 
+ #ifdef _GNU_SOURCE
+ #define __NEED_pid_t
+diff --git a/include/sys/select.h b/include/sys/select.h
+index c5a2877..e25257d 100644
+--- a/include/sys/select.h
++++ b/include/sys/select.h
+@@ -32,6 +32,9 @@ typedef struct
+ int select (int, fd_set *__restrict, fd_set *__restrict, fd_set *__restrict, struct timeval *__restrict);
+ int pselect (int, fd_set *__restrict, fd_set *__restrict, fd_set *__restrict, const struct timespec *__restrict, const sigset_t *__restrict);
+ 
++#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++#define NFDBITS (8*(int)sizeof(long))
++#endif
+ 
+ #ifdef __cplusplus
+ }
+diff --git a/include/sys/statfs.h b/include/sys/statfs.h
+index d8128a2..6f4c623 100644
+--- a/include/sys/statfs.h
++++ b/include/sys/statfs.h
+@@ -9,7 +9,7 @@ extern "C" {
+ 
+ #include <sys/statvfs.h>
+ 
+-typedef struct {
++typedef struct __fsid_t {
+ 	int __val[2];
+ } fsid_t;
+ 
+diff --git a/include/sys/ttydefaults.h b/include/sys/ttydefaults.h
+new file mode 100644
+index 0000000..d251b71
+--- /dev/null
++++ b/include/sys/ttydefaults.h
+@@ -0,0 +1,39 @@
++#ifndef _SYS_TTYDEFAULTS_H
++#define _SYS_TTYDEFAULTS_H
++
++#define TTYDEF_IFLAG (BRKINT | ISTRIP | ICRNL | IMAXBEL | IXON | IXANY)
++#define TTYDEF_OFLAG (OPOST | ONLCR | XTABS)
++#define TTYDEF_LFLAG (ECHO | ICANON | ISIG | IEXTEN | ECHOE|ECHOKE|ECHOCTL)
++#define TTYDEF_CFLAG (CREAD | CS7 | PARENB | HUPCL)
++#define TTYDEF_SPEED (B9600)
++#define CTRL(x) (x&037)
++#define CEOF CTRL('d')
++
++#ifdef _POSIX_VDISABLE
++#define CEOL _POSIX_VDISABLE
++#define CSTATUS _POSIX_VDISABLE
++#else
++#define CEOL '\0'
++#define CSTATUS '\0'
++#endif
++
++#define CERASE 0177
++#define CINTR CTRL('c')
++#define CKILL CTRL('u')
++#define CMIN 1
++#define CQUIT 034
++#define CSUSP CTRL('z')
++#define CTIME 0
++#define CDSUSP CTRL('y')
++#define CSTART CTRL('q')
++#define CSTOP CTRL('s')
++#define CLNEXT CTRL('v')
++#define CDISCARD CTRL('o')
++#define CWERASE CTRL('w')
++#define CREPRINT CTRL('r')
++#define CEOT CEOF
++#define CBRK CEOL
++#define CRPRNT CREPRINT
++#define CFLUSH CDISCARD
++
++#endif
+diff --git a/include/sys/types.h b/include/sys/types.h
+index 6ead8b6..db8661b 100644
+--- a/include/sys/types.h
++++ b/include/sys/types.h
+@@ -25,10 +25,6 @@ extern "C" {
+ #define __NEED_int32_t
+ #define __NEED_int64_t
+ 
+-#define __NEED___uint16_t
+-#define __NEED___uint32_t
+-#define __NEED___uint64_t
+-
+ #define __NEED_blkcnt_t
+ #define __NEED_fsblkcnt_t
+ #define __NEED_fsfilcnt_t
+@@ -57,9 +53,9 @@ extern "C" {
+ #include <bits/alltypes.h>
+ 
+ typedef unsigned char u_int8_t;
+-typedef __uint16_t u_int16_t;
+-typedef __uint32_t u_int32_t;
+-typedef __uint64_t u_int64_t;
++typedef unsigned short u_int16_t;
++typedef unsigned u_int32_t;
++typedef unsigned long long u_int64_t;
+ 
+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+ typedef char *caddr_t;
+diff --git a/include/sys/uio.h b/include/sys/uio.h
+index 09b6ab9..00f73a2 100644
+--- a/include/sys/uio.h
++++ b/include/sys/uio.h
+@@ -21,6 +21,8 @@ extern "C" {
+ 
+ #include <bits/alltypes.h>
+ 
++#define UIO_MAXIOV 1024
++
+ ssize_t readv (int, const struct iovec *, int);
+ ssize_t writev (int, const struct iovec *, int);
+ 
+diff --git a/include/sys/wait.h b/include/sys/wait.h
+index b8d6432..b6dfe01 100644
+--- a/include/sys/wait.h
++++ b/include/sys/wait.h
+@@ -10,10 +10,13 @@ extern "C" {
+ 
+ #define __NEED_pid_t
+ #define __NEED_id_t
+-#define __NEED_siginfo_t
+ #include <bits/alltypes.h>
+ 
+-typedef int idtype_t;
++typedef enum {
++	P_ALL = 0,
++	P_PID = 1,
++	P_PGID = 2
++} idtype_t;
+ 
+ pid_t wait (int *);
+ int waitid (idtype_t, id_t, siginfo_t *, int);
+@@ -37,10 +40,6 @@ pid_t wait4 (pid_t, int *, int, struct rusage *);
+ #define __WALL      0x40000000
+ #define __WCLONE    0x80000000
+ 
+-#define P_ALL  0
+-#define P_PID  1
+-#define P_PGID 2
+-
+ #define WEXITSTATUS(s) (((s) & 0xff00) >> 8)
+ #define WTERMSIG(s) ((s) & 0x7f)
+ #define WSTOPSIG(s) WEXITSTATUS(s)
+diff --git a/include/utmpx.h b/include/utmpx.h
+index 0b3f623..fd5f515 100644
+--- a/include/utmpx.h
++++ b/include/utmpx.h
+@@ -7,6 +7,7 @@ extern "C" {
+ 
+ #define __NEED_pid_t
+ #define __NEED_time_t
++#define __NEED_suseconds_t
+ #define __NEED_struct_timeval
+ 
+ #include <bits/alltypes.h>
+diff --git a/include/wchar.h b/include/wchar.h
+index 0f1f6d2..96cd444 100644
+--- a/include/wchar.h
++++ b/include/wchar.h
+@@ -36,9 +36,9 @@ extern "C" {
+ #define NULL 0L
+ 
+ #undef WEOF
+-#define WEOF (-1)
++#define WEOF 0xffffffffU
+ 
+-typedef struct
++typedef struct __mbstate_t
+ {
+ 	unsigned __opaque1, __opaque2;
+ } mbstate_t;
+diff --git a/include/wctype.h b/include/wctype.h
+index abc7d36..8c544f2 100644
+--- a/include/wctype.h
++++ b/include/wctype.h
+@@ -8,7 +8,6 @@ extern "C" {
+ #include <features.h>
+ 
+ #define __NEED_wint_t
+-#define __NEED_wctrans_t
+ #define __NEED_wctype_t
+ 
+ #if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
+@@ -18,8 +17,10 @@ extern "C" {
+ 
+ #include <bits/alltypes.h>
+ 
++typedef const int * wctrans_t;
++
+ #undef WEOF
+-#define WEOF (-1)
++#define WEOF 0xffffffffU
+ 
+ #undef iswdigit
+ 
+diff --git a/src/dirent/__dirent.h b/src/dirent/__dirent.h
+index 38a27b0..45509e1 100644
+--- a/src/dirent/__dirent.h
++++ b/src/dirent/__dirent.h
+@@ -1,4 +1,4 @@
+-struct __DIR_s
++struct __dirstream
+ {
+ 	int fd;
+ 	off_t tell;
+diff --git a/src/env/__init_tls.c b/src/env/__init_tls.c
+index eb2a6e4..a4704f0 100644
+--- a/src/env/__init_tls.c
++++ b/src/env/__init_tls.c
+@@ -26,9 +26,9 @@ void *__copy_tls(unsigned char *mem)
+ 	mem += libc.tls_size - sizeof(struct pthread);
+ 	mem -= (uintptr_t)mem & (align-1);
+ 	td = (pthread_t)mem;
+-	td->dtv = dtv;
+ 	mem -= size;
+ #endif
++	td->dtv = dtv;
+ 	dtv[1] = mem;
+ 	memcpy(mem, image, len);
+ 	return td;
+diff --git a/src/env/__libc_csu_fini.c b/src/env/__libc_csu_fini.c
+deleted file mode 100644
+index 3671efb..0000000
+--- a/src/env/__libc_csu_fini.c
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#include "libc.h"
+-
+-void __libc_csu_fini()
+-{
+-}
+diff --git a/src/env/__libc_csu_init.c b/src/env/__libc_csu_init.c
+deleted file mode 100644
+index 4f68d19..0000000
+--- a/src/env/__libc_csu_init.c
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#include "libc.h"
+-
+-void __libc_csu_init(int argc, char **argv, char **envp)
+-{
+-}
+diff --git a/src/env/__libc_start_main.c b/src/env/__libc_start_main.c
+index aef9f9e..2a8698b 100644
+--- a/src/env/__libc_start_main.c
++++ b/src/env/__libc_start_main.c
+@@ -5,6 +5,13 @@ void __init_tls(size_t *);
+ void __init_security(size_t *);
+ void __init_ldso_ctors(void);
+ 
++#ifndef SHARED
++static void dummy() {}
++weak_alias(dummy, _init);
++extern void (*const __init_array_start)() __attribute__((weak));
++extern void (*const __init_array_end)() __attribute__((weak));
++#endif
++
+ #define AUX_CNT 38
+ 
+ extern size_t __hwcap, __sysinfo;
+@@ -29,23 +36,16 @@ void __init_libc(char **envp, char *pn)
+ 	__init_security(aux);
+ }
+ 
+-int __libc_start_main(
+-	int (*main)(int, char **, char **), int argc, char **argv,
+-	int (*init)(int, char **, char **), void (*fini)(void),
+-	void (*ldso_fini)(void))
++int __libc_start_main(int (*main)(int,char **,char **), int argc, char **argv)
+ {
+ 	char **envp = argv+argc+1;
+ 
++#ifndef SHARED
+ 	__init_libc(envp, argv[0]);
+-
+-	libc.ldso_fini = ldso_fini;
+-	libc.fini = fini;
+-
+-	/* Execute constructors (static) linked into the application */
+-	if (init) init(argc, argv, envp);
+-
+-#ifdef SHARED
+-	__init_ldso_ctors();
++	_init();
++	uintptr_t a = (uintptr_t)&__init_array_start;
++	for (; a<(uintptr_t)&__init_array_end; a+=sizeof(void(*)()))
++		(*(void (**)())a)();
+ #endif
+ 
+ 	/* Pass control to to application */
+diff --git a/src/exit/exit.c b/src/exit/exit.c
+index e4932b5..f259c98 100644
+--- a/src/exit/exit.c
++++ b/src/exit/exit.c
+@@ -14,6 +14,12 @@ weak_alias(dummy, __funcs_on_exit);
+ weak_alias(dummy, __flush_on_exit);
+ weak_alias(dummy, __seek_on_exit);
+ 
++#ifndef SHARED
++weak_alias(dummy, _fini);
++extern void (*const __fini_array_start)() __attribute__((weak));
++extern void (*const __fini_array_end)() __attribute__((weak));
++#endif
++
+ _Noreturn void exit(int code)
+ {
+ 	static int lock;
+@@ -22,8 +28,14 @@ _Noreturn void exit(int code)
+ 	while (a_swap(&lock, 1)) __syscall(SYS_pause);
+ 
+ 	__funcs_on_exit();
+-	if (libc.fini) libc.fini();
+-	if (libc.ldso_fini) libc.ldso_fini();
++
++#ifndef SHARED
++	uintptr_t a = (uintptr_t)&__fini_array_end;
++	for (; a>(uintptr_t)&__fini_array_start; a-=sizeof(void(*)()))
++		(*(void (**)())(a-sizeof(void(*)())))();
++	_fini();
++#endif
++
+ 	__flush_on_exit();
+ 	__seek_on_exit();
+ 
+diff --git a/src/internal/libc.h b/src/internal/libc.h
+index c9416f0..c8fbe3f 100644
+--- a/src/internal/libc.h
++++ b/src/internal/libc.h
+@@ -9,9 +9,6 @@ struct __libc {
+ 	int threaded;
+ 	int secure;
+ 	size_t *auxv;
+-	int (*atexit)(void (*)(void));
+-	void (*fini)(void);
+-	void (*ldso_fini)(void);
+ 	volatile int threads_minus_1;
+ 	int canceldisable;
+ 	FILE *ofl_head;
+diff --git a/src/internal/locale_impl.h b/src/internal/locale_impl.h
+index c268124..f41c6f2 100644
+--- a/src/internal/locale_impl.h
++++ b/src/internal/locale_impl.h
+@@ -1,5 +1,5 @@
+ #include <locale.h>
+ 
+-struct __locale {
++struct __locale_struct {
+ 	int dummy;
+ };
+diff --git a/src/internal/stdio_impl.h b/src/internal/stdio_impl.h
+index c9d20fa..2083b2f 100644
+--- a/src/internal/stdio_impl.h
++++ b/src/internal/stdio_impl.h
+@@ -18,7 +18,7 @@
+ #define F_ERR 32
+ #define F_SVB 64
+ 
+-struct __FILE_s {
++struct _IO_FILE {
+ 	unsigned flags;
+ 	unsigned char *rpos, *rend;
+ 	int (*close)(FILE *);
+diff --git a/src/internal/syscall.h b/src/internal/syscall.h
+index 7381efe..8eebe71 100644
+--- a/src/internal/syscall.h
++++ b/src/internal/syscall.h
+@@ -19,7 +19,7 @@ long __syscall_ret(unsigned long), __syscall(long, ...),
+ #define __syscall7(n,a,b,c,d,e,f,g) (__syscall)(n,(long)(a),(long)(b),(long)(c),(long)(d),(long)(e),(long)(f),(long)g)
+ 
+ #define __SYSCALL_NARGS_X(a,b,c,d,e,f,g,h,n,...) n
+-#define __SYSCALL_NARGS(...) __SYSCALL_NARGS_X(__VA_ARGS__,7,6,5,4,3,2,1,0)
++#define __SYSCALL_NARGS(...) __SYSCALL_NARGS_X(__VA_ARGS__,7,6,5,4,3,2,1,0,)
+ #define __SYSCALL_CONCAT_X(a,b) a##b
+ #define __SYSCALL_CONCAT(a,b) __SYSCALL_CONCAT_X(a,b)
+ #define __SYSCALL_DISP(b,...) __SYSCALL_CONCAT(b,__SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
+diff --git a/src/ldso/dynlink.c b/src/ldso/dynlink.c
+index 7031d03..b5e4b72 100644
+--- a/src/ldso/dynlink.c
++++ b/src/ldso/dynlink.c
+@@ -91,6 +91,7 @@ struct symdef {
+ 
+ void __init_ssp(size_t *);
+ void *__install_initial_tls(void *);
++void __init_libc(char **, char *);
+ 
+ static struct dso *head, *tail, *ldso, *fini_head;
+ static char *env_path, *sys_path, *r_path;
+@@ -309,7 +310,7 @@ static void *map_library(int fd, struct dso *dso)
+ 	size_t this_min, this_max;
+ 	off_t off_start;
+ 	Ehdr *eh;
+-	Phdr *ph;
++	Phdr *ph, *ph0;
+ 	unsigned prot;
+ 	unsigned char *map, *base;
+ 	size_t dyn;
+@@ -324,11 +325,10 @@ static void *map_library(int fd, struct dso *dso)
+ 	if (eh->e_phoff + phsize > l) {
+ 		l = pread(fd, buf+1, phsize, eh->e_phoff);
+ 		if (l != phsize) return 0;
+-		eh->e_phoff = sizeof *eh;
++		ph = ph0 = (void *)(buf + 1);
++	} else {
++		ph = ph0 = (void *)((char *)buf + eh->e_phoff);
+ 	}
+-	ph = (void *)((char *)buf + eh->e_phoff);
+-	dso->phdr = ph;
+-	dso->phnum = eh->e_phnum;
+ 	for (i=eh->e_phnum; i; i--, ph=(void *)((char *)ph+eh->e_phentsize)) {
+ 		if (ph->p_type == PT_DYNAMIC)
+ 			dyn = ph->p_vaddr;
+@@ -363,9 +363,18 @@ static void *map_library(int fd, struct dso *dso)
+ 	map = mmap((void *)addr_min, map_len, prot, MAP_PRIVATE, fd, off_start);
+ 	if (map==MAP_FAILED) return 0;
+ 	base = map - addr_min;
+-	ph = (void *)((char *)buf + eh->e_phoff);
+-	for (i=eh->e_phnum; i; i--, ph=(void *)((char *)ph+eh->e_phentsize)) {
++	dso->phdr = 0;
++	dso->phnum = 0;
++	for (ph=ph0, i=eh->e_phnum; i; i--, ph=(void *)((char *)ph+eh->e_phentsize)) {
+ 		if (ph->p_type != PT_LOAD) continue;
++		/* Check if the programs headers are in this load segment, and
++		 * if so, record the address for use by dl_iterate_phdr. */
++		if (!dso->phdr && eh->e_phoff >= ph->p_offset
++		    && eh->e_phoff+phsize <= ph->p_offset+ph->p_filesz) {
++			dso->phdr = (void *)(base + ph->p_vaddr
++				+ (eh->e_phoff-ph->p_offset));
++			dso->phnum = eh->e_phnum;
++		}
+ 		/* Reuse the existing mapping for the lowest-address LOAD */
+ 		if ((ph->p_vaddr & -PAGE_SIZE) == addr_min) continue;
+ 		this_min = ph->p_vaddr & -PAGE_SIZE;
+@@ -390,8 +399,7 @@ static void *map_library(int fd, struct dso *dso)
+ 				goto error;
+ 			break;
+ 		}
+-	if (!runtime) reclaim_gaps(base, (void *)((char *)buf + eh->e_phoff),
+-		eh->e_phentsize, eh->e_phnum);
++	if (!runtime) reclaim_gaps(base, ph0, eh->e_phentsize, eh->e_phnum);
+ 	dso->map = map;
+ 	dso->map_len = map_len;
+ 	dso->base = base;
+@@ -476,7 +484,26 @@ static struct dso *load_library(const char *name)
+ 		if (fd < 0 && env_path) fd = path_open(name, env_path, buf, sizeof buf);
+ 		if (fd < 0) {
+ 			if (!sys_path) {
+-				FILE *f = fopen(ETC_LDSO_PATH, "rbe");
++				char *prefix = 0;
++				size_t prefix_len;
++				if (ldso->name[0]=='/') {
++					char *s, *t, *z;
++					for (s=t=z=ldso->name; *s; s++)
++						if (*s=='/') z=t, t=s;
++					prefix_len = z-ldso->name;
++					if (prefix_len < PATH_MAX)
++						prefix = ldso->name;
++				}
++				if (!prefix) {
++					prefix = "";
++					prefix_len = 0;
++				}
++				char etc_ldso_path[prefix_len + 1
++					+ sizeof "/etc/ld-musl-" LDSO_ARCH ".path"];
++				snprintf(etc_ldso_path, sizeof etc_ldso_path,
++					"%.*s/etc/ld-musl-" LDSO_ARCH ".path",
++					(int)prefix_len, prefix);
++				FILE *f = fopen(etc_ldso_path, "rbe");
+ 				if (f) {
+ 					if (getdelim(&sys_path, (size_t[1]){0}, 0, f) <= 0) {
+ 						free(sys_path);
+@@ -670,7 +697,15 @@ static void do_fini()
+ 	for (p=fini_head; p; p=p->fini_next) {
+ 		if (!p->constructed) continue;
+ 		decode_vec(p->dynv, dyn, DYN_CNT);
+-		((void (*)(void))(p->base + dyn[DT_FINI]))();
++		if (dyn[0] & (1<<DT_FINI_ARRAY)) {
++			size_t n = dyn[DT_FINI_ARRAYSZ]/sizeof(size_t);
++			size_t *fn = (size_t *)(p->base + dyn[DT_FINI_ARRAY])+n;
++			while (n--) ((void (*)(void))*--fn)();
++		}
++#ifndef NO_LEGACY_INITFINI
++		if (dyn[0] & (1<<DT_FINI))
++			((void (*)(void))(p->base + dyn[DT_FINI]))();
++#endif
+ 	}
+ }
+ 
+@@ -686,12 +721,19 @@ static void do_init_fini(struct dso *p)
+ 		if (p->constructed) continue;
+ 		p->constructed = 1;
+ 		decode_vec(p->dynv, dyn, DYN_CNT);
+-		if (dyn[0] & (1<<DT_FINI)) {
++		if (dyn[0] & ((1<<DT_FINI) | (1<<DT_FINI_ARRAY))) {
+ 			p->fini_next = fini_head;
+ 			fini_head = p;
+ 		}
++#ifndef NO_LEGACY_INITFINI
+ 		if (dyn[0] & (1<<DT_INIT))
+ 			((void (*)(void))(p->base + dyn[DT_INIT]))();
++#endif
++		if (dyn[0] & (1<<DT_INIT_ARRAY)) {
++			size_t n = dyn[DT_INIT_ARRAYSZ]/sizeof(size_t);
++			size_t *fn = (void *)(p->base + dyn[DT_INIT_ARRAY]);
++			while (n--) ((void (*)(void))*fn++)();
++		}
+ 		if (!need_locking && libc.threads_minus_1) {
+ 			need_locking = 1;
+ 			pthread_mutex_lock(&init_fini_lock);
+@@ -804,6 +846,7 @@ void *__dynlink(int argc, char **argv)
+ 	char *env_preload=0;
+ 	size_t vdso_base;
+ 	size_t *auxv;
++	char **envp = argv+argc+1;
+ 
+ 	/* Find aux vector just past environ[] */
+ 	for (i=argc+1; argv[i]; i++)
+@@ -916,7 +959,6 @@ void *__dynlink(int argc, char **argv)
+ 		tls_align = MAXP2(tls_align, app->tls_align);
+ 	}
+ 	app->global = 1;
+-	app->constructed = 1;
+ 	decode_dyn(app);
+ 
+ 	/* Attach to vdso, if provided by the kernel */
+@@ -1001,15 +1043,12 @@ void *__dynlink(int argc, char **argv)
+ 	_dl_debug_state();
+ 
+ 	if (ssp_used) __init_ssp((void *)aux[AT_RANDOM]);
+-
+-	errno = 0;
+-	return (void *)aux[AT_ENTRY];
+-}
+-
+-void __init_ldso_ctors(void)
+-{
++	__init_libc(envp, argv[0]);
+ 	atexit(do_fini);
++	errno = 0;
+ 	do_init_fini(tail);
++
++	return (void *)aux[AT_ENTRY];
+ }
+ 
+ void *dlopen(const char *file, int mode)
+diff --git a/src/malloc/aligned_alloc.c b/src/malloc/aligned_alloc.c
+index 158dba4..cc0a801 100644
+--- a/src/malloc/aligned_alloc.c
++++ b/src/malloc/aligned_alloc.c
+@@ -1,52 +1,8 @@
+ #include <stdlib.h>
+-#include <stdint.h>
+-#include <errno.h>
+ 
+-/* This function should work with most dlmalloc-like chunk bookkeeping
+- * systems, but it's only guaranteed to work with the native implementation
+- * used in this library. */
++void *__memalign(size_t, size_t);
+ 
+ void *aligned_alloc(size_t align, size_t len)
+ {
+-	unsigned char *mem, *new, *end;
+-	size_t header, footer;
+-
+-	if ((align & -align & -sizeof(void *)) != align) {
+-		errno = EINVAL;
+-		return NULL;
+-	}
+-
+-	if (len > SIZE_MAX - align) {
+-		errno = ENOMEM;
+-		return NULL;
+-	}
+-
+-	if (align <= 4*sizeof(size_t)) {
+-		if (!(mem = malloc(len)))
+-			return NULL;
+-		return mem;
+-	}
+-
+-	if (!(mem = malloc(len + align-1)))
+-		return NULL;
+-
+-	header = ((size_t *)mem)[-1];
+-	new = (void *)((uintptr_t)mem + align-1 & -align);
+-
+-	if (!(header & 7)) {
+-		((size_t *)new)[-2] = ((size_t *)mem)[-2] + (new-mem);
+-		((size_t *)new)[-1] = ((size_t *)mem)[-1] - (new-mem);
+-		return new;
+-	}
+-
+-	end = mem + (header & -8);
+-	footer = ((size_t *)end)[-2];
+-
+-	((size_t *)mem)[-1] = header&7 | new-mem;
+-	((size_t *)new)[-2] = footer&7 | new-mem;
+-	((size_t *)new)[-1] = header&7 | end-new;
+-	((size_t *)end)[-2] = footer&7 | end-new;
+-
+-	if (new != mem) free(mem);
+-	return new;
++	return __memalign(align, len);
+ }
+diff --git a/src/malloc/malloc.c b/src/malloc/malloc.c
+index 1a6d149..4044eb2 100644
+--- a/src/malloc/malloc.c
++++ b/src/malloc/malloc.c
+@@ -418,6 +418,9 @@ void *realloc(void *p, size_t n)
+ 
+ 	next = NEXT_CHUNK(self);
+ 
++	/* Crash on corrupted footer (likely from buffer overflow) */
++	if (next->psize != self->csize) a_crash();
++
+ 	/* Merge adjacent chunks if we need more space. This is not
+ 	 * a waste of time even if we fail to get enough space, because our
+ 	 * subsequent call to free would otherwise have to do the merge. */
+@@ -471,6 +474,9 @@ void free(void *p)
+ 	final_size = new_size = CHUNK_SIZE(self);
+ 	next = NEXT_CHUNK(self);
+ 
++	/* Crash on corrupted footer (likely from buffer overflow) */
++	if (next->psize != self->csize) a_crash();
++
+ 	for (;;) {
+ 		/* Replace middle of large chunks with fresh zero pages */
+ 		if (reclaim && (self->psize & next->csize & C_INUSE)) {
+diff --git a/src/malloc/memalign.c b/src/malloc/memalign.c
+index a594c63..55fe68e 100644
+--- a/src/malloc/memalign.c
++++ b/src/malloc/memalign.c
+@@ -1,7 +1,55 @@
+ #include <stdlib.h>
++#include <stdint.h>
+ #include <errno.h>
++#include "libc.h"
+ 
+-void *memalign(size_t align, size_t len)
++/* This function should work with most dlmalloc-like chunk bookkeeping
++ * systems, but it's only guaranteed to work with the native implementation
++ * used in this library. */
++
++void *__memalign(size_t align, size_t len)
+ {
+-	return aligned_alloc(align, len);
++	unsigned char *mem, *new, *end;
++	size_t header, footer;
++
++	if ((align & -align) != align) {
++		errno = EINVAL;
++		return NULL;
++	}
++
++	if (len > SIZE_MAX - align) {
++		errno = ENOMEM;
++		return NULL;
++	}
++
++	if (align <= 4*sizeof(size_t)) {
++		if (!(mem = malloc(len)))
++			return NULL;
++		return mem;
++	}
++
++	if (!(mem = malloc(len + align-1)))
++		return NULL;
++
++	header = ((size_t *)mem)[-1];
++	new = (void *)((uintptr_t)mem + align-1 & -align);
++
++	if (!(header & 7)) {
++		((size_t *)new)[-2] = ((size_t *)mem)[-2] + (new-mem);
++		((size_t *)new)[-1] = ((size_t *)mem)[-1] - (new-mem);
++		return new;
++	}
++
++	end = mem + (header & -8);
++	footer = ((size_t *)end)[-2];
++
++	((size_t *)mem)[-1] = header&7 | new-mem;
++	((size_t *)new)[-2] = footer&7 | new-mem;
++	((size_t *)new)[-1] = header&7 | end-new;
++	((size_t *)end)[-2] = footer&7 | end-new;
++
++	if (new != mem) free(mem);
++	return new;
+ }
++
++weak_alias(__memalign, memalign);
+diff --git a/src/malloc/posix_memalign.c b/src/malloc/posix_memalign.c
+index 42cf274..cf67db6 100644
+--- a/src/malloc/posix_memalign.c
++++ b/src/malloc/posix_memalign.c
+@@ -1,9 +1,12 @@
+ #include <stdlib.h>
+ #include <errno.h>
+ 
++void *__memalign(size_t, size_t);
++
+ int posix_memalign(void **res, size_t align, size_t len)
+ {
+-	void *mem = aligned_alloc(align, len);
++	if (align < sizeof(void *)) return EINVAL;
++	void *mem = __memalign(align, len);
+ 	if (!mem) return errno;
+ 	*res = mem;
+ 	return 0;
+diff --git a/src/mman/shm_open.c b/src/mman/shm_open.c
+index b23eac7..d042a5a 100644
+--- a/src/mman/shm_open.c
++++ b/src/mman/shm_open.c
+@@ -4,6 +4,7 @@
+ #include <unistd.h>
+ #include <string.h>
+ #include <limits.h>
++#include <pthread.h>
+ 
+ char *__strchrnul(const char *, int);
+ 
+@@ -27,9 +28,13 @@ char *__shm_mapname(const char *name, char *buf)
+ 
+ int shm_open(const char *name, int flag, mode_t mode)
+ {
++	int cs;
+ 	char buf[NAME_MAX+10];
+ 	if (!(name = __shm_mapname(name, buf))) return -1;
+-	return open(name, flag|O_NOFOLLOW|O_CLOEXEC|O_NONBLOCK, mode);
++	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
++	int fd = open(name, flag|O_NOFOLLOW|O_CLOEXEC|O_NONBLOCK, mode);
++	pthread_setcancelstate(cs, 0);
++	return fd;
+ }
+ 
+ int shm_unlink(const char *name)
+diff --git a/src/network/ether.c b/src/network/ether.c
+index ac55411..4304a97 100644
+--- a/src/network/ether.c
++++ b/src/network/ether.c
+@@ -41,3 +41,18 @@ char *ether_ntoa (const struct ether_addr *p_a) {
+ 	static char x[18];
+ 	return ether_ntoa_r (p_a, x);
+ }
++
++int ether_line(const char *l, struct ether_addr *e, char *hostname)
++{
++	return -1;
++}
++
++int ether_ntohost(char *hostname, const struct ether_addr *e)
++{
++	return -1;
++}
++
++int ether_hostton(const char *hostname, struct ether_addr *e)
++{
++	return -1;
++}
+diff --git a/src/network/getifaddrs.c b/src/network/getifaddrs.c
+index a4c3178..a14ac1b 100644
+--- a/src/network/getifaddrs.c
++++ b/src/network/getifaddrs.c
+@@ -127,7 +127,7 @@ int getifaddrs(struct ifaddrs **ifap)
+ 	}
+ 	if_freenameindex(ii);
+ 
+-	int sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
++	int sock = socket(PF_INET, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP);
+ 	if(sock == -1) goto err2;
+ 	struct ifreq reqs[32]; /* arbitrary chosen boundary */
+ 	struct ifconf conf = {.ifc_len = sizeof reqs, .ifc_req = reqs};
+diff --git a/src/network/if_indextoname.c b/src/network/if_indextoname.c
+index f18f17a..6ee7f13 100644
+--- a/src/network/if_indextoname.c
++++ b/src/network/if_indextoname.c
+@@ -10,7 +10,7 @@ char *if_indextoname(unsigned index, char *name)
+ 	struct ifreq ifr;
+ 	int fd, r;
+ 
+-	if ((fd = socket(AF_UNIX, SOCK_DGRAM, 0)) < 0) return 0;
++	if ((fd = socket(AF_UNIX, SOCK_DGRAM|SOCK_CLOEXEC, 0)) < 0) return 0;
+ 	ifr.ifr_ifindex = index;
+ 	r = ioctl(fd, SIOCGIFNAME, &ifr);
+ 	__syscall(SYS_close, fd);
+diff --git a/src/network/if_nameindex.c b/src/network/if_nameindex.c
+index cdb956c..ad0a766 100644
+--- a/src/network/if_nameindex.c
++++ b/src/network/if_nameindex.c
+@@ -47,7 +47,7 @@ struct if_nameindex *if_nameindex()
+ {
+ 	size_t n;
+ 	void *p = 0;
+-	int s = socket(AF_UNIX, SOCK_DGRAM, 0);
++	int s = socket(AF_UNIX, SOCK_DGRAM|SOCK_CLOEXEC, 0);
+ 	if (s>=0) {
+ 		for (n=0; (p=do_nameindex(s, n)) == (void *)-1; n++);
+ 		__syscall(SYS_close, s);
+diff --git a/src/network/if_nametoindex.c b/src/network/if_nametoindex.c
+index 419931f..fb4a147 100644
+--- a/src/network/if_nametoindex.c
++++ b/src/network/if_nametoindex.c
+@@ -10,7 +10,7 @@ unsigned if_nametoindex(const char *name)
+ 	struct ifreq ifr;
+ 	int fd, r;
+ 
+-	if ((fd = socket(AF_UNIX, SOCK_DGRAM, 0)) < 0) return -1;
++	if ((fd = socket(AF_UNIX, SOCK_DGRAM|SOCK_CLOEXEC, 0)) < 0) return -1;
+ 	strncpy(ifr.ifr_name, name, sizeof ifr.ifr_name);
+ 	r = ioctl(fd, SIOCGIFINDEX, &ifr);
+ 	__syscall(SYS_close, fd);
+diff --git a/src/passwd/getgrent_a.c b/src/passwd/getgrent_a.c
+index 780560d..2cb8521 100644
+--- a/src/passwd/getgrent_a.c
++++ b/src/passwd/getgrent_a.c
+@@ -1,6 +1,13 @@
+ #include "pwf.h"
+ #include <pthread.h>
+ 
++static unsigned atou(char **s)
++{
++	unsigned x;
++	for (x=0; **s-'0'<10U; ++*s) x=10*x+(**s-'0');
++	return x;
++}
++
+ struct group *__getgrent_a(FILE *f, struct group *gr, char **line, size_t *size, char ***mem, size_t *nmem)
+ {
+ 	ssize_t l;
+@@ -24,8 +31,8 @@ struct group *__getgrent_a(FILE *f, struct group *gr, char **line, size_t *size,
+ 		*s++ = 0; gr->gr_passwd = s;
+ 		if (!(s = strchr(s, ':'))) continue;
+ 
+-		*s++ = 0; gr->gr_gid = atoi(s);
+-		if (!(s = strchr(s, ':'))) continue;
++		*s++ = 0; gr->gr_gid = atou(&s);
++		if (*s != ':') continue;
+ 
+ 		*s++ = 0; mems = s;
+ 		break;
+diff --git a/src/passwd/getpwent_a.c b/src/passwd/getpwent_a.c
+index 1bd7f4f..34842a0 100644
+--- a/src/passwd/getpwent_a.c
++++ b/src/passwd/getpwent_a.c
+@@ -1,6 +1,13 @@
+ #include "pwf.h"
+ #include <pthread.h>
+ 
++static unsigned atou(char **s)
++{
++	unsigned x;
++	for (x=0; **s-'0'<10U; ++*s) x=10*x+(**s-'0');
++	return x;
++}
++
+ struct passwd *__getpwent_a(FILE *f, struct passwd *pw, char **line, size_t *size)
+ {
+ 	ssize_t l;
+@@ -23,11 +30,11 @@ struct passwd *__getpwent_a(FILE *f, struct passwd *pw, char **line, size_t *siz
+ 		*s++ = 0; pw->pw_passwd = s;
+ 		if (!(s = strchr(s, ':'))) continue;
+ 
+-		*s++ = 0; pw->pw_uid = atoi(s);
+-		if (!(s = strchr(s, ':'))) continue;
++		*s++ = 0; pw->pw_uid = atou(&s);
++		if (*s != ':') continue;
+ 
+-		*s++ = 0; pw->pw_gid = atoi(s);
+-		if (!(s = strchr(s, ':'))) continue;
++		*s++ = 0; pw->pw_gid = atou(&s);
++		if (*s != ':') continue;
+ 
+ 		*s++ = 0; pw->pw_gecos = s;
+ 		if (!(s = strchr(s, ':'))) continue;
+diff --git a/src/process/posix_spawn.c b/src/process/posix_spawn.c
+index e6a031c..68cf795 100644
+--- a/src/process/posix_spawn.c
++++ b/src/process/posix_spawn.c
+@@ -138,7 +138,8 @@ int __posix_spawnx(pid_t *restrict res, const char *restrict path,
+ 	args.envp = envp;
+ 	pthread_sigmask(SIG_BLOCK, SIGALL_SET, &args.oldmask);
+ 
+-	pid = __clone(child, stack+sizeof stack, CLONE_VM|SIGCHLD, &args);
++	pid = __clone(child, stack+sizeof stack,
++		CLONE_VM|CLONE_VFORK|SIGCHLD, &args);
+ 	close(args.p[1]);
+ 
+ 	if (pid > 0) {
+diff --git a/src/signal/sigaddset.c b/src/signal/sigaddset.c
+index d632c6f..edb48d1 100644
+--- a/src/signal/sigaddset.c
++++ b/src/signal/sigaddset.c
+@@ -4,7 +4,7 @@
+ int sigaddset(sigset_t *set, int sig)
+ {
+ 	unsigned s = sig-1;
+-	if (s >= 8*sizeof(sigset_t) || s-32U<3) {
++	if (s >= 8*sizeof(sigset_t) || sig-32U<3) {
+ 		errno = EINVAL;
+ 		return -1;
+ 	}
+diff --git a/src/signal/sigdelset.c b/src/signal/sigdelset.c
+index f8794ad..a77c638 100644
+--- a/src/signal/sigdelset.c
++++ b/src/signal/sigdelset.c
+@@ -4,7 +4,7 @@
+ int sigdelset(sigset_t *set, int sig)
+ {
+ 	unsigned s = sig-1;
+-	if (s >= 8*sizeof(sigset_t) || s-32U<3) {
++	if (s >= 8*sizeof(sigset_t) || sig-32U<3) {
+ 		errno = EINVAL;
+ 		return -1;
+ 	}
+diff --git a/src/signal/sigismember.c b/src/signal/sigismember.c
+index d3de6ef..e887b95 100644
+--- a/src/signal/sigismember.c
++++ b/src/signal/sigismember.c
+@@ -4,7 +4,7 @@
+ int sigismember(const sigset_t *set, int sig)
+ {
+ 	unsigned s = sig-1;
+-	if (s >= 8*sizeof(sigset_t) || s-32U<3) {
++	if (s >= 8*sizeof(sigset_t) || sig-32U<3) {
+ 		errno = EINVAL;
+ 		return -1;
+ 	}
+diff --git a/src/stat/statvfs.c b/src/stat/statvfs.c
+index 637bf82..30d5879 100644
+--- a/src/stat/statvfs.c
++++ b/src/stat/statvfs.c
+@@ -5,6 +5,7 @@
+ 
+ int __statfs(const char *path, struct statfs *buf)
+ {
++	*buf = (struct statfs){0};
+ #ifdef SYS_statfs64
+ 	return syscall(SYS_statfs64, path, sizeof *buf, buf);
+ #else
+@@ -14,6 +15,7 @@ int __statfs(const char *path, struct statfs *buf)
+ 
+ int __fstatfs(int fd, struct statfs *buf)
+ {
++	*buf = (struct statfs){0};
+ #ifdef SYS_fstatfs64
+ 	return syscall(SYS_fstatfs64, fd, sizeof *buf, buf);
+ #else
+@@ -26,14 +28,15 @@ weak_alias(__fstatfs, fstatfs);
+ 
+ static void fixup(struct statvfs *out, const struct statfs *in)
+ {
++	*out = (struct statvfs){0};
+ 	out->f_bsize = in->f_bsize;
+-	out->f_frsize = in->f_bsize;
++	out->f_frsize = in->f_frsize ? in->f_frsize : in->f_bsize;
+ 	out->f_blocks = in->f_blocks;
+ 	out->f_bfree = in->f_bfree;
+ 	out->f_bavail = in->f_bavail;
+ 	out->f_files = in->f_files;
+ 	out->f_ffree = in->f_ffree;
+-	out->f_favail = 0;
++	out->f_favail = in->f_ffree;
+ 	out->f_fsid = in->f_fsid.__val[0];
+ 	out->f_flag = in->f_flags;
+ 	out->f_namemax = in->f_namelen;
+diff --git a/src/stdio/vfscanf.c b/src/stdio/vfscanf.c
+index bb92848..68c8e2c 100644
+--- a/src/stdio/vfscanf.c
++++ b/src/stdio/vfscanf.c
+@@ -81,6 +81,8 @@ int vfscanf(FILE *restrict f, const char *restrict fmt, va_list ap)
+ 
+ 	for (p=(const unsigned char *)fmt; *p; p++) {
+ 
++		alloc = 0;
++
+ 		if (isspace(*p)) {
+ 			while (isspace(p[1])) p++;
+ 			shlim(f, 0);
+diff --git a/src/stdio/vfwscanf.c b/src/stdio/vfwscanf.c
+index 760864f..44fac78 100644
+--- a/src/stdio/vfwscanf.c
++++ b/src/stdio/vfwscanf.c
+@@ -109,6 +109,8 @@ int vfwscanf(FILE *restrict f, const wchar_t *restrict fmt, va_list ap)
+ 
+ 	for (p=fmt; *p; p++) {
+ 
++		alloc = 0;
++
+ 		if (iswspace(*p)) {
+ 			while (iswspace(p[1])) p++;
+ 			while (iswspace((c=getwc(f)))) pos++;
+diff --git a/src/string/strsignal.c b/src/string/strsignal.c
+index 3b0ae6d..905c095 100644
+--- a/src/string/strsignal.c
++++ b/src/string/strsignal.c
+@@ -48,7 +48,7 @@ static const char map[] = {
+ 	[SIGSYS]    = 31
+ };
+ 
+-#define sigmap(x) ((unsigned)(x) > sizeof map ? 0 : map[(unsigned)(x)])
++#define sigmap(x) ((x) >= sizeof map ? (x) : map[(x)])
+ 
+ #endif
+ 
+@@ -61,7 +61,7 @@ static const char strings[] =
+ 	"Trace/breakpoint trap\0"
+ 	"Aborted\0"
+ 	"Bus error\0"
+-	"Floating point exception\0"
++	"Arithmetic exception\0"
+ 	"Killed\0"
+ 	"User defined signal 1\0"
+ 	"Segmentation fault\0"
+@@ -70,7 +70,7 @@ static const char strings[] =
+ 	"Alarm clock\0"
+ 	"Terminated\0"
+ 	"Stack fault\0"
+-	"Child exited\0"
++	"Child process status\0"
+ 	"Continued\0"
+ 	"Stopped (signal)\0"
+ 	"Stopped\0"
+@@ -84,14 +84,30 @@ static const char strings[] =
+ 	"Window changed\0"
+ 	"I/O possible\0"
+ 	"Power failure\0"
+-	"Bad system call";
++	"Bad system call\0"
++	"RT32"
++	"\0RT33\0RT34\0RT35\0RT36\0RT37\0RT38\0RT39\0RT40"
++	"\0RT41\0RT42\0RT43\0RT44\0RT45\0RT46\0RT47\0RT48"
++	"\0RT49\0RT50\0RT51\0RT52\0RT53\0RT54\0RT55\0RT56"
++	"\0RT57\0RT58\0RT59\0RT60\0RT61\0RT62\0RT63\0RT64"
++#if _NSIG > 65
++	"\0RT65\0RT66\0RT67\0RT68\0RT69\0RT70\0RT71\0RT72"
++	"\0RT73\0RT74\0RT75\0RT76\0RT77\0RT78\0RT79\0RT80"
++	"\0RT81\0RT82\0RT83\0RT84\0RT85\0RT86\0RT87\0RT88"
++	"\0RT89\0RT90\0RT91\0RT92\0RT93\0RT94\0RT95\0RT96"
++	"\0RT97\0RT98\0RT99\0RT100\0RT101\0RT102\0RT103\0RT104"
++	"\0RT105\0RT106\0RT107\0RT108\0RT109\0RT110\0RT111\0RT112"
++	"\0RT113\0RT114\0RT115\0RT116\0RT117\0RT118\0RT119\0RT120"
++	"\0RT121\0RT122\0RT123\0RT124\0RT125\0RT126\0RT127\0RT128"
++#endif
++	"";
+ 
+ char *strsignal(int signum)
+ {
+ 	char *s = (char *)strings;
+ 
+ 	signum = sigmap(signum);
+-	if ((unsigned)signum - 1 > 31) signum = 0;
++	if (signum - 1U >= _NSIG-1) signum = 0;
+ 
+ 	for (; signum--; s++) for (; *s; s++);
+ 
+diff --git a/src/thread/pthread_attr_get.c b/src/thread/pthread_attr_get.c
+index ad913c5..03fc91e 100644
+--- a/src/thread/pthread_attr_get.c
++++ b/src/thread/pthread_attr_get.c
+@@ -52,19 +52,19 @@ int pthread_attr_getstacksize(const pthread_attr_t *restrict a, size_t *restrict
+ 
+ int pthread_barrierattr_getpshared(const pthread_barrierattr_t *restrict a, int *restrict pshared)
+ {
+-	*pshared = !!*a;
++	*pshared = !!a->__attr;
+ 	return 0;
+ }
+ 
+ int pthread_condattr_getclock(const pthread_condattr_t *restrict a, clockid_t *restrict clk)
+ {
+-	*clk = *a & 0x7fffffff;
++	*clk = a->__attr & 0x7fffffff;
+ 	return 0;
+ }
+ 
+ int pthread_condattr_getpshared(const pthread_condattr_t *restrict a, int *restrict pshared)
+ {
+-	*pshared = *a>>31;
++	*pshared = a->__attr>>31;
+ 	return 0;
+ }
+ 
+@@ -75,24 +75,24 @@ int pthread_mutexattr_getprotocol(const pthread_mutexattr_t *restrict a, int *re
+ }
+ int pthread_mutexattr_getpshared(const pthread_mutexattr_t *restrict a, int *restrict pshared)
+ {
+-	*pshared = *a>>31;
++	*pshared = a->__attr>>31;
+ 	return 0;
+ }
+ 
+ int pthread_mutexattr_getrobust(const pthread_mutexattr_t *restrict a, int *restrict robust)
+ {
+-	*robust = *a / 4U % 2;
++	*robust = a->__attr / 4U % 2;
+ 	return 0;
+ }
+ 
+ int pthread_mutexattr_gettype(const pthread_mutexattr_t *restrict a, int *restrict type)
+ {
+-	*type = *a & 3;
++	*type = a->__attr & 3;
+ 	return 0;
+ }
+ 
+ int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *restrict a, int *restrict pshared)
+ {
+-	*pshared = *(int *)a;
++	*pshared = a->__attr[0];
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_barrier_init.c b/src/thread/pthread_barrier_init.c
+index 01e8cd6..4c3cb28 100644
+--- a/src/thread/pthread_barrier_init.c
++++ b/src/thread/pthread_barrier_init.c
+@@ -3,6 +3,6 @@
+ int pthread_barrier_init(pthread_barrier_t *restrict b, const pthread_barrierattr_t *restrict a, unsigned count)
+ {
+ 	if (count-1 > INT_MAX-1) return EINVAL;
+-	*b = (pthread_barrier_t){ ._b_limit = count-1 | (a?*a:0) };
++	*b = (pthread_barrier_t){ ._b_limit = count-1 | (a?a->__attr:0) };
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_barrierattr_setpshared.c b/src/thread/pthread_barrierattr_setpshared.c
+index 1edc95d..b391461 100644
+--- a/src/thread/pthread_barrierattr_setpshared.c
++++ b/src/thread/pthread_barrierattr_setpshared.c
+@@ -2,6 +2,6 @@
+ 
+ int pthread_barrierattr_setpshared(pthread_barrierattr_t *a, int pshared)
+ {
+-	*a = pshared ? INT_MIN : 0;
++	a->__attr = pshared ? INT_MIN : 0;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_cond_init.c b/src/thread/pthread_cond_init.c
+index 71489bc..357ecd5 100644
+--- a/src/thread/pthread_cond_init.c
++++ b/src/thread/pthread_cond_init.c
+@@ -4,8 +4,8 @@ int pthread_cond_init(pthread_cond_t *restrict c, const pthread_condattr_t *rest
+ {
+ 	*c = (pthread_cond_t){0};
+ 	if (a) {
+-		c->_c_clock = *a & 0x7fffffff;
+-		if (*a>>31) c->_c_mutex = (void *)-1;
++		c->_c_clock = a->__attr & 0x7fffffff;
++		if (a->__attr>>31) c->_c_mutex = (void *)-1;
+ 	}
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_condattr_setclock.c b/src/thread/pthread_condattr_setclock.c
+index cd2cecc..7112594 100644
+--- a/src/thread/pthread_condattr_setclock.c
++++ b/src/thread/pthread_condattr_setclock.c
+@@ -3,7 +3,7 @@
+ int pthread_condattr_setclock(pthread_condattr_t *a, clockid_t clk)
+ {
+ 	if (clk < 0 || clk-2U < 2) return EINVAL;
+-	*a &= 0x80000000;
+-	*a |= clk;
++	a->__attr &= 0x80000000;
++	a->__attr |= clk;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_condattr_setpshared.c b/src/thread/pthread_condattr_setpshared.c
+index c0cc1ef..bece8a2 100644
+--- a/src/thread/pthread_condattr_setpshared.c
++++ b/src/thread/pthread_condattr_setpshared.c
+@@ -3,7 +3,7 @@
+ int pthread_condattr_setpshared(pthread_condattr_t *a, int pshared)
+ {
+ 	if (pshared > 1U) return EINVAL;
+-	*a &= 0x7fffffff;
+-	*a |= pshared<<31;
++	a->__attr &= 0x7fffffff;
++	a->__attr |= pshared<<31;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_mutex_init.c b/src/thread/pthread_mutex_init.c
+index a7ba39b..9d85a35 100644
+--- a/src/thread/pthread_mutex_init.c
++++ b/src/thread/pthread_mutex_init.c
+@@ -3,6 +3,6 @@
+ int pthread_mutex_init(pthread_mutex_t *restrict m, const pthread_mutexattr_t *restrict a)
+ {
+ 	*m = (pthread_mutex_t){0};
+-	if (a) m->_m_type = *a & 7;
++	if (a) m->_m_type = a->__attr & 7;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_mutexattr_setpshared.c b/src/thread/pthread_mutexattr_setpshared.c
+index 1a26001..8c7a1e2 100644
+--- a/src/thread/pthread_mutexattr_setpshared.c
++++ b/src/thread/pthread_mutexattr_setpshared.c
+@@ -3,7 +3,7 @@
+ int pthread_mutexattr_setpshared(pthread_mutexattr_t *a, int pshared)
+ {
+ 	if (pshared > 1U) return EINVAL;
+-	*a &= 0x7fffffff;
+-	*a |= pshared<<31;
++	a->__attr &= 0x7fffffff;
++	a->__attr |= pshared<<31;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_mutexattr_setrobust.c b/src/thread/pthread_mutexattr_setrobust.c
+index 4a296ba..dcfa4cf 100644
+--- a/src/thread/pthread_mutexattr_setrobust.c
++++ b/src/thread/pthread_mutexattr_setrobust.c
+@@ -3,7 +3,7 @@
+ int pthread_mutexattr_setrobust(pthread_mutexattr_t *a, int robust)
+ {
+ 	if (robust > 1U) return EINVAL;
+-	*a &= ~4;
+-	*a |= robust*4;
++	a->__attr &= ~4;
++	a->__attr |= robust*4;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_mutexattr_settype.c b/src/thread/pthread_mutexattr_settype.c
+index 4e85950..cd7a80e 100644
+--- a/src/thread/pthread_mutexattr_settype.c
++++ b/src/thread/pthread_mutexattr_settype.c
+@@ -3,6 +3,6 @@
+ int pthread_mutexattr_settype(pthread_mutexattr_t *a, int type)
+ {
+ 	if ((unsigned)type > 2) return EINVAL;
+-	*a = (*a & ~3) | type;
++	a->__attr = (a->__attr & ~3) | type;
+ 	return 0;
+ }
+diff --git a/src/thread/pthread_rwlockattr_setpshared.c b/src/thread/pthread_rwlockattr_setpshared.c
+index 1f47f09..e706197 100644
+--- a/src/thread/pthread_rwlockattr_setpshared.c
++++ b/src/thread/pthread_rwlockattr_setpshared.c
+@@ -3,6 +3,6 @@
+ int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *a, int pshared)
+ {
+ 	if (pshared > 1U) return EINVAL;
+-	*(int *)a = pshared;
++	a->__attr[0] = pshared;
+ 	return 0;
+ }
+diff --git a/src/time/__map_file.c b/src/time/__map_file.c
+new file mode 100644
+index 0000000..b322f09
+--- /dev/null
++++ b/src/time/__map_file.c
+@@ -0,0 +1,20 @@
++#include <sys/mman.h>
++#include <fcntl.h>
++#include <sys/stat.h>
++#include "syscall.h"
++
++void *__mmap(void *, size_t, int, int, int, off_t);
++
++const char unsigned *__map_file(const char *pathname, size_t *size)
++{
++	struct stat st;
++	const unsigned char *map = MAP_FAILED;
++	int flags = O_RDONLY|O_LARGEFILE|O_CLOEXEC|O_NOFOLLOW|O_NONBLOCK;
++	int fd = __syscall(SYS_open, pathname, flags);
++	if (fd < 0) return 0;
++	if (!__syscall(SYS_fstat, fd, &st))
++		map = __mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
++	__syscall(SYS_close, fd);
++	*size = st.st_size;
++	return map == MAP_FAILED ? 0 : map;
++}
+diff --git a/src/time/__month_to_secs.c b/src/time/__month_to_secs.c
+new file mode 100644
+index 0000000..43248fb
+--- /dev/null
++++ b/src/time/__month_to_secs.c
+@@ -0,0 +1,10 @@
++int __month_to_secs(int month, int is_leap)
++{
++	static const int secs_through_month[] = {
++		0, 31*86400, 59*86400, 90*86400,
++		120*86400, 151*86400, 181*86400, 212*86400,
++		243*86400, 273*86400, 304*86400, 334*86400 };
++	int t = secs_through_month[month];
++	if (is_leap && month >= 2) t+=86400;
++	return t;
++}
+diff --git a/src/time/__secs_to_tm.c b/src/time/__secs_to_tm.c
+new file mode 100644
+index 0000000..f3c1cf9
+--- /dev/null
++++ b/src/time/__secs_to_tm.c
+@@ -0,0 +1,81 @@
++#include "time_impl.h"
++#include <limits.h>
++
++/* 2000-03-01 (mod 400 year, immediately after feb29 */
++#define LEAPOCH (946684800LL + 86400*(31+29))
++
++#define DAYS_PER_400Y (365*400 + 97)
++#define DAYS_PER_100Y (365*100 + 24)
++#define DAYS_PER_4Y   (365*4   + 1)
++
++int __secs_to_tm(long long t, struct tm *tm)
++{
++	long long days, secs;
++	int remdays, remsecs, remyears;
++	int qc_cycles, c_cycles, q_cycles;
++	int years, months;
++	int wday, yday, leap;
++	static const char days_in_month[] = {31,30,31,30,31,31,30,31,30,31,31,29};
++
++	/* Reject time_t values whose year would overflow int */
++	if (t < INT_MIN * 31622400LL || t > INT_MAX * 31622400LL)
++		return -1;
++
++	secs = t - LEAPOCH;
++	days = secs / 86400;
++	remsecs = secs % 86400;
++	if (remsecs < 0) {
++		remsecs += 86400;
++		days--;
++	}
++
++	wday = (3+days)%7;
++	if (wday < 0) wday += 7;
++
++	qc_cycles = days / DAYS_PER_400Y;
++	remdays = days % DAYS_PER_400Y;
++	if (remdays < 0) {
++		remdays += DAYS_PER_400Y;
++		qc_cycles--;
++	}
++
++	c_cycles = remdays / DAYS_PER_100Y;
++	if (c_cycles == 4) c_cycles--;
++	remdays -= c_cycles * DAYS_PER_100Y;
++
++	q_cycles = remdays / DAYS_PER_4Y;
++	if (q_cycles == 25) q_cycles--;
++	remdays -= q_cycles * DAYS_PER_4Y;
++
++	remyears = remdays / 365;
++	if (remyears == 4) remyears--;
++	remdays -= remyears * 365;
++
++	leap = !remyears && (q_cycles || !c_cycles);
++	yday = remdays + 31 + 28 + leap;
++	if (yday >= 365+leap) yday -= 365+leap;
++
++	years = remyears + 4*q_cycles + 100*c_cycles + 400*qc_cycles;
++
++	for (months=0; days_in_month[months] <= remdays; months++)
++		remdays -= days_in_month[months];
++
++	if (years+100 > INT_MAX || years+100 < INT_MIN)
++		return -1;
++
++	tm->tm_year = years + 100;
++	tm->tm_mon = months + 2;
++	if (tm->tm_mon >= 12) {
++		tm->tm_mon -=12;
++		tm->tm_year++;
++	}
++	tm->tm_mday = remdays + 1;
++	tm->tm_wday = wday;
++	tm->tm_yday = yday;
++
++	tm->tm_hour = remsecs / 3600;
++	tm->tm_min = remsecs / 60 % 60;
++	tm->tm_sec = remsecs % 60;
++
++	return 0;
++}
+diff --git a/src/time/__time.h b/src/time/__time.h
+deleted file mode 100644
+index 967e518..0000000
+--- a/src/time/__time.h
++++ /dev/null
+@@ -1,9 +0,0 @@
+-time_t __tm_to_time(struct tm *);
+-struct tm *__time_to_tm(time_t, struct tm *);
+-void __tzset(void);
+-struct tm *__dst_adjust(struct tm *tm);
+-
+-extern long __timezone;
+-extern int __daylight;
+-extern int __dst_offset;
+-extern char *__tzname[2];
+diff --git a/src/time/__time_to_tm.c b/src/time/__time_to_tm.c
+deleted file mode 100644
+index e2d782b..0000000
+--- a/src/time/__time_to_tm.c
++++ /dev/null
+@@ -1,83 +0,0 @@
+-#include <time.h>
+-
+-/* C defines the rounding for division in a nonsensical way */
+-#define Q(a,b) ((a)>0 ? (a)/(b) : -(((b)-(a)-1)/(b)))
+-
+-#define DAYS_PER_400Y (365*400 + 97)
+-#define DAYS_PER_100Y (365*100 + 24)
+-#define DAYS_PER_4Y   (365*4   + 1)
+-
+-/* FIXME: use lldiv once it's fixed to compute quot,rem together */
+-struct tm *__time_to_tm(time_t t, struct tm *tm)
+-{
+-	/* months are march-based */
+-	static const int days_thru_month[] = {31,61,92,122,153,184,214,245,275,306,337,366};
+-	long long bigday;
+-	unsigned int day, year4, year100;
+-	int year, year400;
+-	int month;
+-	int leap;
+-	int hour, min, sec;
+-	int wday, mday, yday;
+-
+-	/* start from 2000-03-01 (multiple of 400 years) */
+-	t += -946684800 - 86400*(31+29);
+-
+-	bigday = Q(t, 86400);
+-	sec = t-bigday*86400;
+-
+-	hour = sec/3600;
+-	sec -= hour*3600;
+-	min = sec/60;
+-	sec -= min*60;
+-
+-	/* 2000-03-01 was a wednesday */
+-	wday = (3+bigday)%7;
+-	if (wday < 0) wday += 7;
+-
+-	t = -946684800LL - 86400*(31+29) + 9000000;
+-	
+-	year400 = Q(bigday, DAYS_PER_400Y);
+-	day = bigday-year400*DAYS_PER_400Y;
+-
+-	year100 = day/DAYS_PER_100Y;
+-	if (year100 == 4) year100--;
+-	day -= year100*DAYS_PER_100Y;
+-
+-	year4 = day/DAYS_PER_4Y;
+-	if (year4 == 25) year4--;
+-	day -= year4*DAYS_PER_4Y;
+-
+-	year = day/365;
+-	if (year == 4) year--;
+-	day -= year*365;
+-
+-	leap = !year && (year4 || !year100);
+-	yday = day + 31+28 + leap;
+-	if (yday >= 365+leap) yday -= 365+leap;
+-
+-	year += 4*year4 + 100*year100 + 400*year400 + 2000-1900;
+-
+-	for (month=0; days_thru_month[month] <= day; month++);
+-	if (month) day -= days_thru_month[month-1];
+-	month += 2;
+-	if (month >= 12) {
+-		month -= 12;
+-		year++;
+-	}
+-
+-	mday = day+1;
+-
+-	tm->tm_sec = sec;
+-	tm->tm_min = min;
+-	tm->tm_hour= hour;
+-	tm->tm_mday= mday;
+-	tm->tm_mon = month;
+-	tm->tm_year= year;
+-	tm->tm_wday= wday;
+-	tm->tm_yday= yday;
+-	tm->__tm_zone = 0;
+-	tm->__tm_gmtoff = 0;
+-
+-	return tm;
+-}
+diff --git a/src/time/__tm_to_secs.c b/src/time/__tm_to_secs.c
+new file mode 100644
+index 0000000..c29fa98
+--- /dev/null
++++ b/src/time/__tm_to_secs.c
+@@ -0,0 +1,24 @@
++#include "time_impl.h"
++
++long long __tm_to_secs(const struct tm *tm)
++{
++	int is_leap;
++	long long year = tm->tm_year;
++	int month = tm->tm_mon;
++	if (month >= 12 || month < 0) {
++		int adj = month / 12;
++		month %= 12;
++		if (month < 0) {
++			adj--;
++			month += 12;
++		}
++		year += adj;
++	}
++	long long t = __year_to_secs(year, &is_leap);
++	t += __month_to_secs(month, is_leap);
++	t += 86400LL * (tm->tm_mday-1);
++	t += 3600LL * tm->tm_hour;
++	t += 60LL * tm->tm_min;
++	t += tm->tm_sec;
++	return t;
++}
+diff --git a/src/time/__tm_to_time.c b/src/time/__tm_to_time.c
+deleted file mode 100644
+index 9f11805..0000000
+--- a/src/time/__tm_to_time.c
++++ /dev/null
+@@ -1,33 +0,0 @@
+-#include <time.h>
+-
+-/* C defines the rounding for division in a nonsensical way */
+-#define Q(a,b) ((a)>0 ? (a)/(b) : -(((b)-(a)-1)/(b)))
+-
+-time_t __tm_to_time(struct tm *tm)
+-{
+-	time_t year  = tm->tm_year + -100;
+-	int    month = tm->tm_mon;
+-	int    day   = tm->tm_mday;
+-	int z4, z100, z400;
+-
+-	/* normalize month */
+-	if (month >= 12) {
+-		year += month/12;
+-		month %= 12;
+-	} else if (month < 0) {
+-		year += month/12;
+-		month %= 12;
+-		if (month) {
+-			month += 12;
+-			year--;
+-		}
+-	}
+-	z4 = Q(year - (month < 2), 4);
+-	z100 = Q(z4, 25);
+-	z400 = Q(z100, 4);
+-	day += year*365 + z4 - z100 + z400 +
+-		month[(const int []){0,31,59,90,120,151,181,212,243,273,304,334}];
+-	return (long long)day*86400
+-		+ tm->tm_hour*3600 + tm->tm_min*60 + tm->tm_sec
+-		- -946684800; /* the dawn of time :) */
+-}
+diff --git a/src/time/__tz.c b/src/time/__tz.c
+new file mode 100644
+index 0000000..a76a7b4
+--- /dev/null
++++ b/src/time/__tz.c
+@@ -0,0 +1,389 @@
++#include "time_impl.h"
++#include <stdint.h>
++#include <limits.h>
++#include <stdlib.h>
++#include <string.h>
++#include "libc.h"
++
++long  __timezone = 0;
++int   __daylight = 0;
++char *__tzname[2] = { 0, 0 };
++
++weak_alias(__timezone, timezone);
++weak_alias(__daylight, daylight);
++weak_alias(__tzname, tzname);
++
++static char std_name[TZNAME_MAX+1];
++static char dst_name[TZNAME_MAX+1];
++
++static int dst_off;
++static int r0[5], r1[5];
++
++static const unsigned char *zi, *trans, *index, *types, *abbrevs;
++static size_t map_size;
++
++static char old_tz_buf[32];
++static char *old_tz = old_tz_buf;
++static size_t old_tz_size = sizeof old_tz_buf;
++
++static int lock[2];
++
++static int getint(const char **p)
++{
++	unsigned x;
++	for (x=0; **p-'0'<10U; (*p)++) x = **p-'0' + 10*x;
++	return x;
++}
++
++static int getsigned(const char **p)
++{
++	if (**p == '-') {
++		++*p;
++		return -getint(p);
++	}
++	if (**p == '+') ++*p;
++	return getint(p);
++}
++
++static int getoff(const char **p)
++{
++	int off = 3600*getsigned(p);
++	if (**p == ':') {
++		++*p;
++		off += 60*getint(p);
++		if (**p == ':') {
++			++*p;
++			off += getint(p);
++		}
++	}
++	return off;
++}
++
++static void getrule(const char **p, int rule[5])
++{
++	int r = rule[0] = **p;
++
++	if (r!='M') {
++		if (r=='J') ++*p;
++		else rule[0] = 0;
++		rule[1] = getint(p);
++	} else {
++		++*p; rule[1] = getint(p);
++		++*p; rule[2] = getint(p);
++		++*p; rule[3] = getint(p);
++	}
++
++	if (**p=='/') {
++		++*p;
++		rule[4] = getoff(p);
++	} else {
++		rule[4] = 7200;
++	}
++}
++
++static void getname(char *d, const char **p)
++{
++	int i;
++	if (**p == '<') {
++		++*p;
++		for (i=0; **p!='>' && i<TZNAME_MAX; i++)
++			d[i] = (*p)[i];
++		++*p;
++	} else {
++		for (i=0; ((*p)[i]|32)-'a'<26U && i<TZNAME_MAX; i++)
++			d[i] = (*p)[i];
++	}
++	*p += i;
++	d[i] = 0;
++}
++
++#define VEC(...) ((const unsigned char[]){__VA_ARGS__})
++
++static uint32_t zi_read32(const unsigned char *z)
++{
++	return (unsigned)z[0]<<24 | z[1]<<16 | z[2]<<8 | z[3];
++}
++
++static size_t zi_dotprod(const unsigned char *z, const unsigned char *v, size_t n)
++{
++	size_t y;
++	uint32_t x;
++	for (y=0; n; n--, z+=4, v++) {
++		x = zi_read32(z);
++		y += x * *v;
++	}
++	return y;
++}
++
++int __munmap(void *, size_t);
++
++static void do_tzset()
++{
++	char buf[NAME_MAX+25], *pathname=buf+24;
++	const char *try, *s;
++	const unsigned char *map = 0;
++	size_t i;
++	static const char search[] =
++		"/usr/share/zoneinfo/\0/share/zoneinfo/\0/etc/zoneinfo/\0";
++
++	s = getenv("TZ");
++	if (!s) s = "";
++
++	if (old_tz && !strcmp(s, old_tz)) return;
++
++	if (zi) __munmap((void *)zi, map_size);
++
++	/* Cache the old value of TZ to check if it has changed. Avoid
++	 * free so as not to pull it into static programs. Growth
++	 * strategy makes it so free would have minimal benefit anyway. */
++	i = strlen(s);
++	if (i > PATH_MAX+1) s = "", i = 0;
++	if (i >= old_tz_size) {
++		old_tz_size *= 2;
++		if (i >= old_tz_size) old_tz_size = i+1;
++		if (old_tz_size > PATH_MAX+2) old_tz_size = PATH_MAX+2;
++		old_tz = malloc(old_tz_size);
++	}
++	if (old_tz) memcpy(old_tz, s, i+1);
++
++	if (*s == ':') s++;
++
++	/* Non-suid can use an absolute tzfile pathname or a relative
++	 * pathame beginning with "."; in secure mode, only the
++	 * standard path will be searched. */
++	if (*s == '/' || *s == '.') {
++		if (!libc.secure) map = __map_file(s, &map_size);
++	} else {
++		for (i=0; s[i] && s[i]!=','; i++) {
++			if (s[i]=='/') {
++				size_t l = strlen(s);
++				if (l > NAME_MAX || strchr(s, '.'))
++					break;
++				memcpy(pathname, s, l+1);
++				pathname[l] = 0;
++				for (try=search; !map && *try; try+=l) {
++					l = strlen(try);
++					memcpy(pathname-l, try, l);
++					map = __map_file(pathname-l, &map_size);
++				}
++				break;
++			}
++		}
++	}
++
++	zi = map;
++	if (map) {
++		int scale = 2;
++		if (sizeof(time_t) > 4 && map[4]=='2') {
++			size_t skip = zi_dotprod(zi, VEC(1,1,8,5,6,1), 6);
++			trans = zi+skip+44+20;
++			scale++;
++		} else {
++			trans = zi+44;
++		}
++		index = trans + (zi_read32(trans-12) << scale);
++		types = index + zi_read32(trans-12);
++		abbrevs = types + 6*zi_read32(trans-8);
++		if (zi[map_size-1] == '\n') {
++			for (s = (const char *)zi+map_size-2; *s!='\n'; s--);
++			s++;
++		} else {
++			s = 0;
++		}
++	}
++
++	if (!s) s = "GMT0";
++	getname(std_name, &s);
++	__tzname[0] = std_name;
++	__timezone = getoff(&s);
++	getname(dst_name, &s);
++	__tzname[1] = dst_name;
++	if (dst_name[0]) {
++		__daylight = 1;
++		if (*s == '+' || *s=='-' || *s-'0'<10U)
++			dst_off = getoff(&s);
++		else
++			dst_off = __timezone - 3600;
++	} else {
++		__daylight = 0;
++		dst_off = 0;
++	}
++
++	if (*s == ',') s++, getrule(&s, r0);
++	if (*s == ',') s++, getrule(&s, r1);
++}
++
++/* Search zoneinfo rules to find the one that applies to the given time,
++ * and determine alternate opposite-DST-status rule that may be needed. */
++
++static size_t scan_trans(long long t, int local, size_t *alt)
++{
++	int scale = 3 - (trans == zi+44);
++	uint64_t x;
++	int off = 0;
++
++	size_t a = 0, n = (index-trans)>>scale, m;
++
++	if (!n) {
++		if (alt) *alt = 0;
++		return 0;
++	}
++
++	/* Binary search for 'most-recent rule before t'. */
++	while (n > 1) {
++		m = a + n/2;
++		x = zi_read32(trans + (m<<scale));
++		if (scale == 3) x = x<<32 | zi_read32(trans + (m<<scale) + 4);
++		else x = (int32_t)x;
++		if (local) off = (int32_t)zi_read32(types + 6 * index[m-1]);
++		if (t - off < (int64_t)x) {
++			n /= 2;
++		} else {
++			a = m;
++			n -= n/2;
++		}
++	}
++
++	/* First and last entry are special. First means to use lowest-index
++	 * non-DST type. Last means to apply POSIX-style rule if available. */
++	n = (index-trans)>>scale;
++	if (a == n-1) return -1;
++	if (a == 0) {
++		x = zi_read32(trans + (a<<scale));
++		if (scale == 3) x = x<<32 | zi_read32(trans + (a<<scale) + 4);
++		else x = (int32_t)x;
++		if (local) off = (int32_t)zi_read32(types + 6 * index[a-1]);
++		if (t - off < (int64_t)x) {
++			for (a=0; a<(abbrevs-types)/6; a++) {
++				if (types[6*a+4] != types[4]) break;
++			}
++			if (a == (abbrevs-types)/6) a = 0;
++			if (types[6*a+4]) {
++				*alt = a;
++				return 0;
++			} else {
++				*alt = 0;
++				return a;
++			}
++		}
++	}
++
++	/* Try to find a neighboring opposite-DST-status rule. */
++	if (alt) {
++		if (a && types[6*index[a-1]+4] != types[6*index[a]+4])
++			*alt = index[a-1];
++		else if (a+1<n && types[6*index[a+1]+4] != types[6*index[a]+4])
++			*alt = index[a+1];
++		else
++			*alt = index[a];
++	}
++
++	return index[a];
++}
++
++static int days_in_month(int m, int is_leap)
++{
++	if (m==2) return 28+is_leap;
++	else return 30+((0xad5>>(m-1))&1);
++}
++
++/* Convert a POSIX DST rule plus year to seconds since epoch. */
++
++static long long rule_to_secs(const int *rule, int year)
++{
++	int is_leap;
++	long long t = __year_to_secs(year, &is_leap);
++	int x, m, n, d;
++	if (rule[0]!='M') {
++		x = rule[1];
++		if (rule[0]=='J' && (x < 60 || !is_leap)) x--;
++		t += 86400 * x;
++	} else {
++		m = rule[1];
++		n = rule[2];
++		d = rule[3];
++		t += __month_to_secs(m-1, is_leap);
++		int wday = (int)((t + 4*86400) % (7*86400)) / 86400;
++		int days = d - wday;
++		if (days < 0) days += 7;
++		if (n == 5 && days+28 >= days_in_month(m, is_leap)) n = 4;
++		t += 86400 * (days + 7*(n-1));
++	}
++	t += rule[4];
++	return t;
++}
++
++/* Determine the time zone in effect for a given time in seconds since the
++ * epoch. It can be given in local or universal time. The results will
++ * indicate whether DST is in effect at the queried time, and will give both
++ * the GMT offset for the active zone/DST rule and the opposite DST. This
++ * enables a caller to efficiently adjust for the case where an explicit
++ * DST specification mismatches what would be in effect at the time. */
++
++void __secs_to_zone(long long t, int local, int *isdst, long *offset, long *oppoff, const char **zonename)
++{
++	LOCK(lock);
++
++	do_tzset();
++
++	if (zi) {
++		size_t alt, i = scan_trans(t, local, &alt);
++		if (i != -1) {
++			*isdst = types[6*i+4];
++			*offset = -(int32_t)zi_read32(types+6*i);
++			*zonename = (const char *)abbrevs + types[6*i+5];
++			if (oppoff) *oppoff = -(int32_t)zi_read32(types+6*alt);
++			UNLOCK(lock);
++			return;
++		}
++	}
++
++	if (!__daylight) goto std;
++
++	/* FIXME: may be broken if DST changes right at year boundary?
++	 * Also, this could be more efficient.*/
++	long long y = t / 31556952 + 70;
++	while (__year_to_secs(y, 0) > t) y--;
++	while (__year_to_secs(y+1, 0) < t) y++;
++
++	long long t0 = rule_to_secs(r0, y);
++	long long t1 = rule_to_secs(r1, y);
++
++	if (t0 < t1) {
++		if (!local) {
++			t0 += __timezone;
++			t1 += dst_off;
++		}
++		if (t >= t0 && t < t1) goto dst;
++		goto std;
++	} else {
++		if (!local) {
++			t1 += __timezone;
++			t0 += dst_off;
++		}
++		if (t >= t1 && t < t0) goto std;
++		goto dst;
++	}
++std:
++	*isdst = 0;
++	*offset = __timezone;
++	if (oppoff) *oppoff = dst_off;
++	*zonename = __tzname[0];
++	UNLOCK(lock);
++	return;
++dst:
++	*isdst = 1;
++	*offset = dst_off;
++	if (oppoff) *oppoff = __timezone;
++	*zonename = __tzname[1];
++	UNLOCK(lock);
++}
++
++void __tzset()
++{
++	LOCK(lock);
++	do_tzset();
++	UNLOCK(lock);
++}
++
++weak_alias(__tzset, tzset);
+diff --git a/src/time/__year_to_secs.c b/src/time/__year_to_secs.c
+new file mode 100644
+index 0000000..2824ec6
+--- /dev/null
++++ b/src/time/__year_to_secs.c
+@@ -0,0 +1,47 @@
++long long __year_to_secs(long long year, int *is_leap)
++{
++	if (year-2ULL <= 136) {
++		int y = year;
++		int leaps = (y-68)>>2;
++		if (!((y-68)&3)) {
++			leaps--;
++			if (is_leap) *is_leap = 1;
++		} else if (is_leap) *is_leap = 0;
++		return 31536000*(y-70) + 86400*leaps;
++	}
++
++	int cycles, centuries, leaps, rem;
++
++	if (!is_leap) is_leap = &(int){0};
++	cycles = (year-100) / 400;
++	rem = (year-100) % 400;
++	if (rem < 0) {
++		cycles--;
++		rem += 400;
++	}
++	if (!rem) {
++		*is_leap = 1;
++		centuries = 0;
++		leaps = 0;
++	} else {
++		if (rem >= 200) {
++			if (rem >= 300) centuries = 3, rem -= 300;
++			else centuries = 2, rem -= 200;
++		} else {
++			if (rem >= 100) centuries = 1, rem -= 100;
++			else centuries = 0;
++		}
++		if (!rem) {
++			*is_leap = 0;
++			leaps = 0;
++		} else {
++			leaps = rem / 4U;
++			rem %= 4U;
++			*is_leap = !rem;
++		}
++	}
++
++	leaps += 97*cycles + 24*centuries - *is_leap;
++
++	return (year-100) * 31536000LL + leaps * 86400LL + 946684800 + 86400;
++}
+diff --git a/src/time/gmtime.c b/src/time/gmtime.c
+index d4d5d1f..3791b24 100644
+--- a/src/time/gmtime.c
++++ b/src/time/gmtime.c
+@@ -1,11 +1,10 @@
+-#include <time.h>
++#include "time_impl.h"
++#include <errno.h>
+ 
+-#include "__time.h"
++struct tm *__gmtime_r(const time_t *restrict, struct tm *restrict);
+ 
+ struct tm *gmtime(const time_t *t)
+ {
+ 	static struct tm tm;
+-	__time_to_tm(*t, &tm);
+-	tm.tm_isdst = 0;
+-	return &tm;
++	return __gmtime_r(t, &tm);
+ }
+diff --git a/src/time/gmtime_r.c b/src/time/gmtime_r.c
+index 13a2548..fee01bd 100644
+--- a/src/time/gmtime_r.c
++++ b/src/time/gmtime_r.c
+@@ -1,10 +1,17 @@
+-#include <time.h>
++#include "time_impl.h"
++#include <errno.h>
++#include "libc.h"
+ 
+-#include "__time.h"
+-
+-struct tm *gmtime_r(const time_t *restrict t, struct tm *restrict result)
++struct tm *__gmtime_r(const time_t *restrict t, struct tm *restrict tm)
+ {
+-	__time_to_tm(*t, result);
+-	result->tm_isdst = 0;
+-	return result;
++	if (__secs_to_tm(*t, tm) < 0) {
++		errno = EOVERFLOW;
++		return 0;
++	}
++	tm->tm_isdst = 0;
++	tm->__tm_gmtoff = 0;
++	tm->__tm_zone = "GMT";
++	return tm;
+ }
++
++weak_alias(__gmtime_r, gmtime_r);
+diff --git a/src/time/localtime.c b/src/time/localtime.c
+index abd5e84..bb6718c 100644
+--- a/src/time/localtime.c
++++ b/src/time/localtime.c
+@@ -1,12 +1,9 @@
+-#include <time.h>
++#include "time_impl.h"
+ 
+-#include "__time.h"
++struct tm *__localtime_r(const time_t *restrict, struct tm *restrict);
+ 
+ struct tm *localtime(const time_t *t)
+ {
+ 	static struct tm tm;
+-	__tzset();
+-	__time_to_tm(*t - __timezone, &tm);
+-	tm.tm_isdst = -1;
+-	return __dst_adjust(&tm);
++	return __localtime_r(t, &tm);
+ }
+diff --git a/src/time/localtime_r.c b/src/time/localtime_r.c
+index 389a591..c52678f 100644
+--- a/src/time/localtime_r.c
++++ b/src/time/localtime_r.c
+@@ -1,11 +1,15 @@
+-#include <time.h>
++#include "time_impl.h"
++#include <errno.h>
++#include "libc.h"
+ 
+-#include "__time.h"
+-
+-struct tm *localtime_r(const time_t *restrict t, struct tm *restrict result)
++struct tm *__localtime_r(const time_t *restrict t, struct tm *restrict tm)
+ {
+-	__tzset();
+-	__time_to_tm(*t - __timezone, result);
+-	result->tm_isdst = -1;
+-	return __dst_adjust(result);
++	__secs_to_zone(*t, 0, &tm->tm_isdst, &tm->__tm_gmtoff, 0, &tm->__tm_zone);
++	if (__secs_to_tm((long long)*t - tm->__tm_gmtoff, tm) < 0) {
++		errno = EOVERFLOW;
++		return 0;
++	}
++	return tm;
+ }
++
++weak_alias(__localtime_r, localtime_r);
+diff --git a/src/time/mktime.c b/src/time/mktime.c
+index 858cd50..ef1fb42 100644
+--- a/src/time/mktime.c
++++ b/src/time/mktime.c
+@@ -1,24 +1,30 @@
+-#include <time.h>
+-
+-#include "__time.h"
++#include "time_impl.h"
++#include <errno.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ time_t mktime(struct tm *tm)
+ {
+-	int isdst = tm->tm_isdst;
+-	time_t t, lt;
++	struct tm new;
++	long opp;
++	long long t = __tm_to_secs(tm);
++
++	__secs_to_zone(t, 1, &new.tm_isdst, &new.__tm_gmtoff, &opp, &new.__tm_zone);
+ 
+-	__tzset();
++	if (tm->tm_isdst>=0 && new.tm_isdst!=tm->tm_isdst)
++		t += opp - new.__tm_gmtoff;
+ 
+-	tm->tm_sec += __timezone;
+-	if (isdst > 0) tm->tm_sec += __dst_offset;
++	t += new.__tm_gmtoff;
++	if ((time_t)t != t) goto error;
+ 
+-	t = __tm_to_time(tm);
+-	
+-	lt = t - __timezone;
+-	if (isdst > 0) lt -= __dst_offset;
+-	__time_to_tm(lt, tm);
++	__secs_to_zone(t, 0, &new.tm_isdst, &new.__tm_gmtoff, &opp, &new.__tm_zone);
+ 
+-	__dst_adjust(tm);
+-	
++	if (__secs_to_tm(t - new.__tm_gmtoff, &new) < 0) goto error;
++
++	*tm = new;
+ 	return t;
++
++error:
++	errno = EOVERFLOW;
++	return -1;
+ }
+diff --git a/src/time/strftime.c b/src/time/strftime.c
+index 5768705..d16e813 100644
+--- a/src/time/strftime.c
++++ b/src/time/strftime.c
+@@ -3,7 +3,6 @@
+ #include <langinfo.h>
+ #include <time.h>
+ #include <limits.h>
+-#include "__time.h"
+ 
+ // FIXME: integer overflows
+ 
+@@ -182,14 +181,11 @@ do_fmt:
+ 			fmt = "%04d";
+ 			goto number;
+ 		case 'z':
+-			if (tm->tm_isdst < 0) continue;
+-			val = -__timezone - (tm->tm_isdst ? __dst_offset : 0);
++			val = -tm->__tm_gmtoff;
+ 			l += snprintf(s+l, n-l, "%+.2d%.2d", val/3600, abs(val%3600)/60);
+ 			continue;
+ 		case 'Z':
+-			if (tm->tm_isdst < 0 || !__tzname[0] || !__tzname[0][0])
+-				continue;
+-			l += snprintf(s+l, n-l, "%s", __tzname[!!tm->tm_isdst]);
++			l += snprintf(s+l, n-l, "%s", tm->__tm_zone);
+ 			continue;
+ 		default:
+ 			return 0;
+diff --git a/src/time/time_impl.h b/src/time/time_impl.h
+new file mode 100644
+index 0000000..2e9a2c0
+--- /dev/null
++++ b/src/time/time_impl.h
+@@ -0,0 +1,9 @@
++#include <time.h>
++
++int __days_in_month(int, int);
++int __month_to_secs(int, int);
++long long __year_to_secs(long long, int *);
++long long __tm_to_secs(const struct tm *);
++int __secs_to_tm(long long, struct tm *);
++void __secs_to_zone(long long, int, int *, long *, long *, const char **);
++const unsigned char *__map_file(const char *, size_t *);
+diff --git a/src/time/timegm.c b/src/time/timegm.c
+index 6d08917..e7a7939 100644
+--- a/src/time/timegm.c
++++ b/src/time/timegm.c
+@@ -1,9 +1,18 @@
+ #define _GNU_SOURCE
+-#include <time.h>
+-
+-#include "__time.h"
++#include "time_impl.h"
++#include <errno.h>
+ 
+ time_t timegm(struct tm *tm)
+ {
+-	return __tm_to_time(tm);
++	struct tm new;
++	long long t = __tm_to_secs(tm);
++	if (__secs_to_tm(t, &new) < 0) {
++		errno = EOVERFLOW;
++		return -1;
++	}
++	*tm = new;
++	tm->tm_isdst = 0;
++	tm->__tm_gmtoff = 0;
++	tm->__tm_zone = "GMT";
++	return t;
+ }
+diff --git a/src/time/tzset.c b/src/time/tzset.c
+deleted file mode 100644
+index 7e836c2..0000000
+--- a/src/time/tzset.c
++++ /dev/null
+@@ -1,172 +0,0 @@
+-#include <time.h>
+-#include <ctype.h>
+-#include <limits.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include "libc.h"
+-
+-#include "__time.h"
+-
+-long  __timezone = 0;
+-int   __daylight = 0;
+-char *__tzname[2] = { 0, 0 };
+-int   __dst_offset = 0;
+-
+-weak_alias(__timezone, timezone);
+-weak_alias(__daylight, daylight);
+-weak_alias(__tzname, tzname);
+-
+-static char std_name[TZNAME_MAX+1];
+-static char dst_name[TZNAME_MAX+1];
+-
+-/* all elements are zero-based */
+-static struct rule {
+-	signed char month;
+-	signed char week;
+-	short day;
+-	int time;
+-} __dst_start, __dst_end;
+-
+-static void zname(char *d, char **s)
+-{
+-	int i;
+-	for (i=0; i<TZNAME_MAX && isalpha(d[i]=**s); i++, (*s)++);
+-	d[i] = 0;
+-}
+-
+-static int hhmmss(char **s)
+-{
+-	int ofs = strtol(*s, s, 10)*3600;
+-	if (ofs >= 0) {
+-		if (**s == ':') ofs += strtol(*s+1, s, 10)*60;
+-		if (**s == ':') ofs += strtol(*s+1, s, 10);
+-	} else {
+-		if (**s == ':') ofs -= strtol(*s+1, s, 10)*60;
+-		if (**s == ':') ofs -= strtol(*s+1, s, 10);
+-	}
+-	return ofs;
+-}
+-
+-static int dstrule(struct rule *rule, char **s)
+-{
+-	if (**s != ',') return -1;
+-	switch (*++*s) {
+-	case 'J':
+-		rule->month = 'J';
+-		rule->day = strtol(*s+1, s, 10)-1;
+-		break;
+-	case 'M':
+-		rule->month = strtol(*s+1, s, 10)-1;
+-		if (**s != '.' || rule->month < 0 || rule->month > 11)
+-			return -1;
+-		rule->week = strtol(*s+1, s, 10)-1;
+-		if (**s != '.' || rule->week < 0 || rule->week > 4)
+-			return -1;
+-		rule->day = strtol(*s+1, s, 10);
+-		if (rule->day < 0 || rule->day > 6)
+-			return -1;
+-		break;
+-	default:
+-		rule->month = 'L';
+-		rule->day = strtol(*s+1, s, 10);
+-		break;
+-	}
+-	if (**s == '/') {
+-		(*s)++;
+-		rule->time = hhmmss(s);
+-	} else rule->time = 7200;
+-	return 0;
+-}
+-
+-void tzset(void)
+-{
+-	char *z, *a;
+-	
+-	strcpy(std_name, "GMT");
+-	strcpy(dst_name, "GMT");
+-	__tzname[0] = std_name;
+-	__tzname[1] = dst_name;
+-	__timezone = 0;
+-	__daylight = 0;
+-	
+-	if (!(z = getenv("TZ")) || !isalpha(*z)) return;
+-
+-	zname(std_name, &z);
+-	__timezone = hhmmss(&z);
+-
+-	zname(dst_name, &z);
+-	if (dst_name[0]) __daylight=1;
+-	a = z;
+-	__dst_offset = hhmmss(&z) - __timezone;
+-	if (z==a) __dst_offset = -3600;
+-
+-	if (dstrule(&__dst_start, &z) || dstrule(&__dst_end, &z))
+-		__daylight = 0;
+-}
+-
+-void __tzset(void)
+-{
+-	static int lock[2], init;
+-	if (init) return;
+-	LOCK(lock);
+-	if (!init) tzset();
+-	init=1;
+-	UNLOCK(lock);
+-}
+-
+-static int is_leap(int year)
+-{
+-	year -= 100;
+-	return !(year&3) && ((year%100) || !(year%400));
+-}
+-
+-static int cutoff_yday(struct tm *tm, struct rule *rule)
+-{
+-	static const char days_in_month[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+-	static const int first_day[] = {0,31,59,90,120,151,181,212,243,273,304,335};
+-	int yday, mday, leap;
+-	
+-	switch (rule->month) {
+-	case 'J':
+-		return rule->day + (tm->tm_mon > 1 && is_leap(tm->tm_year));
+-	case 'L':
+-		return rule->day;
+-	default:
+-		yday = first_day[rule->month];
+-		leap = is_leap(tm->tm_year);
+-		if (rule->month > 1 && leap) yday++;
+-		mday = (rule->day - (yday + tm->tm_wday - tm->tm_yday) + 1400)%7 + 7*rule->week;
+-		if (mday >= days_in_month[rule->month] + (leap && rule->month == 1))
+-			mday -= 7;
+-		return mday + yday;
+-	}
+-}
+-
+-struct tm *__dst_adjust(struct tm *tm)
+-{
+-	time_t t;
+-	int start, end, secs;
+-	int after_start, before_end;
+-
+-	if (tm->tm_isdst >= 0) return tm;
+-	if (!__daylight) {
+-		tm->tm_isdst = 0;
+-		return tm;
+-	}
+-	
+-	secs = tm->tm_hour*3600 + tm->tm_min*60 + tm->tm_sec;
+-	start = cutoff_yday(tm, &__dst_start);
+-	end = cutoff_yday(tm, &__dst_end);
+-
+-	after_start = (tm->tm_yday > start || (tm->tm_yday == start && secs >= __dst_start.time));
+-	before_end = (tm->tm_yday < end || (tm->tm_yday == end && secs < __dst_end.time));
+-
+-	if ((after_start && before_end) || ((end < start) && (after_start || before_end))) {
+-		tm->tm_sec -= __dst_offset;
+-		tm->tm_isdst = 1;
+-		t = __tm_to_time(tm);
+-		return __time_to_tm(t, tm);
+-	} else tm->tm_isdst = 0;
+-
+-	return tm;
+-}
+diff --git a/src/unistd/ctermid.c b/src/unistd/ctermid.c
+index 21b44ec..ffa9b75 100644
+--- a/src/unistd/ctermid.c
++++ b/src/unistd/ctermid.c
+@@ -4,20 +4,18 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <limits.h>
++#include "syscall.h"
+ 
+ char *ctermid(char *s)
+ {
+-	static char *s2;
++	static char s2[L_ctermid];
+ 	int fd;
+-	if (!s) {
+-		if (!s2) s2 = malloc(L_ctermid);
+-		s = s2;
++	if (!s) s = s2;
++	*s = 0;
++	fd = open("/dev/tty", O_WRONLY | O_NOCTTY | O_CLOEXEC);
++	if (fd >= 0) {
++		ttyname_r(fd, s, L_ctermid);
++		__syscall(SYS_close, fd);
+ 	}
+-	fd = open("/dev/tty", O_WRONLY | O_NOCTTY);
+-	if (fd < 0)
+-		return strcpy(s, "");
+-	if (ttyname_r(fd, s, L_ctermid))
+-		strcpy(s, "");
+-	close(fd);
+ 	return s;
+ }
+diff --git a/tools/mkalltypes.sed b/tools/mkalltypes.sed
+new file mode 100644
+index 0000000..fa15efc
+--- /dev/null
++++ b/tools/mkalltypes.sed
+@@ -0,0 +1,15 @@
++/^TYPEDEF/s/TYPEDEF \(.*\) \([^ ]*\);$/#if defined(__NEED_\2) \&\& !defined(__DEFINED_\2)\
++typedef \1 \2;\
++#define __DEFINED_\2\
++#endif\
++/
++/^STRUCT/s/STRUCT * \([^ ]*\) \(.*\);$/#if defined(__NEED_struct_\1) \&\& !defined(__DEFINED_struct_\1)\
++struct \1 \2;\
++#define __DEFINED_struct_\1\
++#endif\
++/
++/^UNION/s/UNION * \([^ ]*\) \(.*\);$/#if defined(__NEED_union_\1) \&\& !defined(__DEFINED_union_\1)\
++union \1 \2;\
++#define __DEFINED_union_\1\
++#endif\
++/
+-- 
+1.7.3.4
+
+--- a/arch/arm/bits/alltypes.h.in
++++ b/arch/arm/bits/alltypes.h.in
+@@ -1,5 +1,6 @@
+ #define _Addr int
+ #define _Int64 long long
++#define _Reg int
+ 
+ TYPEDEF __builtin_va_list va_list;
+ TYPEDEF __builtin_va_list __isoc_va_list;
+diff --git a/arch/i386/bits/alltypes.h.in b/arch/i386/bits/alltypes.h.in
+index 04fd1cb..efd2c07 100644
+--- a/arch/i386/bits/alltypes.h.in
++++ b/arch/i386/bits/alltypes.h.in
+@@ -1,5 +1,6 @@
+ #define _Addr int
+ #define _Int64 long long
++#define _Reg int
+ 
+ #if __GNUC__ >= 3
+ TYPEDEF __builtin_va_list va_list;
+diff --git a/arch/microblaze/bits/alltypes.h.in b/arch/microblaze/bits/alltypes.h.in
+index eb842aa..6bd7942 100644
+--- a/arch/microblaze/bits/alltypes.h.in
++++ b/arch/microblaze/bits/alltypes.h.in
+@@ -1,5 +1,6 @@
+ #define _Addr int
+ #define _Int64 long long
++#define _Reg int
+ 
+ TYPEDEF __builtin_va_list va_list;
+ TYPEDEF __builtin_va_list __isoc_va_list;
+diff --git a/arch/mips/bits/alltypes.h.in b/arch/mips/bits/alltypes.h.in
+index eb842aa..6bd7942 100644
+--- a/arch/mips/bits/alltypes.h.in
++++ b/arch/mips/bits/alltypes.h.in
+@@ -1,5 +1,6 @@
+ #define _Addr int
+ #define _Int64 long long
++#define _Reg int
+ 
+ TYPEDEF __builtin_va_list va_list;
+ TYPEDEF __builtin_va_list __isoc_va_list;
+diff --git a/arch/powerpc/bits/alltypes.h.in b/arch/powerpc/bits/alltypes.h.in
+index 1c3fe28..e9d8dd8 100644
+--- a/arch/powerpc/bits/alltypes.h.in
++++ b/arch/powerpc/bits/alltypes.h.in
+@@ -1,5 +1,6 @@
+ #define _Addr int
+ #define _Int64 long long
++#define _Reg int
+ 
+ TYPEDEF __builtin_va_list va_list;
+ TYPEDEF __builtin_va_list __isoc_va_list;
+diff --git a/arch/x86_64/bits/alltypes.h.in b/arch/x86_64/bits/alltypes.h.in
+index b9bff86..277e944 100644
+--- a/arch/x86_64/bits/alltypes.h.in
++++ b/arch/x86_64/bits/alltypes.h.in
+@@ -1,5 +1,6 @@
+ #define _Addr long
+ #define _Int64 long
++#define _Reg long
+ 
+ TYPEDEF __builtin_va_list va_list;
+ TYPEDEF __builtin_va_list __isoc_va_list;
+diff --git a/include/alltypes.h.in b/include/alltypes.h.in
+index f3481fc..644c61d 100644
+--- a/include/alltypes.h.in
++++ b/include/alltypes.h.in
+@@ -17,7 +17,7 @@ TYPEDEF unsigned _Int64 uint64_t;
+ TYPEDEF unsigned _Int64 uintmax_t;
+ 
+ TYPEDEF unsigned mode_t;
+-TYPEDEF unsigned nlink_t;
++TYPEDEF unsigned _Reg nlink_t;
+ TYPEDEF _Int64 off_t;
+ TYPEDEF unsigned _Int64 ino_t;
+ TYPEDEF unsigned _Int64 dev_t;
+-- 
+--- a/include/alltypes.h.in
++++ b/include/alltypes.h.in
+@@ -4,6 +4,7 @@ TYPEDEF _Addr ptrdiff_t;
+ TYPEDEF _Addr ssize_t;
+ TYPEDEF _Addr intptr_t;
+ TYPEDEF _Addr regoff_t;
++TYPEDEF _Reg register_t;
+ 
+ TYPEDEF signed char     int8_t;
+ TYPEDEF short           int16_t;
+@@ -14,6 +15,7 @@ TYPEDEF unsigned char   uint8_t;
+ TYPEDEF unsigned short  uint16_t;
+ TYPEDEF unsigned int    uint32_t;
+ TYPEDEF unsigned _Int64 uint64_t;
++TYPEDEF unsigned _Int64 u_int64_t;
+ TYPEDEF unsigned _Int64 uintmax_t;
+ 
+ TYPEDEF unsigned mode_t;
+diff --git a/include/sys/types.h b/include/sys/types.h
+index db8661b..27170f6 100644
+--- a/include/sys/types.h
++++ b/include/sys/types.h
+@@ -49,13 +49,17 @@ extern "C" {
+ #define __NEED_pthread_key_t
+ #define __NEED_pthread_once_t
+ #define __NEED_useconds_t
++#define __NEED_u_int64_t
++
++#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
++#define __NEED_register_t
++#endif
+ 
+ #include <bits/alltypes.h>
+ 
+ typedef unsigned char u_int8_t;
+ typedef unsigned short u_int16_t;
+ typedef unsigned u_int32_t;
+-typedef unsigned long long u_int64_t;
+ 
+ #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+ typedef char *caddr_t;
+@@ -65,7 +69,6 @@ typedef unsigned u_int, uint;
+ typedef unsigned long u_long, ulong;
+ typedef long long quad_t;
+ typedef unsigned long long u_quad_t;
+-typedef long register_t;
+ #include <endian.h>
+ #include <sys/select.h>
+ #include <sys/sysmacros.h>
+-- 
+--- a/arch/arm/bits/stdint.h
++++ b/arch/arm/bits/stdint.h
+@@ -17,6 +17,4 @@ typedef uint32_t uint_fast32_t;
+ #define UINTPTR_MAX     UINT32_MAX
+ #define PTRDIFF_MIN     INT32_MIN
+ #define PTRDIFF_MAX     INT32_MAX
+-#define SIG_ATOMIC_MIN  INT32_MIN
+-#define SIG_ATOMIC_MAX  INT32_MAX
+ #define SIZE_MAX        UINT32_MAX
+diff --git a/arch/microblaze/bits/stdint.h b/arch/microblaze/bits/stdint.h
+index 43d3d59..d1b2712 100644
+--- a/arch/microblaze/bits/stdint.h
++++ b/arch/microblaze/bits/stdint.h
+@@ -17,6 +17,4 @@ typedef uint32_t uint_fast32_t;
+ #define UINTPTR_MAX     UINT32_MAX
+ #define PTRDIFF_MIN     INT32_MIN
+ #define PTRDIFF_MAX     INT32_MAX
+-#define SIG_ATOMIC_MIN  INT32_MIN
+-#define SIG_ATOMIC_MAX  INT32_MAX
+ #define SIZE_MAX        UINT32_MAX
+diff --git a/arch/mips/bits/stdint.h b/arch/mips/bits/stdint.h
+index 43d3d59..d1b2712 100644
+--- a/arch/mips/bits/stdint.h
++++ b/arch/mips/bits/stdint.h
+@@ -17,6 +17,4 @@ typedef uint32_t uint_fast32_t;
+ #define UINTPTR_MAX     UINT32_MAX
+ #define PTRDIFF_MIN     INT32_MIN
+ #define PTRDIFF_MAX     INT32_MAX
+-#define SIG_ATOMIC_MIN  INT32_MIN
+-#define SIG_ATOMIC_MAX  INT32_MAX
+ #define SIZE_MAX        UINT32_MAX
+diff --git a/arch/powerpc/bits/stdint.h b/arch/powerpc/bits/stdint.h
+index 43d3d59..d1b2712 100644
+--- a/arch/powerpc/bits/stdint.h
++++ b/arch/powerpc/bits/stdint.h
+@@ -17,6 +17,4 @@ typedef uint32_t uint_fast32_t;
+ #define UINTPTR_MAX     UINT32_MAX
+ #define PTRDIFF_MIN     INT32_MIN
+ #define PTRDIFF_MAX     INT32_MAX
+-#define SIG_ATOMIC_MIN  INT32_MIN
+-#define SIG_ATOMIC_MAX  INT32_MAX
+ #define SIZE_MAX        UINT32_MAX
+diff --git a/arch/x86_64/bits/stdint.h b/arch/x86_64/bits/stdint.h
+index 495e1e4..1bb147f 100644
+--- a/arch/x86_64/bits/stdint.h
++++ b/arch/x86_64/bits/stdint.h
+@@ -17,6 +17,4 @@ typedef uint32_t uint_fast32_t;
+ #define UINTPTR_MAX     UINT64_MAX
+ #define PTRDIFF_MIN     INT64_MIN
+ #define PTRDIFF_MAX     INT64_MAX
+-#define SIG_ATOMIC_MIN  INT64_MIN
+-#define SIG_ATOMIC_MAX  INT64_MAX
+ #define SIZE_MAX        UINT64_MAX
+-- 
+--- a/include/alltypes.h.in
++++ b/include/alltypes.h.in
+@@ -66,3 +66,7 @@ STRUCT iovec { void *iov_base; size_t iov_len; };
+ 
+ TYPEDEF unsigned socklen_t;
+ TYPEDEF unsigned short sa_family_t;
++
++#undef _Addr
++#undef _Int64
++#undef _Reg
+-- 
+--- a/Makefile
++++ b/Makefile
+@@ -80,6 +80,9 @@ include/bits/alltypes.h: include/bits/alltypes.h.in include/alltypes.h.in tools/
+ 
+ src/ldso/dynlink.lo: arch/$(ARCH)/reloc.h
+ 
++OPTIMIZE_SRCS = $(wildcard $(OPTIMIZE_GLOBS:%=src/%))
++$(OPTIMIZE_SRCS:%.c=%.o) $(OPTIMIZE_SRCS:%.c=%.lo): CFLAGS += -O3
++
+ %.o: $(ARCH)/%.s
+ 	$(CC) $(CFLAGS_ALL_STATIC) -c -o $@ $<
+ 
+diff --git a/configure b/configure
+index b679986..327863c 100755
+--- a/configure
++++ b/configure
+@@ -24,6 +24,7 @@ System types:
+   --host=HOST             same as --target
+ 
+ Optional features:
++  --enable-optimize=...   optimize listed components for speed over size [auto]
+   --enable-debug          build with debugging information [disabled]
+   --enable-warnings       build with recommended warnings flags [disabled]
+   --enable-gcc-wrapper    build musl-gcc toolchain wrapper [auto]
+@@ -104,6 +105,7 @@ fi
+ CFLAGS_C99FSE=
+ CFLAGS_AUTO=
+ LDFLAGS_AUTO=
++OPTIMIZE_GLOBS=
+ prefix=/usr/local/musl
+ exec_prefix='$(prefix)'
+ bindir='$(exec_prefix)/bin'
+@@ -111,6 +113,7 @@ libdir='$(prefix)/lib'
+ includedir='$(prefix)/include'
+ syslibdir='/lib'
+ target=
++optimize=auto
+ debug=no
+ warnings=no
+ shared=yes
+@@ -129,6 +132,9 @@ case "$arg" in
+ --disable-shared|--enable-shared=no) shared=no ;;
+ --enable-static|--enable-static=yes) static=yes ;;
+ --disable-static|--enable-static=no) static=no ;;
++--enable-optimize) optimize=yes ;;
++--enable-optimize=*) optimize=${arg#*=} ;;
++--disable-optimize) optimize=no ;;
+ --enable-debug|--enable-debug=yes) debug=yes ;;
+ --disable-debug|--enable-debug=no) debug=no ;;
+ --enable-warnings|--enable-warnings=yes) warnings=yes ;;
+@@ -230,14 +236,57 @@ tryflag CFLAGS_C99FSE -fexcess-precision=standard \
+ || { test "$ARCH" = i386 && tryflag CFLAGS_C99FSE -ffloat-store ; }
+ tryflag CFLAGS_C99FSE -frounding-math
+ 
++
++#
++# If debugging is explicitly enabled, don't auto-enable optimizations
++#
++if test "$debug" = yes ; then
++CFLAGS_AUTO=-g
++test "$optimize" = auto && optimize=no
++fi
++
+ #
+-# Setup basic default CFLAGS: debug, optimization, and -pipe
++# Possibly add a -O option to CFLAGS and select modules to optimize with
++# -O3 based on the status of --enable-optimize and provided CFLAGS.
+ #
+-if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then :
++printf "checking for optimization settings... "
++case "x$optimize" in
++xauto)
++if fnmatch '-O*|*\ -O*' "$CFLAGS_AUTO $CFLAGS" ; then
++printf "using provided CFLAGS\n" ;optimize=no
+ else
+-tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
++printf "using defaults\n" ; optimize=yes
+ fi
+-test "x$debug" = xyes && CFLAGS_AUTO="-g"
++;;
++xsize|xnone) printf "minimize size\n" ; optimize=size ;;
++xno|x) printf "disabled\n" ; optimize=no ;;
++*) printf "custom\n" ;;
++esac
++
++test "$optimize" = no || tryflag CFLAGS_AUTO -Os || tryflag CFLAGS_AUTO -O2
++test "$optimize" = yes && optimize="internal,malloc,math,string"
++
++if fnmatch 'no|size' "$optimize" ; then :
++else
++printf "components to be optimized for speed:"
++while test "$optimize" ; do
++case "$optimize" in
++*,*) this=${optimize%%,*} optimize=${optimize#*,} ;;
++*) this=$optimize optimize=
++esac
++printf " $this"
++case "$this" in
++*/*.c) ;;
++*/*) this=$this*.c ;;
++*) this=$this/*.c ;;
++esac
++OPTIMIZE_GLOBS="$OPTIMIZE_GLOBS $this"
++done
++OPTIMIZE_GLOBS=${OPTIMIZE_GLOBS# }
++printf "\n"
++fi
++
++# Always try -pipe
+ tryflag CFLAGS_AUTO -pipe
+ 
+ #
+@@ -267,14 +316,6 @@ tryflag CFLAGS_AUTO -fno-asynchronous-unwind-tables
+ tryflag CFLAGS_AUTO -Wa,--noexecstack
+ 
+ #
+-# Some optimization levels add bloated alignment that hurt performance
+-#
+-tryflag CFLAGS_AUTO -falign-functions=1
+-tryflag CFLAGS_AUTO -falign-labels=1
+-tryflag CFLAGS_AUTO -falign-loops=1
+-tryflag CFLAGS_AUTO -falign-jumps=1
+-
+-#
+ # On x86, make sure we don't have incompatible instruction set
+ # extensions enabled by default. This is bad for making static binaries.
+ # We cheat and use i486 rather than i386 because i386 really does not
+@@ -366,6 +407,7 @@ CPPFLAGS = $CPPFLAGS
+ LDFLAGS = $LDFLAGS_AUTO $LDFLAGS
+ CROSS_COMPILE = $CROSS_COMPILE
+ LIBCC = $LIBCC
++OPTIMIZE_GLOBS = $OPTIMIZE_GLOBS
+ EOF
+ test "x$static" = xno && echo "STATIC_LIBS ="
+ test "x$shared" = xno && echo "SHARED_LIBS ="
+-- 
+1.7.3.4
+

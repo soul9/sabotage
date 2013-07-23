@@ -10,7 +10,7 @@ filesize=747520
 sha512=7ca852eda3be7b34bfdaf1eb9e7d435987d5177f865737b211e62f4037825cc322436e1ff49c3f875b3a20679f6f21ba5ffff271d03d3d03c7a97854f4f51832
 
 [build]
-patch -p1 < "$K"/musl-arm-eh.patch || exit 1
+patch -p1 < "$K"/musl-0911-cumul.patch || exit 1
 
 [ -z "$butch_prefix" ] && butch_prefix=/ # musl's configure doesnt seem to handle empty prefix properly
 
