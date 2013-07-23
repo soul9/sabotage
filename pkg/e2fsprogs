@@ -16,7 +16,7 @@ CFLAGS="-fPIC -DHAVE_LSEEK64 -DHAVE_LSEEK64_PROTOTYPE -Dlseek64=lseek -fgnu89-in
   ./configure -C --prefix="$butch_prefix" --with-root-prefix="$butch_prefix" \
   --sbindir="$butch_prefix"/bin --disable-nls --disable-tls || exit 1
 sed -i 's:sys/signal.h:signal.h:' misc/fsck.c
-make -j$MAKE_THREADS V=1 CFLAGS="-D_GNU_SOURCE -include math.h -fPIC -Dopen64=open" || exit 1
+make -j$MAKE_THREADS V=1 CFLAGS="-D_GNU_SOURCE -include math.h -fPIC -Dopen64=open -D__uint64_t=u_int64_t" || exit 1
 # dont fail because of makeinfo
 make DESTDIR="$butch_install_dir" install -k
 
