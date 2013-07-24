@@ -2,6 +2,9 @@
 
 [mirrors]
 http://mirror.wzff.de/sabotage/tarballs/kernel-headers-3.3.4-1.tar.gz
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/kernel-headers-3.3.4-1.tar.gz
+http://codu.org/~rofl/tarballs/kernel-headers-3.3.4-1.tar.gz
+
 [main]
 filesize=3350751
 sha512=62805c6433521df2ba9d741f1e23452f03d205b2472e11b27cfe91b37b0c0ed353de6a803803f142d214ea734817dca9c49e0d08988e9011c52882f7a5243a86
