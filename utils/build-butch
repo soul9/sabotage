@@ -7,7 +7,7 @@ filename="$C"/butch-$version.tar.bz2
 
 if [ -z "$BUTCH_BIN" ] ; then
 
-tarxf http://mirror.wzff.de/butch/ butch-$version .tar.bz2 butch
+tarxf http://foss.aueb.gr/mirrors/linux/butch/ butch-$version .tar.bz2 butch
 
 getfilesize() {
 	wc -c "$1" | cut -d " " -f 1
