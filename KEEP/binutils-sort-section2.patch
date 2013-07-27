@@ -1,0 +1,219 @@
+From e65eb8b1c6dad97ae8315390356084dac7633e3f Mon Sep 17 00:00:00 2001
+--- a/ld/ldlang.c
++++ b/ld/ldlang.c
+@@ -2462,7 +2462,9 @@ wild_sort (lang_wild_statement_type *wild,
+       /* Here either the files are not sorted by name, or we are
+ 	 looking at the sections for this file.  */
+ 
+-      if (sec != NULL && sec->spec.sorted != none)
++      if (sec != NULL
++	  && sec->spec.sorted != none
++	  && sec->spec.sorted != by_none)
+ 	if (compare_section (sec->spec.sorted, section, ls->section) < 0)
+ 	  break;
+     }
+diff --git a/ld/scripttempl/elf.sc b/ld/scripttempl/elf.sc
+index 17c2cf1..51a655e 100644
+--- a/ld/scripttempl/elf.sc
++++ b/ld/scripttempl/elf.sc
+@@ -462,7 +462,7 @@ cat <<EOF
+   .init         ${RELOCATING-0} :
+   {
+     ${RELOCATING+${INIT_START}}
+-    KEEP (*(.init))
++    KEEP (*(SORT_NONE(.init)))
+     ${RELOCATING+${INIT_END}}
+   } ${FILL}
+ 
+@@ -483,7 +483,7 @@ cat <<EOF
+   .fini         ${RELOCATING-0} :
+   {
+     ${RELOCATING+${FINI_START}}
+-    KEEP (*(.fini))
++    KEEP (*(SORT_NONE(.fini)))
+     ${RELOCATING+${FINI_END}}
+   } ${FILL}
+   ${RELOCATING+PROVIDE (__${ETEXT_NAME} = .);}
+diff --git a/ld/scripttempl/elf32msp430.sc b/ld/scripttempl/elf32msp430.sc
+index 5098c17..beabd89 100644
+--- a/ld/scripttempl/elf32msp430.sc
++++ b/ld/scripttempl/elf32msp430.sc
+@@ -99,17 +99,17 @@ SECTIONS
+   .text :
+   {
+     ${RELOCATING+. = ALIGN(2);}
+-    *(.init)
+-    *(.init0)  /* Start here after reset.  */
+-    *(.init1)
+-    *(.init2)  /* Copy data loop  */
+-    *(.init3)
+-    *(.init4)  /* Clear bss  */
+-    *(.init5)
+-    *(.init6)  /* C++ constructors.  */
+-    *(.init7)
+-    *(.init8)
+-    *(.init9)  /* Call main().  */
++    *(SORT_NONE(.init))
++    *(SORT_NONE(.init0))  /* Start here after reset.  */
++    *(SORT_NONE(.init1))
++    *(SORT_NONE(.init2))  /* Copy data loop  */
++    *(SORT_NONE(.init3))
++    *(SORT_NONE(.init4))  /* Clear bss  */
++    *(SORT_NONE(.init5))
++    *(SORT_NONE(.init6))  /* C++ constructors.  */
++    *(SORT_NONE(.init7))
++    *(SORT_NONE(.init8))
++    *(SORT_NONE(.init9))  /* Call main().  */
+ 
+     ${CONSTRUCTING+ __ctors_start = . ; }
+     ${CONSTRUCTING+ *(.ctors) }
+@@ -124,17 +124,17 @@ SECTIONS
+     *(.text.*)
+ 
+     ${RELOCATING+. = ALIGN(2);}
+-    *(.fini9)  /*   */
+-    *(.fini8)
+-    *(.fini7)
+-    *(.fini6)  /* C++ destructors.  */
+-    *(.fini5)
+-    *(.fini4)
+-    *(.fini3)
+-    *(.fini2)
+-    *(.fini1)
+-    *(.fini0)  /* Infinite loop after program termination.  */
+-    *(.fini)
++    *(SORT_NONE(.fini9))
++    *(SORT_NONE(.fini8))
++    *(SORT_NONE(.fini7))
++    *(SORT_NONE(.fini6))  /* C++ destructors.  */
++    *(SORT_NONE(.fini5))
++    *(SORT_NONE(.fini4))
++    *(SORT_NONE(.fini3))
++    *(SORT_NONE(.fini2))
++    *(SORT_NONE(.fini1))
++    *(SORT_NONE(.fini0))  /* Infinite loop after program termination.  */
++    *(SORT_NONE(.fini))
+ 
+     _etext = .;
+   } ${RELOCATING+ > text}
+diff --git a/ld/scripttempl/elf32msp430_3.sc b/ld/scripttempl/elf32msp430_3.sc
+index c730c5d..0ddcf0f 100644
+--- a/ld/scripttempl/elf32msp430_3.sc
++++ b/ld/scripttempl/elf32msp430_3.sc
+@@ -75,17 +75,17 @@ SECTIONS
+   .text :
+   {
+     ${RELOCATING+. = ALIGN(2);}
+-    *(.init)
+-    *(.init0)  /* Start here after reset.  */
+-    *(.init1)
+-    *(.init2)
+-    *(.init3)
+-    *(.init4)
+-    *(.init5)
+-    *(.init6)  /* C++ constructors.  */
+-    *(.init7)
+-    *(.init8)
+-    *(.init9)  /* Call main().  */
++    *(SORT_NONE(.init))
++    *(SORT_NONE(.init0))  /* Start here after reset.  */
++    *(SORT_NONE(.init1))
++    *(SORT_NONE(.init2))
++    *(SORT_NONE(.init3))
++    *(SORT_NONE(.init4))
++    *(SORT_NONE(.init5))
++    *(SORT_NONE(.init6)) /* C++ constructors.  */
++    *(SORT_NONE(.init7))
++    *(SORT_NONE(.init8))
++    *(SORT_NONE(.init9))  /* Call main().  */
+ 
+     ${CONSTRUCTING+ __ctors_start = . ; }
+     ${CONSTRUCTING+ *(.ctors) }
+@@ -100,17 +100,17 @@ SECTIONS
+     *(.text.*)
+ 
+     ${RELOCATING+. = ALIGN(2);}
+-    *(.fini9)
+-    *(.fini8)
+-    *(.fini7)
+-    *(.fini6)  /* C++ destructors.  */
+-    *(.fini5)
+-    *(.fini4)
+-    *(.fini3)
+-    *(.fini2)
+-    *(.fini1)
+-    *(.fini0)  /* Infinite loop after program termination.  */
+-    *(.fini)
++    *(SORT_NONE(.fini9))
++    *(SORT_NONE(.fini8))
++    *(SORT_NONE(.fini7))
++    *(SORT_NONE(.fini6))  /* C++ destructors.  */
++    *(SORT_NONE(.fini5))
++    *(SORT_NONE(.fini4))
++    *(SORT_NONE(.fini3))
++    *(SORT_NONE(.fini2))
++    *(SORT_NONE(.fini1))
++    *(SORT_NONE(.fini0))  /* Infinite loop after program termination.  */
++    *(SORT_NONE(.fini))
+ 
+     ${RELOCATING+ _etext = . ; }
+   } ${RELOCATING+ > text}
+diff --git a/ld/scripttempl/elfd10v.sc b/ld/scripttempl/elfd10v.sc
+index 1cdfbdc..dc45cdd 100644
+--- a/ld/scripttempl/elfd10v.sc
++++ b/ld/scripttempl/elfd10v.sc
+@@ -87,10 +87,10 @@ SECTIONS
+   .text ${RELOCATING+${TEXT_START_ADDR}} :
+   {
+     ${RELOCATING+${TEXT_START_SYMBOLS}}
+-    KEEP (*(.init))
+-    KEEP (*(.init.*))
+-    KEEP (*(.fini))
+-    KEEP (*(.fini.*))
++    KEEP (*(SORT_NONE(.init)))
++    KEEP (*(SORT_NONE(.init.*)))
++    KEEP (*(SORT_NONE(.fini)))
++    KEEP (*(SORT_NONE(.fini.*)))
+     *(.text)
+     *(.text.*)
+     /* .gnu.warning sections are handled specially by elf32.em.  */
+diff --git a/ld/scripttempl/elfd30v.sc b/ld/scripttempl/elfd30v.sc
+index d8d3fbe..df64f1b 100644
+--- a/ld/scripttempl/elfd30v.sc
++++ b/ld/scripttempl/elfd30v.sc
+@@ -110,8 +110,8 @@ SECTIONS
+   {
+     *(.text)
+     *(.gnu.linkonce.t*)
+-    *(.init)
+-    *(.fini)
++    *(SORT_NONE(.init))
++    *(SORT_NONE(.fini))
+     ${RELOCATING+ _etext = . ; }
+   } ${RELOCATING+ > ${TEXT_MEMORY}}
+ 
+diff --git a/ld/scripttempl/elfxtensa.sc b/ld/scripttempl/elfxtensa.sc
+index d330230..5e03797 100644
+--- a/ld/scripttempl/elfxtensa.sc
++++ b/ld/scripttempl/elfxtensa.sc
+@@ -402,7 +402,7 @@ cat <<EOF
+ 
+     ${RELOCATING+${INIT_START}}
+     ${RELOCATING+KEEP (*(.init.literal))}
+-    ${RELOCATING+KEEP (*(.init))}
++    ${RELOCATING+KEEP (*(SORT_NONE(.init)))}
+     ${RELOCATING+${INIT_END}}
+ 
+     ${RELOCATING+${TEXT_START_SYMBOLS}}
+@@ -413,7 +413,7 @@ cat <<EOF
+ 
+     ${RELOCATING+${FINI_START}}
+     ${RELOCATING+KEEP (*(.fini.literal))}
+-    ${RELOCATING+KEEP (*(.fini))}
++    ${RELOCATING+KEEP (*(SORT_NONE(.fini)))}
+     ${RELOCATING+${FINI_END}}
+   } =${NOP-0}
+ 
+-- 
+1.7.1
+

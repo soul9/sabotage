@@ -1,18 +1,97 @@
+From 6e9904258942022fdc259efc11add9f263637335 Mon Sep 17 00:00:00 2001
 http://sourceware.org/bugzilla/show_bug.cgi?id=14156
---- binutils-2.22/ld/ldlang.c	2011-11-21 09:29:38.000000000 +0000
-+++ binutils-2.22.patched/ld/ldlang.c	2013-04-02 17:00:37.003000002 +0000
-@@ -3538,8 +3538,12 @@
+--- a/ld/ld.h
++++ b/ld/ld.h
+@@ -87,7 +87,7 @@ typedef enum {sort_none, sort_ascending, sort_descending} sort_order;
  
- 	    case lang_wild_statement_enum:
- 	      sec = s->wild_statement.section_list;
--	      for (sec = s->wild_statement.section_list; sec != NULL;
--		   sec = sec->next)
+ typedef enum {
+   none, by_name, by_alignment, by_name_alignment, by_alignment_name,
+-  by_init_priority
++  by_none, by_init_priority
+ } sort_type;
+ 
+ extern sort_type sort_section;
+diff --git a/ld/ld.texinfo b/ld/ld.texinfo
+index 732fed6..d0a5d90 100644
+--- a/ld/ld.texinfo
++++ b/ld/ld.texinfo
+@@ -4038,6 +4038,10 @@ treated as nested sorting command.
+ If the section sorting command in linker script is nested, the
+ command line option will be ignored.
+ 
++@cindex SORT_NONE
++@code{SORT_NONE} disables section sorting by ignoring the command line
++section sorting option.
++
+ If you ever get confused about where input sections are going, use the
+ @samp{-M} linker option to generate a map file.  The map file shows
+ precisely how input sections are mapped to output sections.
+diff --git a/ld/ldgram.y b/ld/ldgram.y
+index 923ac0f..6e00118 100644
+--- a/ld/ldgram.y
++++ b/ld/ldgram.y
+@@ -129,7 +129,7 @@ static int error_index;
+ %token <token> ALIGN_K BLOCK BIND QUAD SQUAD LONG SHORT BYTE
+ %token SECTIONS PHDRS INSERT_K AFTER BEFORE
+ %token DATA_SEGMENT_ALIGN DATA_SEGMENT_RELRO_END DATA_SEGMENT_END
+-%token SORT_BY_NAME SORT_BY_ALIGNMENT
++%token SORT_BY_NAME SORT_BY_ALIGNMENT SORT_NONE
+ %token SORT_BY_INIT_PRIORITY
+ %token '{' '}'
+ %token SIZEOF_HEADERS OUTPUT_FORMAT FORCE_COMMON_ALLOCATION OUTPUT_ARCH
+@@ -467,6 +467,13 @@ wildcard_spec:
+ 			  $$.exclude_name_list = NULL;
+ 			  $$.section_flag_list = NULL;
+ 			}
++	|	SORT_NONE '(' wildcard_name ')'
++			{
++			  $$.name = $3;
++			  $$.sorted = by_none;
++			  $$.exclude_name_list = NULL;
++			  $$.section_flag_list = NULL;
++			}
+ 	|	SORT_BY_NAME '(' SORT_BY_ALIGNMENT '(' wildcard_name ')' ')'
+ 			{
+ 			  $$.name = $5;
+diff --git a/ld/ldlang.c b/ld/ldlang.c
+index e94d261..317e445 100644
+--- a/ld/ldlang.c
++++ b/ld/ldlang.c
+@@ -3510,6 +3510,8 @@ update_wild_statements (lang_statement_union_type *s)
+ 		      if (sort_section == by_name)
+ 			sec->spec.sorted = by_alignment_name;
+ 		      break;
++		    case by_none:
++		      sec->spec.sorted = none;
+ 		    default:
+ 		      break;
+ 		    }
+@@ -3521,8 +3523,11 @@ update_wild_statements (lang_statement_union_type *s)
+ 	      break;
+ 
+ 	    case lang_output_section_statement_enum:
+-	      update_wild_statements
+-		(s->output_section_statement.children.head);
 +	      /* Don't sort .init/.fini sections.  */
-+	      if (sec == NULL
-+		  || strcmp (sec->spec.name, ".init") == 0
-+		  || strcmp (sec->spec.name, ".fini") == 0)
-+		break;
-+	      for (; sec != NULL; sec = sec->next)
- 		{
- 		  switch (sec->spec.sorted)
- 		    {
++	      if (strcmp (s->output_section_statement.name, ".init") != 0
++		  && strcmp (s->output_section_statement.name, ".fini") != 0)
++		update_wild_statements
++		  (s->output_section_statement.children.head);
+ 	      break;
+ 
+ 	    case lang_group_statement_enum:
+diff --git a/ld/ldlex.l b/ld/ldlex.l
+index 7da611f..c24d1ab 100644
+--- a/ld/ldlex.l
++++ b/ld/ldlex.l
+@@ -302,6 +302,7 @@ V_IDENTIFIER [*?.$_a-zA-Z\[\]\-\!\^\\]([*?.$_a-zA-Z0-9\[\]\-\!\^\\]|::)*
+ <BOTH,SCRIPT>"SORT_BY_ALIGNMENT"	{ RTOKEN(SORT_BY_ALIGNMENT); }
+ <BOTH,SCRIPT>"SORT"			{ RTOKEN(SORT_BY_NAME); }
+ <BOTH,SCRIPT>"SORT_BY_INIT_PRIORITY"	{ RTOKEN(SORT_BY_INIT_PRIORITY); }
++<BOTH,SCRIPT>"SORT_NONE"		{ RTOKEN(SORT_NONE); }
+ <EXPRESSION,BOTH,SCRIPT>"NOLOAD"	{ RTOKEN(NOLOAD);}
+ <EXPRESSION,BOTH,SCRIPT>"DSECT"		{ RTOKEN(DSECT);}
+ <EXPRESSION,BOTH,SCRIPT>"COPY"		{ RTOKEN(COPY);}
+-- 
+1.7.1
+
