@@ -47,7 +47,7 @@ diff -aur util-linux-2.23.1.org/include/ttyutils.h util-linux-2.23.1/include/tty
  #include <stdlib.h>
  #include <termios.h>
  #include <limits.h>
-+#include "ttydefaults.h"
++#include <sys/ttydefaults.h>
  #ifdef HAVE_SYS_IOCTL_H
  #include <sys/ioctl.h>
  #endif
@@ -59,7 +59,7 @@ diff -aur util-linux-2.23.1.org/term-utils/setterm.c util-linux-2.23.1/term-util
  #include "closestream.h"
  
 -#if __GNU_LIBRARY__ < 5
-+#if defined(__GLIBC__) && __GNU_LIBRARY__ < 5
++#if defined(__GNU_LIBRARY__) && __GNU_LIBRARY__ < 5
  #ifndef __alpha__
  # include <linux/unistd.h>
  #define __NR_klogctl __NR_syslog

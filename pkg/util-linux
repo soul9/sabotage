@@ -12,10 +12,6 @@ ncurses
 [build]
 patch -p1 < "$K"/util-linux.patch || exit 1
 
-mkdir include/scsi
-cp "$K"/scsi_ioctl.h include/scsi/
-cp "$K"/ttydefaults.h include/
-
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --with-ncurses --disable-nls || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
