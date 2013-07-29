@@ -31,7 +31,7 @@ sed -i 's@struct siginfo@siginfo_t@g' \
   gdb/linux-nat.c gdb/amd64-linux-nat.c gdb/mn10300-linux-tdep.c gdb/linux-nat.h gdb/ia64-linux-nat.c \
   gdb/ppc-linux-nat.c gdb/hppa-linux-tdep.c gdb/procfs.c gdb/alpha-linux-tdep.c gdb/mips-linux-tdep.c \
   gdb/frv-linux-tdep.c  gdb/gdbserver/linux-low.h gdb/gdbserver/linux-arm-low.c gdb/gdbserver/linux-low.c \
-  gdb/gdbserver/linux-x86-low.c  || exit 1
+  gdb/gdbserver/linux-x86-low.c gdb/arm-linux-nat.c || exit 1
 
 # fix mips build ...
 cp "$K"/gdb-sgidefs.h gdb/sgidefs.h
