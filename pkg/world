@@ -3,6 +3,7 @@ stage1
 pkg
 xorg
 gui
+irssi
 lxde
 bsdtar
 nmap
