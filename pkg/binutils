@@ -14,7 +14,6 @@ patch -p1 < "$K"/binutils-arm.diff || exit 1
 patch -p1 < "$K"/binutils-as-needed.patch || exit 1
 patch -p1 < "$K"/binutils222-ppc-textrel.patch || exit 1
 patch -p1 < "$K"/binutils-sort-section.patch || exit 1
-patch -p1 < "$K"/binutils-sort-section2.patch || exit 1
 
 $K/bin/libibertyfix libiberty
 
