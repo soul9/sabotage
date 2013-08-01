@@ -17,7 +17,7 @@ patch -p1 < "$K"/libgc-os_dep.patch || exit 1
 
 touch include/execinfo.h
 
-CFLAGS="-D_GNU_SOURCE -DUSE_PROC_FOR_LIBRARIES -DNO_GETCONTEXT" \
+CFLAGS="-D_GNU_SOURCE -DNO_GETCONTEXT -DUSE_MMAP" \
   ./configure -C --prefix="$butch_prefix" \
   --enable-cplusplus \
   --enable-threads=pthreads \
