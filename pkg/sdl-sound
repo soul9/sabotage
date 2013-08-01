@@ -1,5 +1,8 @@
 [mirrors]
 http://www.icculus.org/SDL_sound/downloads/SDL_sound-1.0.3.tar.gz
+http://offload2.icculus.org/SDL_sound/downloads/SDL_sound-1.0.3.tar.gz
+http://ftp.usa.openbsd.org/pub/OpenBSD/distfiles/SDL_sound-1.0.3.tar.gz
+http://mirror2.openwrt.org/sources/SDL_sound-1.0.3.tar.gz
 
 [main]
 filesize=1127100
