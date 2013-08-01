@@ -22,6 +22,7 @@ patch -p1 < "$K"/alsa-lib_pcm_h.patch || exit 1
 patch -p1 < "$K"/alsa-lib_mixed_types.patch || exit 1
 patch -p1 < "$K"/alsa-lib_mips_atomic.patch || exit 1
 patch -p1 < "$K"/alsa-lib_mask_inline.patch || exit 1
+patch -p1 < "$K"/alsa-lib_kernel_off_t.patch || exit 1
 
 sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' include/global.h || exit 1
 
