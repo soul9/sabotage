@@ -1,9 +1,9 @@
-[main]
-filesize=249029
-sha512=e3b5e4ec201254cce928c5d9850627699ad4c5c3622afcaa7256aa8deb4de21420aa2cda51c684d66565418101f51cfca3c02c732bd550ac8bb8b312816daab5
-
 [mirrors]
-http://xorg.freedesktop.org/releases/individual/lib/libXdamage-1.1.3.tar.bz2
+http://xorg.freedesktop.org/archive/individual/lib/libXdamage-1.1.4.tar.gz
+
+[main]
+filesize=339060
+sha512=903cb9c40108b85c29da9343d54e76f73eaa393f5521ed5daea9ad98ee9bc64aecee818f4461fe41b347d77ea90140f2e9f1bfbf7b4b101b6b2b993ec2183923
 
 [deps]
 damageproto
