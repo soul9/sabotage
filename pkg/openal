@@ -23,6 +23,8 @@ for i in OpenAL32/ Alc/ Alc/backends; do cp config.h $i ; done
 # some symbols in the global space (alsalib/src/conf.c)
 sed -i 's@RTLD_NOW@RTLD_NOW|RTLD_GLOBAL@' Alc/helpers.c || exit 1
 
+[ "$DEBUGBUILD" = "1" ] && echo 'CFLAGS+=-O0 -g3' >> config.mak
+
 mkdir lib
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
