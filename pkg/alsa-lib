@@ -33,8 +33,19 @@ sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' inclu
 sed -i 's@PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP@{{{1,0,0,0,0,0,0,0,0,0}}}@' src/conf.c
 
 THIS="$PWD"
-CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -g -O0" ./configure -C \
-	 --prefix="$butch_prefix" --disable-python --with-debug || exit 1
+
+# by default alsa-lib uses --with-versioned, which will create *horribly* broken
+# wrapper functions. for example, snd_pcm_hw_params_set_buffer_time_near will
+# pass a pointer to a pointer of int to a function expecting a pointer of int,
+# and then dereferences it and uses the value as an int, even though it's a pointer.
+# also in case of success, it returns the modified value as if it was a *getter*
+# function.
+
+CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -g3 -O0" ./configure -C \
+	 --prefix="$butch_prefix" \
+         --disable-python \
+         --without-versioned \
+         --with-debug || exit 1
 
 find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1
 
