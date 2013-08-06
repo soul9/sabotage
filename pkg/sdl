@@ -9,6 +9,7 @@ http://www.libsdl.org/release/SDL-1.2.15.tar.gz
 libxext
 
 [build]
+patch -p1 < "$K"/sdl-stacksize.patch || exit 1
 
 cd src/video/fbcon
 sed -i -e "s|__u16|ushort|" -e "s|__u32|uint|" *.c *.h
