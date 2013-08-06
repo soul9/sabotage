@@ -41,11 +41,18 @@ THIS="$PWD"
 # also in case of success, it returns the modified value as if it was a *getter*
 # function.
 
-CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -g3 -O0" ./configure -C \
+debugcflags=
+debugflags=
+if [ "$DEBUGBUILD" = 1 ] ; then
+	debugflags=--with-debug
+	debugcflags="-O0 -g3"
+fi
+
+CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -Os $debugcflags" ./configure -C \
 	 --prefix="$butch_prefix" \
          --disable-python \
          --without-versioned \
-         --with-debug || exit 1
+         $debugflags || exit 1
 
 find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1
 
