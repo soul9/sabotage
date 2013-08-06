@@ -6,5 +6,6 @@ if [ -z "$1" ] ; then
 	exit 1
 fi
 interface="$1"
-/sbin/udhcpc -i "$interface" -s /etc/udhcpc-script
+retries=1
+/sbin/udhcpc -t $retries -n -i "$interface" -s /etc/udhcpc-script
 
