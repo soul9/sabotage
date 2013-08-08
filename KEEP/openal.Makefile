@@ -35,7 +35,7 @@ clean:
 	$(CC) $(BUILDCFLAGS) -c -o $@ $<
 
 lib/libopenal.so: $(OBJS)
-	$(CC) -shared $(LDFLAGS) -Wl,-soname=libopenal.so -o $@ $(OBJS)
+	$(CC) -shared $(LDFLAGS) -Wl,-soname=libopenal.so -o $@ $(OBJS) -lasound
 
 $(DESTDIR)$(libdir)/%.so: lib/%.so
 	install -D -m 755 $< $@
