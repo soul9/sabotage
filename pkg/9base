@@ -28,6 +28,9 @@ sed -i 's/__linux__/__not_linux__/;s/__sun__/__linux__/' lib9/dirread.c
 sed -i '/sys.termios.h/d' lib9/readcons.c
 sed -i '/^.touch./d' Makefile  # we don't have futimes
 
+# ed's getline clobbers the one defined in musl, and this causes problems
+# when libc functions like getpwuid call getline.
+patch -p1 < "$K"/9base-ed-getline.patch || exit 1
 make -j$MAKE_THREADS || exit 1
 
 # only install things not sufficently well-provided by busybox
