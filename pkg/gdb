@@ -20,8 +20,6 @@ find . -name 'configure' -exec sed -i 's,MAKEINFO="$MISSING makeinfo",MAKEINFO=t
 # remove hardcoded -O2 -g CFLAGS which are *not* overridable (i.e. always appended, taking precedence)
 find . -name configure -exec sed -e 's/CFLAGS="-g -O2"/:/g' -e 's/CFLAGS="-O2"/:/g' -i "{}" \;
 
-#fix linux_thread_db.c into compliance...
-patch -p1 < "$K/gdb-linux_threaddb.patch" || exit 1
 patch -p1 < "$K/gdb-linux_nat.patch" || exit 1
 patch -p1 < "$K/gdb-amd64-debugreg.patch" || exit 1
 patch -p1 < "$K/gdb-arm-gentmap.patch" || exit 1
