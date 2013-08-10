@@ -64,10 +64,12 @@ if [ "$A" = "powerpc" ] ; then
 	archflags="-include $PWD/ppc-regs.h"
 fi
 
-#-DUT_NAMESIZE=32
-#-Dfeof_unlocked=feof
-CC="$CC -static -D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
-CFLAGS="-O0 $archflags" \
+# if you want gdbserver, you either have to remove -static
+# or set --disable-inprocess-agent .
+# and of course --enable-gdbserver=yes
+
+LDFLAGS="-static" \
+CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $archflags" \
 ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
   --with-system-zlib=yes --enable-gdbserver=no --disable-sim \
