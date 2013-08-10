@@ -1,31 +1,19 @@
 [deps]
 ncurses
 
-[main]
-filesize=9080692
-sha512=5560351fb005aae0be435a59de0218a8b4f494c8211a026838e8735a98d5010c395b9da6ec8c1ea31c75a94da7c6071f3eb0b7e5426f5beb75cc0d56ddb8d5b2
-tardir=vim73
-
 [mirrors]
-ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2
+ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+
+[main]
+filesize=9843297
+sha512=65d55da556ee283a364b376d251b70e430b7a157bb5a8ee89565060ff9937907966d416cffd33f701b3314d0fdf16efe00065f66bc8459469f5ae2f713418e0e
+tardir=vim74
 
 [build]
-
-#FIXME this manual patch download stuff is nasty
-
-PATCHLEVEL=495
-for n in $(seq -w 001 $PATCHLEVEL); do
-  echo "Grabbing patch $n/$PATCHLEVEL"
-  wget -q -O - ftp://ftp.vim.org/pub/vim/patches/7.3/7.3.$n | patch -p0
-done
 
 CFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" ./configure -C \
   --prefix="$butch_prefix" --mandir="$butch_prefix"/share/man --localstatedir="$butch_prefix"/var/lib/vim \
   --disable-nls --disable-netbeans --disable-gui --with-x=no --enable-multibyte || exit 1
-make -C src auto/osdef.h || exit 1
-sed -i '/define stack_t/d' src/auto/config.h
-sed -i '/setenv/d' src/auto/osdef.h
-sed -i '/putenv/d' src/auto/osdef.h
 
 make || exit 1
 make -j1 VIMRCLOC="$butch_prefix"/etc DESTDIR="$butch_install_dir" install || exit 1
