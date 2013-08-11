@@ -3,6 +3,7 @@ alsa-utils
 autoconf
 automake
 bison
+bridge-utils
 busybox-man
 capchroot
 cpan-Data-Dump
