@@ -31,3 +31,7 @@ ln -s bin sbin
 
 chmod 1777 tmp
 
+cp -r "$K"/etc/* "$R"/etc/
+cp -r "$K"/bin/* "$R"/bin/
+chmod 0600 "$R"/etc/shadow
+
