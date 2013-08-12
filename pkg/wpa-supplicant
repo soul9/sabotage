@@ -11,7 +11,6 @@ openssl
 zlib-dynamic
 
 [build]
-#patch -p1 < "$K/some.patch"
 cd wpa_supplicant
 cp defconfig .config
 # libnl-tiny seems to implement the netlink (libnl) 2 API, thus the
@@ -22,6 +21,6 @@ CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
   -Dnl_handle_destroy=nl_socket_free \
   -D__int32_t=int32_t -D__int16_t=int16_t -D__uint8_t=uint8_t \
   -D__uint32_t=uint32_t -D__uint16_t=uint16_t \
-  -include stdint.h" \
-  LDFLAGS="-lz" make -j$MAKE_THREADS || exit 1
+  -include stdint.h $optcflags" \
+  LDFLAGS="-lz $optldflags" make -j$MAKE_THREADS || exit 1
 make BINDIR=/bin DESTDIR="$butch_install_dir" install || exit 1

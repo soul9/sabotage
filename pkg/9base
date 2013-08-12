@@ -22,7 +22,8 @@ echo "PREFIX = $butch_prefix" >>config.mk
 # the dc calculator, called by bc, assumes a signed char,
 # which is not true for ARM. it fails on "4 - 3" resp. "4 3 -ps."
 # without -fsigned-char.
-echo "CFLAGS += -fsigned-char -D_GNU_SOURCE -DPLAN9PORT -D__USE_MISC" >>config.mk
+echo "CFLAGS += -fsigned-char -D_GNU_SOURCE -DPLAN9PORT -D__USE_MISC $optcflags" >>config.mk
+echo "LDFLAGS += $optldflags" >> config.mk
 
 sed -i 's/__linux__/__not_linux__/;s/__sun__/__linux__/' lib9/dirread.c
 sed -i '/sys.termios.h/d' lib9/readcons.c

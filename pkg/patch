@@ -13,7 +13,8 @@ http://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.gz
 [ "$STAGE" = "0" ] && CC="$butch_root_dir/bin/musl-gcc"
 
 CC="$CC -static" \
-CFLAGS="-D_GNU_SOURCE -Werror-implicit-function-declaration" \
+CFLAGS="-D_GNU_SOURCE -Werror-implicit-function-declaration $optcflags" \
+LDFLAGS="-static $optldflags" \
   ./configure -C --prefix=$butch_prefix || exit 1
 
 make -j$MAKE_THREADS || exit 1

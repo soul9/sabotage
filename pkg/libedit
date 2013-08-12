@@ -11,7 +11,7 @@ termcap
 [build]
 patch -p0 src/editline/readline.h -i "$K/libedit_readlineh.patch" || exit 1
 
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D__STDC_ISO_10646__" \
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D__STDC_ISO_10646__ $optcflags" \
   ./configure -C --prefix="$butch_prefix" --enable-widec || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

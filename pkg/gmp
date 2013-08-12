@@ -16,7 +16,7 @@ abihack=
 
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 CC="$CC -static" \
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Wno-implicit" \
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Wno-implicit $optcflags" \
 ./configure -C \
   --prefix="$butch_prefix" --with-pic --disable-shared $abihack || exit 1
 

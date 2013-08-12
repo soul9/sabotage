@@ -8,8 +8,10 @@ http://dbg.download.sourcemage.org/fallback/file-5.07.tar.gz
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-LDFLAGS="-static" CC="$CC -Wl,-static -static-libgcc -static -D_GNU_SOURCE -D_BSD_SOURCE" \
-  ./configure -C --prefix="$butch_prefix" --disable-shared || exit 1
+LDFLAGS="$optldflags" CC="$CC -Wl,-static -static-libgcc -static -D_GNU_SOURCE -D_BSD_SOURCE" \
+CFLAGS="$optcflags" \
+./configure -C --prefix="$butch_prefix" \
+  --disable-shared || exit 1
 sed -i 's/memory.h/string.h/' src/encoding.c src/ascmagic.c
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

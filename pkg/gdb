@@ -68,8 +68,8 @@ fi
 # or set --disable-inprocess-agent .
 # and of course --enable-gdbserver=yes
 
-LDFLAGS="-static" \
-CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $archflags" \
+LDFLAGS="-static $optldflags" \
+CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $optcflags $archflags" \
 ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
   --with-system-zlib=yes --enable-gdbserver=no --disable-sim \
