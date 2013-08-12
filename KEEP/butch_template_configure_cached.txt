@@ -54,7 +54,7 @@ if $butch_do_custom_destdir ; then
 	butch_install_dir="$butch_custom_destdir"
 	if $butch_do_cleanup_custom_destdir ; then
 		rm -rf "$butch_custom_destdir"
-		if [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
+		if %BUTCH_IS_REBUILD && [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
 		(
 			# remove left-over symlinks
 			cd "$butch_prefix"/

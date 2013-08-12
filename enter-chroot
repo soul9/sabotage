@@ -1,4 +1,5 @@
 #!/bin/sh
+source ./config
 if [ -z "$R" ] ; then
 	echo 'no environment vars set, did you run . config first ?'
 	exit 1

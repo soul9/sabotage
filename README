@@ -43,13 +43,10 @@ DO NOT RUN SCRIPTS YOU HAVE NOT READ.
   # set SABOTAGE_BUILDDIR, A, and MAKE_THREADS variables. 
   # the other values can be left as-is usually.
 
-% . ./config       # required!
-
 % ./build-stage 0  # build toolchain (~2min on an AMD FX 8core, 75min on ARM Cortex A8 800Mhz)
 % ./enter-chroot   # enter $R chrooted, needs root password
 % cd /src
 % vi config        # set your MAKE_THREADS, etc
-% . config
 % butch install stage1
 # and after that, feel free to install optional packages:
 # you can look at what's available using 'ls /src/pkg'
@@ -73,40 +70,18 @@ or you can simply copy the rootfs in $R to your medium of choice.
 
 The default root password is "sabotage".
 
-as usual, 
-
-% source /src/config
-
-so that butch has its environment variables set.
-
 you may want to generate some sshd-keys for sshd to use; use
 
 % butch install sshd-keys
 
 the sshd itself can be started using /sbin/sshd
 
-if you need dhcp, run
+check and edit /etc/rc.local for things you may want to autostart,
+such as network config, dhcp, linux console keymap...
 
-% butch install ndhcp-init
-
-this will create users and chroot for ndchp to use, afterwards you use
-
-% /etc/rc.dhcp start
-
-to run it.
-
-an alternate dhcp client is uclibc's udhcpc,
-which can be launched using /bin/dhclient.
-
-otherwise use ifconfig, route and /etc/resolve.conf to configure your static ip.
-you can of course put it into a script, and launch it automatically using
-/etc/rc.local
-
-for example
-% echo nameserver 8.8.8.8 > /etc/resolv.conf
-% ifconfig eth0 192.168.1.2 netmask 255.255.255.0
-% route add default gw 192.168.0.1
-
+if you have X installed, you may want to edit /bin/X for the correct evdev
+settings (see examples provided in there), then run "startx".
+also check /etc/xinitrc for X11 keyboard config.
 
 NOTE TO CONTRIBUTORS
 if you want to add packages, start from KEEP/package.template .

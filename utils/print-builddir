@@ -1,0 +1,4 @@
+#!/bin/sh
+source "$PWD"/config
+echo "$R"
+

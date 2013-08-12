@@ -1,6 +1,6 @@
 #!/bin/sh
-
 export H="$PWD"
+source ./config
 
 if [ ! -r "$H"/config ]; then
     printf -- "couldn't read configuration file: %s\n" "$H/config"
@@ -48,15 +48,15 @@ EOF
 # NOTE
 # installation starts all over if installed.dat is not there.
 # to manually continue a stage0 build, run
-#     $S/butch.bin install stage0
+#     $R/bin/butch install stage0
 # in case the build failed or was interrupted.
 rm -f "$S"/pkg/installed.dat
 
 if [ "$STAGE" = "0" ] ; then
 	# build stage0
-	"$S"/butch.bin install stage0
+	CONFIG="$H/config" BUTCHDB="$R"/var/lib/butch.db "$R"/bin/butch install stage0
 elif [ "$STAGE" = "u" ] ; then
-	mv "$S/butch.bin" "$R/bin/butch"
+	mv "$R/bin/butch" "$R/bin/butch"
 	path_save="$PATH"
 	export PATH="$R/bin/:$PATH"
 	export STAGEU=1

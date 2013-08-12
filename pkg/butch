@@ -1,11 +1,11 @@
 [mirrors]
-http://codu.org/~rofl/butch-0.2.1.tar.bz2
-http://mirror.wzff.de/butch/butch-0.2.1.tar.bz2
-http://foss.aueb.gr/mirrors/linux/butch/butch-0.2.1.tar.bz2
+http://codu.org/~rofl/butch-0.3.0.tar.bz2
+http://mirror.wzff.de/butch/butch-0.3.0.tar.bz2
+http://foss.aueb.gr/mirrors/linux/butch/butch-0.3.0.tar.bz2
 
 [main]
-filesize=65001
-sha512=1be8ad50c1c2430213bacdba3958d35344c81b05c8aba1bc8805cd577161467bcf8515ae61e0663fab4009563b6d6b8464179fe023a7983e0f40a855cdb15ad8
+filesize=65176
+sha512=23f81cafdf3d81a4598560caaf8becbccdced79d09e033405f0434a7d4a823f8f19ba2501d8f14a8c41c53d461238a276e7771f0c7f274264949c964834ef0df
 tardir=butch
 
 [deps]
@@ -16,14 +16,11 @@ stage0_musl
 if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 	rm -rf butch
 	git clone https://github.com/rofl0r/butch
-else
-	patch -p1 < "$K"/butch-021-memory_corruption.patch || exit 1
 fi
 
 # prepare build config...
-printf "LDFLAGS = -static\n" > butch/config.mak
-[ -z "$DEBUGBUILD" ] || printf "CFLAGS += -g3\n" >> butch/config.mak
-echo "CFLAGS += -O0" >> butch/config.mak
+printf "LDFLAGS += -static %s\n" "$optldflags" > butch/config.mak
+printf "CFLAGS += %s\n" "$optcflags" >> butch/config.mak
 
 if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
 	# if on arm or mips, we only use one build thread to not exhaust memory
@@ -37,10 +34,11 @@ fi
 [ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
 CC="$CC -static" ./build.sh || exit 1
 BUTCH_BIN=butch/butch
+mv "$BUTCH_BIN" "$BUTCH_BIN"-core
 
 # "make install"
 dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
-cp -f "$BUTCH_BIN" "$dest"/bin/butch || exit 1
+cp -f "$BUTCH_BIN"-core "$dest"/bin/butch-core || exit 1
 
 

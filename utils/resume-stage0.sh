@@ -6,4 +6,4 @@
 # this var is usually set by build-stage; omitting it results in build error of stage0_finish
 export H="$PWD"
 
-$S/butch.bin install stage0
+CONFIG="$H"/config "$R"/bin/butch install stage0
