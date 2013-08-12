@@ -1,0 +1,16 @@
+[deps]
+stage1
+gdb
+file
+iptables
+dropbear
+lynx
+nano
+proxychains
+strace
+git
+tmux
+tcpdump
+wireless-tools
+wpa-supplicant
+
