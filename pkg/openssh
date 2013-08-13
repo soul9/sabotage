@@ -20,12 +20,14 @@ CC="gcc -include openssh-hacks.h -D_BSD_SOURCE -DMISSING_HOWMANY -DMISSING_FD_MA
   --sysconfdir="$butch_prefix"/etc/ssh \
   --with-privsep-user=nobody \
   --with-md5-passwords --with-mantype=man --mandir="$butch_prefix"/share/man \
-  --disable-strip --disable-lastlog --disable-utmpx --disable-btmp || exit 1
+  --disable-strip --disable-lastlog --disable-utmp --disable-utmpx --disable-btmp \
+  --disable-wtmp --disable-wtmpx --disable-pututline --disable-pututxline || exit 1
 
 mkdir netinet
 touch netinet/in_systm.h
 
 sed -i '/USE_BTMP/d' config.h
+sed -i '/USE_UTMP/d' config.h
 
 make -j$MAKE_THREADS || exit 1
 
