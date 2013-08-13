@@ -55,8 +55,56 @@ CFLAGS_busybox="$debugcflags -Wl,-z,muldefs -Werror-implicit-function-declaratio
 HOSTCC="$CC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
 echo busybox build complete
 
+# building standalone suid applets
+make allnoconfig
+sed -i 's/# CONFIG_FEATURE_INDIVIDUAL is not set/CONFIG_FEATURE_INDIVIDUAL=y/' .config
+cp .config .config.clean
+
+build_single() {
+	local dir="$1"
+	local applet="$2"
+	local bb_cflags="-D_GNU_SOURCE -std=gnu99 -I../include -I../libbb -DNDEBUG -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE \
+                         -D_FILE_OFFSET_BITS=64 -DBB_VER=\"1.20.2\" -DBB_BT=AUTOCONF_TIMESTAMP -include ../include/autoconf.h"
+	make include/autoconf.h
+	$CC ./applets/applet_tables.c || exit 1
+	./a.out include/applet_tables.h
+	cd "$dir"
+	$CC -static $bb_cflags $optcflags $tus -o ../"$applet" $optldflags || exit 1
+	cd ..
+}
+
+# 1) ping
+sed -i 's/# CONFIG_PING is not set/CONFIG_PING=y/' .config
+sed -i 's/# CONFIG_FEATURE_FANCY_PING is not set/CONFIG_FEATURE_FANCY_PING=y/' .config
+
+tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/read.c ../libbb/xconnect.c ../libbb/copyfd.c \
+../libbb/default_error_retval.c ../libbb/appletlib.c ../libbb/messages.c ../libbb/xfuncs.c ../libbb/full_write.c \
+../libbb/inet_cksum.c ping.c ../libbb/create_icmp_socket.c ../libbb/perror_msg.c ../libbb/xfuncs_printf.c ../libbb/safe_write.c \
+../libbb/time.c ../libbb/safe_strncpy.c ../libbb/getopt32.c ../libbb/xatonum.c ../libbb/llist.c"
+
+build_single networking ping
+
+# 2) su
+cp .config.clean .config
+sed -i 's/# CONFIG_SU is not set/CONFIG_SU=y/' .config
+sed -i 's/# CONFIG_USE_BB_PWD_GRP is not set/CONFIG_USE_BB_PWD_GRP=y/' .config
+
+tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/read.c ../libbb/copyfd.c ../libbb/xatonum.c \
+../libbb/default_error_retval.c ../libbb/pw_encrypt.c ../libbb/appletlib.c ../libbb/run_shell.c ../libbb/last_char_is.c \
+../libbb/messages.c ../libbb/llist.c ../libbb/setup_environment.c ../libbb/xfuncs.c ../libbb/full_write.c \
+../libbb/get_last_path_component.c ../libbb/getopt32.c ../libbb/xfuncs_printf.c ../libbb/correct_password.c \
+../libbb/perror_msg.c ../libbb/change_identity.c ../libbb/bb_pwd.c ../libbb/safe_write.c ../libbb/time.c \
+../libbb/signals.c ../libbb/bb_askpass.c ../libpwdgrp/pwd_grp.c ../libbb/wfopen.c ../libbb/xrealloc_vector.c su.c"
+
+build_single loginutils su
+
+# done, continue with "make install" equivalent
+
 dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
+
+cp su "$dest"/bin/
+cp ping "$dest"/bin/
 
 busybox_bin=busybox
 [ "$DEBUGBUILD" = "1" ] && busybox_bin=busybox_unstripped
