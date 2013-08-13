@@ -667,7 +667,7 @@ ac_cv_have___va_copy=${ac_cv_have___va_copy='no'}
 ac_cv_have_accrights_in_msghdr=${ac_cv_have_accrights_in_msghdr='no'}
 ac_cv_have_chflags=${ac_cv_have_chflags='no'}
 ac_cv_have_clock_t=${ac_cv_have_clock_t='yes'}
-ac_cv_have_control_in_msghdr=${ac_cv_have_control_in_msghdr='no'}
+ac_cv_have_control_in_msghdr=${ac_cv_have_control_in_msghdr='yes'}
 ac_cv_have_decl_ADDR_NO_RANDOMIZE=${ac_cv_have_decl_ADDR_NO_RANDOMIZE='no'}
 ac_cv_have_decl_BROKEN_GETADDRINFO=${ac_cv_have_decl_BROKEN_GETADDRINFO='no'}
 ac_cv_have_decl_GLOB_NOMATCH=${ac_cv_have_decl_GLOB_NOMATCH='yes'}
