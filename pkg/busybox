@@ -58,6 +58,8 @@ echo busybox build complete
 # building standalone suid applets
 make allnoconfig
 sed -i 's/# CONFIG_FEATURE_INDIVIDUAL is not set/CONFIG_FEATURE_INDIVIDUAL=y/' .config
+# without LFS and the whole LARGEFILE64 glibc nonsense, busybox assumes that off_t is long
+sed -i 's/# CONFIG_LFS is not set/CONFIG_LFS=y/' .config
 cp .config .config.clean
 
 build_single() {
