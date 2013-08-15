@@ -23,13 +23,14 @@ mkdir -p "$S" "$R"
 cd "$R"
 mkdir -p boot bin dev etc home lib mnt proc root share srv src sys tmp var
 mkdir -p src/logs var/log/sshd var/log/crond var/log/dmesg
-mkdir -p var/empty var/service var/lib var/tmp var/spool/cron/crontabs
+mkdir -p var/empty var/service var/lib var/spool/cron/crontabs
 
 # usr and sbin are a mistake
 ln -s . usr
 ln -s bin sbin
 
-chmod 1777 tmp var/tmp
+ln -s ../tmp var/tmp
+chmod 1777 tmp
 chmod 700 root
 
 cp -r "$K"/etc/* "$R"/etc/
