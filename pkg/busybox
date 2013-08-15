@@ -68,7 +68,7 @@ build_single() {
 	local bb_cflags="-D_GNU_SOURCE -std=gnu99 -I../include -I../libbb -DNDEBUG -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE \
                          -D_FILE_OFFSET_BITS=64 -DBB_VER=\"1.20.2\" -DBB_BT=AUTOCONF_TIMESTAMP -include ../include/autoconf.h"
 	make include/autoconf.h
-	$CC ./applets/applet_tables.c || exit 1
+	$CC -static ./applets/applet_tables.c || exit 1
 	./a.out include/applet_tables.h
 	cd "$dir"
 	$CC -static $bb_cflags $optcflags $tus -o ../"$applet" $optldflags || exit 1
