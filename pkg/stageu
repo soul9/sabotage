@@ -1,5 +1,4 @@
 [deps]
-gawk
 gcc4
 gmp
 m4
