@@ -27,9 +27,6 @@ if [ ! -f "$butch_prefix"/lib/libc.so ] ; then
 	exit 1
 fi
 
-#busybox awk doesnt like the two calls to attribute_mode function which is commented out
-sed -i '/   *attribute_mode/s@attr@#&@' gcc/config/i386/i386-builtin-types.awk
-
 # we're doing a bit of hack to place the g++ contents in this folder
 # the build system isnt really laid out for extracting multiple tarballs into
 # the same dir...
