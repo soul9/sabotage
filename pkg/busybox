@@ -88,26 +88,11 @@ tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/
 
 build_single networking ping
 
-# 2) su
-cp .config.clean .config
-sed -i 's/# CONFIG_SU is not set/CONFIG_SU=y/' .config
-sed -i 's/# CONFIG_USE_BB_PWD_GRP is not set/CONFIG_USE_BB_PWD_GRP=y/' .config
-
-tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/read.c ../libbb/copyfd.c ../libbb/xatonum.c \
-../libbb/default_error_retval.c ../libbb/pw_encrypt.c ../libbb/appletlib.c ../libbb/run_shell.c ../libbb/last_char_is.c \
-../libbb/messages.c ../libbb/llist.c ../libbb/setup_environment.c ../libbb/xfuncs.c ../libbb/full_write.c \
-../libbb/get_last_path_component.c ../libbb/getopt32.c ../libbb/xfuncs_printf.c ../libbb/correct_password.c \
-../libbb/perror_msg.c ../libbb/change_identity.c ../libbb/bb_pwd.c ../libbb/safe_write.c ../libbb/time.c \
-../libbb/signals.c ../libbb/bb_askpass.c ../libpwdgrp/pwd_grp.c ../libbb/wfopen.c ../libbb/xrealloc_vector.c su.c"
-
-build_single loginutils su
-
 # done, continue with "make install" equivalent
 
 dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
 
-cp su "$dest"/bin/
 cp ping "$dest"/bin/
 
 busybox_bin=busybox
