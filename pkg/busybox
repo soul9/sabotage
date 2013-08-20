@@ -58,33 +58,60 @@ HOSTCC="$CC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS 
 echo busybox build complete
 
 # building standalone suid applets
-make allnoconfig
+make allnoconfig >/dev/null
 sed -i 's/# CONFIG_FEATURE_INDIVIDUAL is not set/CONFIG_FEATURE_INDIVIDUAL=y/' .config
 # without LFS and the whole LARGEFILE64 glibc nonsense, busybox assumes that off_t is long
 sed -i 's/# CONFIG_LFS is not set/CONFIG_LFS=y/' .config
 cp .config .config.clean
+
+quote () {
+tr '\n' ' ' <<EOF | grep '^[-[:alnum:]_=,./:]* $' >/dev/null 2>&1 && { echo "$1" ; return 0 ; }
+$1
+EOF
+printf %s\\n "$1" | sed -e "s/'/'\\\\''/g" -e "1s/^/'/;\$s/\$/'/" -e "s/^'\([-[:alnum:]_,./:]*\)=\(.*\)\$/\1='\2/"
+}
+
+quote_args() {
+cmdline= #$(quote "$0")
+for i ; do cmdline="$cmdline $(quote "$i")" ; done
+}
+
+compile() {
+	quote_args $@
+	printf "%s %s\n", "$CC" "$cmdline"
+	"$CC" $@
+}
 
 build_single() {
 	local dir="$1"
 	local applet="$2"
 	local bb_cflags="-D_GNU_SOURCE -std=gnu99 -I../include -I../libbb -DNDEBUG -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE \
                          -D_FILE_OFFSET_BITS=64 -DBB_VER=\"1.20.2\" -DBB_BT=AUTOCONF_TIMESTAMP -include ../include/autoconf.h"
+	if [ "$DEBUGBUILD" = "1" ] ; then
+		bb_cflags="$bb_cflags -O0 -g3"
+	else
+		bb_cflags="$bb_cflags -Os -s"
+	fi
 	make include/autoconf.h
-	$CC -static ./applets/applet_tables.c || exit 1
+	compile -static ./applets/applet_tables.c || exit 1
 	./a.out include/applet_tables.h
 	cd "$dir"
-	$CC -static $bb_cflags $optcflags $tus -o ../"$applet" $optldflags || exit 1
+	compile -static $bb_cflags $optcflags $tus -o ../"$applet" $optldflags || exit 1
 	cd ..
 }
 
 # 1) ping
+cp -f .config.clean .config
 sed -i 's/# CONFIG_PING is not set/CONFIG_PING=y/' .config
 sed -i 's/# CONFIG_FEATURE_FANCY_PING is not set/CONFIG_FEATURE_FANCY_PING=y/' .config
+sed -i 's/# CONFIG_PING6 is not set/CONFIG_PING6=y/' .config
+sed -i 's/# CONFIG_FEATURE_IPV6 is not set/CONFIG_FEATURE_IPV6=y/' .config
 
 tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/read.c ../libbb/xconnect.c ../libbb/copyfd.c \
 ../libbb/default_error_retval.c ../libbb/appletlib.c ../libbb/messages.c ../libbb/xfuncs.c ../libbb/full_write.c \
 ../libbb/inet_cksum.c ping.c ../libbb/create_icmp_socket.c ../libbb/perror_msg.c ../libbb/xfuncs_printf.c ../libbb/safe_write.c \
-../libbb/time.c ../libbb/safe_strncpy.c ../libbb/getopt32.c ../libbb/xatonum.c ../libbb/llist.c"
+../libbb/time.c ../libbb/safe_strncpy.c ../libbb/getopt32.c ../libbb/xatonum.c ../libbb/llist.c ../libbb/create_icmp6_socket.c \
+../libbb/get_last_path_component.c ../libbb/last_char_is.c"
 
 build_single networking ping
 
