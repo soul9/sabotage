@@ -13,4 +13,6 @@ tmux
 tcpdump
 wireless-tools
 wpa-supplicant
+su
+ping-perms
 
