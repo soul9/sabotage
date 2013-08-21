@@ -2,6 +2,7 @@
 musl
 kernel-headers
 perl
+less
 
 [main]
 filesize=2190170
