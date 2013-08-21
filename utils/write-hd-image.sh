@@ -194,7 +194,7 @@ losetup -d "$loopdev"
 echo_bold ' 5) /'
 loopdev=`losetup -f`
 run_echo losetup -o $part2_start "$loopdev" "$imagefile" || die 'Failed to losetup for /'
-mkfs.ext3 "$loopdev" || die_unloop 'Failed to mkfs.ext3 loop for /'
+mkfs.ext4 "$loopdev" || die_unloop 'Failed to mkfs.ext4 loop for /'
 mount "$loopdev" "$mountdir" || die_unloop 'Failed to mount loop for /'
 
 echo_bold "copying contents, this will take a while"
