@@ -6,6 +6,7 @@ filesize=1578454
 sha512=dd6ef30a21564b9532a6a9845dedcdab8af759a3272cfffb7856f41adc46f5e168ace4c0f448ed6e1ee0ec3628941cf4de2a244a737a341bf359cc7e4ecd2a97
 
 [deps]
+zlib
 
 [build]
 CPPFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
@@ -13,8 +14,10 @@ CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
 
 # TODO : edit generated options.h
-echo "#define DISABLE_UTMP" >> config.h
-echo "#define DISABLE_WTMP" >> config.h
+
+for i in UTMP WTMP PUTUTLINE PUTUTXLINE SYSLOG LASTLOG ; do 
+	echo "#define DISABLE_$i" >> config.h
+done
 
 make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" \
   prefix="$butch_prefix" sbindir="$butch_prefix"/bin DESTDIR="$butch_install_dir" \
@@ -23,3 +26,5 @@ make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" 
 make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" \
   prefix="$butch_prefix" sbindir="$butch_prefix"/bin DESTDIR="$butch_install_dir" \
   -j$MAKE_THREADS install STATIC=1 || exit 1
+
+[ -e "$butch_prefix"/ssh ] || ln -s dbclient "$butch_install_dir""$butch_prefix"/bin/ssh
