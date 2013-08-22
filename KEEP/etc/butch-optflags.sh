@@ -19,14 +19,13 @@ else
 		# stage 0 is built with the hostcompiler until stage0_gcc, after that using gcc3
 		# so cflags should be more conservative - gcc 3 does not support lto and similar options.
 		optcflags="-fdata-sections -ffunction-sections -Os -g0 -fno-unwind-tables -fno-asynchronous-unwind-tables"
-		optldflags="-s -Wl,--gc-sections"
 	else
 		# lto usually gives better results in speed and size than forced functionsections + garbage collection
 		# however it's like 10 times slower.
 		# so you should enable it only if build time does not matter and you want the best possible result.
 		# optcflags="-flto -fwhole-program -Os -g0"
 		optcflags="-ftree-dce -fdata-sections -ffunction-sections -Os -g0 -fno-unwind-tables -fno-asynchronous-unwind-tables"
-		optldflags="-s -Wl,--gc-sections"
 	fi
+	optldflags="-s -Wl,--gc-sections -Wl,-z,relro,-z,now"
 fi
 
