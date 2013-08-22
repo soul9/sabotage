@@ -13,6 +13,8 @@ CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
 
 # TODO : edit generated options.h
+echo "#define DISABLE_UTMP" >> config.h
+echo "#define DISABLE_WTMP" >> config.h
 
 make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" \
   prefix="$butch_prefix" sbindir="$butch_prefix"/bin DESTDIR="$butch_install_dir" \
