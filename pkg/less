@@ -13,6 +13,7 @@ http://www.greenwoodsoftware.com/less/less-444.tar.gz
 patch -p1 < "$K"/less.patch || exit 1
 patch -p1 < "$K"/less-implicit.patch || exit 1
 
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags"\
+  ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

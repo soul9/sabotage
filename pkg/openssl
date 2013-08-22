@@ -62,7 +62,10 @@ sed -i 's/defined(linux)/0/' crypto/ui/ui_openssl.c
 # will require musl's dynlinker to mprotect(PROT_EXEC), which is not allowed by grsec.
 sed -i 's@cast-586.o:@c_enc.o:@' Configure
 
-export CFLAGS="-fPIC -Wa,--noexecstack -fno-strict-aliasing -D_GNU_SOURCE -Wl,-Bsymbolic -O3"
+export CFLAGS="-fPIC -Wa,--noexecstack -fno-strict-aliasing -D_GNU_SOURCE -Wl,-Bsymbolic \
+$optcflags"
+export LDFLAGS="$optldflags"
+
 disable_asm=
 #disable_asm=no-asm
 

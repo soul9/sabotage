@@ -7,7 +7,8 @@ http://downloads.sourceforge.net/sourceforge/flex/flex-2.5.35.tar.bz2
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-CC="$CC -static -D_GNU_SOURCE -DSTDC_HEADERS" ./configure -C --prefix="$butch_prefix" \
+LDFLAGS="$optldflags -static" CPPFLAGS="-D_GNU_SOURCE -DSTDC_HEADERS" CFLAGS="$optcflags" \
+  ./configure -C --prefix="$butch_prefix" \
   --disable-nls --infodir="$butch_prefix"/share/info --mandir="$butch_prefix"/share/man || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

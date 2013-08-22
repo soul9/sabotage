@@ -10,8 +10,9 @@ http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.bz2
 [build]
 gnulibfix lib
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-CC="$CC -static" \
-CFLAGS="-Drpl_strstr=strstr" \
+LDFLAGS="$optldflags -static" \
+CPPFLAGS="-Drpl_strstr=strstr" \
+CFLAGS="$optcflags" \
 ./configure -C --prefix="$butch_prefix" gl_cv_func_strtod_works=yes || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

@@ -10,11 +10,11 @@ sha512=077d854e469eb8158460481daadd729ef7fa1c08687b9547397d32d23f862168f53dfcf1a
 http://prdownloads.sourceforge.net/e2fsprogs/e2fsprogs-1.41.14.tar.gz
 
 [build]
-patch -p1 < $K/e2fsprogs-nonx86.patch || exit 1
-CC="$CC -static" \
-CFLAGS="-fPIC -DHAVE_LSEEK64 -DHAVE_LSEEK64_PROTOTYPE -Dlseek64=lseek -fgnu89-inline" \
+patch -p1 < "$K"/e2fsprogs-nonx86.patch || exit 1
+CFLAGS="-fPIC -DHAVE_LSEEK64 -DHAVE_LSEEK64_PROTOTYPE -Dlseek64=lseek -fgnu89-inline $optcflags" \
+LDFLAGS="$optldflags -static" \
   ./configure -C --prefix="$butch_prefix" --with-root-prefix="$butch_prefix" \
-  --sbindir="$butch_prefix"/bin --disable-nls --disable-tls || exit 1
+  --sbindir="$butch_prefix"/bin --disable-nls || exit 1
 sed -i 's:sys/signal.h:signal.h:' misc/fsck.c
 make -j$MAKE_THREADS V=1 CFLAGS="-D_GNU_SOURCE -include math.h -fPIC -Dopen64=open -D__uint64_t=u_int64_t" || exit 1
 # dont fail because of makeinfo

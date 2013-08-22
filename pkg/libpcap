@@ -11,7 +11,9 @@ bison
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -DIPPROTO_HOPOPTS=0 -I$butch_prefix/include/libnl-tiny" \
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -DIPPROTO_HOPOPTS=0 -I$butch_prefix/include/libnl-tiny \
+$optcflags" \
+LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" ac_cv_type_u_int64_t=yes || exit 1
 sed -i 's@-lnl-genl@-lnl-tiny@' Makefile
 make -j$MAKE_THREADS || exit 1

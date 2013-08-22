@@ -13,6 +13,8 @@ sha512=55518ab24139e9c7f61bcccabb89ed3c2f769320d97975a3644a32645d4f88bc5df29c413
 
 [build]
 CPPFLAGS="-D_GNU_SOURCE" \
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags" \
 ./configure -C \
   --prefix="$butch_prefix" \
   --with-ssl \
