@@ -48,6 +48,7 @@ if $do_kmap ; then
 	#kmap=/share/kmap/croat.kmap
 	#kmap=/share/kmap/cz-lat2.kmap
 	#kmap=/share/kmap/de-latin1.kmap
+	#kmap=/share/kmap/de-latin1-nodeadkeys.kmap
 	#kmap=/share/kmap/de_CH-latin1.kmap
 	#kmap=/share/kmap/dk-latin1.kmap
 	#kmap=/share/kmap/dvorak-l.kmap

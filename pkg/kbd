@@ -63,6 +63,7 @@ qwerty/us.map.gz
 qwertz/croat.map.gz
 qwertz/de_CH-latin1.map.gz
 qwertz/de-latin1.map.gz
+qwertz/de-latin1-nodeadkeys.map.gz
 qwertz/fr_CH-latin1.map.gz
 qwertz/hu.map.gz
 qwertz/sg-latin1.map.gz
