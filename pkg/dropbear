@@ -9,10 +9,15 @@ sha512=dd6ef30a21564b9532a6a9845dedcdab8af759a3272cfffb7856f41adc46f5e168ace4c0f
 
 [build]
 CPPFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
-CFLAGS="-Os -s -ftree-dce -fdata-sections -ffunction-sections" \
-LDFLAGS="-static -Wl,--gc-sections" ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
 
 # TODO : edit generated options.h
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" \
+  prefix="$butch_prefix" sbindir="$butch_prefix"/bin DESTDIR="$butch_install_dir" \
+  -j$MAKE_THREADS STATIC=1 || exit 1
+
+make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" \
+  prefix="$butch_prefix" sbindir="$butch_prefix"/bin DESTDIR="$butch_install_dir" \
+  -j$MAKE_THREADS install STATIC=1 || exit 1
