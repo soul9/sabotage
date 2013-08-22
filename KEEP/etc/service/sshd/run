@@ -23,6 +23,6 @@ elif [ -e /bin/dropbear ] ; then
 	make_key_if_needed rsa
 	make_key_if_needed dss
 
-	exec /bin/dropbear -F -E 2>&1
+	exec /bin/dropbear -F 2>&1
 
 fi
