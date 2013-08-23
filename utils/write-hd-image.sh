@@ -52,8 +52,23 @@ check_opts() {
 	done
 }
 
+quote () {
+tr '\n' ' ' <<EOF | grep '^[-[:alnum:]_=,./:]* $' >/dev/null 2>&1 && { echo "$1" ; return 0 ; }
+$1
+EOF
+printf %s\\n "$1" | sed -e "s/'/'\\\\''/g" -e "1s/^/'/" -e "\$s/\$/'/" -e "s#^'\([-[:alnum:]_,./:]*\)=\(.*\)\$#\1='\2#"
+}
+
+quote_args() {
+local cmdline=
+for i ; do cmdline="$cmdline $(quote "$i")" ; done
+printf "%s" "$cmdline"
+}
+
+
 run_echo() {
-	printf "%s\n", "$@"
+	local cmdline=$(quote_args $@)
+	printf "%s\n" "$cmdline"
 	"$@"
 }
 
