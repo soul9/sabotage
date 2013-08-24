@@ -1,0 +1,27 @@
+[mirrors]
+http://ftp.gnu.org/gnu/screen/screen-4.0.3.tar.gz
+
+[main]
+filesize=840602
+sha512=24c1f598972f3dc9ed49cd2c05852190a0190d22fa01401eee8484627c8dd2815f0a422d9b2697faa8aaa0b3efc6730a94e2d5aa787dbe5e9ec719143176c338
+
+[deps]
+
+[build]
+patch -p1 < "$K"/screen-intcast.patch || exit 1
+
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" \
+  --with-sys-screenrc="$butch_prefix"/etc/screenrc || exit 1
+
+cat << EOF >> config.h
+#undef UTMPOK
+#undef LOGINDEFAULT
+#define LOGINDEFAULT 0
+#undef GETUTENT
+#undef UTHOST
+#undef BUGGYGETLOGIN
+EOF
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
