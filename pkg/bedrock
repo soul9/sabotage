@@ -1,5 +1,4 @@
 [deps]
-root-perms
 9base
 busybox
 e2fsprogs

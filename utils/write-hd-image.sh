@@ -1,4 +1,5 @@
 #!/bin/sh
+MYDIR=$(dirname "$(readlink -f "$0")")
 
 calculate() {
 	printf "%s\n" "$1" | bc
@@ -236,6 +237,12 @@ else
 fi
 rm -f "$mountdir"/boot/*
 echo '/dev/sda1 /boot ext3 defaults 0 0' >> "$mountdir"/etc/fstab || die_unmount 'Failed to extend fstab'
+
+echo_bold ' 6) applying root perms'
+$MYDIR/root-perms.sh "$mountdir"
+
+echo_bold ' 7) cleaning up'
+
 umount "$mountdir" || die_unloop 'Failed to unmount /'
 sync
 losetup -d "$loopdev"
