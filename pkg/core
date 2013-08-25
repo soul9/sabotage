@@ -10,7 +10,7 @@ proxychains
 posix-man
 strace
 git
-tmux
+screen
 tcpdump
 wireless-tools
 wpa-supplicant
