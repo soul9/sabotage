@@ -19,11 +19,35 @@ swapon -a
 hostname $(cat /etc/hostname)
 ifconfig lo up
 
-mount -o remount,ro /
+rw=true
+rwtest=/tmp/rwtest.tmp
+if touch "$rwtest" 2>/dev/null; then
+	rm "$rwtest"
+else
+	rw=false
+fi
+
+$rw && mount -o remount,ro /
 fsck -A -T -C -p
 mkdir -p /dev/shm /dev/pts
-mount -o remount,rw /
+$rw && mount -o remount,rw /
 mount -a
+
+if ! $rw ; then
+	echo "non-writable fs detected, mounting tmpfs to /var and /tmp"
+	# tmpfs defaults to -o size=50%
+	mount -t tmpfs -o mode=1777 tmpfs /tmp
+	mount -t tmpfs -o size=1M,mode=751 tmpfs /var
+	ln -sf /tmp /var/tmp
+	mkdir -p /var/spool/cron/crontabs /var/service /var/log /var/empty
+	( cd /etc/service
+	for i in * ; do 
+		# we copy the services instead of symlinking, so subdirs can be created
+		cp -rf /etc/service/$i /var/service/
+		mkdir -p /var/log/$i
+	done
+	)
+fi
 
 [ -f /etc/random-seed ] && cat /etc/random-seed >/dev/urandom
 dd if=/dev/urandom of=/etc/random-seed count=1 bs=512 2>/dev/null
