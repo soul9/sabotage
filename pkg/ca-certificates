@@ -1,5 +1,4 @@
 [deps]
-python
 
 [mirrors]
 http://ftp.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_20130119.tar.gz
@@ -12,6 +11,19 @@ tardir=ca-certificates-20130119
 [build]
 
 patch -p1 < $K/ca-certificates.patch || exit 1
+cp "$K"/certdata2pem.c mozilla/
+cat << EOF > mozilla/Makefile
+all: a.out
+	./a.out
+a.out:
+	\$(CC) -Wall -Wextra -O0 -g certdata2pem.c
+clean:
+	-rm -f *.crt
+install:
+	for p in *.crt; do \
+	 install -D -m 644 \$\$p \$(CERTSDIR)/\$\$p ; \
+	done
+EOF
 make || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
