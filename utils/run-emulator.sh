@@ -10,6 +10,7 @@ for i ; do
 done
 nographic=
 [ -z "$console" ] || nographic="-nographic"
+[ -z "$console" ] && console="vga=ask"
 [ -z "$INIT" ] && INIT=/bin/init
 [ -z "$KERNEL" ] && KERNEL=$R/boot/vmlinuz
 
