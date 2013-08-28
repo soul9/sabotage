@@ -1,5 +1,6 @@
 [mirrors]
 http://ftp.easysw.com/pub/fltk/snapshots/fltk-1.3.x-r9708.tar.gz
+http://ftp.fi.netbsd.org/pub/gnu/easysw/fltk/snapshots/fltk-1.3.x-r9708.tar.gz
 
 [main]
 filesize=4343506
