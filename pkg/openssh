@@ -14,7 +14,10 @@ openssl
 patch -p1 < "$K/openssh-configure.patch"
 
 cp $K/openssh-hacks.h .
+# work around for issue #104 until we come up with a proper patch
+issue104cflags="-fno-builtin-exit -D__noreturn__="
 CC="gcc -include openssh-hacks.h -D_BSD_SOURCE -DMISSING_HOWMANY -DMISSING_FD_MASK -DMISSING_NFDBITS" \
+CFLAGS="$issue104cflags $optcflags" \
   ./configure -C --prefix="$butch_prefix" \
   --sbindir="$butch_prefix"/bin --libexecdir="$butch_prefix"/lib/ssh \
   --sysconfdir="$butch_prefix"/etc/ssh \
