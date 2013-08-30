@@ -26,6 +26,7 @@ set -e -x
 
 mkdir -p "$K" "$C" "$S" "$R" "$LOGPATH"
 
+. "$H"/utils/sabotage-prereqs
 . "$H"/utils/utils
 . "$H"/utils/prepare-rootfs
 if [ "$STAGE" = "0" ] || [ "$STAGE" = "u" ] ; then
