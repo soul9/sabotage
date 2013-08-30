@@ -2,8 +2,8 @@
 
 download() {
     local try=0
-    local limit=60
-    local timeout=30
+    local limit=3
+    local timeout=1
     while [ $try -ne $limit ]; do
         try=$((try+1))
 		if ! wget --no-check-certificate "$1" ; then
