@@ -1,0 +1,18 @@
+[main]
+filesize=1650525
+sha512=a462bba4f0f1f0394f040877e99d9dd1d5b26f031b5ee6db0cf3f00fb124527d65f2a6d9ef64e8e144c68a5cab92aeaaee75a6321f9024c505ae150f24def991
+tardir=mpv-0.1.4
+
+[mirrors]
+https://github.com/mpv-player/mpv/archive/v0.1.4.tar.gz
+
+[deps]
+ffmpeg
+wget
+
+[build]
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure --disable-libass  --prefix="$butch_prefix" || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
