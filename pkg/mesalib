@@ -12,6 +12,7 @@ glproto
 libdrm
 dri2proto
 libxdamage
+libxext
 
 [build]
 if false ; then
