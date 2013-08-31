@@ -176,14 +176,6 @@ diff -r -u -N strace-c-original//mem.c strace-c-patched//mem.c
 diff -r -u -N strace-c-original//net.c strace-c-patched//net.c
 --- strace-c-original//net.c	2011-09-20 16:09:19.000000000 +0000
 +++ strace-c-patched//net.c	2011-09-20 19:14:14.000000000 +0000
-@@ -31,6 +31,7 @@
-  */
- 
- #include "defs.h"
-+#include <linux/tcp.h>
- 
- #include <sys/stat.h>
- #include <sys/socket.h>
 @@ -109,15 +110,6 @@
  #define HAVE_SENDMSG		1		/* HACK - *FIXME* */
  #endif

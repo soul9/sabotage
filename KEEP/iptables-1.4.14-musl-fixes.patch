@@ -60,16 +60,6 @@
 -#include <linux/in6.h>
 -#endif
  #endif
---- iptables-1.4.12.1.o/include/linux/netfilter/xt_osf.h
-+++ iptables-1.4.12.1/include/linux/netfilter/xt_osf.h
-@@ -21,6 +21,7 @@
- #define _XT_OSF_H
- 
- #include <linux/types.h>
-+#include <linux/tcp.h>
- 
- #define MAXGENRELEN		32
- 
 --- iptables-1.4.12.1.o/include/linux/netfilter_ipv4/ip_tables.h
 +++ iptables-1.4.12.1/include/linux/netfilter_ipv4/ip_tables.h
 @@ -16,6 +16,7 @@
