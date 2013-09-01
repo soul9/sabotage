@@ -29,14 +29,23 @@ if [ -z "$1" ] ; then
 	echo "(i.e. the ones in /opt/packagename)"
 	echo "into /"
 
-	echo "error: need to pass directory to relocate"
+	echo "error: need to pass package name to relocate" >&2
 	exit 1
 fi
 
 butch_root=/
-butch_install_dir="$1"
+ec=0
 
-for loc in bin sbin etc include lib libexec share var ; do
-	relocate "$butch_root" $loc ..
+for pkg ; do
+	butch_install_dir=/opt/"$pkg"
+	if [ -d "$butch_install_dir" ] ; then
+		for loc in bin sbin etc include lib libexec share var ; do
+			relocate "$butch_root" $loc ..
+		done
+	else
+		echo "warning: package $pkg does not seem to be installed" >&2
+		ec=1
+	fi
 done
 
+exit $ec
