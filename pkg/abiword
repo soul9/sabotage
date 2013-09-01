@@ -1,0 +1,24 @@
+[main]
+filesize=8825031
+sha512=d2c77a2e7eb883d61b57111729459d8713462a136a3b50106b55a8d5cdbf392603199e2bd7897814de2855c25bc4b3572e4fb5fa194bb212bc9d35acf9ff9909
+
+[mirrors]
+http://abisource.org/downloads/abiword/2.8.2/source/abiword-2.8.2.tar.gz
+
+[deps]
+librsvg
+goffice
+fribidi
+glib
+wv
+
+[build]
+patch -p1 < "$K"/abiword-png15.patch || exit 1
+
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" \
+   --disable-default-plugins  || exit 1
+
+patch -p1 < "$K"/abiword-makefile.patch || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
