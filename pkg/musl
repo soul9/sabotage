@@ -12,6 +12,7 @@ sha512=623a7addd032b2fed5850451225c45fac07e0496467c9f3b3355baab6d0b8aeb011af6ed7
 [build]
 patch -p1 < "$K"/musl-0913-sigqueue.patch || exit 1
 patch -p1 < "$K"/musl-0913-ldso-symlink.patch || exit 1
+patch -p1 < "$K"/musl-0913-popen.patch || exit 1
 
 CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 if [ "$A" = "powerpc" ] ; then
