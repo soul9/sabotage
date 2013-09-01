@@ -1,4 +1,9 @@
 #!/bin/sh
+
+# wrapper script to set up environment for butch-core
+# and redirects to several extension scripts
+# + aliases to some commands
+
 [ "$STAGE" = "0" ] && [ -z "$CONFIG" ] && CONFIG="$PWD/config"
 [ -z "$CONFIG" ] && CONFIG=/src/config
 
@@ -10,5 +15,40 @@ fi
 source "$CONFIG"
 
 BINDIR=$(dirname "$(readlink -f "$0")")
-exec "$BINDIR"/butch-core $*
+
+usage() {
+cat << EOF >&2
+butch wrapper v0.1.0
+
+usage: $0 [build|download|list|search|unlink|relink|relocate|update|install|prefetch|rebuild] package ...
+
+list:		list all installed packages
+search:		search for term in package names (grep syntax)
+unlink:		removes symlinks from /opt/packagename into /
+relocate:	creates symlinks for all files under /opt/packagename to /
+relink:		==relocate
+update:		update all packages whose hash changed
+install:	download, build, relocate package(s) and all missing dependencies
+build:		==install
+prefetch:	download package(s) and all missing dependencies
+download:	==prefetch
+rebuild:	unlink, download, rebuild, relocate package(s), but not their dependencies
+
+all download related actions are only done when needed, i.e. the tarball is missing.
+EOF
+}
+
+prog=butch-core
+case $1 in
+	build) shift ; set -- install "$@";;
+	download) shift ; set -- prefetch "$@";;
+	list) shift; prog=butch-list;;
+	search) shift; prog=butch-search;;
+	unlink) shift ; prog=butch-unlink;; #remove links of pkg
+	relink|relocate) shift; prog=butch-relocate;; #relinks the pkg into /
+	update|install|prefetch|rebuild) : ;;
+	*) usage;; # we exec anyway to get butch-core's usage info
+esac
+	
+exec "$BINDIR"/$prog "$@"
 
