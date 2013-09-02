@@ -13,6 +13,7 @@ libdrm
 dri2proto
 libxdamage
 libxext
+gettext
 
 [build]
 if false ; then
