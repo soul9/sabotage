@@ -13,6 +13,10 @@ else
   mouse=event3
 fi
 
+# for physical devices (non-emulator),
+# take a look at "cat /proc/bus/input/devices" to get hints
+# about the evdev ids. look for things like event1, event6, ...
+
 export DISPLAY=:0
 
 exec Xfbdev -retro  :0 -keybd evdev,,device=/dev/input/$keyb \
