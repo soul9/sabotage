@@ -14,6 +14,17 @@ readline
 patch -p1 < "$K"/mysql-srv_buf_size.patch || exit 1
 patch -p1 < "$K"/mysql-libedit.patch || exit 1
 
+# prevent installation of 10K tests, 180MB, + and additional 35MB of symlinks
+DISABLE_TESTS=true
+if $DISABLE_TESTS ; then
+	echo "RETURN()" > tests/CMakeLists.txt
+	echo "RETURN()" > libmysqld/examples/CMakeLists.txt
+	sed -i 's@  ADD_SUBDIRECTORY(tests)@@' CMakeLists.txt || exit 1
+	sed -i 's@  ADD_SUBDIRECTORY(mysql-test)@@' CMakeLists.txt || exit 1
+	sed -i 's@  ADD_SUBDIRECTORY(mysql-test/lib/My/SafeProcess)@@' CMakeLists.txt || exit 1
+	rm -rf tests mysql-test
+fi
+
 mkdir build && cd build
 
 cmake \
