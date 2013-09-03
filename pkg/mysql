@@ -1,9 +1,9 @@
 [mirrors]
-http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.11.tar.gz
+http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.13.tar.gz
 
 [main]
-filesize=35458544
-sha512=d87d9eba5d86a5e4b4defff5755eaff4e76041520398b63dfc6bdd11604d46877ef0c57cced169d6d1fd03cb679c165b6731c6f48eceea70e48d5fc5bad7e2ab
+filesize=35951160
+sha512=56d3aa84c0ed69fcdb7706117398d555aaec0c20fe09364cd6d4a6b3e3af8644825d7cb886dbfd3fe630bfd318306090359f04f2558cf499915a9f1648520a82
 
 [deps]
 cmake
@@ -12,7 +12,6 @@ readline
 
 [build]
 patch -p1 < "$K"/mysql-srv_buf_size.patch || exit 1
-patch -p1 < "$K"/mysql-libedit.patch || exit 1
 
 # prevent installation of 10K tests, 180MB, + and additional 35MB of symlinks
 DISABLE_TESTS=true
