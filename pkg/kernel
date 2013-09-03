@@ -4,17 +4,17 @@ xz
 grsec
 
 [mirrors]
-https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.5.tar.xz
-ftp://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.5.tar.xz
-http://ftp.free.fr/pub/linux/kernel/v3.x/linux-3.10.5.tar.xz
-http://ftp.heanet.ie/mirrors/linux/kernel/v3.x/linux-3.10.5.tar.xz
+https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.10.tar.xz
+ftp://www.kernel.org/pub/linux/kernel/v3.x/linux-3.10.10.tar.xz
+http://ftp.free.fr/pub/linux/kernel/v3.x/linux-3.10.10.tar.xz
+http://ftp.heanet.ie/mirrors/linux/kernel/v3.x/linux-3.10.10.tar.xz
 
 [main]
-filesize=73204564
-sha512=49556c80d3afcd272ab08ebd9ffe95d331dfbc6af2c04a583d29f3919016f3ba17dc46efd01735cfb49b972a734c4afd2fb7b1bde9063f4bc95ccf70882ff96f
+filesize=73207156
+sha512=776ff943168c8acf56c9891b79a63e700f5799b46240f9f88b9117ca5a1534a6e5f9ffc1247b0ef402a11e54d6250896271f12d131822691ea1851d43eda5e2a
 
 [build]
-GRSEC_VER=grsecurity-2.9.1-3.10.5-201308052154
+GRSEC_VER=grsecurity-2.9.1-3.10.10-201309011630
 
 # get into menuconfig using
 # make HOSTCFLAGS="-D_GNU_SOURCE" HOSTLDFLAGS=-lncurses menuconfig
