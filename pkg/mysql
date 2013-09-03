@@ -64,18 +64,4 @@ make -j$MAKE_THREADS VERBOSE=1 || exit 1
 
 # possible CMAKE_BUILD_TYPEs: Debug, Release, RelWithDebInfo and MinSizeRel
 
-SEGMENTS="Client Server IniFiles ManPages SharedLibraries"
-SEGMENTS="$SEGMENTS Development Documentation Info Readme"
-
-# FIXME: the cmake crap doesnt know how to install into DESTDIR
-
-for segment in $SEGMENTS; do
-   cmake DESTDIR=$butch_install_dir -DCMAKE_INSTALL_COMPONENT=$segment -P cmake_install.cmake
-done
-
-unset SEGMENTS
-
-
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-#make -j$MAKE_THREADS || exit 1
-#make DESTDIR="$butch_install_dir" install || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
