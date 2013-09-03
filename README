@@ -85,6 +85,10 @@ also check /etc/xinitrc for X11 keyboard config.
 
 NOTE TO CONTRIBUTORS
 if you want to add packages, start from KEEP/package.template .
+cp KEEP/package.template pkg/my_new_pkg
+use utils/dlinfo.sh http://1.2.3.4/my_new_pkg.tar.xz
+that'll spit out the filesize, sha512sum boilerplate for easy copy&paste.
+
 please do not use HTTPS or FTP mirrors.
 HTTPS is unsupported by busybox wget, and FTP is a broken protocol from the 70ies
 which needs a second data connection (i.e. open port on the client).
@@ -99,9 +103,12 @@ fulfill the GPL), space considerations are a top issue.
 so if available, ALWAYS USE a TAR.XZ (preferred) or TAR.BZ2 download URL.
 in the former case, xz has to be added to the [deps] section.
 
-it is recommend that you create a git branches for your work:
+it is necessary that you create git branches for your work:
 this allows me to checkout your changes and rebase as i see fit,
 and you can easily pull back into your master without getting merge conflicts.
+
+do not commit more than one change/package in a single commit, as it makes
+it much more work than needed to pick the good commits and leave away bad ones.
 
 
 CONTACT
