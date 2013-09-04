@@ -16,8 +16,19 @@ libmng
 liblcms
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+# we supply the gperf-generated C file to avoid a dependency on it
+cp "$K"/netsurf-3.0.src_colors.c src/libsvgtiny-0.1.0/src/src_colors.c || exit 1
+cat << EOF > src/libsvgtiny-0.1.0/src/Makefile
+DIR_SOURCES := svgtiny.c svgtiny_gradient.c svgtiny_list.c
+SOURCES := \$(SOURCES) \$(BUILDDIR)/src_colors.c
+
+\$(BUILDDIR)/src_colors.c: src/src_colors.c
+	\$(CP) \$< \$@
+
+include \$(NSBUILD)/Makefile.subdir
+EOF
+
+# FIXME: netsurfs Makefile suppresses parallel builds
 CFLAGS="-I$butch_prefix/include/cairo/" NETSURF_USE_BMP=NO \
  make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
