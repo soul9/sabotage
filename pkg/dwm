@@ -13,8 +13,11 @@ libxdmcp
 libxinerama
 
 [build]
-cp $K/dwm.config.mk config.mk
-#patch -p1 < "$K/some.patch" #download patches from suckless.org and put in /src/KEEP and modify this row in the build...
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make \
+  PREFIX="$butch_prefix" \
+  CFLAGS="$optcflags -D_GNU_SOURCE -DVERSION=\\\"6.0\\\" -DXINERAMA" \
+  LDFLAGS="$optldflags -lX11 -lXinerama -lXau -lXdmcp -lxcb -lX11-xcb" \
+  -j$MAKE_THREADS || exit 1
+
+make PREFIX="$butch_prefix" MANPREFIX="$butch_prefix/share/man" \
+     DESTDIR="$butch_install_dir" install || exit 1
