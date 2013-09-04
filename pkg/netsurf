@@ -1,9 +1,9 @@
 [mirrors]
-http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-2.9-full-src.tar.gz
+http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-3.0-full-src.tar.gz
 [main]
-filesize=4621932
-sha512=8dfd4d845f5255ee4420c6d4454594eb34dda129096b4d6acb72bd00e976042e7caf80b075ed39d3d3bf3b070c297f73f889075200bd7fb3d2467ca8154c07f0
-tardir=netsurf-2.9
+filesize=6143522
+sha512=bf99891da59f46e0d74064208d6c31875b075a103a501f5ca34efb1a240a6813ed5e056df8bc93c395d5756b58c24a4ca5feefadc4ab81faed48a6598f18612a
+tardir=netsurf-full-3.0
 
 [deps]
 libpng
@@ -18,5 +18,6 @@ liblcms
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
 #CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-CFLAGS="-I$butch_prefix/include/cairo/" make -j$MAKE_THREADS || exit 1
+CFLAGS="-I$butch_prefix/include/cairo/" NETSURF_USE_BMP=NO \
+ make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
