@@ -2,12 +2,12 @@
 curl
 
 [main]
-filesize=3399942
-sha512=b8b5a17de1c08ed220b0be958e153af63055df2af408781fcb4855577cab57b911f86477e235ba8d83804dbe7675df9a36b18ccb360a03cd4ee407cb02e09d3a
+filesize=4479898
+sha512=84d2d70622d19200594f4ea8550f00c3bd46657381ea953a2171172faf27ffa8be30c9249e1ed93d983826880c7e78a76884c841212338efdfb7ab38713bdbe1
 
 [mirrors]
-http://git-core.googlecode.com/files/git-1.7.6.5.tar.gz
-http://www.kernel.org/pub/software/scm/git/git-1.7.6.5.tar.gz
+https://git-core.googlecode.com/files/git-1.8.3.4.tar.gz
+https://www.kernel.org/pub/software/scm/git/git-1.8.3.4.tar.gz
 
 [build]
 
