@@ -1,0 +1,14 @@
+[main]
+filesize=32947
+sha512=06a75cdf7d22c64c1331276b0f58577c3c42c1c2edcb41a33a3c37f7b65bd284a3b006dd94e0dc081f42f028dd18b60f278e8b3f33a1cf6611b1398bff80df7d
+
+[mirrors]
+http://dl.suckless.org/st/st-0.4.1.tar.gz
+
+[build]
+make \
+ PREFIX="$butch_prefix" \
+ CFLAGS="$optcflags -D_GNU_SOURCE -std=c99 -Wall -Wvariadic-macros -Os -I/include -I/include/freetype2 -DVERSION=\\\"0.4.1\\\" -D_BSD_SOURCE -D_XOPEN_SOURCE=600" \
+ LDFLAGS="-g -L/lib -lc -lX11 -lutil -lXext -lXft -lfontconfig -lfreetype" \
+  -j$MAKE_THREADS  || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
