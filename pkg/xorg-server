@@ -5,6 +5,20 @@ fixesproto
 damageproto
 xcmiscproto
 libxkbfile
+freetype
+libfontenc
+libxdmcp
+bigreqsproto
+randrproto
+renderproto
+fontsproto
+videoproto
+compositeproto
+recordproto
+scrnsaverproto
+resourceproto
+xineramaproto
+libxfont
 
 [main]
 filesize=5172054
