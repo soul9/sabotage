@@ -2,6 +2,7 @@
 stage1
 gdb
 file
+htop
 iptables
 dropbear
 lynx
@@ -12,6 +13,7 @@ strace
 git
 screen
 tcpdump
+tree
 wireless-tools
 wpa-supplicant
 su
