@@ -10,10 +10,8 @@ ncurses
 
 [build]
 patch -p1 < "$K"/dvtm-vt.patch || exit 1
-#  ./configure -C --prefix="$butch_prefix" || exit 1
 make all install \
- PREFIX="$butch_prefix" \
- CFLAGS="-std=c99 $optcflags -I. -I/include -DVERSION=\\\"0.9\\\" -DNDEBUG" \
- LDFLAGS="-lncurses" \
+ PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" \
+ CFLAGS="-std=gnu99 $optcflags -I. -I/include -DVERSION=\\\"0.9\\\"" \
+ LDFLAGS="-lncurses $optldflags" \
  -j$MAKE_THREADS  || exit 1
-#make DESTDIR=$butch_install_dir install || exit 1
