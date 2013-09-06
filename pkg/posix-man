@@ -7,6 +7,8 @@ sha512=1db07377a63aefddd2dc996f153075e86db9b8577c4b86fda47a9787645068ae8cf0c8c72
 
 [mirrors]
 http://www.kernel.org/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2003-a.tar.xz
+ftp://www.kernel.org/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2003-a.tar.xz
+http://mirror.anl.gov/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2003-a.tar.xz
 
 [build]
 
