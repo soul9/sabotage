@@ -11,5 +11,6 @@ mpc
 mpfr
 musl
 dynamic-toolchain
+man
 xz
 zlib

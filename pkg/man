@@ -1,0 +1,4 @@
+[build]
+"$CC" $optcflags -std=gnu99 -o man "$K"/man.c -static $optldflags || exit 1
+
+mv man "$butch_prefix"/bin/
