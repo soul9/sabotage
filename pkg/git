@@ -16,7 +16,7 @@ sha512=f62fcd8f20c0e8dc6909de8ccc950c39703e4c9b36acba643ab22051a1290fbe0eb606c41
 make CURL_LIBCURL="/lib/libcurl.a /lib/libssl.a /lib/libcrypto.a" \
   CC="$CC" HOSTCC="$HOSTCC" \
   prefix="$butch_prefix" gitexecdir="$butch_prefix"/lib/git-core \
-  NO_TCLTK=1 NO_PYTHON=1 NO_EXPAT=1 \
+  NO_TCLTK=1 NO_PYTHON=1 NO_EXPAT=1 NO_GETTEXT=1 \
   CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   DESTDIR="$butch_install_dir" -j$MAKE_THREADS all install  || exit 1
 
