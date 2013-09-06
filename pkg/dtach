@@ -1,18 +1,19 @@
+[mirrors]
+http://downloads.sourceforge.net/project/dtach/dtach/0.8/dtach-0.8.tar.gz
+http://pkgs.fedoraproject.org/repo/pkgs/dtach/dtach-0.8.tar.gz/ec5999f3b6bb67da19754fcb2e5221f3/dtach-0.8.tar.gz
+
 [main]
 filesize=55472
 sha512=ad0a788d10a5e1e1be4c353b64e1e4a0dc8c888492a638b2442d7c59ef31d67975357116435a1059141bfc2c82a3a6e9e490faa87cf81e5fc3bc7457a99c1193
 
-[mirrors]
-http://pkgs.fedoraproject.org/repo/pkgs/dtach/dtach-0.8.tar.gz/ec5999f3b6bb67da19754fcb2e5221f3/dtach-0.8.tar.gz
-
 [deps]
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
-
-./configure -C --prefix="$butch_prefix" || exit 1
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" || exit 1
+
 make -j$MAKE_THREADS || exit 1
-#This is in the dtach README, you don't "install" it in the typical sense
-install -D dtach $butch_install_dir/bin/dtach || exit 1
-install -D dtach.1 $butch_install_dir/share/man/man1/dtach.1 || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+install -D dtach "$dest"/bin/dtach || exit 1
+install -D dtach.1 "$dest"/share/man/man1/dtach.1 || exit 1
