@@ -14,6 +14,7 @@ gtk+2
 libglade
 libmng
 liblcms
+flex
 
 [build]
 # we supply the gperf-generated C file to avoid a dependency on it
