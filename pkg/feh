@@ -10,6 +10,7 @@ curl
 giblib
 libxinerama
 libexif
+libxt
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
