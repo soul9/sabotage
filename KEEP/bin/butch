@@ -18,11 +18,13 @@ BINDIR=$(dirname "$(readlink -f "$0")")
 
 usage() {
 cat << EOF >&2
-butch wrapper v0.1.0
+butch wrapper v0.1.1
 
-usage: $0 [build|download|list|search|unlink|relink|relocate|update|install|prefetch|rebuild] package ...
+usage: $0 command package ...
 
+------- available commands -----
 list:		list all installed packages
+files:		show all files installed by package
 search:		search for term in package names (grep syntax)
 unlink:		removes symlinks from /opt/packagename into /
 relocate:	creates symlinks for all files under /opt/packagename to /
@@ -35,6 +37,15 @@ download:	==prefetch
 rebuild:	unlink, download, rebuild, relocate package(s), but not their dependencies
 
 all download related actions are only done when needed, i.e. the tarball is missing.
+
+examples:
+butch build nano strace gdb
+butch files busybox
+
+butch unlink gettext #temporarily unlinks gettext
+( do some work... for example check if package XY builds without gettext)
+butch relink gettext #put it back into place
+
 EOF
 }
 
@@ -43,6 +54,7 @@ case $1 in
 	build) shift ; set -- install "$@";;
 	download) shift ; set -- prefetch "$@";;
 	list) shift; prog=butch-list;;
+	files) shift; prog=butch-files;;
 	search) shift; prog=butch-search;;
 	unlink) shift ; prog=butch-unlink;; #remove links of pkg
 	relink|relocate) shift; prog=butch-relocate;; #relinks the pkg into /
