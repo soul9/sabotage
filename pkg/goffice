@@ -8,6 +8,7 @@ sha512=61a3063d37e2ded4d4065d261f728c862daea04090ac38abe2524089ed1ee253e0d77e501
 [deps]
 gtk+2
 libgsf
+pcre
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
