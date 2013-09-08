@@ -1,11 +1,14 @@
 [mirrors]
-http://mirror.switch.ch/mirror/apache/dist//httpd/httpd-2.4.3.tar.bz2
+http://mirror.switch.ch/mirror/apache/dist//httpd/httpd-2.4.6.tar.bz2
+http://mirror.symnds.com/software/Apache//httpd/httpd-2.4.6.tar.bz2
 
 [main]
-filesize=4559279
-sha512=d4501ae69aacb75d960bc8cb61c9e1ff52e6e42a37c37ca84c839262e183ca2f305794da28266aa2119d211ba0f4531705f66330079ab594c05e92ae8196d1ab
+filesize=4949897
+sha512=8ade7ec5291f07a60e279f7a73a79c11c150dbf09c9e7b059e136fcb250130aa0f381b118f84e230184b065d452d5e946df8a5766991be8cdc6e8f5d4c4bac01
 
 [deps]
+apr
+apr-util
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
