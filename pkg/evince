@@ -12,6 +12,7 @@ poppler-data
 poppler
 gnome-icon-theme-fake
 shared-mime-info
+libsm
 
 [build]
 # https://bugzilla.gnome.org/show_bug.cgi?id=637055
