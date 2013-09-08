@@ -13,6 +13,7 @@ pkgconf
 perl
 cpan-XML-Parser
 intltool
+menu-cache
 
 [build]
 #patch -p1 < "$K/some.patch"
