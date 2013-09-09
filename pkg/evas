@@ -1,9 +1,9 @@
 [main]
-filesize=10142455
-sha512=a6233d09391feab9969e6147e8d1259eb60fb82e31d36015dce78d4becf67b2e7fb1726238f78145443031d9e76d7a4dbe435e0d54d4c4de49c2adc3bbafbfd5
+filesize=10256632
+sha512=79b1cf51867fb4c1edae19bf3cdca6f88fbbe6d3895cc6121add17581eac7e07e68a813bfd1d691df9d132a8d84ce176b1021165825dd487bd0eccd86c0e257f
 
 [mirrors]
-http://download.enlightenment.org/releases/evas-1.7.1.tar.gz
+http://download.enlightenment.org/releases/evas-1.7.8.tar.gz
 
 [deps]
 musl
@@ -24,7 +24,7 @@ cairo
 #patch -p1 < "$K/some.patch" || exit 1
 # for future EFL releases, wayland support can be enabled with:
 # --enable-wayland-shm --enable-wayland-egl --enable-gl-flavor-gles --enable-gles-variety-sgx
-CFLAGS="-D_GNU_SOURCE -Duseconds_t=unsigned" ./configure -C --prefix="$butch_prefix" --enable-fontconfig --enable-fb=static \
+CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" --enable-fontconfig --enable-fb=static \
 --disable-harfbuzz --enable-buffer=static --disable-directfb --enable-static-software-generic --enable-software-xlib=static \
 --enable-software-xcb --enable-sdl-primitive --enable-image-loader-jpeg --enable-image-loader-png --enable-image-loader-tiff \
 --disable-install-examples --disable-tests --disable-doc || exit 1
