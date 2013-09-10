@@ -19,7 +19,7 @@ patch -p1 < "$K"/musl-0913-popen.patch || exit 1
 patch -p1 < "$K"/musl-0913-synccall.patch || exit 1
 
 CC=$R/bin/gcc ./configure --enable-gcc-wrapper \
-  --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
+  --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak

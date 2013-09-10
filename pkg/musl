@@ -15,7 +15,7 @@ patch -p1 < "$K"/musl-0913-ldso-symlink.patch || exit 1
 patch -p1 < "$K"/musl-0913-popen.patch || exit 1
 patch -p1 < "$K"/musl-0913-synccall.patch || exit 1
 
-CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
+CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
 if [ "$A" = "powerpc" ] ; then
 cat << EOF >> config.mak
 LDFLAGS += -Wl,--secure-plt
