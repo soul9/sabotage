@@ -8,12 +8,7 @@ http://downloads.sourceforge.net/project/cmus/cmus-v2.5.0.tar.bz2
 [deps]
 
 [build]
-#cmus won't take --prefix as an option and must have that read in from a file
-cat > cmus-override.txt << EOF
-prefix="$butch_prefix"
-EOF
-
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
-./configure -f cmus-override.txt || exit 1
+./configure prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
