@@ -38,7 +38,6 @@
 static FILE *ofd, *ifd;
 static int *line_ptr;
 
-static int ifd_class;		/* Type of ifd, 0=stdin, 1=file, 2=pipe */
 static int keep_nl;		/* How many nl to keep til eof */
 static int optional_keep;		/* Is the next keep optional ? */
 static int pending_nl;		/* Is there a pending newline on output? */
@@ -58,7 +57,7 @@ static char man_file[256];
 static char word[80];			/* Current word */
 
 static int right_margin = 65;		/* Don't print past this column */
-static int verbose = 1;
+static int verbose = 1;		/* print warnings about unknown macros */
 static int no_nl = 1;			/* Next NL in input file is ignored */
 static int catmode = 1;		/* Have we seen a '.XX' command ? */
 static int cur_font = 0x100;		/* Current font, 1 == Roman */
@@ -177,7 +176,7 @@ int main(int argc, char **argv) {
 
 static int find_page(char *name, char *sect) {
 	static char defpath[] = "/usr/local/share/man:/usr/share/man";
-	static char defsect[] = "1p:1:2:3p:3:4:5:6:7:8:9:0p";
+	static char defsect[] = "1p:1:1perl:2:3p:3:3perl:4:5:6:7:8:9:0p";
 	static char defsuff[] = ":.gz:.Z";
 	static char manorcat[] = "man:cat";
 
@@ -264,6 +263,31 @@ static void step(char **pcurr, char **pnext) {
 	*pnext = next;
 }
 
+static char* which(const char* prog, char* buf, size_t buf_size) {
+	char* path = getenv("PATH");
+	if(!path) return 0;
+	while(1) {
+		path += strspn(path, ":");
+		size_t l = strcspn(path, ":");
+		if(!l) break;
+		if (snprintf(buf, buf_size, "%.*s/%s", (int)l, path, prog) >= buf_size)
+                        continue;
+		if(!access(buf, X_OK)) return buf;
+		path += l;
+	}
+	return 0;
+}
+
+static int program_exists_in_path(const char* prog) {
+	char buf[256];
+	return !!which(prog, buf, sizeof buf);
+}
+
+#define PREPROC "manpp"
+static int preprocessor_exists(void) {
+	return program_exists_in_path(PREPROC);
+}
+
 static int open_page(char *name) {
 	char *p, *command = 0;
 	char buf[256];
@@ -271,95 +295,23 @@ static int open_page(char *name) {
 	if(access(name, 0) < 0)
 		return -1;
 
-	p = strrchr(name, '.');
-	if(p) {
-		if(strcmp(p, ".gz") == 0)
-			command = "gzip -dc ";
-		if(strcmp(p, ".Z") == 0)
-			command = "uncompress -c ";
+	if((p = strrchr(name, '.'))) {
+		if(!strcmp(p, ".gz")) command = "gzip -dc ";
+		else if(!strcmp(p, ".Z")) command = "uncompress -c ";
 	}
+	if(!command) command = "cat ";
 
-	if(command) {
-		snprintf(buf, sizeof buf, "%s%s", command, name);
-		ifd = popen(buf, "r");
-		if(ifd == 0)
-			return -1;
-		ifd_class = 2;
-		return 0;
-	}
-	ifd = fopen(name, "r");
-	if(ifd == 0)
-		return -1;
-	ifd_class = 1;
+	snprintf(buf, sizeof buf, "%s%s%s", command, name, preprocessor_exists() ? " | " PREPROC : "");
+	if(!(ifd = popen(buf, "r"))) return -1;
 	return 0;
 }
 
 static void close_page(void) {
-	switch (ifd_class) {
-		case 1:
-			fclose(ifd);
-			break;
-		case 2:
-			pclose(ifd);
-			break;
+	if(ifd) {
+		pclose(ifd);
+		ifd = 0;
 	}
-	ifd_class = 0;
 }
-
-/****************************************************************************
- * Accepted nroff commands and executors.
- */
-
-const struct cmd_list_s {
-	char cmd[3];
-	char class;
-	char id;
-} cmd_list[] = {
-	{"\\\"", 0, 0}, 
-	{"nh", 0, 0},		/* This program never inserts hyphens */
-	{"hy", 0, 0},		/* This program never inserts hyphens */
-	{"PD", 0, 0},		/* Inter-para distance is 1 line */
-	{"DT", 0, 0},		/* Default tabs, they can't be non-default! */
-	{"IX", 0, 0},		/* Indexing for some weird package */
-	{"Id", 0, 0},		/* Line for RCS tokens */
-	{"BY", 0, 0},		/* I wonder where this should go ? */
-	{"nf", 0, 1},		/* Line break, Turn line fill off */
-	{"fi", 0, 2},		/* Line break, Turn line fill on */
-	{"sp", 0, 3},		/* Line break, line space (arg for Nr lines) */
-	{"br", 0, 4},		/* Line break */
-	{"bp", 0, 5},		/* Page break */
-	{"PP", 0, 6},
-	{"LP", 0, 6},
-	{"P", 0, 6},		/* Paragraph */
-	{"RS", 0, 7},		/* New Para + Indent start */
-	{"RE", 0, 8},		/* New Para + Indent end */
-	{"HP", 0, 9},		/* Begin hanging indent (TP without arg?) */
-	{"ad", 0, 10},		/* Line up right margin */
-	{"na", 0, 11},		/* Leave right margin unaligned */
-	{"ta", 0, 12},		/* Changes _input_ tab spacing, right? */
-	{"TH", 1, 1},		/* Title and headers */
-	{"SH", 1, 2},		/* Section */
-	{"SS", 1, 3},		/* Subsection */
-	{"IP", 1, 4},		/* New para, indent except argument 1 */
-	{"TP", 1, 5},		/* New para, indent except line 1 */
-	{"B", 2, 22},		/* Various font fiddles */
-	{"BI", 2, 23},
-	{"BR", 2, 21},
-	{"I", 2, 33},
-	{"IB", 2, 32},
-	{"IR", 2, 31},
-	{"RB", 2, 12},
-	{"RI", 2, 13},
-	{"SB", 2, 42},
-	{"SM", 2, 44},
-	{"C", 2, 22},		/* PH-UX manual pages! */
-	{"CI", 2, 23},
-	{"CR", 2, 21},
-	{"IC", 2, 32},
-	{"RC", 2, 12},
-	{"so", 3, 0},
-	{"\0\0", 0}
-};
 
 /****************************************************************************
  * ifd is the manual page, ofd is the 'output' file or pipe, format it! 
@@ -511,6 +463,61 @@ static int fetch_word(void) {
 	return (nl != 0);
 }
 
+/****************************************************************************
+ * Accepted nroff commands and executors.
+ */
+
+const struct cmd_list_s {
+	char cmd[3];
+	char class;
+	char id;
+} cmd_list[] = {
+	{"\\\"", 0, 0}, 
+	{"nh", 0, 0},		/* This program never inserts hyphens */
+	{"hy", 0, 0},		/* This program never inserts hyphens */
+	{"PD", 0, 0},		/* Inter-para distance is 1 line */
+	{"DT", 0, 0},		/* Default tabs, they can't be non-default! */
+	{"IX", 0, 0},		/* Indexing for some weird package */
+	{"Id", 0, 0},		/* Line for RCS tokens */
+	{"BY", 0, 0},		/* I wonder where this should go ? */
+	{"nf", 0, 1},		/* Line break, Turn line fill off */
+	{"fi", 0, 2},		/* Line break, Turn line fill on */
+	{"sp", 0, 3},		/* Line break, line space (arg for Nr lines) */
+	{"br", 0, 4},		/* Line break */
+	{"bp", 0, 5},		/* Page break */
+	{"PP", 0, 6},
+	{"LP", 0, 6},
+	{"P", 0, 6},		/* Paragraph */
+	{"RS", 0, 7},		/* New Para + Indent start */
+	{"RE", 0, 8},		/* New Para + Indent end */
+	{"HP", 0, 9},		/* Begin hanging indent (TP without arg?) */
+	{"ad", 0, 10},		/* Line up right margin */
+	{"na", 0, 11},		/* Leave right margin unaligned */
+	{"ta", 0, 12},		/* Changes _input_ tab spacing, right? */
+	{"TH", 1, 1},		/* Title and headers */
+	{"SH", 1, 2},		/* Section */
+	{"SS", 1, 3},		/* Subsection */
+	{"IP", 1, 4},		/* New para, indent except argument 1 */
+	{"TP", 1, 5},		/* New para, indent except line 1 */
+	{"B", 2, 22},		/* Various font fiddles */
+	{"BI", 2, 23},
+	{"BR", 2, 21},
+	{"I", 2, 33},
+	{"IB", 2, 32},
+	{"IR", 2, 31},
+	{"RB", 2, 12},
+	{"RI", 2, 13},
+	{"SB", 2, 42},
+	{"SM", 2, 44},
+	{"C", 2, 22},		/* PH-UX manual pages! */
+	{"CI", 2, 23},
+	{"CR", 2, 21},
+	{"IC", 2, 32},
+	{"RC", 2, 12},
+	{"so", 3, 0},
+	{"\0\0", 0}
+};
+
 static int do_command(void) {
 	char *cmd;
 	int ch, i;
@@ -581,19 +588,33 @@ static void do_skipeol(void) {
 	ungetc(ch, ifd);
 }
 
+static void flush_word(char **p) {
+	memcpy(*p, "\\fR", 4);
+	print_word(word);
+	*p = word;
+}
+
+static void insert_font(char **p, int font) {
+	const char ftab[] = " RBIS";
+	memcpy(*p, "\\f", 2);
+	(*p)[2] = ftab[font];
+	*p += 3;
+}
+
 static int do_fontwords(int this_font, int other_font, int early_exit) {
-#define checkp(X) assert(p+X+1<word+sizeof word)
-	static char ftab[] = " RBIS";
 	char *p = word;
-	int i, ch;
+	int ch;
 	int in_quote = 0;
 	
-	no_nl = 0;		/* Line is effectivly been reprocessed so NL is visable */
+	no_nl = 0; /* Line is effectivly been reprocessed so NL is visible */
 	for(;;) {
-		if(p == word) {
-			strcpy(p, "\\f");
-			p[2] = ftab[this_font];
-			p += 3;
+		if(p == word) insert_font(&p, this_font);
+		/* at each turn, at most 5 bytes are appended to word
+		 * in order to flush the buffer, 4 more bytes are required to stay free */
+		if(p+5+4 >= word+sizeof word) {
+			assert(p+4<word+sizeof word);
+			flush_word(&p);
+			continue;
 		}
 		if((ch = fgetc(ifd)) == EOF || ch == '\n')
 			break;
@@ -603,61 +624,33 @@ static int do_fontwords(int this_font, int other_font, int early_exit) {
 		}
 		if(in_quote || !isspace(ch)) {
 			if(isspace(ch) && p > word + 3) {
-				checkp(4);
-				strcpy(p, "\\fR");
-				p += 3;
-				*p = 0;
-				print_word(word);
-				p = word;
-				if(no_fill)
-					print_word(" ");
+				flush_word(&p);
+				if(no_fill) print_word(" ");
 				continue;
 			}
-			if(p < word + sizeof(word) - 4)
-				*p++ = ch;
+			*p++ = ch;
 			if(ch == '\\') {
-				if((ch = fgetc(ifd)) == EOF || ch == '\n')
-					break;
-				if(p < word + sizeof(word) - 4)
-					*p++ = ch;
+				if((ch = fgetc(ifd)) == EOF || ch == '\n') break;
+				*p++ = ch;
 			}
 			continue;
 		}
 
 		if(p != word + 3) {
-			if(early_exit)
-				break;
+			if(early_exit) break;
 
-			if(this_font == other_font) {
-				checkp(4);
-				strcpy(p, "\\fR");
-				p += 3;
-				*p = 0;
-				print_word(word);
-				p = word;
-			}
-			i = this_font;
+			if(this_font == other_font) flush_word(&p);
+			int i = this_font;
 			this_font = other_font;
 			other_font = i;
-			if(p < word + sizeof(word) - 4) {
-				strcpy(p, "\\f");
-				p[2] = ftab[this_font];
-				p += 3;
-			}
+			insert_font(&p, this_font);
 		}
 	}
 	ungetc(ch, ifd);
 
-	if(p > word + 3) {
-		checkp(4);
-		strcpy(p, "\\fR");
-		p += 3;
-		*p = 0;
-		print_word(word);
-	}
+	if(p > word + 3) flush_word(&p);
 
 	return 0;
-#undef checkp
 }
 
 static int do_noargs(int cmd_id) {
@@ -833,7 +826,8 @@ static void print_word(char *pword) {
  * \(XX  Special character XX
  * \X    Print as X
  */
-
+#define checkw(X) assert(d+X<wword+(sizeof wword/sizeof wword[0]))
+#define checkl(X) assert(line_ptr+X<line+(sizeof line/sizeof line[0]))
 	char *s;
 	int *d, ch = 0;
 	int length = 0;
@@ -846,6 +840,7 @@ static void print_word(char *pword) {
 		if(*s == '\n')
 			continue;
 		if(*s != '\\') {
+			checkw(1);
 			*d++ = (ch = *s) + cur_font;
 			length++;
 		} else {
@@ -880,16 +875,19 @@ static void print_word(char *pword) {
 					++s;
 				if(s[1])
 					++s;
+				checkw(1);
 				*d++ = '*' + cur_font;
 				length++;
 				continue;
 			}
 
+			checkw(1);
 			*d++ = *s + cur_font;
 			length++;
 		}
 	}
 
+	checkw(1);
 	*d = 0;
 #ifdef SPLATTER
 	{
@@ -912,15 +910,24 @@ static void print_word(char *pword) {
 
 	if(line_ptr == 0)
 		line_ptr = line;
-	else if(!no_fill && (line_ptr[-1] & 0xFF) > ' ') {
-		if((line_ptr[-1] & 0xFF) == '.')
-			*line_ptr++ = cur_font + ' ';
-		*line_ptr++ = sp_font;
-		gaps_on_line++;
+	else {
+		assert(line_ptr > line);
+		if(!no_fill && (line_ptr[-1] & 0xFF) > ' ') {
+			if((line_ptr[-1] & 0xFF) == '.') {
+				checkl(1);
+				*line_ptr++ = cur_font + ' ';
+			}
+			checkl(1);
+			*line_ptr++ = sp_font;
+			gaps_on_line++;
+		}
 	}
 
+	checkl(length);
 	memcpy(line_ptr, wword, length * sizeof(int));
 	line_ptr += length;
+#undef checkw
+#undef checkl
 }
 
 static void line_break(void) {
