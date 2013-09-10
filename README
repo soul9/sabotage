@@ -15,7 +15,7 @@ Requirements:
 - lots of time and a fair bit of Linux knowledge
 
 This system has been built on Debian 6.0 and 7.0, Ubuntu 13.04, 
-Suse 11.4, aboriginal 1.1 and 1.2 systems, and Fedora 19.
+Suse 11.4, aboriginal 1.1 and 1.2, and Fedora 19 systems.
 
 You can bootstrap your own build from the scripts at 
 
