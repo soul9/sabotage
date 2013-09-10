@@ -115,12 +115,20 @@ tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/
 
 build_single networking ping
 
+# 2 true and false
+cat << EOF > true.c
+int main() { return 0; }
+EOF
+cat << EOF > false.c
+int main() { return 1; }
+EOF
+compile -static $optcflags true.c -o true $optldflags || exit 1
+compile -static $optcflags false.c -o false $optldflags || exit 1
+
 # done, continue with "make install" equivalent
 
 dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
-
-cp ping "$dest"/bin/
 
 busybox_bin=busybox
 [ "$DEBUGBUILD" = "1" ] && busybox_bin=busybox_unstripped
@@ -151,3 +159,8 @@ for f in $("$dest"/bin/busybox --list); do
 done
 
 echo symlinks done.
+
+cp -f ping "$dest"/bin/
+cp -f true "$dest"/bin/
+cp -f false "$dest"/bin/
+
