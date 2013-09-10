@@ -31,8 +31,8 @@ CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE -fPIC' \
   -Dsitescript="$butch_prefix"/bin \
   -Dvendorscript="$butch_prefix"/bin \
   -Dinc_version_list=none $debug_flags \
-  -Dman1dir="$butch_prefix"/share/man/man1 -Dman1ext=1perl \
-  -Dman3dir="$butch_prefix"/share/man/man3 -Dman3ext=3perl || exit 1
+  -Dman1dir="$butch_prefix"/share/man/man1perl -Dman1ext=1perl \
+  -Dman3dir="$butch_prefix"/share/man/man3perl -Dman3ext=3perl || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make install || exit 1
