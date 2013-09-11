@@ -33,3 +33,9 @@ EOF
 CFLAGS="-I$butch_prefix/include/cairo/" NETSURF_USE_BMP=NO \
  make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+# g_get_language_names returns "C" only, but there's no such directory
+# this causes missing translations (file name is "Messages") and the welcome page
+# not to be found
+dest="$butch_install_dir""$butch_prefix"
+ln -sf en "$dest"/share/netsurf/C
