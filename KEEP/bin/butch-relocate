@@ -9,7 +9,7 @@ relocate() {
         cd "$butch_install_dir/$dir" || return 1
         echo "relocating $butch_install_dir/$dir"
         for i in * ; do
-                if [ -d "$i" ] ; then
+                if [ ! -L "$i" ] && [ -d "$i" ] ; then
                         local save="$PWD"
                         relocate "$target_root" "$dir/$i" "$backlinks/.."
                         cd "$save"
