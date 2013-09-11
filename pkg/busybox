@@ -160,7 +160,11 @@ done
 
 echo symlinks done.
 
-cp -f ping "$dest"/bin/
-cp -f true "$dest"/bin/
-cp -f false "$dest"/bin/
-
+for p in ping true false ; do
+	# in case a symlink from one of the above program names to busybox
+	#  already exists, we need to delete it
+	# before copying. otherwise the *busybox binary* gets replaced
+	# through the symlink...
+	rm -f "$dest"/bin/"$p"
+	cp -f "$p" "$dest"/bin/
+done
