@@ -143,8 +143,12 @@ echo check if busybox works:
 "$dest"/bin/busybox --list >/dev/null|| exit 1
 
 trylink() {
+	if [ ! -e bb-link ] ; then
+		printf '#!%s/bin/busybox\n' "$butch_prefix" > bb-link
+		chmod +x bb-link
+	fi
 	printf "trying to link busybox to %s ... " "$1"
-	if ! ln -sf busybox "$1" ; then
+	if ! cp -f bb-link "$1" ; then
 		echo FAIL
 		exit 1
 	else
