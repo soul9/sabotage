@@ -58,7 +58,8 @@ case $1 in
 	search) shift; prog=butch-search;;
 	unlink) shift ; prog=butch-unlink;; #remove links of pkg
 	relink|relocate) shift; prog=butch-relocate;; #relinks the pkg into /
-	update|install|prefetch|rebuild) : ;;
+	update) export BUTCH_SKIPLIST=gcc3:stage0:stage0_musl:stage0_gcc:stage0_prepare:"$BUTCH_SKIPLIST" ;;
+	install|prefetch|rebuild) : ;;
 	*) usage;; # we exec anyway to get butch-core's usage info
 esac
 	
