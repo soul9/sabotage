@@ -1,5 +1,6 @@
 [deps]
 sweep
+abiword
 audacity
 evince
 epdfview
@@ -15,3 +16,4 @@ ixchat
 dillo
 netsurf
 pgadmin3
+sylpheed
