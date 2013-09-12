@@ -7,6 +7,7 @@ http://wayland.freedesktop.org/releases/wayland-1.0.0.tar.xz
 
 [deps]
 libffi
+expat
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
