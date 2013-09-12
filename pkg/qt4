@@ -1,5 +1,6 @@
 [mirrors]
 ftp://ftp.trolltech.com/qt/source/qt-x11-opensource-src-4.3.4.tar.gz
+http://ftp.heanet.ie/mirrors/trolltech/pub/qt/source/qt-x11-opensource-src-4.3.4.tar.gz
 
 [main]
 filesize=43988710
