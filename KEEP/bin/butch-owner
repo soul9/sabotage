@@ -1,0 +1,15 @@
+#!/bin/sh
+for i ; do
+	printf "%s:" "$i"
+	link=$(readlink "$i")
+	fail=$?
+	if [ ! -e "$i" ] ; then
+		echo "INEXISTANT"
+	elif [ ! "$fail" = 0 ] ; then
+		echo "UNKNOWN"
+	else
+		printf "%s\n" "$link" | \
+		   awk 'BEGIN { FS="/" } \
+        	        { for(i=1;i<=NF;i++) if($i=="opt") {if(i<NF) print $(i+1); else print "UNKNOWN"; exit} }'
+	fi
+done

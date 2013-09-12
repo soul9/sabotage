@@ -25,6 +25,7 @@ usage: $0 command package ...
 ------- available commands -----
 list:		list all installed packages
 files:		show all files installed by package
+owner:		shows which package owns a file
 search:		search for term in package names (grep syntax)
 unlink:		removes symlinks from /opt/packagename into /
 relocate:	creates symlinks for all files under /opt/packagename to /
@@ -41,6 +42,7 @@ all download related actions are only done when needed, i.e. the tarball is miss
 examples:
 butch build nano strace gdb
 butch files busybox
+butch owner /bin/gcc
 
 butch unlink gettext #temporarily unlinks gettext
 ( do some work... for example check if package XY builds without gettext)
@@ -54,6 +56,7 @@ case $1 in
 	build) shift ; set -- install "$@";;
 	download) shift ; set -- prefetch "$@";;
 	list) shift; prog=butch-list;;
+	owner) shift; prog=butch-owner;;
 	files) shift; prog=butch-files;;
 	search) shift; prog=butch-search;;
 	unlink) shift ; prog=butch-unlink;; #remove links of pkg
