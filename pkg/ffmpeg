@@ -16,6 +16,7 @@ bash
 sed -i 's@/bin/sh@/bin/bash@' configure
 
 CFLAGS="-D_BSD_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" --disable-debug --disable-yasm || exit 1
+  ./configure --prefix="$butch_prefix" --disable-debug --disable-yasm \
+  --enable-shared || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
