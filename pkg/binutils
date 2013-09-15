@@ -1,10 +1,10 @@
-[main]
-filesize=19973532
-sha512=ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74
-
 [mirrors]
-http://ftp.gnu.org/gnu/binutils/binutils-2.22.tar.bz2
-http://ftpmirror.gnu.org/binutils/binutils-2.22.tar.bz2
+http://ftp.gnu.org/gnu/binutils/binutils-2.23.2.tar.bz2
+http://ftpmirror.gnu.org/binutils/binutils-2.23.2.tar.bz2
+
+[main]
+filesize=21440347
+sha512=dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16
 
 [deps]
 stage0_musl
@@ -12,8 +12,6 @@ stage0_musl
 [build]
 patch -p1 < "$K"/binutils-arm.diff || exit 1
 patch -p1 < "$K"/binutils-as-needed.patch || exit 1
-patch -p1 < "$K"/binutils222-ppc-textrel.patch || exit 1
-patch -p1 < "$K"/binutils-sort-section.patch || exit 1
 
 $K/bin/libibertyfix libiberty
 
@@ -29,6 +27,7 @@ CC="$CC -static" \
 CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
 ./configure -C --prefix="$butch_prefix" \
   --disable-nls --disable-werror \
+  --enable-initfini-array \
   --disable-install-libbfd $config_arch_flags || exit 1
 
 make -j$MAKE_THREADS || exit 1
