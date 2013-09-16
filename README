@@ -8,10 +8,9 @@ environment (for example pre-built aboriginal linux qemu images).
 
 Requirements:
 - ~4G free disk space
-- root access
+- root access, or a linux 3.8+ host kernel with USER_NS support
 - usual GCC 4 toolchain
 - git
-- a bootloader of your choice (extlinux is favored)
 - lots of time and a fair bit of Linux knowledge
 
 This system has been built on Debian 6.0 and 7.0, Ubuntu 13.04, 
@@ -41,6 +40,7 @@ DO NOT RUN SCRIPTS YOU HAVE NOT READ.
 % cp KEEP/config.stage0 config
 % vi config
   # set SABOTAGE_BUILDDIR, A, and MAKE_THREADS variables. 
+  # if you have an appropriate kernel and no root privs, set SUPER.
   # the other values can be left as-is usually.
 
 % ./build-stage 0  # build toolchain (~2min on an AMD FX 8core, 75min on ARM Cortex A8 800Mhz)

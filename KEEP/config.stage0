@@ -16,6 +16,12 @@ export HOSTCC=gcc
 ## stage0 builds in less than 2minutes using -j9 on an AMD 8core
 export MAKE_THREADS=1
 
+# in case you have linux kernel 3.8+ with CONFIG_USER_NS enabled,
+# you can use super_chroot in place of chroot, so you don't need
+# root perms to build.
+# if SUPER is set, the enter-chroot script will use super_chroot.
+#export SUPER=1
+
 #    ARM SPECIFIC STUFF    #
 
 ## set your ARM floating point emulation [softfp/hard]

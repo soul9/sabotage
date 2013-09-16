@@ -1,27 +1,40 @@
 #!/bin/sh
 source ./config
+export H="$PWD"
+
 if [ -z "$R" ] ; then
-	echo 'no environment vars set, did you run . config first ?'
+	echo 'no R environment var set, your config is broken'
 	exit 1
 fi
 
-uid="$(id -u)"
-if [ "$uid" != "0" ]; then
-    printf -- "need to be root. please enter password.\n"
-    su -c "$0"
-    exit $?
-fi
-
-export H="$PWD"
-
 mkdir -p "$R"/src/tarballs
 
-mount --rbind /dev "$R"/dev
-mount --rbind /proc "$R"/proc
-mount --bind "$C" "$R"/src/tarballs
+if [ ! -z "$SUPER" ] ; then
+	CHROOT=./super_chroot
+	if [ ! -x "$CHROOT" ] ; then
+		printf "super_chroot binary not found, compile KEEP/super_chroot.c\n"
+		printf "musl-gcc KEEP/super_chroot.c -o super_chroot\n"
+		exit 1
+	fi
+else
+
+	uid="$(id -u)"
+	if [ "$uid" != "0" ]; then
+	    printf -- "need to be root. please enter password.\n"
+	    su -c "$0"
+	    exit $?
+	fi
+
+
+	mount --rbind /dev "$R"/dev
+	mount --rbind /proc "$R"/proc
+	mount --bind "$C" "$R"/src/tarballs
+
+	CHROOT=chroot
+fi
 
 echo "Entering chroot..."
-chroot "$R" /bin/env -i \
+"$CHROOT" "$R" /bin/env -i \
     HOME=/root TERM="$TERM" PS1='\u:\w$ ' \
     /bin/sh --login
 
@@ -34,11 +47,13 @@ tryumount() {
 	fi
 }
 
-tryumount "$R"/src/tarballs
-tryumount "$R"/dev/pts
-tryumount "$R"/dev/shm
-tryumount "$R"/dev
-tryumount "$R"/proc
+if [ -z "$SUPER" ] ; then
+	tryumount "$R"/src/tarballs
+	tryumount "$R"/dev/pts
+	tryumount "$R"/dev/shm
+	tryumount "$R"/dev
+	tryumount "$R"/proc
+fi
 
 #echo empty line so we get a proper prompt back
 echo
