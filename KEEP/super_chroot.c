@@ -20,11 +20,14 @@ int main(int argc, char **argv)
 
 	chk(unshare(CLONE_NEWUSER|CLONE_NEWNS));
 
+	char buf[32];
+
 	int fd = open("/proc/self/uid_map", O_RDWR);
-	dprintf(fd, "%u %u 1\n", 0, uid);
+	write(fd, buf, snprintf(buf, sizeof buf, "0 %u 1\n", uid));
 	close(fd);
+
 	fd = open("/proc/self/gid_map", O_RDWR);
-	dprintf(fd, "%u %u 1\n", 0, gid);
+	write(fd, buf, snprintf(buf, sizeof buf, "0 %u 1\n", gid));
 	close(fd);
 
 	setgroups(0, 0);
