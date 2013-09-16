@@ -9,7 +9,9 @@ http://ftp.gnu.org/non-gnu/cvs/source/stable/1.11.23/cvs-1.11.23.tar.bz2
 [deps]
 
 [build]
-patch -p0 /src/build/cvs-1.11.23/lib/getline.h  < "$K/cvs1.patch"
-CFLAGS="-D_GNU_SOURCE" ./configure -C --prefix="$butch_prefix" --enable-case-sensitivity || exit 1
+patch -p1 < "$K"/cvs1.patch || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" \
+LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" --enable-case-sensitivity || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
