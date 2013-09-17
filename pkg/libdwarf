@@ -1,0 +1,33 @@
+[mirrors]
+http://www.prevanders.net/libdwarf-20130729.tar.gz
+
+[main]
+filesize=1533828
+sha512=f9d25cfd6c6b15bebf6cd63c7014ecf4123798fce637c0da103008758d6a9d5705c3797216a8d1ab3e210c4235f199ab19d7ed0bf6c3582f49eacba1629c5cc0
+tardir=dwarf-20130729
+
+[deps]
+
+[build]
+
+for dir in libdwarf dwarfdump ; do
+(
+echo XXX entering dir $dir
+cd $dir
+cp ../config.cache .
+
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" || exit 1
+# the make target of dwarfdump is broken for concurrent build
+[ $dir = dwarfdump ] && MAKE_THREADS=1
+make -j$MAKE_THREADS || exit 1
+)
+done
+
+# libdwarf lacks make install
+dest="$butch_install_dir""$butch_prefix"
+install -D -m 755 libdwarf/libdwarf.a "$dest"/lib/libdwarf.a || exit 1
+install -D -m 755 libdwarf/libdwarf.h "$dest"/include/libdwarf.h || exit 1
+install -D -m 755 libdwarf/dwarf.h "$dest"/include/dwarf.h || exit 1
+install -D -m 755 dwarfdump/dwarfdump "$dest"/bin/dwarfdump || exit 1
+install -D -m 755 dwarfdump/dwarfdump.1 "$dest"/share/man/man1/dwarfdump.1 || exit 1
