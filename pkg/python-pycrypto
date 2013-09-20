@@ -1,0 +1,15 @@
+[mirrors]
+https://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/pycrypto-2.6.tar.gz
+https://pypi.python.org/packages/source/p/pycrypto/pycrypto-2.6.tar.gz
+http://sources.openelec.tv/devel/pycrypto-2.6.tar.gz
+
+[main]
+filesize=443445
+sha512=7dc82f258e87aad458e88626c5167c17ef9f967aadfc62c41592e14476acf247dd41468bc7351ebb15a6e26f106e5f62bb3a00686b18522b1607e3c7e36b53a8
+
+[deps]
+python
+
+[build]
+python setup.py build || exit 1
+python setup.py install --prefix="$butch_prefix" --root="$butch_install_dir" || exit 1
