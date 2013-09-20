@@ -1,5 +1,4 @@
 [deps]
-perl
 kernel-headers
 
 [main]
@@ -18,7 +17,9 @@ http://ftp.uni-ulm.de/pub/mirrors/kernel.org/utils/boot/syslinux/4.xx/syslinux-4
 
 sed -i '/#define statfs/d;/#undef statfs/d' libinstaller/linuxioctl.h
 
-make -j$MAKE_THREADS -C libinstaller CC="$CC" || exit 1
+"$CC" -Wall "$K"/extlinux-bin2c-replacement.c -o libinstaller/bin2c.pl || exit 1
+
+PATH="$PATH:$PWD/libinstaller" make -j$MAKE_THREADS -C libinstaller CC="$CC" PERL="" || exit 1
 make -j$MAKE_THREADS -C extlinux \
   CC="$CC" OPTFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="-static $optldflags" || exit 1
 make -j$MAKE_THREADS -C linux \
