@@ -9,7 +9,6 @@ sha512=fc02e9ea67ad86626b35c3c7fc3fd63947c7452352751009256c42717d350eff9855eae2e
 openssl
 bzip2-dynamic
 pcre
-xz
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in

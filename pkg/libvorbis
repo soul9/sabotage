@@ -6,7 +6,6 @@ sha512=6b579517b9caba293ccf88c8806689076ef9c122e5424c704a81a4c461dbc67147dadee1b
 
 [deps]
 libogg
-xz
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in

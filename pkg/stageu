@@ -6,5 +6,4 @@ mpc
 mpfr
 musl
 dynamic-toolchain
-xz
 zlib

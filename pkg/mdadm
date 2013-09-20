@@ -7,7 +7,6 @@ sha512=0ad0f71fe2f91b8bdba2daf2beed93c746a7cb0afcd94e8d5a4d092ea61fccc543d332d32
 
 [deps]
 kernel-headers
-xz
 
 [build]
 patch -p1 < "$K"/mdadm_h.patch || exit 1

@@ -10,7 +10,6 @@ mpc
 mpfr
 musl
 dynamic-toolchain
-xz
 zlib
 capchroot
 bedrock-scripts

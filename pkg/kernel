@@ -1,6 +1,5 @@
 [deps]
 gcc4
-xz
 grsec
 
 [mirrors]
