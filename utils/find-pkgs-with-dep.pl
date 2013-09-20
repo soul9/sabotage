@@ -19,10 +19,10 @@ sub has_dep {
 	return 0;
 }
 
-my $pkgdir = $ENV{"R"} or die("environment vars not set. be sure to source config.");
+my $pkgdir = $ENV{"S"} or die("environment var S not set. be sure to source config.");
 my $pkg_searched = $ARGV[0] or die ("need package to search for as argv1");
 
-$pkgdir .= "/src/pkg/";
+$pkgdir .= "/pkg/";
 my @files = glob($pkgdir . "*");
 for(@files) {
 	my $pkg = $_;
