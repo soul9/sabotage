@@ -34,7 +34,7 @@ somewhere).
 
 READ THE COOKBOOK FIRST.
 
-Build instructions:  Caveat emptor, this is all pre-alpha!
+Build instructions:
 DO NOT RUN SCRIPTS YOU HAVE NOT READ.
 
 % cp KEEP/config.stage0 config
@@ -64,8 +64,8 @@ Run "butch" and look at the usage information it outputs for further options.
 
 butch uses build templates that allow a high level of customization.
 in case you're interested, take a look at 
-KEEP/butch_template_configure_cached.txt
-to see how it works. this is the base template used by sabotage, which
+KEEP/butch_template_configure_cached.txt to see how it works. 
+this is the base template used by sabotage, which
 is responsible for things like providing a tuned config.cache for faster
 configure runs, installing packages into a custom directory in /opt, 
 creation of filelists, etc.
@@ -89,7 +89,7 @@ the sshd service can be started using "sv u sshd"
 (will create keys automatically on first use).
 to make the service autostart on boot, remove /etc/service/sshd/down.
 
-check and edit /etc/rc.local for other things you to autostart,
+check and edit /etc/rc.local for other things to autostart,
 such as network config, dhcp, linux console keymap...
 
 if you have X installed, you want to edit /bin/X for the correct evdev
