@@ -9,6 +9,7 @@ sha512=24c1f598972f3dc9ed49cd2c05852190a0190d22fa01401eee8484627c8dd2815f0a422d9
 
 [build]
 patch -p1 < "$K"/screen-intcast.patch || exit 1
+patch -p1 < "$K"/screen-root.patch || exit 1
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
