@@ -27,7 +27,8 @@ patch -p1 < "$K"/python273-pathsearch.patch || exit 1
 debugflags=
 [ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
 
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -fPIC" ./configure -C --prefix="$butch_prefix" \
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -fPIC $optcflags" \
+LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" \
   --with-system-expat --with-system-ffi || exit 1
 
 # python does not use the user CFLAGS as last element, so they override our
@@ -36,3 +37,17 @@ CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -fPIC" ./configure -C --prefix="$butch_prefi
 EXTRA_CFLAGS="$debugflags" make -j$MAKE_THREADS  || exit 1
 
 make DESTDIR="$butch_install_dir" install || exit 1
+
+# shrinking python's install size from 90+ MB to 40+...
+dest="$butch_install_dir""$butch_prefix"
+# removing duplicate libpython2.7.a which takes 10-17MB depending on CFLAGS
+ln -sf ../../libpython2.7.a "$dest"/lib/python2.7/config/libpython2.7.a
+# removing tests
+for test in sqlite3/test email/test ctypes/test test unittest/test lib-tk/test \
+            bsddb/test json/tests lib2to3/tests distutils/tests tests ; do
+	rm -rf "$dest"/lib/python2.7/"$test"
+done
+# removing precompiled python code
+# this can cause a minimal startup time increase
+find "$dest"/lib/python2.7/ -name '*.pyo' -or -name '*.pyc' -exec rm {} \;
+
