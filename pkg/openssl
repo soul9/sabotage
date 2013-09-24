@@ -97,7 +97,7 @@ make -j$MAKE_THREADS depend || exit 1
 make -j$MAKE_THREADS build_libs || exit 1
 make -j$MAKE_THREADS build-shared build_apps openssl.pc libssl.pc libcrypto.pc || exit 1
 echo XXX make install
-make -j$MAKE_THREADS INSTALL_PREFIX="$butch_install_dir" MANDIR="${butch_install_dir}${butch_prefix}/share/man" install || exit 1
+make -j$MAKE_THREADS INSTALL_PREFIX="$butch_install_dir" MANDIR="${butch_prefix}/share/man" install || exit 1
 
 # for some reason, the *.so* are not installed
 dest="${butch_install_dir}${butch_prefix}/lib"
