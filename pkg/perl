@@ -9,6 +9,7 @@ filesize=13724906
 sha512=c30cda0af9463942e40b5d70a95e69b0640bf0b79d9d9dfa1a61d9d8b9ee05f553fd240be4c8b3c60a1def66c80453e49e865c27d3dd0b686f5c004e1ff58d92
 
 [build]
+VERSION=5.16.3
 # with empty prefix, perl will disregard the prefix parameters entirely, failing to build
 [ -z "$butch_prefix" ] && butch_prefix=/
 
@@ -18,7 +19,9 @@ debug_flags=
 
 sed -i 's,-fstack-protector,-fnostack-protector,g' ./Configure
 
-CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE -fPIC' \
+CC="gcc" ./Configure -des \
+  -Accflags="-D_GNU_SOURCE -D_BSD_SOURCE -fPIC $optcflags" \
+  -Aldflags="$optldflags" \
   -Dprefix="$butch_prefix" -Dvendorprefix="$butch_prefix" \
   -Dinstallprefix="$butch_install_dir"/ \
   -Dprivlib="$butch_prefix"/share/perl5/core_perl \
@@ -36,4 +39,12 @@ CC="gcc" ./Configure -des -Accflags='-D_GNU_SOURCE -D_BSD_SOURCE -fPIC' \
 
 make -j$MAKE_THREADS || exit 1
 make install || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+# perl manpages take 20 MB, that's a third of its entire size.
+# as long as nobody needs them, we will remove them.
+rm -rf "$dest"/share/man
+# replace duplicated perl binary with symlink
+ln -sf perl$VERSION "$dest"/bin/perl
+
 
