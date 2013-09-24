@@ -21,6 +21,7 @@ cat << EOF >> config.h
 #undef GETUTENT
 #undef UTHOST
 #undef BUGGYGETLOGIN
+#undef SOCKDIR
 EOF
 
 make -j$MAKE_THREADS || exit 1
