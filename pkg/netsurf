@@ -39,3 +39,16 @@ make DESTDIR="$butch_install_dir" install || exit 1
 # not to be found
 dest="$butch_install_dir""$butch_prefix"
 ln -sf en "$dest"/share/netsurf/C
+
+mkdir -p "$dest"/share/applications
+cat << EOF > "$dest"/share/applications/netsurf.desktop
+[Desktop Entry]
+Name=Netsurf 
+Comment=Web Browser
+Exec=netsurf 
+Icon=netsurf 
+MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
+Terminal=false
+Type=Application
+Categories=GTK;Network;WebBrowser; 
+EOF
