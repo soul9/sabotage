@@ -77,17 +77,12 @@ EOF
 fs=$butch_install_dir$butch_prefix
 # generate busybox loadkmap compatible keymaps from the gnu ones.
 # taken from http://hg.slitaz.org/wok/file/3f989c266063/kbd-busybox/receipt
-tmpmap=/tmp/current.kmap
-dumpkmap > $tmpmap || exit 1
 mkdir -p "$fs"/share/kmap
 for i in $slitaz_set ; do
 	k=$(basename $i)
 	k=${k%.map.gz} # strips off .map.gz from $k
-	"$fs"/bin/loadkeys "$fs"/share/keymaps/i386/$i && 
-	dumpkmap > "$fs"/share/kmap/$k.kmap
+	"$fs"/bin/loadkeys -b "$fs"/share/keymaps/i386/$i > "$fs"/share/kmap/$k.kmap
 done
-loadkmap < $tmpmap
-rm $tmpmap
 
 replace_stuff=true
 
