@@ -1,14 +1,16 @@
 [mirrors]
-http://matt.ucc.asn.au/dropbear/releases/dropbear-2013.56.tar.bz2
+http://matt.ucc.asn.au/dropbear/releases/dropbear-2013.59.tar.bz2
 
 [main]
-filesize=1578454
-sha512=dd6ef30a21564b9532a6a9845dedcdab8af759a3272cfffb7856f41adc46f5e168ace4c0f448ed6e1ee0ec3628941cf4de2a244a737a341bf359cc7e4ecd2a97
+filesize=1583000
+sha512=6ab1ce83edb8d3d0082ad2a3074dc5f128ea96eab22e0168620e32c3befec631a90aefe0309aaf54a302b4f0654b817dd2bb09f1b4d885afe83ea6f1841b1fc5
 
 [deps]
 zlib
 
 [build]
+patch -p1 < "$K"/dropbear-scp-install.patch || exit 1
+
 CPPFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
 CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
