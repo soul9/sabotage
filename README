@@ -44,6 +44,14 @@ DO NOT RUN SCRIPTS YOU HAVE NOT READ.
   # if you have an appropriate kernel and no root privs, set SUPER.
   # the other values can be left as-is usually.
 
+NOTE: it is possible to build i386 sabotage from within an existing
+32bit chroot on a 64bit sys, however you need to run fakeroot, linux32,
+or setarch from util-linux to "impersonate" a 32bit sys (this means
+uname has to lie and report a 32bit sys).
+a minimal linux32 implementation is available on
+https://github.com/rofl0r/hardcore-utils/blob/master/linux32.c .
+just use it to spawn a new shell and you're good to go.
+
 % ./build-stage 0  # build toolchain 
                    # ~2min on an AMD FX 8core, 75min on ARM Cortex A8 800Mhz
 % ./enter-chroot   # enter $R chrooted, needs root password or SUPER, see above
