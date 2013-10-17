@@ -31,7 +31,9 @@ $rw && mount -o remount,ro /
 fsck -A -T -C -p
 mkdir -p /dev/shm /dev/pts
 $rw && mount -o remount,rw /
-mount -a
+
+cryptmount -M # make encrypted devices from /etc/crypttab available
+mount -a # mount stuff from /etc/fstab
 
 if ! $rw ; then
 	echo "non-writable fs detected, mounting tmpfs to /var and /tmp"
