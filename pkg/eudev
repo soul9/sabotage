@@ -20,3 +20,7 @@ LDFLAGS="$optldflags" \
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+# prevent renaming of ethernet interfaces
+ln -s /dev/null "$dest"/etc/udev/rules.d/80-net-name-slot.rules
