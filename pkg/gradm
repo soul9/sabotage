@@ -4,13 +4,13 @@ flex
 bison
 
 [mirrors]
-https://grsecurity.net/test/gradm-2.9.1-201301041755.tar.gz
-http://codu.org/~rofl/tarballs/gradm-2.9.1-201301041755.tar.gz
-http://mirror.wzff.de/sabotage/tarballs/gradm-2.9.1-201301041755.tar.gz
+http://grsecurity.net/stable/gradm-2.9.1-201309161709.tar.gz
+http://codu.org/~rofl/tarballs/gradm-2.9.1-201309161709.tar.gz
+http://mirror.wzff.de/sabotage/tarballs/gradm-2.9.1-201309161709.tar.gz
 
 [main]
-filesize=80369
-sha512=167b39b37dc3c4de65d5b9a9df2c85954853588551fe399febd67896deb9d03d0884ef1ea91fa06ae60b852d2e6171de2819eadd23f13dcf8bafd488d4581d56
+filesize=81155
+sha512=1e501c33bbcfe155cefde3bbf0c264f360091e4f7af6ecf00f981dd1f123291e52b89ea67a248a1bfe3421f28b627582ca7f24c686b724694c116b1984ba701a
 tardir=gradm2
 
 [build]
