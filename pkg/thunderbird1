@@ -31,12 +31,14 @@ cp xpinstall/cleanup/InstallCleanupDefines.h toolkit/xre/ || exit 1
 #  --enable-xpcom-obsolete \
 #  --disable-xul \
 #  --disable-jsloader \
+#  --disable-composer \
+#  --disable-xpfe-components \
+#  --enable-plaintext-editor-only \
 
 #ac_cv_path_ZIP=/bin/true \
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
 ./configure --prefix="$butch_prefix" \
   --enable-application=mail \
-  --enable-plaintext-editor-only \
   --enable-system-cairo \
   --with-x \
   --with-pthreads \
@@ -51,8 +53,6 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --disable-jsd \
   --disable-oji \
   --disable-accessibility \
-  --disable-xpfe-components \
-  --disable-composer \
   --disable-xtf \
   --disable-mathml \
   --disable-installer \
