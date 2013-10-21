@@ -30,6 +30,7 @@ cp xpinstall/cleanup/InstallCleanupDefines.h toolkit/xre/ || exit 1
 
 #  --enable-xpcom-obsolete \
 #  --disable-xul \
+#  --disable-jsloader \
 
 #ac_cv_path_ZIP=/bin/true \
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
@@ -51,7 +52,6 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --disable-oji \
   --disable-accessibility \
   --disable-xpfe-components \
-  --disable-jsloader \
   --disable-composer \
   --disable-xtf \
   --disable-mathml \
