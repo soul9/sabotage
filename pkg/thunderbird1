@@ -18,6 +18,7 @@ zip
 patch -p1 < "$K"/thunderbird1-getprotobyname_r.patch || exit 1
 patch -p1 < "$K"/thunderbird1-linux-detection.patch || exit 1
 patch -p1 < "$K"/thunderbird1-chrome-registry.patch || exit 1
+patch -p1 < "$K"/thunderbird1-useragent.patch || exit 1
 
 # https://bugzilla.mozilla.org/show_bug.cgi?id=416463
 rm xpcom/obsolete/component/nsFileSpecImpl.h \
