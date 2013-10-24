@@ -4,7 +4,7 @@ pkgconf
 apr
 apr-util
 zlib-dynamic
-neon
+serf
 sqlite
 swig
 
