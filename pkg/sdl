@@ -10,6 +10,7 @@ libxext
 
 [build]
 patch -p1 < "$K"/sdl-stacksize.patch || exit 1
+patch -p1 < "$K"/sdl-grsec.patch || exit 1
 
 cd src/video/fbcon
 sed -i -e "s|__u16|ushort|" -e "s|__u32|uint|" *.c *.h
