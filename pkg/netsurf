@@ -18,6 +18,7 @@ flex
 
 [build]
 patch -p1 < "$K"/netsurf-3.0-searchengines.patch || exit 1
+patch -p1 < "$K"/netsurf-3.0-scrollspeed.patch || exit 1
 # we supply the gperf-generated C file to avoid a dependency on it
 cp "$K"/netsurf-3.0.src_colors.c src/libsvgtiny-0.1.0/src/src_colors.c || exit 1
 cat << EOF > src/libsvgtiny-0.1.0/src/Makefile
