@@ -1588,6 +1588,10 @@ gl_cv_size_max=yes
 gl_cv_sys_struct_timeval=yes
 gl_cv_sys_struct_utimbuf=yes
 
+# this gnulib test is especially stupid, it invokes UB and hangs for
+# an entire minute
+gl_cv_func_working_mktime=yes
+
 gt_cv_c_wint_t=yes
 gt_cv_c_wchar_t=yes
 gt_cv_c_intmax_t=yes
