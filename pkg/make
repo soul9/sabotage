@@ -10,6 +10,7 @@ http://ftp.gnu.org/gnu/make/make-3.82.tar.bz2
 
 [build]
 [ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
+patch -p1 < "$K/make-3.82-upstream_fixes-3.patch" || exit 1
 CC="$CC -static" ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
 # __BEOS__ to use a shipped ar.h
 make -j$MAKE_THREADS CFLAGS=-D__BEOS__ || exit 1
