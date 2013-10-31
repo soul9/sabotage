@@ -19,6 +19,7 @@ perl
 python
 
 [build]
+FF_VERSION=25.0
 patch -p1 < "$K"/firefox-virtualenv.patch || exit 1
 patch -p1 < "$K"/firefox-getprotobyname_r.patch || exit 1
 patch -p1 < "$K"/firefox-finite.patch || exit 1
@@ -119,20 +120,38 @@ CFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
 CXXFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
 make -f client.mk || exit 1
 
+# TODO: check whether this step is actually necessary
 CFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
 CXXFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
 make -C firefox-build-dir/browser/installer || exit 1
 
-# TODO : figure out how to install stuff correctly
-# the created tarball is unusable, as gnu tar is assumed
-# probably we can just copy everything under firefox-build-dir/dist
-# into "$butch_install_dir""$butch_prefix"
-# for now, the browser can be started like this:
-# cd /src/build/firefox/mozilla-release/firefox-build-dir/dist
-# LD_LIBRARY_PATH=lib/ bin/firefox
+dest="$butch_install_dir""$butch_prefix"
+mkdir -p "$dest"/lib/firefox-"$FF_VERSION" "$dest"/bin \
+  "$dest"/share/applications "$dest"/share/pixmaps
+cp -r firefox-build-dir/dist/firefox/* "$dest"/lib/firefox-"$FF_VERSION"/ \
+  || exit1
+ln -sf ../lib/firefox-"$FF_VERSION"/firefox-bin "$dest"/bin/
 
-#CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-#  ./configure -C --prefix="$butch_prefix" || exit 1
+cat << EOF > "$dest"/bin/firefox
+#!/bin/sh
+LD_LIBRARY_PATH="$dest"/lib/firefox-"$FF_VERSION" \
+firefox-bin
+EOF
+chmod +x "$dest"/bin/firefox
 
-#make -j$MAKE_THREADS || exit 1
-#make DESTDIR="$butch_install_dir" install || exit 1
+cat << EOF > "$dest"/share/applications/firefox.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=Firefox Web Browser
+Comment=Browse the World Wide Web
+GenericName=Web Browser
+Exec=firefox %u
+Terminal=false
+Type=Application
+Icon=firefox
+Categories=GNOME;GTK;Network;WebBrowser;
+MimeType=application/xhtml+xml;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;
+StartupNotify=true
+EOF
+ln -sf ../../lib/firefox-"$FF_VERSION"/browser/icons/mozicon128.png \
+"$dest"/share/pixmaps/firefox.png
