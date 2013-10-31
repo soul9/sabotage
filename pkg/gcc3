@@ -15,9 +15,6 @@ patch -p1 < "$K"/gcc-346-unlink.patch || exit 1
 
 find gcc/config -name linux.h -exec sed -i 's@struct siginfo@siginfo_t@g' "{}" \; || exit 1
 
-# fix size_t mismatch issue on i386/musl host
-printf '#include_next <stddef.h>\n' > gcc/ginclude/stddef.h || exit 1
-
 if [ "$A" = "i386" ] && [ "$(./config.guess)" = "i686-pc-linux-gnulibc1" ] ; then
 	printf '#!/bin/sh\necho i386-unknown-linux-gnu\n' > config.guess
 fi
