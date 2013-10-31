@@ -3,6 +3,9 @@ use strict;
 use warnings;
 
 my %libs;
+my @libpath;
+@libpath = split /:/, $ENV{"LD_LIBRARY_PATH"} if(defined($ENV{"LD_LIBRARY_PATH"}));
+push @libpath, "/lib";
 
 sub getlibs {
 	my $search = shift;
@@ -15,7 +18,18 @@ sub getlibs {
 			my $x = $1;
 			if(!defined $libs{$x}) {
 				$libs{$x} = 1;
-				$x = "/lib/" . $x if(! -e $x);
+				if(! -e $x) {
+					for my $lp(@libpath) {
+						if( -e $lp . "/" . $x) {
+							$x = $lp . "/" . $x;
+							last;
+						}
+					}
+				}
+				if(! -e $x) {
+					print "error: lib $x not found\n";
+					next;
+				}
 				getlibs($search, $x);
 			}
 		}
