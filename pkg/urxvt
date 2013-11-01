@@ -1,0 +1,19 @@
+[main]
+filesize=897170
+sha512=8d1abf38c6ad47129fafc22c3996a7e2cd0f0cf4982d441ee30076d64d191637942307efd12cc05dfef6b65136530973be9da89e6769c5967d4e523f33309237
+
+[mirrors]
+http://dist.schmorp.de/rxvt-unicode/rxvt-unicode-9.18.tar.bz2
+
+[deps]
+xorg-proto-headers
+xorg-libraries
+
+[build]
+#patch -p1 < "$K"/some.patch || exit 1
+
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --enable-xft --disable-font-styles --disable-perl --disable-utmp --disable-wtmp --disable-pixbuf --disable-startup-notification --disable-transparency --prefix="$butch_prefix" || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
