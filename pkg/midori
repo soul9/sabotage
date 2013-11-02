@@ -21,3 +21,4 @@ DISABLE_NOTIFY=1 ./configure  --prefix="$butch_install_dir" --disable-docs --dis
 	--disable-webkit2 --disable-zeitgeist || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="/" install || exit 1
+install -m644 -D _build/icons/48x48/midori.png "$butch_install_dir/share/pixmaps/midori.png" || exit 1
