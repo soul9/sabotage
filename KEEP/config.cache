@@ -1369,8 +1369,6 @@ ac_cv_type_size_t=${ac_cv_type_size_t='yes'}
 ac_cv_type_socklen_t=${ac_cv_type_socklen_t='yes'}
 ac_cv_type_ssize_t=${ac_cv_type_ssize_t='yes'}
 ac_cv_type_stack_t=${ac_cv_type_stack_t='yes'}
-ac_cv_type_stat64=${ac_cv_type_stat64='no'}
-ac_cv_type_statfs64=${ac_cv_type_statfs64='no'}
 ac_cv_type_struct_sigcontext=${ac_cv_type_struct_sigcontext='yes'}
 ac_cv_type_struct_sockaddr_storage=yes
 ac_cv_type_struct_timespec=${ac_cv_type_struct_timespec='yes'}
