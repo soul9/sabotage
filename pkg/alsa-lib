@@ -23,14 +23,9 @@ patch -p1 < "$K"/alsa-lib_mixed_types.patch || exit 1
 patch -p1 < "$K"/alsa-lib_mips_atomic.patch || exit 1
 patch -p1 < "$K"/alsa-lib_mask_inline.patch || exit 1
 patch -p1 < "$K"/alsa-lib_kernel_off_t.patch || exit 1
+patch -p1 < "$K"/alsa-lib-portable-mutex.patch || exit 1
 
 sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' include/global.h || exit 1
-
-# musl doesn't support PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
-# this hack sets the right flag to 1 but will fail when musl changes its internal layout
-# TODO: the proper way is to use an __attribute__((constructor)) function that initializes it
-
-sed -i 's@PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP@{{{1,0,0,0,0,0,0,0,0,0}}}@' src/conf.c
 
 THIS="$PWD"
 
