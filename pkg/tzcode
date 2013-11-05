@@ -22,7 +22,7 @@ TZDOBJS=        zdump.o localtime.o ialloc.o asctime.c
 PREFIX=/usr/local
 MANDIR=\$(PREFIX)/share/man
 BINDIR=\$(PREFIX)/bin
-TZDIR=\$(PREFIX)/etc/zoneinfo
+TZDIR=\$(PREFIX)/share/zoneinfo
 all:	zic zdump tzselect
 version.h:
 	(echo 'static char const PKGVERSION[]="(\$(PACKAGE)) ";' && \
