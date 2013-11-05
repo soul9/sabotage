@@ -11,11 +11,11 @@ if which udevd > /dev/null 2>&1 ; then
 	mkdir -p /run
 	mount -t tmpfs -o nosuid,nodev,mode=0755 run /run
 	echo > /proc/sys/kernel/hotplug
-	/bin/udevd --daemon 
+	/bin/udevd --daemon
 	/bin/udevadm trigger --action=add    --type=subsystems
 	/bin/udevadm trigger --action=add    --type=devices
 	/bin/udevadm trigger --action=change --type=devices
-	/bin/udevadm settle 
+	/bin/udevadm settle
 
 else
 	echo /bin/mdev > /proc/sys/kernel/hotplug
@@ -56,7 +56,7 @@ if ! $rw ; then
 	ln -sf /tmp /var/tmp
 	mkdir -p /var/spool/cron/crontabs /var/service /var/log /var/empty
 	( cd /etc/service
-	for i in * ; do 
+	for i in * ; do
 		# we copy the services instead of symlinking, so subdirs can be created
 		cp -rf /etc/service/$i /var/service/
 		mkdir -p /var/log/$i
