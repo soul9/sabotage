@@ -24,11 +24,11 @@ CC="gcc" ./Configure -des \
   -Aldflags="$optldflags" \
   -Dprefix="$butch_prefix" -Dvendorprefix="$butch_prefix" \
   -Dinstallprefix="$butch_install_dir" \
-  -Dprivlib="$butch_prefix"/share/perl5/core_perl \
+  -Dprivlib="$butch_prefix"/lib/perl5/core_perl \
   -Darchlib="$butch_prefix"/lib/perl5/core_perl \
-  -Dsitelib="$butch_prefix"/share/perl5/site_perl \
+  -Dsitelib="$butch_prefix"/lib/perl5/site_perl \
   -Dsitearch="$butch_prefix"/lib/perl5/site_perl \
-  -Dvendorlib="$butch_prefix"/share/perl5/vendor_perl \
+  -Dvendorlib="$butch_prefix"/lib/perl5/vendor_perl \
   -Dvendorarch="$butch_prefix"/lib/perl5/vendor_perl \
   -Dscriptdir="$butch_prefix"/bin \
   -Dsitescript="$butch_prefix"/bin \
