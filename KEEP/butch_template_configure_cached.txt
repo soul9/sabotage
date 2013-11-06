@@ -162,7 +162,7 @@ if $have_files ; then
 	if [ "$butch_do_filelists" ] ; then
 		mkdir -p "$butch_filelists"
 		echo "creating filelist $filelist"
-		find . -type f > "$filelist"
+		find . -type f -or -type l > "$filelist"
 	fi
 
 	if $butch_do_relocate ; then
