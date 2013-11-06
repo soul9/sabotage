@@ -75,6 +75,9 @@ isemptydir() {
 
 mountdir=
 
+losetup --help 2>&1 | grep [-]-sizelimit \
+  || die "losetup does not support --sizelimit. maybe try building util-linux"
+
 which extlinux 2>&1 > /dev/null || die 'extlinux must be in PATH (try installing syslinux)'
 [ -z "$UID" ] && UID=`id -u`
 [ "$UID" = "0" ] || die "must be root"
@@ -187,6 +190,7 @@ mountdir="/tmp/mnt.$$"
 echo_bold "info: mounting $imagefile as $loopdev on $mountdir"
 
 run_echo losetup -o $part1_start --sizelimit $part1_size "$loopdev" "$imagefile" || die 'Failed to losetup for /boot'
+
 mkdir -p "$mountdir" || die_unloop 'Failed to create '"$mountdir"
 mkfs.ext3 "$loopdev" || die_unloop 'Failed to mkfs.ext3 loop for /boot'
 mount "$loopdev" "$mountdir" || die_unloop 'Failed to mount loop for /boot'
