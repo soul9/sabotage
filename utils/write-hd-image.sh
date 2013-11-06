@@ -1,10 +1,6 @@
 #!/bin/sh
 MYDIR=$(dirname "$(readlink -f "$0")")
 
-calculate() {
-	printf "%s\n" "$1" | bc
-}
-
 echo_bold() {
 	tput bold
 	echo $@
@@ -124,12 +120,12 @@ part1_start_sector=2048
 part1_size_mb=100
 
 # second partition starts at $part1_start_sector + ($part1_size_mb * 1024 * (1024/512))
-part2_start_sector=`calculate "$part1_start_sector + ($part1_size_mb * 1024 * 1024 / $bytes_per_sector)"`
+part2_start_sector=$(($part1_start_sector + ($part1_size_mb * 1024 * 1024 / $bytes_per_sector)))
 
 # ancient fdisk 2.17 (as used by debian 6) does not calculate cylinders automatically...
 imagesize_in_bytes=`wc -c $imagefile |  cut -d ' ' -f 1`
 
-cylinders=`calculate "$imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per_sector)"`
+cylinders=$(($imagesize_in_bytes / ($heads * $sectors_per_track * $bytes_per_sector)))
 
 # n - new partition
 # p - primary partition
@@ -145,8 +141,8 @@ cylinders=`calculate "$imagesize_in_bytes / ($heads * $sectors_per_track * $byte
 # w - write
 
 # byte positions
-part1_start=`calculate "$bytes_per_sector * $part1_start_sector"`
-part1_size=`calculate "$part1_size_mb * 1024 * 1024"`
+part1_start=$(($bytes_per_sector * $part1_start_sector))
+part1_size=$(($part1_size_mb * 1024 * 1024))
 
 # test if we're using the ancient version, it can't deal with -u=sectors flag
 # additionally, sending "u" to it as a keystroke will turn into sectors mode, while
@@ -157,12 +153,12 @@ need_u_flag=
 if [ "$olde_shit" = "1" ] ; then
 	echo "ancient fdisk version detected, passing -u"
 	need_u_flag="-u"
-	part2_start_sector=`calculate "$part2_start_sector + 2"`
-	part1_size=`calculate "$part1_size + (2 * $bytes_per_sector)"`
+	part2_start_sector=$(($part2_start_sector + 2))
+	part1_size=$(($part1_size + (2 * $bytes_per_sector)))
 fi
 
 # byte pos
-part2_start=`calculate "$part1_start + $part1_size"`
+part2_start=$(($part1_start + $part1_size))
 
 echo fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" $need_u_flag "$imagefile"
 fdisk -C "$cylinders" -H "$heads" -S "$sectors_per_track" -b "$bytes_per_sector" $need_u_flag "$imagefile" << EOF
