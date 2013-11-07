@@ -9,6 +9,8 @@ sha512=5e0016fbe15eebfa68bb04fa7b5aedd7edc7a508afdc030adb7cbec4e9eca84fe16119ca7
 kernel-headers
 
 [build]
+patch -p1 < "$K"/eudev-Handle-1-return-from-sysconf.patch || exit 1
+
 # https://github.com/gentoo/eudev/issues/75
 # https://github.com/gentoo/eudev/issues/70
 CFLAGS="-D_GNU_SOURCE $optcflags" \
