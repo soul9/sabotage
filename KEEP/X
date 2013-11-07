@@ -28,5 +28,5 @@ exec Xfbdev -retro  :0 -keybd evdev,,device=/dev/input/$keyb \
   -mouse evdev,,device=/dev/input/$mouse
 
 else
-	exec Xorg
+	exec Xorg -nolisten tcp
 fi
