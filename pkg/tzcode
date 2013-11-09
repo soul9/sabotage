@@ -15,15 +15,15 @@ cat << EOF > Makefile
 PACKAGE=        tzcode
 VERSION=        2013g
 BUGEMAIL=       tz@iana.org
-TZCSRCS=        zic.c localtime.c asctime.c scheck.c ialloc.c
 TZCOBJS=        zic.o localtime.o asctime.o scheck.o ialloc.o
-TZDSRCS=        zdump.c localtime.c ialloc.c asctime.o
-TZDOBJS=        zdump.o localtime.o ialloc.o asctime.c
+TZDOBJS=        zdump.o localtime.o ialloc.o asctime.o
+OBJS=           zic.o zdump.o localtime.o ialloc.o asctime.o
 PREFIX=/usr/local
 MANDIR=\$(PREFIX)/share/man
 BINDIR=\$(PREFIX)/bin
 TZDIR=\$(PREFIX)/share/zoneinfo
 all:	zic zdump tzselect
+\$(OBJS):  version.h
 version.h:
 	(echo 'static char const PKGVERSION[]="(\$(PACKAGE)) ";' && \
 	 echo 'static char const TZVERSION[]="\$(VERSION)";' && \
