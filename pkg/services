@@ -8,3 +8,4 @@ IS="$K"/bin/install-service
 "$IS" tty3 "$K"/services/tty3
 "$IS" tty4 "$K"/services/tty4
 "$IS" ttyS0 "$K"/services/ttyS0
+"$IS" --down --log tor "$K"/services/tor
