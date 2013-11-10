@@ -1,4 +1,5 @@
 [deps]
+compositeproto
 xproto
 libx11
 
