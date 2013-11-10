@@ -1,0 +1,36 @@
+[main]
+filesize=133173
+sha512=4b69c5d3008803347d0ce7628957e3873c9ebd799662b25dfb739afb6a1ce97bdd02b0465ac4d949bc38af2155880ac068209dc638b94e5c86a8011ec3a00de0
+
+[mirrors]
+http://freefr.dl.sourceforge.net/project/squashfs/squashfs/squashfs4.2/squashfs4.2.tar.gz
+
+[deps]
+zlib
+
+[build]
+patch -p1 < "$K"/squashfs-tools.patch || exit 1
+
+cd squashfs-tools
+
+if [ -e Makefile.old ]; then
+  OLDMKF="Makefile.old"
+else
+  OLDMKF="Makefile"
+fi
+
+#$butch_prefix??
+echo 'INSTALL_DIR="'$butch_install_dir'/bin"' > Makefile.new
+echo 'EXTRA_LDFLAGS="'$optldflags'"' >> Makefile.new
+echo 'EXTRA_CFLAGS="-D_GNU_SOURCE '$optcflags'"' >> Makefile.new
+cat $OLDMKF >> Makefile.new
+if [ ! -e Makefile.old ]; then
+  mv Makefile Makefile.old
+else
+  rm Makefile
+fi
+
+mv Makefile.new Makefile
+
+make -j$MAKE_THREADS || exit 1
+make install || exit 1
