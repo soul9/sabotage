@@ -15,6 +15,7 @@ mesalib
 ruby
 sqlite
 libxt
+libxcomposite
 
 [build]
 patch -p1 < "$K/webkitgtk1-assert.patch"
