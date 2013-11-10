@@ -7,6 +7,7 @@ sha512=89d1ddb461af460a83744cc761989d430750dcef9565ac98960c1c87e6082ebb35e61c4f2
 tardir=midori-0.5.5
 
 [deps]
+librsvg
 python
 webkitgtk1
 vala
