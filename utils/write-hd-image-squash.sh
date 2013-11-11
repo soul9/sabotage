@@ -78,7 +78,6 @@ mountdir=
 losetup --help 2>&1 | grep [-]-sizelimit \
   || die "losetup does not support --sizelimit. maybe try building util-linux"
 cpio --help 2>&1 > /dev/null || die "cpio is needed to create hard disk image"
-[ ! -x "$contents"/opt/extlinux/bin/extlinux ] || die 'extlinux must be in $contents (try installing extlinux)'
 [ -z "$UID" ] && UID=`id -u`
 [ "$UID" = "0" ] || die "must be root"
 
@@ -93,6 +92,7 @@ if ! isemptydir "$contents/proc" || ! isemptydir "$contents/sys" || ! isemptydir
 	die "$contents was not properly unmounted! (check sys/ dev/ proc/)"
 fi
 [ ! -f "$contents"/boot/vmlinuz ] && die "$contents does not have a kernel image"
+[ ! -x "$contents"/bin/extlinux ] && die 'extlinux must be in $contents (try installing extlinux)'
 
 imagesize="$3"
 [ -z "$imagesize" ] && usage

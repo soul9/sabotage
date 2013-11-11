@@ -13,24 +13,7 @@ patch -p1 < "$K"/squashfs-tools.patch || exit 1
 
 cd squashfs-tools
 
-if [ -e Makefile.old ]; then
-  OLDMKF="Makefile.old"
-else
-  OLDMKF="Makefile"
-fi
-
-#$butch_prefix??
-echo 'INSTALL_DIR="'$butch_install_dir'/bin"' > Makefile.new
-echo 'EXTRA_LDFLAGS="'$optldflags'"' >> Makefile.new
-echo 'EXTRA_CFLAGS="-D_GNU_SOURCE '$optcflags'"' >> Makefile.new
-cat $OLDMKF >> Makefile.new
-if [ ! -e Makefile.old ]; then
-  mv Makefile Makefile.old
-else
-  rm Makefile
-fi
-
-mv Makefile.new Makefile
-
-make -j$MAKE_THREADS || exit 1
-make install || exit 1
+make INSTALL_DIR="$butch_install_dir""$butch_prefix""/bin"\
+     EXTRA_LDFLAGS="$optldflags"\
+     EXTRA_CFLAGS="-D_GNU_SOURCE -DFNM_EXTMATCH=0 $optcflags"\
+     -j$MAKE_THREADS all install || exit 1
