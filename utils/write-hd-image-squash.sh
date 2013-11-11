@@ -184,7 +184,7 @@ extcfg() {
   echo "      APPEND boot=/dev/sda1 sqsh_root=$fs"
 
 }
-"$contents"/opt/extlinux/bin/extlinux -i "$mountdir" || die_unmount 'Failed to install extlinux'
+"$contents"/bin/extlinux -i "$mountdir" || die_unmount 'Failed to install extlinux'
 (
   echo "PROMPT 1"
   echo "TIMEOUT 100"
