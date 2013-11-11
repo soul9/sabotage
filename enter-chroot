@@ -27,8 +27,8 @@ else
 	fi
 
 
-	mount --rbind /dev "$R"/dev
-	mount --rbind /proc "$R"/proc
+	mount --bind /dev "$R"/dev
+	mount --bind /proc "$R"/proc
 	mount --bind "$C" "$R"/src/tarballs
 
 	CHROOT=chroot
@@ -51,7 +51,10 @@ tryumount() {
 	if ! umount "$dest" 2>/dev/null; then
 		echo "unmount failure ($dest), retrying in 1 sec..."
 		sleep 1
-		umount -f "$dest"
+		if ! umount -f "$dest" 2>/dev/null; then
+		  echo "unmount -f failure ($dest), trying last resort umount -l"
+		  umount -l "$dest"
+		fi
 	fi
 }
 
