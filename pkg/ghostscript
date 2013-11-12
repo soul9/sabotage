@@ -1,0 +1,21 @@
+[mirrors]
+http://downloads.ghostscript.com/public/ghostscript-9.10.tar.bz2
+
+[main]
+filesize=30983380
+sha512=59f380e52c84b69819ef7d321f323950c22306119cfa7b38809a23e83f9a3af1e35b5d66d9b9e9adef32131aa283a235deec346acced330d7ad7d1201fe7ca04
+
+[deps]
+expat
+freetype
+libpng
+libtiff
+
+[build]
+#patch -p1 < "$K"/some.patch || exit 1
+
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
