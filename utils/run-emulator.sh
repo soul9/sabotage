@@ -1,6 +1,6 @@
 #!/bin/sh
 export H="$PWD"
-source ./config
+. ./config
 
 console=
 rw=rw
