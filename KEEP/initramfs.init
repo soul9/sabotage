@@ -25,9 +25,9 @@ for i in $(cat /proc/cmdline); do
 done
 i=10
 for i in $(seq 10); do
+  [ -e "$boot" ] && break
   sleep 1
   mdev -s
-  [ -e "$boot" ] && break
 done
 
 mount "${boot}" /boot

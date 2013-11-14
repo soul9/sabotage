@@ -27,8 +27,10 @@ else
 	fi
 
 
-	mount --rbind /dev "$R"/dev
-	mount --rbind /proc "$R"/proc
+	mount --bind /dev "$R"/dev
+	mount --bind /dev/pts "$R"/dev/pts
+	mount --bind /dev/shm "$R"/dev/shm
+	mount --bind /proc "$R"/proc
 	mount --bind "$C" "$R"/src/tarballs
 
 	CHROOT=chroot
