@@ -1,10 +1,10 @@
 [mirrors]
-ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/25.0/source/firefox-25.0.source.tar.bz2
-http://releases.mozilla.org/pub/mozilla.org/firefox/releases/25.0/source/firefox-25.0.source.tar.bz2
+http://releases.mozilla.org/pub/mozilla.org/firefox/releases/25.0.1/source/firefox-25.0.1.source.tar.bz2
+ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/25.0.1/source/firefox-25.0.1.source.tar.bz2
 
 [main]
-filesize=127524815
-sha512=debec2cc87da1e68739ddadcb35a027cf6f980471c85ea2e6a85f5b0b4861415659c74b5e57b6cb06bcdf6ecf4722e1c08d98a4256aefdf5bf285c9806f5a13f
+filesize=127526415
+sha512=7f6cef8dec77d9e43a11f35d5cbae267e71327caa0d63a713ef8579bc45a921c7211d14354da1856d3d7b25c7ca99abf463682873f07fc5a4543c64d589be0f0
 tardir=mozilla-release
 
 [deps]
@@ -19,7 +19,7 @@ perl
 python
 
 [build]
-FF_VERSION=25.0
+FF_VERSION=25.0.1
 patch -p1 < "$K"/firefox-virtualenv.patch || exit 1
 patch -p1 < "$K"/firefox-getprotobyname_r.patch || exit 1
 patch -p1 < "$K"/firefox-finite.patch || exit 1
