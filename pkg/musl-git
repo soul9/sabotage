@@ -10,7 +10,7 @@ if [ -d "$dest/musl-git" ] ; then
 else
 	mkdir -p "$dest"
 	cd "$dest"
-	git clone git://git.etalabs.net/musl musl-git || exit 1
+	git clone git://git.musl-libc.org/musl musl-git || exit 1
 	cd musl-git
 fi
 
