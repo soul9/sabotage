@@ -1,0 +1,34 @@
+[mirrors]
+http://wiki.qemu-project.org/download/qemu-1.7.0.tar.bz2
+
+[main]
+filesize=12248954
+sha512=6ee52444b93fc2953e8080383cc0cdc618a826ddd5252bf5f6faf27d91699a414924d6015d27ea12ce1cc21e135acbc8dde595c84a4ce1e0c7173f0446f867eb
+
+[deps]
+glib
+sdl
+libx11
+
+[build]
+
+# WARNING this package needs more than 512 MB ram to build
+
+patch -p1 < "$K"/qemu-170-openpty.patch || exit 1
+patch -p1 < "$K"/qemu-170-ffsll.patch || exit 1
+patch -p1 < "$K"/qemu-170-ffsl.patch || exit 1
+patch -p1 < "$K"/qemu-170-sigset_t.patch || exit 1
+
+CFLAGS="-D_GNU_SOURCE -Dflock64=flock -D__SIGRTMIN=32 -D__SIGRTMAX=\(NSIG-1\)"
+# F_EXLCK is 4; F_SHLCK 8 on all archs except alpha
+CFLAGS="$CFLAGS -DF_EXLCK=4 -DF_SHLCK=8"
+CFLAGS="$CFLAGS -O0 -g0" \
+./configure --prefix="$butch_prefix" \
+  --enable-kvm \
+  --disable-werror \
+  --disable-vnc \
+  --disable-bluez \
+  --enable-sdl || exit 1
+
+make -j$MAKE_THREADS V=1 || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
