@@ -1,6 +1,5 @@
 [mirrors]
-http://mirror.switch.ch/mirror/apache/dist//httpd/httpd-2.4.6.tar.bz2
-http://mirror.symnds.com/software/Apache//httpd/httpd-2.4.6.tar.bz2
+http://archive.apache.org/dist/httpd/httpd-2.4.6.tar.bz2
 
 [main]
 filesize=4949897
