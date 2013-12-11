@@ -76,6 +76,8 @@ CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $optcflags $archflags" \
 ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
   --with-system-zlib=yes $gdbserverflags \
+  --enable-64-bit-bfd \
+  --enable-targets=x86_64-linux,i386-linux,powerpc-linux,arm-linux,mips-linux,mipsel-linux,microblaze-linux \
   --disable-sim \
   --disable-tui \
   || exit 1
