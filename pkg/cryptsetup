@@ -1,6 +1,6 @@
 [mirrors]
 http://cryptsetup.googlecode.com/files/cryptsetup-1.6.0.tar.bz2
-http://ftp.de.netbsd.org/pub/Linux/gentoo/distfiles/cryptsetup-1.6.0.tar.bz2
+http://ftp.de.netbsd.org/pub/gentoo/distfiles/cryptsetup-1.6.0.tar.bz2
 http://ftp.fi.debian.org/gentoo/distfiles/cryptsetup-1.6.0.tar.bz2
 
 [main]
