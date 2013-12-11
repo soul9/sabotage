@@ -25,11 +25,12 @@ patch -p1 < "$K/gdb-linux_nat.patch" || exit 1
 patch -p1 < "$K/gdb-amd64-debugreg.patch" || exit 1
 patch -p1 < "$K/gdb-arm-gentmap.patch" || exit 1
 patch -p1 < "$K/gdb-arm-wrapper.patch" || exit 1
+patch -p1 < "$K/gdb-74-linux-low.patch" || exit 1
 
 sed -i 's@struct siginfo@siginfo_t@g' \
   gdb/linux-nat.c gdb/amd64-linux-nat.c gdb/mn10300-linux-tdep.c gdb/linux-nat.h gdb/ia64-linux-nat.c \
   gdb/ppc-linux-nat.c gdb/hppa-linux-tdep.c gdb/procfs.c gdb/alpha-linux-tdep.c gdb/mips-linux-tdep.c \
-  gdb/frv-linux-tdep.c  gdb/gdbserver/linux-low.h gdb/gdbserver/linux-arm-low.c gdb/gdbserver/linux-low.c \
+  gdb/frv-linux-tdep.c  gdb/gdbserver/linux-arm-low.c gdb/gdbserver/linux-low.c \
   gdb/gdbserver/linux-x86-low.c gdb/arm-linux-nat.c || exit 1
 
 # fix mips build ...
@@ -65,15 +66,17 @@ if [ "$A" = "powerpc" ] ; then
 	archflags="-include $PWD/ppc-regs.h"
 fi
 
-# if you want gdbserver, you either have to remove -static
-# or set --disable-inprocess-agent .
-# and of course --enable-gdbserver=yes
+gdbserverflags="--enable-gdbserver=no"
+[ "$WANT_GDBSERVER" = 1 ] && gdbserverflags="--enable-gdbserver=yes --disable-inprocess-agent"
+# gdbserver tries to build some .so for inprocess-agent, but it doesnt strip away -static
+# from LDFLAGS, so it tries to link the .so with -shared -static, which can't work
 
 LDFLAGS="-static $optldflags" \
 CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $optcflags $archflags" \
 ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
-  --with-system-zlib=yes --enable-gdbserver=no --disable-sim \
+  --with-system-zlib=yes $gdbserverflags \
+  --disable-sim \
   --disable-tui \
   || exit 1
 

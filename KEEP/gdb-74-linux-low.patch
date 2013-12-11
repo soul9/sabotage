@@ -1,0 +1,54 @@
+the first and the last hunk fix thread-db related compilation errors,
+the others fix struct siginfo which was renamed to siginfo_t even in
+glib.
+
+--- gdb-7.4.org/gdb/gdbserver/linux-low.h
++++ gdb-7.4/gdb/gdbserver/linux-low.h
+@@ -19,6 +19,8 @@
+ 
+ #ifdef HAVE_THREAD_DB_H
+ #include <thread_db.h>
++#else
++#include "gdb_thread_db.h"
+ #endif
+ 
+ #include "gdb_proc_service.h"
+@@ -46,8 +48,6 @@
+ extern struct regset_info target_regsets[];
+ #endif
+ 
+-struct siginfo;
+-
+ struct process_info_private
+ {
+   /* Arch-specific additions.  */
+@@ -63,6 +63,8 @@
+ 
+ struct lwp_info;
+ 
++#include <sys/wait.h>
++
+ struct linux_target_ops
+ {
+   /* Architecture-specific setup.  */
+@@ -103,7 +105,7 @@
+      Returns true if any conversion was done; false otherwise.
+      If DIRECTION is 1, then copy from INF to NATIVE.
+      If DIRECTION is 0, copy from NATIVE to INF.  */
+-  int (*siginfo_fixup) (struct siginfo *native, void *inf, int direction);
++  int (*siginfo_fixup) (siginfo_t *native, void *inf, int direction);
+ 
+   /* Hook to call when a new process is created or attached to.
+      If extra per-process architecture-specific data is needed,
+@@ -253,11 +255,9 @@
+   int need_step_over;
+ 
+   int thread_known;
+-#ifdef HAVE_THREAD_DB_H
+   /* The thread handle, used for e.g. TLS access.  Only valid if
+      THREAD_KNOWN is set.  */
+   td_thrhandle_t th;
+-#endif
+ 
+   /* Arch-specific additions.  */
+   struct arch_lwp_info *arch_private;
