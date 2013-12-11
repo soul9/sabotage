@@ -1,5 +1,5 @@
 [mirrors]
-http://mikmod.shlomifish.org/files/libmikmod-3.2.0.tar.gz
+http://downloads.sourceforge.net/project/mikmod/libmikmod/3.2.0/libmikmod-3.2.0.tar.gz
 
 [main]
 filesize=873258
