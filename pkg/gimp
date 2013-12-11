@@ -1,5 +1,8 @@
 [mirrors]
-http://mirrors.zerg.biz/gimp/v2.8/gimp-2.8.2.tar.bz2
+ftp://ftp.gimp.org/pub/gimp/v2.8/gimp-2.8.2.tar.bz2
+http://gimp.cybermirror.org/v2.8/gimp-2.8.2.tar.bz2
+http://ftp.snt.utwente.nl/pub/software/gimp/gimp/v2.8/gimp-2.8.2.tar.bz2
+http://ftp.sunet.se/pub/gnu/gimp/v2.8/gimp-2.8.2.tar.bz2
 
 [main]
 filesize=20161424
