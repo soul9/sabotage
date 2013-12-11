@@ -2,7 +2,7 @@
 ftp://ftp.altlinux.org/pub/people/legion/kbd/kbd-1.15.3.tar.gz
 http://ftp.cc.uoc.gr/mirrors/ftp.kernel.org/pub/linux/utils/kbd/kbd-1.15.3.tar.gz
 http://pkgs.fedoraproject.org/repo/pkgs/kbd/kbd-1.15.3.tar.gz/8143e179a0f3c25646ce5085e8777200/kbd-1.15.3.tar.gz
-http://ftp.osuosl.org/pub/linux/utils/kbd/kbd-1.15.3.tar.gz
+https://www.codeaurora.org/mirrored_source/quic/le/kbd-1.15.3.tar.bz2
 
 [main]
 filesize=1659867
