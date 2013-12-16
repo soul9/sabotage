@@ -23,6 +23,7 @@ sha512=e0080a380cc280575efb8ec065f99a1ab6f0ac0528c9bb5688414b1d6bb3f42645d825755
 # additionally it searches for stuff only relative to its own binary.
 # this doesn't work well with our symlink relocation strategy.
 patch -p1 < "$K"/python273-pathsearch.patch || exit 1
+patch -p1 < "$K"/python-fix-posix-close-clash.patch || exit 1
 
 debugflags=
 [ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
