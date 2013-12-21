@@ -1,0 +1,983 @@
+--- cyassl-2.8.0.org/ctaocrypt/src/error.c
++++ cyassl-2.8.0/ctaocrypt/src/error.c
+@@ -22,7 +22,7 @@
+ #ifdef HAVE_CONFIG_H
+     #include <config.h>
+ #endif
+- 
++
+ #include <cyassl/ctaocrypt/settings.h>
+ 
+ #include <cyassl/ctaocrypt/error.h>
+@@ -33,297 +33,233 @@
+ #endif
+ 
+ 
+-void CTaoCryptErrorString(int error, char* buffer)
++const char *CTaoCryptGetErrorString(int error)
+ {
+-    const int max = CYASSL_MAX_ERROR_SZ;   /* shorthand */
+-
+ #ifdef NO_ERROR_STRINGS
+ 
+     (void)error;
+-    XSTRNCPY(buffer, "no support for error strings built in", max);
++    return "no support for error strings built in";
+ 
+ #else
+ 
+     switch (error) {
+ 
+-    case OPEN_RAN_E :        
+-        XSTRNCPY(buffer, "opening random device error", max);
+-        break;
++    case OPEN_RAN_E :
++        return "opening random device error";
+ 
+     case READ_RAN_E :
+-        XSTRNCPY(buffer, "reading random device error", max);
+-        break;
++        return "reading random device error";
+ 
+     case WINCRYPT_E :
+-        XSTRNCPY(buffer, "windows crypt init error", max);
+-        break;
++        return "windows crypt init error";
+ 
+-    case CRYPTGEN_E : 
+-        XSTRNCPY(buffer, "windows crypt generation error", max);
+-        break;
++    case CRYPTGEN_E :
++        return "windows crypt generation error";
+ 
+-    case RAN_BLOCK_E : 
+-        XSTRNCPY(buffer, "random device read would block error", max);
+-        break;
++    case RAN_BLOCK_E :
++        return "random device read would block error";
+ 
+     case MP_INIT_E :
+-        XSTRNCPY(buffer, "mp_init error state", max);
+-        break;
++        return "mp_init error state";
+ 
+     case MP_READ_E :
+-        XSTRNCPY(buffer, "mp_read error state", max);
+-        break;
++        return "mp_read error state";
+ 
+     case MP_EXPTMOD_E :
+-        XSTRNCPY(buffer, "mp_exptmod error state", max);
+-        break;
++        return "mp_exptmod error state";
+ 
+     case MP_TO_E :
+-        XSTRNCPY(buffer, "mp_to_xxx error state, can't convert", max);
+-        break;
++        return "mp_to_xxx error state, can't convert";
+ 
+     case MP_SUB_E :
+-        XSTRNCPY(buffer, "mp_sub error state, can't subtract", max);
+-        break;
++        return "mp_sub error state, can't subtract";
+ 
+     case MP_ADD_E :
+-        XSTRNCPY(buffer, "mp_add error state, can't add", max);
+-        break;
++        return "mp_add error state, can't add";
+ 
+     case MP_MUL_E :
+-        XSTRNCPY(buffer, "mp_mul error state, can't multiply", max);
+-        break;
++        return "mp_mul error state, can't multiply";
+ 
+     case MP_MULMOD_E :
+-        XSTRNCPY(buffer, "mp_mulmod error state, can't multiply mod", max);
+-        break;
++        return "mp_mulmod error state, can't multiply mod";
+ 
+     case MP_MOD_E :
+-        XSTRNCPY(buffer, "mp_mod error state, can't mod", max);
+-        break;
++        return "mp_mod error state, can't mod";
+ 
+     case MP_INVMOD_E :
+-        XSTRNCPY(buffer, "mp_invmod error state, can't inv mod", max);
+-        break; 
+-        
++        return "mp_invmod error state, can't inv mod";
++
+     case MP_CMP_E :
+-        XSTRNCPY(buffer, "mp_cmp error state", max);
+-        break; 
+-        
++        return "mp_cmp error state";
++
+     case MP_ZERO_E :
+-        XSTRNCPY(buffer, "mp zero result, not expected", max);
+-        break; 
+-        
++        return "mp zero result, not expected";
++
+     case MEMORY_E :
+-        XSTRNCPY(buffer, "out of memory error", max);
+-        break;
++        return "out of memory error";
+ 
+     case RSA_WRONG_TYPE_E :
+-        XSTRNCPY(buffer, "RSA wrong block type for RSA function", max);
+-        break; 
++        return "RSA wrong block type for RSA function";
+ 
+     case RSA_BUFFER_E :
+-        XSTRNCPY(buffer, "RSA buffer error, output too small or input too big",
+-                max);
+-        break; 
++        return "RSA buffer error, output too small or input too big";
+ 
+     case BUFFER_E :
+-        XSTRNCPY(buffer, "Buffer error, output too small or input too big",max);
+-        break; 
++        return "Buffer error, output too small or input too big";
+ 
+     case ALGO_ID_E :
+-        XSTRNCPY(buffer, "Setting Cert AlogID error", max);
+-        break; 
++        return "Setting Cert AlogID error";
+ 
+     case PUBLIC_KEY_E :
+-        XSTRNCPY(buffer, "Setting Cert Public Key error", max);
+-        break; 
++        return "Setting Cert Public Key error";
+ 
+     case DATE_E :
+-        XSTRNCPY(buffer, "Setting Cert Date validity error", max);
+-        break; 
++        return "Setting Cert Date validity error";
+ 
+     case SUBJECT_E :
+-        XSTRNCPY(buffer, "Setting Cert Subject name error", max);
+-        break; 
++        return "Setting Cert Subject name error";
+ 
+     case ISSUER_E :
+-        XSTRNCPY(buffer, "Setting Cert Issuer name error", max);
+-        break; 
++        return "Setting Cert Issuer name error";
+ 
+     case CA_TRUE_E :
+-        XSTRNCPY(buffer, "Setting basic constraint CA true error", max);
+-        break; 
++        return "Setting basic constraint CA true error";
+ 
+     case EXTENSIONS_E :
+-        XSTRNCPY(buffer, "Setting extensions error", max);
+-        break; 
++        return "Setting extensions error";
+ 
+     case ASN_PARSE_E :
+-        XSTRNCPY(buffer, "ASN parsing error, invalid input", max);
+-        break;
++        return "ASN parsing error, invalid input";
+ 
+     case ASN_VERSION_E :
+-        XSTRNCPY(buffer, "ASN version error, invalid number", max);
+-        break;
++        return "ASN version error, invalid number";
+ 
+     case ASN_GETINT_E :
+-        XSTRNCPY(buffer, "ASN get big int error, invalid data", max);
+-        break;
++        return "ASN get big int error, invalid data";
+ 
+     case ASN_RSA_KEY_E :
+-        XSTRNCPY(buffer, "ASN key init error, invalid input", max);
+-        break;
++        return "ASN key init error, invalid input";
+ 
+     case ASN_OBJECT_ID_E :
+-        XSTRNCPY(buffer, "ASN object id error, invalid id", max);
+-        break;
++        return "ASN object id error, invalid id";
+ 
+     case ASN_TAG_NULL_E :
+-        XSTRNCPY(buffer, "ASN tag error, not null", max);
+-        break;
++        return "ASN tag error, not null";
+ 
+     case ASN_EXPECT_0_E :
+-        XSTRNCPY(buffer, "ASN expect error, not zero", max);
+-        break;
++        return "ASN expect error, not zero";
+ 
+     case ASN_BITSTR_E :
+-        XSTRNCPY(buffer, "ASN bit string error, wrong id", max);
+-        break;
++        return "ASN bit string error, wrong id";
+ 
+     case ASN_UNKNOWN_OID_E :
+-        XSTRNCPY(buffer, "ASN oid error, unknown sum id", max);
+-        break;
++        return "ASN oid error, unknown sum id";
+ 
+     case ASN_DATE_SZ_E :
+-        XSTRNCPY(buffer, "ASN date error, bad size", max);
+-        break;
++        return "ASN date error, bad size";
+ 
+     case ASN_BEFORE_DATE_E :
+-        XSTRNCPY(buffer, "ASN date error, current date before", max);
+-        break;
++        return "ASN date error, current date before";
+ 
+     case ASN_AFTER_DATE_E :
+-        XSTRNCPY(buffer, "ASN date error, current date after", max);
+-        break;
++        return "ASN date error, current date after";
+ 
+     case ASN_SIG_OID_E :
+-        XSTRNCPY(buffer, "ASN signature error, mismatched oid", max);
+-        break;
++        return "ASN signature error, mismatched oid";
+ 
+     case ASN_TIME_E :
+-        XSTRNCPY(buffer, "ASN time error, unkown time type", max);
+-        break;
++        return "ASN time error, unkown time type";
+ 
+     case ASN_INPUT_E :
+-        XSTRNCPY(buffer, "ASN input error, not enough data", max);
+-        break;
++        return "ASN input error, not enough data";
+ 
+     case ASN_SIG_CONFIRM_E :
+-        XSTRNCPY(buffer, "ASN sig error, confirm failure", max);
+-        break;
++        return "ASN sig error, confirm failure";
+ 
+     case ASN_SIG_HASH_E :
+-        XSTRNCPY(buffer, "ASN sig error, unsupported hash type", max);
+-        break;
++        return "ASN sig error, unsupported hash type";
+ 
+     case ASN_SIG_KEY_E :
+-        XSTRNCPY(buffer, "ASN sig error, unsupported key type", max);
+-        break;
++        return "ASN sig error, unsupported key type";
+ 
+     case ASN_DH_KEY_E :
+-        XSTRNCPY(buffer, "ASN key init error, invalid input", max);
+-        break;
++        return "ASN key init error, invalid input";
+ 
+     case ASN_NTRU_KEY_E :
+-        XSTRNCPY(buffer, "ASN NTRU key decode error, invalid input", max);
+-        break;
++        return "ASN NTRU key decode error, invalid input";
+ 
+     case ECC_BAD_ARG_E :
+-        XSTRNCPY(buffer, "ECC input argument wrong type, invalid input", max);
+-        break;
++        return "ECC input argument wrong type, invalid input";
+ 
+     case ASN_ECC_KEY_E :
+-        XSTRNCPY(buffer, "ECC ASN1 bad key data, invalid input", max);
+-        break;
++        return "ECC ASN1 bad key data, invalid input";
+ 
+     case ECC_CURVE_OID_E :
+-        XSTRNCPY(buffer, "ECC curve sum OID unsupported, invalid input", max);
+-        break;
++        return "ECC curve sum OID unsupported, invalid input";
+ 
+     case BAD_FUNC_ARG :
+-        XSTRNCPY(buffer, "Bad function argument", max);
+-        break;
++        return "Bad function argument";
+ 
+     case NOT_COMPILED_IN :
+-        XSTRNCPY(buffer, "Feature not compiled in", max);
+-        break;
++        return "Feature not compiled in";
+ 
+     case UNICODE_SIZE_E :
+-        XSTRNCPY(buffer, "Unicode password too big", max);
+-        break;
++        return "Unicode password too big";
+ 
+     case NO_PASSWORD :
+-        XSTRNCPY(buffer, "No password provided by user", max);
+-        break;
++        return "No password provided by user";
+ 
+     case ALT_NAME_E :
+-        XSTRNCPY(buffer, "Alt Name problem, too big", max);
+-        break;
++        return "Alt Name problem, too big";
+ 
+     case AES_GCM_AUTH_E:
+-        XSTRNCPY(buffer, "AES-GCM Authentication check fail", max);
+-        break;
++        return "AES-GCM Authentication check fail";
+ 
+     case AES_CCM_AUTH_E:
+-        XSTRNCPY(buffer, "AES-CCM Authentication check fail", max);
+-        break;
++        return "AES-CCM Authentication check fail";
+ 
+     case CAVIUM_INIT_E:
+-        XSTRNCPY(buffer, "Cavium Init type error", max);
+-        break;
++        return "Cavium Init type error";
+ 
+     case COMPRESS_INIT_E:
+-        XSTRNCPY(buffer, "Compress Init error", max);
+-        break;
++        return "Compress Init error";
+ 
+     case COMPRESS_E:
+-        XSTRNCPY(buffer, "Compress error", max);
+-        break;
++        return "Compress error";
+ 
+     case DECOMPRESS_INIT_E:
+-        XSTRNCPY(buffer, "DeCompress Init error", max);
+-        break;
++        return "DeCompress Init error";
+ 
+     case DECOMPRESS_E:
+-        XSTRNCPY(buffer, "DeCompress error", max);
+-        break;
++        return "DeCompress error";
+ 
+     case BAD_ALIGN_E:
+-        XSTRNCPY(buffer, "Bad alignment error, no alloc help", max);
+-        break;
++        return "Bad alignment error, no alloc help";
+ 
+     case ASN_NO_SIGNER_E :
+-        XSTRNCPY(buffer, "ASN no signer error to confirm failure", max);
+-        break;
++        return "ASN no signer error to confirm failure";
+ 
+     case ASN_CRL_CONFIRM_E :
+-        XSTRNCPY(buffer, "ASN CRL sig error, confirm failure", max);
+-        break;
++        return "ASN CRL sig error, confirm failure";
+ 
+     case ASN_CRL_NO_SIGNER_E :
+-        XSTRNCPY(buffer, "ASN CRL no signer error to confirm failure", max);
+-        break;
++        return "ASN CRL no signer error to confirm failure";
+ 
+     case ASN_OCSP_CONFIRM_E :
+-        XSTRNCPY(buffer, "ASN OCSP sig error, confirm failure", max);
+-        break;
++        return "ASN OCSP sig error, confirm failure";
+ 
+     default:
+-        XSTRNCPY(buffer, "unknown error number", max);
++        return "unknown error number";
+ 
+     }
+ 
+ #endif /* NO_ERROR_STRINGS */
+ 
+ }
++
++void CTaoCryptErrorString(int error, char* buffer)
++{
++    XSTRNCPY(buffer, CTaoCryptGetErrorString(error), CYASSL_MAX_ERROR_SZ);
++}
++
++
+--- cyassl-2.8.0.org/cyassl/ctaocrypt/error.h
++++ cyassl-2.8.0/cyassl/ctaocrypt/error.h
+@@ -118,6 +118,7 @@
+ 
+ 
+ CYASSL_API void CTaoCryptErrorString(int err, char* buff);
++CYASSL_API const char *CTaoCryptGetErrorString(int error);
+ 
+ 
+ #ifdef __cplusplus
+--- cyassl-2.8.0.org/cyassl/openssl/ssl.h
++++ cyassl-2.8.0/cyassl/openssl/ssl.h
+@@ -142,6 +142,7 @@
+ 
+ #define ERR_error_string CyaSSL_ERR_error_string
+ #define ERR_error_string_n CyaSSL_ERR_error_string_n
++#define ERR_reason_error_string CyaSSL_ERR_reason_error_string
+ 
+ #define SSL_set_ex_data CyaSSL_set_ex_data
+ #define SSL_get_shutdown CyaSSL_get_shutdown
+--- cyassl-2.8.0.org/cyassl/options.h
++++ cyassl-2.8.0/cyassl/options.h
+@@ -1,31 +1,68 @@
+-/* options.h.in
++/* cyassl options.h
++ * generated from configure options
+  *
+  * Copyright (C) 2006-2013 wolfSSL Inc.
+  *
+  * This file is part of CyaSSL.
+  *
+- * CyaSSL is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * CyaSSL is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+  */
+ 
+-/* default blank options for autoconf */
+-
+ #pragma once
+ 
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
++
++#undef  _GNU_SOURCE
++#define _GNU_SOURCE
++
++#undef  CYASSL_DTLS
++#define CYASSL_DTLS
++
++#undef  _POSIX_THREADS
++#define _POSIX_THREADS
++
++#undef  NDEBUG
++#define NDEBUG
++
++#undef  TEST_IPV6
++#define TEST_IPV6
++
++#undef  CYASSL_RIPEMD
++#define CYASSL_RIPEMD
++
++#undef  CYASSL_SHA512
++#define CYASSL_SHA512
++
++#undef  CYASSL_SHA384
++#define CYASSL_SHA384
++
++#undef  SESSION_CERTS
++#define SESSION_CERTS
++
++#undef  CYASSL_CERT_GEN
++#define CYASSL_CERT_GEN
++
++#undef  NO_DSA
++#define NO_DSA
++
++#undef  NO_PSK
++#define NO_PSK
++
++#undef  NO_MD4
++#define NO_MD4
++
++#undef  NO_PWDBASED
++#define NO_PWDBASED
++
++#undef  NO_HC128
++#define NO_HC128
++
++#undef  NO_RABBIT
++#define NO_RABBIT
++
++#undef  USE_FAST_MATH
++#define USE_FAST_MATH
+ 
+ 
+ #ifdef __cplusplus
+--- cyassl-2.8.0.org/cyassl/ssl.h
++++ cyassl-2.8.0/cyassl/ssl.h
+@@ -303,6 +303,7 @@
+ CYASSL_API char* CyaSSL_ERR_error_string(unsigned long,char*);
+ CYASSL_API void  CyaSSL_ERR_error_string_n(unsigned long e, char* buf,
+                                            unsigned long sz);
++CYASSL_API const char* CyaSSL_ERR_reason_error_string(unsigned long);
+ 
+ /* extras */
+ 
+--- cyassl-2.8.0.org/src/internal.c
++++ cyassl-2.8.0/src/internal.c
+@@ -5690,369 +5690,284 @@
+     return SendBuffered(ssl);
+ }
+ 
+-
+-
+-void SetErrorString(int error, char* str)
++const char* CyaSSL_ERR_reason_error_string(unsigned long e)
+ {
+-    const int max = CYASSL_MAX_ERROR_SZ;  /* shorthand */
+-
+ #ifdef NO_ERROR_STRINGS
+ 
+-    (void)error;
+-    XSTRNCPY(str, "no support for error strings built in", max);
++    (void)e;
++    return "no support for error strings built in";
+ 
+ #else
+ 
++    int error = (long) e;
++
+     /* pass to CTaoCrypt */
+     if (error < MAX_CODE_E && error > MIN_CODE_E) {
+-        CTaoCryptErrorString(error, str);
+-        return;
++        return CTaoCryptGetErrorString(error);
+     }
+ 
+     switch (error) {
+ 
+     case UNSUPPORTED_SUITE :
+-        XSTRNCPY(str, "unsupported cipher suite", max);
+-        break;
++        return "unsupported cipher suite";
+ 
+     case INPUT_CASE_ERROR :
+-        XSTRNCPY(str, "input state error", max);
+-        break;
++        return "input state error";
+ 
+     case PREFIX_ERROR :
+-        XSTRNCPY(str, "bad index to key rounds", max);
+-        break;
++        return "bad index to key rounds";
+ 
+     case MEMORY_ERROR :
+-        XSTRNCPY(str, "out of memory", max);
+-        break;
++        return "out of memory";
+ 
+     case VERIFY_FINISHED_ERROR :
+-        XSTRNCPY(str, "verify problem on finished", max);
+-        break;
++        return "verify problem on finished";
+ 
+     case VERIFY_MAC_ERROR :
+-        XSTRNCPY(str, "verify mac problem", max);
+-        break;
++        return "verify mac problem";
+ 
+     case PARSE_ERROR :
+-        XSTRNCPY(str, "parse error on header", max);
+-        break;
++        return "parse error on header";
+ 
+     case SIDE_ERROR :
+-        XSTRNCPY(str, "wrong client/server type", max);
+-        break;
++        return "wrong client/server type";
+ 
+     case NO_PEER_CERT :
+-        XSTRNCPY(str, "peer didn't send cert", max);
+-        break;
++        return "peer didn't send cert";
+ 
+     case UNKNOWN_HANDSHAKE_TYPE :
+-        XSTRNCPY(str, "weird handshake type", max);
+-        break;
++        return "weird handshake type";
+ 
+     case SOCKET_ERROR_E :
+-        XSTRNCPY(str, "error state on socket", max);
+-        break;
++        return "error state on socket";
+ 
+     case SOCKET_NODATA :
+-        XSTRNCPY(str, "expected data, not there", max);
+-        break;
++        return "expected data, not there";
+ 
+     case INCOMPLETE_DATA :
+-        XSTRNCPY(str, "don't have enough data to complete task", max);
+-        break;
++        return "don't have enough data to complete task";
+ 
+     case UNKNOWN_RECORD_TYPE :
+-        XSTRNCPY(str, "unknown type in record hdr", max);
+-        break;
++        return "unknown type in record hdr";
+ 
+     case DECRYPT_ERROR :
+-        XSTRNCPY(str, "error during decryption", max);
+-        break;
++        return "error during decryption";
+ 
+     case FATAL_ERROR :
+-        XSTRNCPY(str, "revcd alert fatal error", max);
+-        break;
++        return "revcd alert fatal error";
+ 
+     case ENCRYPT_ERROR :
+-        XSTRNCPY(str, "error during encryption", max);
+-        break;
++        return "error during encryption";
+ 
+     case FREAD_ERROR :
+-        XSTRNCPY(str, "fread problem", max);
+-        break;
++        return "fread problem";
+ 
+     case NO_PEER_KEY :
+-        XSTRNCPY(str, "need peer's key", max);
+-        break;
++        return "need peer's key";
+ 
+     case NO_PRIVATE_KEY :
+-        XSTRNCPY(str, "need the private key", max);
+-        break;
++        return "need the private key";
+ 
+     case NO_DH_PARAMS :
+-        XSTRNCPY(str, "server missing DH params", max);
+-        break;
++        return "server missing DH params";
+ 
+     case RSA_PRIVATE_ERROR :
+-        XSTRNCPY(str, "error during rsa priv op", max);
+-        break;
++        return "error during rsa priv op";
+ 
+     case MATCH_SUITE_ERROR :
+-        XSTRNCPY(str, "can't match cipher suite", max);
+-        break;
++        return "can't match cipher suite";
+ 
+     case BUILD_MSG_ERROR :
+-        XSTRNCPY(str, "build message failure", max);
+-        break;
++        return "build message failure";
+ 
+     case BAD_HELLO :
+-        XSTRNCPY(str, "client hello malformed", max);
+-        break;
++        return "client hello malformed";
+ 
+     case DOMAIN_NAME_MISMATCH :
+-        XSTRNCPY(str, "peer subject name mismatch", max);
+-        break;
++        return "peer subject name mismatch";
+ 
+     case WANT_READ :
+     case SSL_ERROR_WANT_READ :
+-        XSTRNCPY(str, "non-blocking socket wants data to be read", max);
+-        break;
++        return "non-blocking socket wants data to be read";
+ 
+     case NOT_READY_ERROR :
+-        XSTRNCPY(str, "handshake layer not ready yet, complete first", max);
+-        break;
++        return "handshake layer not ready yet, complete first";
+ 
+     case PMS_VERSION_ERROR :
+-        XSTRNCPY(str, "premaster secret version mismatch error", max);
+-        break;
++        return "premaster secret version mismatch error";
+ 
+     case VERSION_ERROR :
+-        XSTRNCPY(str, "record layer version error", max);
+-        break;
++        return "record layer version error";
+ 
+     case WANT_WRITE :
+     case SSL_ERROR_WANT_WRITE :
+-        XSTRNCPY(str, "non-blocking socket write buffer full", max);
+-        break;
++        return "non-blocking socket write buffer full";
+ 
+     case BUFFER_ERROR :
+-        XSTRNCPY(str, "malformed buffer input error", max);
+-        break;
++        return "malformed buffer input error";
+ 
+     case VERIFY_CERT_ERROR :
+-        XSTRNCPY(str, "verify problem on certificate", max);
+-        break;
++        return "verify problem on certificate";
+ 
+     case VERIFY_SIGN_ERROR :
+-        XSTRNCPY(str, "verify problem based on signature", max);
+-        break;
++        return "verify problem based on signature";
+ 
+     case CLIENT_ID_ERROR :
+-        XSTRNCPY(str, "psk client identity error", max);
+-        break;
++        return "psk client identity error";
+ 
+     case SERVER_HINT_ERROR:
+-        XSTRNCPY(str, "psk server hint error", max);
+-        break;
++        return "psk server hint error";
+ 
+     case PSK_KEY_ERROR:
+-        XSTRNCPY(str, "psk key callback error", max);
+-        break;
++        return "psk key callback error";
+ 
+     case NTRU_KEY_ERROR:
+-        XSTRNCPY(str, "NTRU key error", max);
+-        break;
++        return "NTRU key error";
+ 
+     case NTRU_DRBG_ERROR:
+-        XSTRNCPY(str, "NTRU drbg error", max);
+-        break;
++        return "NTRU drbg error";
+ 
+     case NTRU_ENCRYPT_ERROR:
+-        XSTRNCPY(str, "NTRU encrypt error", max);
+-        break;
++        return "NTRU encrypt error";
+ 
+     case NTRU_DECRYPT_ERROR:
+-        XSTRNCPY(str, "NTRU decrypt error", max);
+-        break;
++        return "NTRU decrypt error";
+ 
+     case ZLIB_INIT_ERROR:
+-        XSTRNCPY(str, "zlib init error", max);
+-        break;
++        return "zlib init error";
+ 
+     case ZLIB_COMPRESS_ERROR:
+-        XSTRNCPY(str, "zlib compress error", max);
+-        break;
++        return "zlib compress error";
+ 
+     case ZLIB_DECOMPRESS_ERROR:
+-        XSTRNCPY(str, "zlib decompress error", max);
+-        break;
++        return "zlib decompress error";
+ 
+     case GETTIME_ERROR:
+-        XSTRNCPY(str, "gettimeofday() error", max);
+-        break;
++        return "gettimeofday() error";
+ 
+     case GETITIMER_ERROR:
+-        XSTRNCPY(str, "getitimer() error", max);
+-        break;
++        return "getitimer() error";
+ 
+     case SIGACT_ERROR:
+-        XSTRNCPY(str, "sigaction() error", max);
+-        break;
++        return "sigaction() error";
+ 
+     case SETITIMER_ERROR:
+-        XSTRNCPY(str, "setitimer() error", max);
+-        break;
++        return "setitimer() error";
+ 
+     case LENGTH_ERROR:
+-        XSTRNCPY(str, "record layer length error", max);
+-        break;
++        return "record layer length error";
+ 
+     case PEER_KEY_ERROR:
+-        XSTRNCPY(str, "cant decode peer key", max);
+-        break;
++        return "cant decode peer key";
+ 
+     case ZERO_RETURN:
+     case SSL_ERROR_ZERO_RETURN:
+-        XSTRNCPY(str, "peer sent close notify alert", max);
+-        break;
++        return "peer sent close notify alert";
+ 
+     case ECC_CURVETYPE_ERROR:
+-        XSTRNCPY(str, "Bad ECC Curve Type or unsupported", max);
+-        break;
++        return "Bad ECC Curve Type or unsupported";
+ 
+     case ECC_CURVE_ERROR:
+-        XSTRNCPY(str, "Bad ECC Curve or unsupported", max);
+-        break;
++        return "Bad ECC Curve or unsupported";
+ 
+     case ECC_PEERKEY_ERROR:
+-        XSTRNCPY(str, "Bad ECC Peer Key", max);
+-        break;
++        return "Bad ECC Peer Key";
+ 
+     case ECC_MAKEKEY_ERROR:
+-        XSTRNCPY(str, "ECC Make Key failure", max);
+-        break;
++        return "ECC Make Key failure";
+ 
+     case ECC_EXPORT_ERROR:
+-        XSTRNCPY(str, "ECC Export Key failure", max);
+-        break;
++        return "ECC Export Key failure";
+ 
+     case ECC_SHARED_ERROR:
+-        XSTRNCPY(str, "ECC DHE shared failure", max);
+-        break;
++        return "ECC DHE shared failure";
+ 
+-    case BAD_MUTEX_ERROR:
+-        XSTRNCPY(str, "Bad mutex, operation failed", max);
+-        break;
+-
+     case NOT_CA_ERROR:
+-        XSTRNCPY(str, "Not a CA by basic constraint error", max);
+-        break;
++        return "Not a CA by basic constraint error";
+ 
+     case BAD_PATH_ERROR:
+-        XSTRNCPY(str, "Bad path for opendir error", max);
+-        break;
++        return "Bad path for opendir error";
+ 
+     case BAD_CERT_MANAGER_ERROR:
+-        XSTRNCPY(str, "Bad Cert Manager error", max);
+-        break;
++        return "Bad Cert Manager error";
+ 
+     case OCSP_CERT_REVOKED:
+-        XSTRNCPY(str, "OCSP Cert revoked", max);
+-        break;
++        return "OCSP Cert revoked";
+ 
+     case CRL_CERT_REVOKED:
+-        XSTRNCPY(str, "CRL Cert revoked", max);
+-        break;
++        return "CRL Cert revoked";
+ 
+     case CRL_MISSING:
+-        XSTRNCPY(str, "CRL missing, not loaded", max);
+-        break;
++        return "CRL missing, not loaded";
+ 
+     case MONITOR_RUNNING_E:
+-        XSTRNCPY(str, "CRL monitor already running", max);
+-        break;
++        return "CRL monitor already running";
+ 
+     case THREAD_CREATE_E:
+-        XSTRNCPY(str, "Thread creation problem", max);
+-        break;
++        return "Thread creation problem";
+ 
+     case OCSP_NEED_URL:
+-        XSTRNCPY(str, "OCSP need URL", max);
+-        break;
++        return "OCSP need URL";
+ 
+     case OCSP_CERT_UNKNOWN:
+-        XSTRNCPY(str, "OCSP Cert unknown", max);
+-        break;
++        return "OCSP Cert unknown";
+ 
+     case OCSP_LOOKUP_FAIL:
+-        XSTRNCPY(str, "OCSP Responder lookup fail", max);
+-        break;
++        return "OCSP Responder lookup fail";
+ 
+     case MAX_CHAIN_ERROR:
+-        XSTRNCPY(str, "Maximum Chain Depth Exceeded", max);
+-        break;
++        return "Maximum Chain Depth Exceeded";
+ 
+     case COOKIE_ERROR:
+-        XSTRNCPY(str, "DTLS Cookie Error", max);
+-        break;
++        return "DTLS Cookie Error";
+ 
+     case SEQUENCE_ERROR:
+-        XSTRNCPY(str, "DTLS Sequence Error", max);
+-        break;
++        return "DTLS Sequence Error";
+ 
+     case SUITES_ERROR:
+-        XSTRNCPY(str, "Suites Pointer Error", max);
+-        break;
++        return "Suites Pointer Error";
+ 
+     case SSL_NO_PEM_HEADER:
+-        XSTRNCPY(str, "No PEM Header Error", max);
+-        break;
++        return "No PEM Header Error";
+ 
+     case OUT_OF_ORDER_E:
+-        XSTRNCPY(str, "Out of order message, fatal", max);
+-        break;
++        return "Out of order message, fatal";
+ 
+     case BAD_KEA_TYPE_E:
+-        XSTRNCPY(str, "Bad KEA type found", max);
+-        break;
++        return "Bad KEA type found";
+ 
+     case SANITY_CIPHER_E:
+-        XSTRNCPY(str, "Sanity check on ciphertext failed", max);
+-        break;
++        return "Sanity check on ciphertext failed";
+ 
+     case RECV_OVERFLOW_E:
+-        XSTRNCPY(str, "Receive callback returned more than requested", max);
+-        break;
++        return "Receive callback returned more than requested";
+ 
+     case GEN_COOKIE_E:
+-        XSTRNCPY(str, "Generate Cookie Error", max);
+-        break;
++        return "Generate Cookie Error";
+ 
+     case NO_PEER_VERIFY:
+-        XSTRNCPY(str, "Need peer certificate verify Error", max);
+-        break;
++        return "Need peer certificate verify Error";
+ 
+     case FWRITE_ERROR:
+-        XSTRNCPY(str, "fwrite Error", max);
+-        break;
++        return "fwrite Error";
+ 
+     case CACHE_MATCH_ERROR:
+-        XSTRNCPY(str, "Cache restore header match Error", max);
+-        break;
++        return "Cache restore header match Error";
+ 
+     case UNKNOWN_SNI_HOST_NAME_E:
+-        XSTRNCPY(str, "Unrecognized host name Error", max);
+-        break;
++        return "Unrecognized host name Error";
+ 
+     default :
+-        XSTRNCPY(str, "unknown error number", max);
++        return "unknown error number";
+     }
+ 
+ #endif /* NO_ERROR_STRINGS */
+ }
+ 
++void SetErrorString(int error, char* str)
++{
++    XSTRNCPY(str, CyaSSL_ERR_reason_error_string(error), CYASSL_MAX_ERROR_SZ);
++}
+ 
+ 
+ /* be sure to add to cipher_name_idx too !!!! */
+--- cyassl-2.8.0.org/support/cyassl.pc
++++ cyassl-2.8.0/support/cyassl.pc
+@@ -1,4 +1,4 @@
+-prefix=/usr/local
++prefix=
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+ includedir=${prefix}/include

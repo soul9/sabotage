@@ -1,17 +1,20 @@
 [deps]
 
 [mirrors]
-http://www.yassl.com/altpkg/cyassl-2.7.0.tar.xz
+http://www.yassl.com/altpkg/cyassl-2.8.0.tar.xz
 
 [main]
-filesize=680508
-sha512=a8e44763db90d6f213092b71b058ea02e1aa4985d064c9c284c2cb5d78ad34d43c8f56e1dee9267110d8bfa06e21b9b8ed83e5628359f7632c317056d48ba181
+filesize=723208
+sha512=e21c3ed26f059ca0563d376e5cf9d6dc66416b9e017e71bcd5513425b8a22eac3315da3a001602fb2d250f53856d4759b693412eb95b040b72eee6a8b2ca29ab
 
 [build]
+patch -p1 < "$K"/cyassl-280-ERR_reason.patch || exit 1
+
 debug_flags=
 [ "$DEBUGBUILD" = 1 ] && debug_flags=--enable-debug
 
-CFLAGS="-D_GNU_SOURCE" ./configure --prefix="$butch_prefix" --enable-dtls --enable-opensslExtra \
+C_EXTRA_FLAGS="-D_GNU_SOURCE $optcflags" \
+./configure --prefix="$butch_prefix" --enable-dtls --enable-opensslExtra \
   --enable-static $debug_flags \
   --disable-silent-rules \
   --enable-ipv6 --enable-ripemd --enable-sha512 \
