@@ -1,12 +1,12 @@
 [mirrors]
-ftp://ftp.gimp.org/pub/gimp/v2.8/gimp-2.8.2.tar.bz2
-http://gimp.cybermirror.org/v2.8/gimp-2.8.2.tar.bz2
-http://ftp.snt.utwente.nl/pub/software/gimp/gimp/v2.8/gimp-2.8.2.tar.bz2
-http://ftp.sunet.se/pub/gnu/gimp/v2.8/gimp-2.8.2.tar.bz2
+ftp://ftp.gimp.org/pub/gimp/v2.8/gimp-2.8.10.tar.bz2
+http://gimp.cybermirror.org/v2.8/gimp-2.8.10.tar.bz2
+http://ftp.snt.utwente.nl/pub/software/gimp/gimp/v2.8/gimp-2.8.10.tar.bz2
+http://ftp.sunet.se/pub/gnu/gimp/v2.8/gimp-2.8.10.tar.bz2
 
 [main]
-filesize=20161424
-sha512=82a15072aba97d41a7dd74920f5db4e89442ff83841ac614f6fadfd964bdb8d3ae478ac0ba2e906bcf4569c8de00a1616fd6d626032f093060f28df3655d9111
+filesize=20343461
+sha512=21c96832ce61ecb2dad5276b454e7965263b6733add7e4a95cfc5f308fca681bceab21c1b77921332e0725d0e514e06868a4698ca9d7e4b30a28a07c7356a3a8
 
 [deps]
 babl
@@ -21,12 +21,10 @@ shared-mime-info
 # with empty prefix, gimp references share/... instead of /share/...
 [ -z "$butch_prefix" ] && butch_prefix=/
 
-patch -p1 < "$K"/gimp-execinfo.patch || exit 1
-
 # disable the gimp head in the toolbox by default
 patch -p1 < "$K"/gimp-toolbox-wilber.patch || exit 1
 
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+CFLAGS="-D_GNU_SOURCE $optcflags" ./configure -C --prefix="$butch_prefix" \
   --mandir="$butch_prefix"/share/man \
   --disable-python \
   --disable-alsatest \
