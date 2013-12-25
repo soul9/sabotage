@@ -1,17 +1,17 @@
+[mirrors]
+ftp://ftp.gnu.org/gnu/gdb/gdb-7.6.2.tar.bz2
+http://ftp.gnu.org/gnu/gdb/gdb-7.6.2.tar.bz2
+
+[main]
+filesize=24269334
+sha512=e72e9c2abb58cc08c38841380270fe783f26baf62798171d21cf0843e6c9a81d285f424dc6229ea7b1c6c957d999c8aa75c2bd15076817abb9caab28c4eb7666
+
 [deps]
 kernel-headers
 termcap
 patch
 gettext
 readline
-
-[main]
-filesize=20614020
-sha512=9a5e8b04be6e8a746cb0e6a8b524ec0fa1fa3a971633c54646d722d2ff9200304e36f80cdf30d5a8ba69b5d188f7c1b2baad40d11881c416a3a54e7dee8cc724
-tardir=gdb-7.4
-
-[mirrors]
-http://ftp.gnu.org/gnu/gdb/gdb-7.4.tar.bz2
 
 [build]
 #fix missing "makeinfo" requirement...
@@ -24,14 +24,9 @@ patch -p1 < "$K"/gdb-threaddb.patch || exit 1
 patch -p1 < "$K/gdb-linux_nat.patch" || exit 1
 patch -p1 < "$K/gdb-amd64-debugreg.patch" || exit 1
 patch -p1 < "$K/gdb-arm-gentmap.patch" || exit 1
-patch -p1 < "$K/gdb-arm-wrapper.patch" || exit 1
-patch -p1 < "$K/gdb-74-linux-low.patch" || exit 1
-
-sed -i 's@struct siginfo@siginfo_t@g' \
-  gdb/linux-nat.c gdb/amd64-linux-nat.c gdb/mn10300-linux-tdep.c gdb/linux-nat.h gdb/ia64-linux-nat.c \
-  gdb/ppc-linux-nat.c gdb/hppa-linux-tdep.c gdb/procfs.c gdb/alpha-linux-tdep.c gdb/mips-linux-tdep.c \
-  gdb/frv-linux-tdep.c  gdb/gdbserver/linux-arm-low.c gdb/gdbserver/linux-low.c \
-  gdb/gdbserver/linux-x86-low.c gdb/arm-linux-nat.c || exit 1
+patch -p1 < "$K"/gdb-76-linux-low-threaddb.patch || exit 1
+patch -p1 < "$K"/gdb-76-readline.patch || exit 1
+patch -p1 < "$K"/gdb-76-pid_t.patch || exit 1
 
 # fix mips build ...
 cp "$K"/gdb-sgidefs.h gdb/sgidefs.h
