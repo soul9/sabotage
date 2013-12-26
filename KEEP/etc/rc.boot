@@ -18,7 +18,7 @@ if which udevd > /dev/null 2>&1 ; then
 	/bin/udevadm settle
 
 else
-	echo /bin/mdev > /proc/sys/kernel/hotplug
+	echo /sbin/mdev > /proc/sys/kernel/hotplug
 	mdev -s
 fi
 
