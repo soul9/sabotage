@@ -1,0 +1,30 @@
+[mirrors]
+http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.7.tar.gz
+[main]
+filesize=223794
+sha512=77ad016fa5fb3fcb0d940b29d3fa914f546d79cdf2221ed47e4dec6d3a005b25d2d32ee1fdd4f662a7a84274572b72235b82e4c39995c7ca0bb049a7d88595b5
+
+[deps]
+
+[build]
+patch -p1 < "$K"/dash-fix.patch || exit 1
+
+cat << EOF > nl.c
+#include <stdio.h>
+int main() {
+	/* the way nl is invoked (-v 0) means we should start with 0 */
+        size_t i = 0; char b[4096];
+        while(fgets(b, sizeof b, stdin)) { printf("%zu %s", i, b); i++; }
+}
+
+EOF
+# dash mkbuiltins script depends on "nl"
+$CC nl.c -o nl || exit 1
+export PATH="$PWD:$PATH"
+
+LC_CTYPE=C CFLAGS="-D_GNU_SOURCE -D__KLIBC__ $optcflags -g" \
+LDFLAGS="$optldflags -static" \
+  ./configure -C --prefix="$butch_prefix" || exit 1
+
+LC_CTYPE=C make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
