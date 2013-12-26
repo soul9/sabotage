@@ -58,13 +58,13 @@ printf %s\\n "$1" | sed -e "s/'/'\\\\''/g" -e "1s/^/'/" -e "\$s/\$/'/" -e "s#^'\
 
 quote_args() {
 local cmdline=
-for i ; do cmdline="$cmdline $(quote "$i")" ; done
+for i ; do cmdline="$cmdline $(quote $i)" ; done
 printf "%s" "$cmdline"
 }
 
 
 run_echo() {
-	local cmdline=$(quote_args $@)
+	local cmdline="$(quote_args $@)"
 	printf "%s\n" "$cmdline"
 	"$@"
 }
