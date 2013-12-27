@@ -9,7 +9,7 @@ sha512=06420df987429bdec6aea216046548cb7d1e1ed004e140c01692625dfb9149cc42ad98755
 termcap
 
 [build]
-patch -p0 src/editline/readline.h -i "$K/libedit_readlineh.patch" || exit 1
+patch -p1 < "$K"/libedit_readlineh.patch || exit 1
 
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D__STDC_ISO_10646__ $optcflags" \
   ./configure -C --prefix="$butch_prefix" --enable-widec || exit 1
