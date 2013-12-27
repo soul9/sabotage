@@ -94,7 +94,7 @@ trim() {
 }
 
 get_mount() {
-	if type findmnt &> /dev/null ; then
+	if type findmnt >/dev/null 2>&1 ; then
 		findmnt -cfmnoTARGET "$1"
 	else
 		cat /proc/self/mountinfo | \
@@ -152,11 +152,11 @@ ct_main() {
 
 	# Warn if any of the dependencies are missing
 	for dep in $DEPS; do
-		type $dep &> /dev/null || info "$dep not found, some functionality may fail"
+		type $dep >/dev/null 2>&1 || info "$dep not found, some functionality may fail"
 	done
 
 	# Check for UDEV
-	if pidof udevd &>/dev/null; then
+	if pidof udevd >/dev/null 2>&1; then
 		UDEVRUNNING=1
 		info "Detected udevd"
 	else
@@ -523,7 +523,7 @@ ct_map() {
 
 		# cryptsetup 'create' can be destructive, don't do it if blkid can
 		# identify the device type
-		if [ $FORCE -ne 1 ] && blkid -p "$dev" &>/dev/null; then
+		if [ $FORCE -ne 1 ] && blkid -p "$dev" >/dev/null 2>&1; then
 			error "Refusing to call 'cryptsetup create' on device that might"
 			error " have data. If you are sure this is what you want, use"
 			error " the -f option"
