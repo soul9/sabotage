@@ -1,0 +1,12 @@
+--- /root/dovecot-2.2.4/src/dns/dns-client.c	2013-04-17 13:59:47.000000000 +0000
++++ dovecot-2.2.4/src/dns/dns-client.c	2013-08-02 01:42:17.363046584 +0000
+@@ -35,7 +35,7 @@
+ 		ret = net_gethostbyname(line + 3, &ips, &ips_count);
+ 		if (ret == 0 && ips_count == 0) {
+ 			/* shouldn't happen, but fix it anyway.. */
+-			ret = NO_ADDRESS;
++			ret = TRY_AGAIN;
+ 		}
+ 		if (ret != 0) {
+ 			o_stream_nsend_str(client->output,
+

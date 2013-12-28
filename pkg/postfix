@@ -1,0 +1,25 @@
+[mirrors]
+http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/postfix-2.10.1.tar.gz
+http://archive.mgm51.com/mirrors/postfix-source/official/postfix-2.10.1.tar.gz
+
+[main]
+filesize=3827595
+sha512=34d5923748b38dd93609657011adc1371ab738ee86558aa4822cce6e879ccdd426bb4de994ab425b3a2745c8ca10a01b2d1c5f310872e839f9627afa8dcccdf0
+
+[deps]
+db
+openssl
+dovecot
+
+[build]
+CCARGS="-DNO_NIS -DUSE_TLS -DUSE_SASL_AUTH -DDEF_SASL_SERVER_TYPE=\"dovecot\"" AUXLIBS="-lssl -lcrypto" make -f Makefile.init makefiles
+make || exit 1
+sh postfix-install -non-interactive \
+   install_root="$butch_prefix" \
+   daemon_directory="$butch_prefix/lib/postfix" \
+   manpage_directory="$butch_prefix/share/man" || exit 1
+cp "$K"/postfix-main.cf /etc/postfix/main.cf
+cp "$K"/postfix-master.cf /etc/postfix/master.cf
+cp "$K"/postfix-virtual /etc/postfix/virtual
+/bin/postmap /etc/postfix/virtual
+[ ! -f /etc/aliases ] && touch /etc/aliases && /bin/newaliases

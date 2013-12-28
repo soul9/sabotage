@@ -1,0 +1,16 @@
+[main]
+filesize=4335791
+sha512=c5d33500af6c8440fcdb6b6c2a495b495066bb013985284d9c5b3ba4bd52a0985b37047791a5e89e6e98148590e22596d2574156614ab71e247173f9a828a2f2
+
+[mirrors]
+http://dovecot.org/releases/2.2/dovecot-2.2.4.tar.gz
+
+[deps]
+openssl
+
+[build]
+patch -p1 < "$K/dovecot.patch" || exit 1
+./configure -C --prefix="$butch_prefix" || exit 1
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
+cp "$K"/dovecot.conf /etc/dovecot/
