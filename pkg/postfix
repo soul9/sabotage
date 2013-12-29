@@ -1,10 +1,10 @@
 [mirrors]
-http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/postfix-2.10.1.tar.gz
-http://archive.mgm51.com/mirrors/postfix-source/official/postfix-2.10.1.tar.gz
+http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/postfix-2.10.2.tar.gz
+http://archive.mgm51.com/mirrors/postfix-source/official/postfix-2.10.2.tar.gz
+ftp://ftp.porcupine.org/mirrors/postfix-release/official/postfix-2.10.2.tar.gz
 
-[main]
-filesize=3827595
-sha512=34d5923748b38dd93609657011adc1371ab738ee86558aa4822cce6e879ccdd426bb4de994ab425b3a2745c8ca10a01b2d1c5f310872e839f9627afa8dcccdf0
+filesize=3828326
+sha512=fa6c123da040a8e332c0bf2430f5b098523c2eff42a6cf4bfe6618b82d59be8e5a7f5c85b09ab8fd0312058b2135b174e00890423e4d3f8f732c3dc3c91f01c3
 
 [deps]
 db
@@ -12,14 +12,22 @@ openssl
 dovecot
 
 [build]
-CCARGS="-DNO_NIS -DUSE_TLS -DUSE_SASL_AUTH -DDEF_SASL_SERVER_TYPE=\"dovecot\"" AUXLIBS="-lssl -lcrypto" make -f Makefile.init makefiles
-make || exit 1
+CCARGS="-DNO_NIS -DUSE_TLS -DUSE_SASL_AUTH -DDEF_SASL_SERVER_TYPE=\"dovecot\"" \
+AUXLIBS="-lssl -lcrypto" make -f Makefile.init makefiles
+make -j$MAKE_THREADS || exit 1
 sh postfix-install -non-interactive \
-   install_root="$butch_prefix" \
-   daemon_directory="$butch_prefix/lib/postfix" \
-   manpage_directory="$butch_prefix/share/man" || exit 1
-cp "$K"/postfix-main.cf /etc/postfix/main.cf
-cp "$K"/postfix-master.cf /etc/postfix/master.cf
-cp "$K"/postfix-virtual /etc/postfix/virtual
-/bin/postmap /etc/postfix/virtual
-[ ! -f /etc/aliases ] && touch /etc/aliases && /bin/newaliases
+   install_root="$butch_install_dir" \
+   daemon_directory="$butch_prefix"/lib/postfix \
+   manpage_directory="$butch_prefix"/share/man || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+mv "$dest"/usr/* "$dest"/ || exit 1
+rm "$dest"/bin/* || exit 1
+mv "$dest"/sbin/* "$dest"/bin/ || exit 1
+rm -rf "$dest"/usr "$dest"/sbin || exit1 
+
+if [ ! -e "$butch_prefix"/etc/postfix/main.cf ] ; then
+  install -D -m 644 "$K"/postfix-main.cf "$butch_prefix"/etc/postfix/main.cf
+  install -D -m 644 "$K"/postfix-master.cf "$butch_prefix"/etc/postfix/master.cf
+  install -D -m 644 "$K"/postfix-virtual "$butch_prefix"/etc/postfix/virtual
+fi
