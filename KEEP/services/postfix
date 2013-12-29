@@ -2,6 +2,7 @@
 if [ ! -f /etc/postfix/postfix.key ] ; then
    su -s /bin/sh - postfix -c \
       "openssl req -new -x509 -days 3650 -nodes -out /etc/postfix/postfix.crt \
+      -subj '/C=US/ST=Oregon/L=Portland/CN=invalid.org' \
       -keyout /etc/postfix/postfix.key && chmod o= /etc/postfix/postfix.key" || exit 1
 fi
 postmap /etc/postfix/virtual
