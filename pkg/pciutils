@@ -1,5 +1,6 @@
 [mirrors]
 http://ftp.kernel.org/pub/software/utils/pciutils/pciutils-3.2.1.tar.xz
+ftp://ftp.kernel.org/pub/software/utils/pciutils/pciutils-3.2.1.tar.xz
 
 [main]
 filesize=282268
@@ -10,7 +11,8 @@ sha512=d49e5c3d2bc1ef22d25b4e38e8043f3cf0bb50ee6d7f7763e512ab8a740031eabb575e8f6
 [build]
 patch -p1 < "$K"/pciutils-io.patch || exit 1
 patch -p1 < "$K"/pciutils-implicit.patch || exit 1
+patch -p1 < "$K"/pciutils-pread.patch || exit 1
 
-make CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+make CFLAGS="-D_GNU_SOURCE -DHAVE_PREAD $optcflags" LDFLAGS="$optldflags" \
   PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" \
   -j$MAKE_THREADS all install || exit 1
