@@ -58,13 +58,13 @@ printf %s\\n "$1" | sed -e "s/'/'\\\\''/g" -e "1s/^/'/" -e "\$s/\$/'/" -e "s#^'\
 
 quote_args() {
 local cmdline=
-for i ; do cmdline="$cmdline $(quote "$i")" ; done
+for i ; do cmdline="$cmdline $(quote $i)" ; done
 printf "%s" "$cmdline"
 }
 
 
 run_echo() {
-	local cmdline=$(quote_args $@)
+	local cmdline="$(quote_args $@)"
 	printf "%s\n" "$cmdline"
 	"$@"
 }
@@ -75,7 +75,6 @@ isemptydir() {
 
 mountdir=
 
-cpio --help 2>&1 > /dev/null || die "cpio is needed to create hard disk image"
 [ -z "$UID" ] && UID=`id -u`
 [ "$UID" = "0" ] || die "must be root"
 
@@ -90,8 +89,12 @@ if ! isemptydir "$contents/proc" || ! isemptydir "$contents/sys" || ! isemptydir
 	die "$contents was not properly unmounted! (check sys/ dev/ proc/)"
 fi
 [ ! -f "$contents"/boot/vmlinuz ] && die "$contents does not have a kernel image"
-[ ! -x "$contents"/bin/extlinux ] && die 'extlinux must be in $contents (try installing extlinux on the target)'
+[ ! -x "$contents"/bin/syslinux ] && die 'syslinux must be in $contents (try installing syslinux6 on the target)'
 [ ! -x "$contents"/bin/mksquashfs ] && die 'mksquashfs must be in $contents (try installing squashfs-tools on the target)'
+[ ! -x "$contents"/bin/mcopy ] && die 'mcopy not found in $contents (try installing mtools)'
+[ ! -x "$(type cpio |sed 's,.* ,,g')" ] && die 'cpio not found in $contents (try installing cpio)'
+[ ! -x "$(type mkfs.vfat |sed 's,.* ,,g')" ] && die 'no mkfs.vfat, install dosfstools on host system'
+
 tempcnts="$(mktemp -d)"
 cp -a "$contents"/* "$tempcnts"
 contents="$tempcnts"
@@ -101,11 +104,6 @@ imagesize="$3"
 
 check_opts $@
 [ "$copy_tarballs" = "1" ] && [ -z "$C" ] && die "--copy_tarballs needs C to be set. consider running 'source config'"
-
-for mbr_bin in mbr.bin /usr/lib/syslinux/mbr.bin /usr/share/syslinux/mbr.bin /usr/lib/syslinux/bios/mbr.bin
-	do [ -f "$mbr_bin" ] && break ; done
-
-[ -z "$mbr_bin" ] && die 'Could not find mbr.bin'
 
 echo_bold "0) rm the image file"
 [ -f "$imagefile" ] && rm -f "$imagefile"
@@ -146,12 +144,17 @@ p
 1
 $part_start_sector
 
+t
+b
+
 a
 1
 w
 EOF
 
 echo_bold '3) copy mbr'
+for mbr_bin in mbr.bin "$contents"/lib/syslinux/bios/mbr.bin "$contents"/lib/syslinux/mbr.bin
+        do [ -f "$mbr_bin" ] && break ; done
 dd conv=notrunc if="$mbr_bin" of="$imagefile" || die 'Failed to set up MBR'
 
 echo_bold '4) /boot'
@@ -163,12 +166,12 @@ echo_bold "info: mounting $imagefile as $loopdev on $mountdir"
 run_echo losetup -o $part_start "$loopdev" "$imagefile" || die 'Failed to losetup for /'
 
 mkdir -p "$mountdir" || die_unloop 'Failed to create '"$mountdir"
-mkfs.ext4 -O extents "$loopdev" || die_unloop 'Failed to mkfs.ext4 loop for /'
+mkfs.vfat "$loopdev" || die_unloop 'Failed to mkfs.vfat loop for /'
 mount "$loopdev" "$mountdir" || die_unloop 'Failed to mount loop for /'
 mkdir "$mountdir"
 
 if [ -d "$contents" ] ; then
-	cp -a "$contents"/boot/* "$mountdir" || die_unmount 'Failed to copy boot'
+	cp "$contents"/boot/* "$mountdir" || die_unmount 'Failed to copy boot'
 else
 	tar -C "$mountdir" -xf "$contents" boot || die_unmount 'Failed to extract boot'
 fi
@@ -177,22 +180,42 @@ extcfg() {
   kernel="$1"
   fs="$2"
   echo "LABEL $kernel - $fs"
-  echo "      KERNEL $kernel"
-  echo "      INITRD /default.igz"
-  echo "      APPEND boot=/dev/sda1 vga=ask sqsh_root=$fs"
-  echo "LABEL $kernel - $fs rescue"
+  echo "      MENU LABEL $kernel - $fs"
   echo "      KERNEL $kernel"
   echo "      INITRD /default.igz"
   echo "      APPEND boot=/dev/sda1 sqsh_root=$fs"
-
 }
-"$contents"/bin/extlinux -i "$mountdir" || die_unmount 'Failed to install extlinux'
+
+for i in /lib/syslinux/bios/ldlinux.c32 /lib/syslinux/bios/vesamenu.c32 /lib/syslinux/bios/libcom32.c32 /lib/syslinux/bios/libutil.c32; do
+  cp "$contents"$i "$mountdir"/ || die_unmount 'Failed to install '$i
+done
+rm "$mountdir"/extlinux.conf
+mkdir -p "$mountdir"/EFI/BOOT
+if [ -d "$contents"/lib/syslinux/efi64 ]; then
+ for i in /lib/syslinux/efi64/ldlinux.e64 /lib/syslinux/efi64/vesamenu.c32 /lib/syslinux/efi64/libcom32.c32 /lib/syslinux/efi64/libutil.c32; do
+    cp "$contents"$i "$mountdir"/EFI/BOOT || die_unmount 'Failed to install '$i
+  done
+  cp "$contents"/lib/syslinux/efi64/syslinux.efi "$mountdir"/EFI/BOOT/bootx64.efi
+elif [ -d "$contents"/lib/syslinux/efi32 ]; then
+ for i in /lib/syslinux/efi32/ldlinux.e32 /lib/syslinux/efi32/vesamenu.c32 /lib/syslinux/efi32/libcom32.c32 /lib/syslinux/efi32/libutil.c32; do
+    cp "$contents"$i "$mountdir"/EFI/BOOT || die_unmount 'Failed to install '$i
+  done
+  cp "$contents"/lib/syslinux/efi32/syslinux.efi "$mountdir"/EFI/BOOT/bootia32.efi
+fi
+
 (
-  echo "PROMPT 1"
+  echo "UI vesamenu.c32"
+  echo "PROMPT 0"
   echo "TIMEOUT 100"
   echo "DEFAULT /vmlinuz - /root.sqsh.img"
   extcfg "/vmlinuz" "/root.sqsh.img"
-) > "$mountdir"/extlinux.conf
+) > "$mountdir"/syslinux.cfg
+echo "INCLUDE /syslinux.cfg" > "$mountdir"/EFI/BOOT/syslinux.cfg
+mount --bind /dev "$contents/dev"
+mount -t proc proc "$contents/proc"
+mount -t sysfs sys "$contents/sys"
+chroot "$contents" syslinux -i $loopdev || die_unmount 'Failed to install syslinux'
+umount "$contents/dev" "$contents/proc" "$contents/sys"
 
 sync
 echo_bold "copying contents, this will take a while"
@@ -211,13 +234,18 @@ if [ "$copy_tarballs" != "1" ] ; then
   tarexclude='src/tarballs/**'
 fi
 rm "$contents"/root.sqsh.img
+
+# No need to mount sysfs and proc since initramfs does this
+sed -i -r '/mount -t (proc|sysfs).*/d' "$contents/etc/rc.boot"
+
 chroot "$contents" mksquashfs / /root.sqsh.img -wildcards -e '**.sqsh.img' 'proc/**' 'sys/**' 'dev/**' 'boot/**' $tarexclude $buildexclude
 
 time cp "$contents"/root.sqsh.img "$mountdir"/
 
 echo_bold ' 8) creating initramfs'
 (
-  cd "$mountdir"
+  initramfstmp=$(mktemp -d)
+  cd "$initramfstmp"
   mkdir -p initramfs/bin
   cp "$contents"/opt/busybox/bin/busybox initramfs/bin
   ln -s busybox initramfs/bin/sh
@@ -225,9 +253,9 @@ echo_bold ' 8) creating initramfs'
   chmod +x initramfs/init
   mkdir initramfs/boot initramfs/newroot initramfs/sbin initramfs/proc initramfs/sys
   cd initramfs
-  find . | cpio -H newc -o | gzip > ../default.igz
-  cd ..
-  rm -r initramfs
+  find . | cpio -H newc -o | gzip > "$mountdir"/default.igz
+  cd "$mountdir"
+  rm -r "$initramfstmp"
 )
 
 echo_bold ' 9) cleaning up'
