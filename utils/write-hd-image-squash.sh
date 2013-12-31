@@ -92,8 +92,7 @@ fi
 [ ! -x "$contents"/bin/syslinux ] && die 'syslinux must be in $contents (try installing syslinux6 on the target)'
 [ ! -x "$contents"/bin/mksquashfs ] && die 'mksquashfs must be in $contents (try installing squashfs-tools on the target)'
 [ ! -x "$contents"/bin/mcopy ] && die 'mcopy not found in $contents (try installing mtools)'
-[ ! -x "$(type cpio |sed 's,.* ,,g')" ] && die 'cpio not found in $contents (try installing cpio)'
-[ ! -x "$(type mkfs.vfat |sed 's,.* ,,g')" ] && die 'no mkfs.vfat, install dosfstools on host system'
+[ ! -x "$contents"/bin/mkfs.vfat ] && die 'no mkfs.vfat, install dosfstools on target'
 
 tempcnts="$(mktemp -d)"
 cp -a "$contents"/* "$tempcnts"
@@ -166,7 +165,13 @@ echo_bold "info: mounting $imagefile as $loopdev on $mountdir"
 run_echo losetup -o $part_start "$loopdev" "$imagefile" || die 'Failed to losetup for /'
 
 mkdir -p "$mountdir" || die_unloop 'Failed to create '"$mountdir"
-mkfs.vfat "$loopdev" || die_unloop 'Failed to mkfs.vfat loop for /'
+
+mount --bind /dev "$contents/dev"
+mount -t proc proc "$contents/proc"
+mount -t sysfs sys "$contents/sys"
+chroot "$contents" mkfs.vfat "$loopdev" || die_unloop 'Failed to mkfs.vfat loop for /'
+umount "$contents/dev" "$contents/proc" "$contents/sys"
+
 mount "$loopdev" "$mountdir" || die_unloop 'Failed to mount loop for /'
 mkdir "$mountdir"
 
@@ -243,7 +248,7 @@ chroot "$contents" mksquashfs / /root.sqsh.img -wildcards -e '**.sqsh.img' 'proc
 time cp "$contents"/root.sqsh.img "$mountdir"/
 
 echo_bold ' 8) creating initramfs'
-(
+
   initramfstmp=$(mktemp -d)
   cd "$initramfstmp"
   mkdir -p initramfs/bin
@@ -252,11 +257,11 @@ echo_bold ' 8) creating initramfs'
   cp "$contents"/src/KEEP/initramfs.init initramfs/init
   chmod +x initramfs/init
   mkdir initramfs/boot initramfs/newroot initramfs/sbin initramfs/proc initramfs/sys
-  cd initramfs
-  find . | cpio -H newc -o | gzip > "$mountdir"/default.igz
-  cd "$mountdir"
-  rm -r "$initramfstmp"
-)
+  cp -a "$initramfstmp" "$contents"/"$initramfstmp"
+  chroot "$contents" sh -c "cd $initramfstmp/initramfs; find . | cpio -H newc -o | gzip > $initramfstmp/default.igz"
+  cp "$contents"/"$initramfstmp"/default.igz "$mountdir"
+  cd
+  rm -r "$initramfstmp" "$contents"/"$initramfstmp"
 
 echo_bold ' 9) cleaning up'
 
