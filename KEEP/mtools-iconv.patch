@@ -1,0 +1,34 @@
+--- charsetConv.c
++++ charsetConv.c
+@@ -107,7 +107,7 @@
+ 
+ 	if(codepage == 0)
+ 		codepage = mtools_default_codepage;
+-	if(codepage < 0 || codepage > 9999) {
++	if(codepage != 850) {
+ 		fprintf(stderr, "Bad codepage %d\n", codepage);
+ 		return NULL;
+ 	}
+@@ -115,7 +115,7 @@
+ 	if(getWcharCp() == NULL)
+ 		return NULL;
+ 
+-	sprintf(dosCp, "CP%d", codepage);
++	sprintf(dosCp, "latin1");
+ 	from = iconv_open(wcharCp, dosCp);
+ 	if(from == (iconv_t)-1) {
+ 		fprintf(stderr, "Error converting to codepage %d %s\n",
+@@ -123,11 +123,11 @@
+ 		return NULL;
+ 	}
+ 
+-	sprintf(dosCp, "CP%d//TRANSLIT", codepage);
++	sprintf(dosCp, "latin1//TRANSLIT");
+ 	to   =  iconv_open(dosCp, wcharCp);
+ 	if(to == (iconv_t)-1) {
+ 		/* Transliteration not supported? */
+-		sprintf(dosCp, "CP%d", codepage);
++		sprintf(dosCp, "latin1");
+ 		to   =  iconv_open(dosCp, wcharCp);
+ 	}
+ 	if(to == (iconv_t)-1) {

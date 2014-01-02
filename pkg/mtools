@@ -1,0 +1,11 @@
+[mirrors]
+http://ftp.gnu.org/gnu/mtools/mtools-4.0.18.tar.bz2
+
+[main]
+filesize=420190
+sha512=3981a4727aa4e2ec5c931201b236f52fcd1c9d55f888cb2fbdc5c4172402e2b229ede9a5005b972ffdad59bcb861e2fcc01404845e521116419079ae78239090
+
+[build]
+patch -p0 < "$K"/mtools-iconv.patch || exit 1
+CC="$CC" CFLAGS="$optcflags -UHAVE_ICONV_H" LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
+make PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" -j$MAKE_THREADS all install || exit 1
