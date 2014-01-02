@@ -191,25 +191,26 @@ extcfg() {
   echo "      APPEND boot=/dev/sda1 sqsh_root=$fs"
 }
 
-for i in /lib/syslinux/bios/ldlinux.c32 /lib/syslinux/bios/vesamenu.c32 /lib/syslinux/bios/libcom32.c32 /lib/syslinux/bios/libutil.c32; do
-  cp "$contents"$i "$mountdir"/ || die_unmount 'Failed to install '$i
-done
 rm "$mountdir"/extlinux.conf
 mkdir -p "$mountdir"/EFI/BOOT
+menumods="menu.c32 libutil.c32"
+for i in ldlinux.c32 $menumods; do
+  cp "$contents"/lib/syslinux/bios/$i "$mountdir"/ || die_unmount 'Failed to install '$i
+done
 if [ -d "$contents"/lib/syslinux/efi64 ]; then
- for i in /lib/syslinux/efi64/ldlinux.e64 /lib/syslinux/efi64/vesamenu.c32 /lib/syslinux/efi64/libcom32.c32 /lib/syslinux/efi64/libutil.c32; do
-    cp "$contents"$i "$mountdir"/EFI/BOOT || die_unmount 'Failed to install '$i
+ for i in ldlinux.e64 $menumods; do
+    cp "$contents"/lib/syslinux/efi64/$i "$mountdir"/EFI/BOOT || die_unmount 'Failed to install '$i
   done
   cp "$contents"/lib/syslinux/efi64/syslinux.efi "$mountdir"/EFI/BOOT/bootx64.efi
 elif [ -d "$contents"/lib/syslinux/efi32 ]; then
- for i in /lib/syslinux/efi32/ldlinux.e32 /lib/syslinux/efi32/vesamenu.c32 /lib/syslinux/efi32/libcom32.c32 /lib/syslinux/efi32/libutil.c32; do
-    cp "$contents"$i "$mountdir"/EFI/BOOT || die_unmount 'Failed to install '$i
+ for i in ldlinux.e32 $menumods; do
+    cp "$contents"/lib/syslinux/efi32/$i "$mountdir"/EFI/BOOT || die_unmount 'Failed to install '$i
   done
   cp "$contents"/lib/syslinux/efi32/syslinux.efi "$mountdir"/EFI/BOOT/bootia32.efi
 fi
 
 (
-  echo "UI vesamenu.c32"
+  echo "UI menu.c32"
   echo "PROMPT 0"
   echo "TIMEOUT 100"
   echo "DEFAULT /vmlinuz - /root.sqsh.img"
