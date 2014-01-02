@@ -1,0 +1,23 @@
+[mirrors]
+http://www.kernel.org/pub/software/network/iw/iw-3.13.tar.xz
+ftp://www.kernel.org/pub/software/network/iw/iw-3.13.tar.xz
+
+[main]
+filesize=85724
+sha512=cbfa2ea8f4584e61060d56e52f405d1e67dc04d08b75179dde58d2ed20b78eae78b04650af1760265df97e559af0af6664e384d65109bf380391bc38b08a348d
+
+[deps]
+libnl-tiny
+pkgconf
+
+[build]
+patch -p1 < "$K"/iw-libnl-tiny.patch
+CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
+  -DCONFIG_LIBNL20 \
+  -Dnl_handle=nl_sock -Dnl_handle_alloc_cb=nl_socket_alloc_cb \
+  -Dnl_handle_destroy=nl_socket_free \
+  -D__int32_t=int32_t -D__int16_t=int16_t -D__uint8_t=uint8_t \
+  -D__uint32_t=uint32_t -D__uint16_t=uint16_t \
+  -include stdint.h $optcflags" \
+  LDFLAGS="$optldflags" make -j$MAKE_THREADS || exit 1
+make PREFIX="$butch_prefix" SBINDIR="$butch_prefix"/bin DESTDIR="$butch_install_dir" install || exit 1
