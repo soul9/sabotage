@@ -2,12 +2,12 @@
 gcc4
 
 [mirrors]
-http://www.musl-libc.org/releases/musl-0.9.14.tar.gz
-http://www.etalabs.net/musl/releases/musl-0.9.14.tar.gz
+http://www.musl-libc.org/releases/musl-0.9.15.tar.gz
+http://www.etalabs.net/musl/releases/musl-0.9.15.tar.gz
 
 [main]
-filesize=826126
-sha512=e5c3f7b1549dc2f9cbd3359cc413f761d5967607c23705f651c33d0ae93f00582193a41fe1f87158467d58d8eba2d7c09e0fe2f2b2c02c1dda78eee1a4cecff6
+filesize=829742
+sha512=2c5f3e742cf29fd76db8079b6012b1b359eda635593995ea8add008abc9744f0ca504e915f7828692aeafc3bddc66e0716492182cd5696e2fa24d9a2289601b8
 
 [build]
 
