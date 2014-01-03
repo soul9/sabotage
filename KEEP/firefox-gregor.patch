@@ -25,15 +25,6 @@ diff -r 06549f98901b ipc/chromium/src/base/file_util.h
  #include <sys/stat.h>
  #endif
  
-@@ -466,7 +470,7 @@
- #if defined(OS_WIN)
-   WIN32_FIND_DATA find_data_;
-   HANDLE find_handle_;
--#elif defined(ANDROID)
-+#elif defined(NO_FTS)
-   void *fts_;
- #elif defined(OS_POSIX)
-   FTS* fts_;
 diff -r 06549f98901b ipc/chromium/src/base/file_util_posix.cc
 --- a/ipc/chromium/src/base/file_util_posix.cc	Fri Aug 02 14:36:52 2013 +0000
 +++ b/ipc/chromium/src/base/file_util_posix.cc	Fri Aug 02 14:42:20 2013 +0000
@@ -74,33 +65,6 @@ diff -r 06549f98901b ipc/chromium/src/base/file_util_posix.cc
    // XXX Need ftsless impl for bionic
    return false;
  #else
-@@ -613,7 +616,7 @@
- }
- 
- FileEnumerator::~FileEnumerator() {
--#ifndef ANDROID
-+#ifndef NO_FTS
-   if (fts_)
-     fts_close(fts_);
- #endif
-@@ -625,7 +628,7 @@
-   if (!is_in_find_op_)
-     return;
- 
--#ifndef ANDROID
-+#ifndef NO_FTS
-   memcpy(&(info->stat), fts_ent_->fts_statp, sizeof(info->stat));
-   info->filename.assign(fts_ent_->fts_name);
- #endif
-@@ -636,7 +639,7 @@
- // large directories with many files this can be quite deep.
- // TODO(erikkay) - get rid of this recursive pattern
- FilePath FileEnumerator::Next() {
--#ifdef ANDROID
-+#ifdef NO_FTS
-   return FilePath();
- #else
-   if (!is_in_find_op_) {
 diff -r 06549f98901b ipc/chromium/src/base/time_posix.cc
 --- a/ipc/chromium/src/base/time_posix.cc	Fri Aug 02 14:36:52 2013 +0000
 +++ b/ipc/chromium/src/base/time_posix.cc	Fri Aug 02 14:42:20 2013 +0000
@@ -126,18 +90,6 @@ diff -r 06549f98901b media/libcubeb/src/cubeb_alsa.c
  #define _XOPEN_SOURCE 500
  #include <pthread.h>
  #include <sys/time.h>
-diff -r 06549f98901b media/mtransport/third_party/nICEr/src/stun/addrs.c
---- a/media/mtransport/third_party/nICEr/src/stun/addrs.c	Fri Aug 02 14:36:52 2013 +0000
-+++ b/media/mtransport/third_party/nICEr/src/stun/addrs.c	Fri Aug 02 14:42:20 2013 +0000
-@@ -63,7 +63,7 @@
- #include <net/if_dl.h>
- #include <net/if_types.h>
- #include <sys/sockio.h>
--#else
-+#elif 0
- #include <linux/if.h>
- #endif
- #include <net/route.h>
 diff -r 06549f98901b media/webrtc/trunk/testing/gtest/src/gtest.cc
 --- a/media/webrtc/trunk/testing/gtest/src/gtest.cc	Fri Aug 02 14:36:52 2013 +0000
 +++ b/media/webrtc/trunk/testing/gtest/src/gtest.cc	Fri Aug 02 14:42:20 2013 +0000
@@ -150,18 +102,6 @@ diff -r 06549f98901b media/webrtc/trunk/testing/gtest/src/gtest.cc
  #if GTEST_OS_LINUX
  
  // TODO(kenton@google.com): Use autoconf to detect availability of
-diff -r 06549f98901b media/webrtc/trunk/webrtc/system_wrappers/source/cpu_info.cc
---- a/media/webrtc/trunk/webrtc/system_wrappers/source/cpu_info.cc	Fri Aug 02 14:36:52 2013 +0000
-+++ b/media/webrtc/trunk/webrtc/system_wrappers/source/cpu_info.cc	Fri Aug 02 14:42:20 2013 +0000
-@@ -38,7 +38,7 @@
-     WEBRTC_TRACE(kTraceStateInfo, kTraceUtility, -1,
-                  "Available number of cores:%d", number_of_cores_);
- 
--#elif defined(WEBRTC_LINUX) && !defined(WEBRTC_ANDROID) && !defined(WEBRTC_GONK)
-+#elif defined(WEBRTC_LINUX) && !defined(WEBRTC_ANDROID) && !defined(WEBRTC_GONK) && defined(__GLIBC__)
-     number_of_cores_ = get_nprocs();
-     WEBRTC_TRACE(kTraceStateInfo, kTraceUtility, -1,
-                  "Available number of cores:%d", number_of_cores_);
 diff -r 06549f98901b netwerk/sctp/src/netinet/sctp_bsd_addr.c
 --- a/netwerk/sctp/src/netinet/sctp_bsd_addr.c	Fri Aug 02 14:36:52 2013 +0000
 +++ b/netwerk/sctp/src/netinet/sctp_bsd_addr.c	Fri Aug 02 14:42:20 2013 +0000
