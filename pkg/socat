@@ -1,0 +1,32 @@
+[mirrors]
+http://www.dest-unreach.org/socat/download/socat-1.7.2.2.tar.gz
+
+[main]
+filesize=564923
+sha512=0b2f4bac91143b7b57465ded4ba58dbacdd050ce34dddfc01933643b488cef2eec80419714801342596c65b1d9a3e3daf46919786d5c8d46d2465ed481863c41
+
+[deps]
+openssl
+
+[build]
+#fix undefined NETDB_INTERNAL (from http://www.ethernut.de/api/netdb_8h.html)
+echo "#define 	NETDB_INTERNAL   -1" > if_tun.h
+#fix redefinition of struct ethhdr
+sed '/if_ether/d' /include/linux/if_tun.h >> if_tun.h
+sed -i 's,#include <linux/if_tun.h>,#include "if_tun.h",' sysincludes.h
+
+./configure --prefix="$butch_prefix" \
+            --bindir=/bin \
+            --sbindir=/bin \
+            --disable-help \
+            --disable-readline \
+            --disable-filan \
+            --disable-sycls
+#            --disable-tun \
+#            --disable-udp \
+#            --disable-socks4 \
+#            --disable-socks4a \
+#            --disable-proxy \
+#            --disable-sctp \
+
+make PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" -j$MAKE_THREADS all install || exit 1
