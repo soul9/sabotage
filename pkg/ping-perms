@@ -1,7 +1,0 @@
-[deps]
-libcap2
-busybox
-
-[build]
-ping_exe=$(readlink -f "$butch_prefix"/bin/ping)
-setcap cap_net_raw+ep "$ping_exe" || exit 1
