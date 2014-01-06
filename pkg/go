@@ -8,6 +8,7 @@ https://go.googlecode.com/files/go1.2.src.tar.gz
 
 [deps]
 bash
+wget
 
 [build]
 sed -i '105d' ./include/libc.h || exit 1
