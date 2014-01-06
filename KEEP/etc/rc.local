@@ -11,6 +11,13 @@ do_kmap=false
 do_disable_overcommit=true
 do_protected_symlinks=false
 do_protected_hardlinks=true
+do_allow_user_ping=true
+
+if $do_allow_user_ping ; then
+	# give groups 1000 - MAX access.
+	# this excludes services and root, but root uses SOCK_RAW anyway.
+	echo "1000 2147483647" > /proc/sys/net/ipv4/ping_group_range
+fi
 
 if $do_init_devices ; then
 	# if mdev/eudev don't work as excepted, do it straight
