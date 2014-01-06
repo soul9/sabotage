@@ -42,6 +42,8 @@ dopatch "$K"/busybox-tar-xz2.patch || exit 1
 dopatch "$K"/busybox-bzip2bug.patch || exit 1
 dopatch "$K"/busybox-fdisk-gpt-size.patch || exit 1
 dopatch "$K"/busybox-fdisk-sector-size.patch || exit 1
+dopatch "$K"/busybox-ping.patch || exit 1
+dopatch "$K"/busybox-ping2.patch || exit 1
 
 
 #__inline seems to get activated when -std=gnu99 is used, causing havoc 
@@ -115,7 +117,7 @@ sed -i 's/# CONFIG_FEATURE_IPV6 is not set/CONFIG_FEATURE_IPV6=y/' .config
 
 tus="../libbb/xfunc_die.c ../libbb/verror_msg.c ../libbb/bb_strtonum.c ../libbb/read.c ../libbb/xconnect.c ../libbb/copyfd.c \
 ../libbb/default_error_retval.c ../libbb/appletlib.c ../libbb/messages.c ../libbb/xfuncs.c ../libbb/full_write.c \
-../libbb/inet_cksum.c ping.c ../libbb/create_icmp_socket.c ../libbb/perror_msg.c ../libbb/xfuncs_printf.c ../libbb/safe_write.c \
+../libbb/inet_cksum.c ping.c ../libbb/perror_msg.c ../libbb/xfuncs_printf.c ../libbb/safe_write.c \
 ../libbb/time.c ../libbb/safe_strncpy.c ../libbb/getopt32.c ../libbb/xatonum.c ../libbb/llist.c ../libbb/create_icmp6_socket.c \
 ../libbb/get_last_path_component.c ../libbb/last_char_is.c"
 
