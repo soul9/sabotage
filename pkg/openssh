@@ -8,6 +8,7 @@ sha512=f87b3e1d3110b87c1dfff729459ff26024863480c8eb4449b9e3b0b750d187acdfedb199c
 
 [deps]
 openssl
+sshd-service
 
 [build]
 # fix implicit declarations
@@ -38,5 +39,8 @@ chown root:root /var/empty
 chmod 0755 /var/empty
 
 #key generation is disabled for packaging
-#the sshd service will create the keys on first usage
+#the sshd service will create the keys on service prereqs
 make DESTDIR="$butch_install_dir" install-nokeys || exit 1
+
+IS="$K"/bin/install-service
+"$IS" --down --log openssh "$K"/services/openssh
