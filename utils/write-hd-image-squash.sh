@@ -241,9 +241,6 @@ if [ "$copy_tarballs" != "1" ] ; then
 fi
 rm "$contents"/root.sqsh.img
 
-# No need to mount sysfs and proc since initramfs does this
-sed -i -r '/mount -t (proc|sysfs).*/d' "$contents/etc/rc.boot"
-
 chroot "$contents" mksquashfs / /root.sqsh.img -wildcards -e '**.sqsh.img' 'proc/**' 'sys/**' 'dev/**' 'boot/**' $tarexclude $buildexclude
 
 time cp "$contents"/root.sqsh.img "$mountdir"/
