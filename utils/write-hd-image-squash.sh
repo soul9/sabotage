@@ -98,6 +98,16 @@ tempcnts="$(mktemp -d)"
 cp -a "$contents"/* "$tempcnts"
 contents="$tempcnts"
 
+mount --bind /dev "$contents/dev"
+mount -t proc proc "$contents/proc"
+mount -t sysfs sys "$contents/sys"
+chroot "$contents" << EOF || die_unmount 'Failed to mkfs.vfat loop for /'
+for i in /etc/service/*/run; do
+  \$i --prereqs
+done
+EOF
+umount "$contents/dev" "$contents/proc" "$contents/sys"
+
 imagesize="$3"
 [ -z "$imagesize" ] && usage
 
