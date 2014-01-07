@@ -1,28 +1,11 @@
 #!/bin/sh
-
-if [ -e /bin/sshd ] ; then
-
-	[ -f /etc/ssh/ssh_host_key ]       || ssh-keygen -t rsa1  -N "" -b 2048 -f /etc/ssh/ssh_host_key
-	[ -f /etc/ssh/ssh_host_rsa_key ]   || ssh-keygen -t rsa   -N "" -b 2048 -f /etc/ssh/ssh_host_rsa_key
-	[ -f /etc/ssh/ssh_host_dsa_key ]   || ssh-keygen -t dsa   -N "" -b 1024 -f /etc/ssh/ssh_host_dsa_key
-	[ -f /etc/ssh/ssh_host_ecdsa_key ] || ssh-keygen -t ecdsa -N "" -b 521  -f /etc/ssh/ssh_host_ecdsa_key
-
-	exec /bin/sshd -De 2>&1
-
-elif [ -e /bin/dropbear ] ; then
-	[ ! -d /etc/dropbear ] && mkdir -p /etc/dropbear
-	make_key_if_needed() {
-		local key=$1
-		local filename=/etc/dropbear/dropbear_${key}_host_key
-		if [ ! -f "$filename" ] ; then
-			local bits=1024
-			[ "$key" = "rsa" ] && bits=2048
-			dropbearkey -s $bits -t $key -f "$filename" | tail -n2 > ${filename}.pub
-		fi
-	}
-	make_key_if_needed rsa
-	make_key_if_needed dss
-
-	exec /bin/dropbear -F 2>&1
-
+# sshd starts whatever ssh service is installed, preferably openssh... if you still want
+# to use dropbear after you installed openssh, run the dropbear service instead
+MYDIR=$(dirname "$(readlink -f "$0")")
+if [ -x "$MYDIR"/../openssh/run ] ; then
+  exec "$MYDIR"/../openssh/run
+elif [ -x "$MYDIR"/../dropbear/run ] ; then
+  exec "$MYDIR"/../dropbear/run
+else
+  exit 1
 fi

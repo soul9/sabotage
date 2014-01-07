@@ -1,0 +1,3 @@
+[build]
+IS="$K"/bin/install-service
+"$IS" --down --log sshd "$K"/services/sshd
