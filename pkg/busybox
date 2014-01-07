@@ -76,8 +76,7 @@ int main() { return 1; }
 EOF
 
 for p in true false ; do
-$CC -static $optcflags -nostartfiles "$butch_prefix"/lib/crt1.o \
-  "$p".c -o "$p" $optldflags || exit 1
+$CC -static $optcflags "$p".c -o "$p" $optldflags || exit 1
 done
 # done, continue with "make install" equivalent
 
