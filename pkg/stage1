@@ -3,7 +3,6 @@ kbd
 9base
 busybox
 e2fsprogs
-extlinux
 gcc4
 gmp
 m4

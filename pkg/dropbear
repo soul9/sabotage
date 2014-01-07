@@ -7,6 +7,7 @@ sha512=2d9c374f17eef22a783d5fef9f30ee2fcbb8778ff7319bb028d8f6181f49827867e3b7f02
 
 [deps]
 zlib
+sshd-service
 
 [build]
 CPPFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
@@ -28,3 +29,6 @@ make SCPPROGRESS=1 PROGRAMS="dropbear scp dbclient dropbearkey dropbearconvert" 
   -j$MAKE_THREADS install STATIC=1 || exit 1
 
 [ -e "$butch_prefix"/ssh ] || ln -s dbclient "$butch_install_dir""$butch_prefix"/bin/ssh
+
+IS="$K"/bin/install-service
+"$IS" --down --log dropbear "$K"/services/dropbear

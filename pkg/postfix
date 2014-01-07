@@ -31,3 +31,6 @@ if [ ! -e "$butch_prefix"/etc/postfix/main.cf ] ; then
   install -D -m 644 "$K"/postfix-master.cf "$butch_prefix"/etc/postfix/master.cf
   install -D -m 644 "$K"/postfix-virtual "$butch_prefix"/etc/postfix/virtual
 fi
+
+IS="$K"/bin/install-service
+"$IS" --down --log postfix "$K"/services/postfix

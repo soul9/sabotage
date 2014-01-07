@@ -98,6 +98,16 @@ tempcnts="$(mktemp -d)"
 cp -a "$contents"/* "$tempcnts"
 contents="$tempcnts"
 
+mount --bind /dev "$contents/dev"
+mount -t proc proc "$contents/proc"
+mount -t sysfs sys "$contents/sys"
+chroot "$contents" << EOF || die_unmount 'Failed to mkfs.vfat loop for /'
+for i in /etc/service/*/run; do
+  \$i --prereqs
+done
+EOF
+umount "$contents/dev" "$contents/proc" "$contents/sys"
+
 imagesize="$3"
 [ -z "$imagesize" ] && usage
 
@@ -240,9 +250,6 @@ if [ "$copy_tarballs" != "1" ] ; then
   tarexclude='src/tarballs/**'
 fi
 rm "$contents"/root.sqsh.img
-
-# No need to mount sysfs and proc since initramfs does this
-sed -i -r '/mount -t (proc|sysfs).*/d' "$contents/etc/rc.boot"
 
 chroot "$contents" mksquashfs / /root.sqsh.img -wildcards -e '**.sqsh.img' 'proc/**' 'sys/**' 'dev/**' 'boot/**' $tarexclude $buildexclude
 

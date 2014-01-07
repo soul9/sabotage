@@ -29,13 +29,12 @@ for i in $(seq 10); do
   mdev -s
 done
 
-mount "${boot}" /boot
+mount -o umask=077 "${boot}" /boot
 mount -o loop -t squashfs "/boot/${sqsh_root}" /newroot
 if [ -x "/newroot/${init}" ] ; then
   mount --move /boot /newroot/boot
-  mount --move /proc /newroot/proc
-  mount --move /sys /newroot/sys
   mount --move /dev /newroot/dev
+  umount -f /sys /proc
   exec switch_root /newroot "${init}"
 fi
 echo "Failed to switch_root, dropping to a shell"
