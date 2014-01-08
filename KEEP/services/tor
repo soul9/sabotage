@@ -1,6 +1,7 @@
 #!/bin/sh
 TORHOME=/var/run/tor
 if [ ! -d "$TORHOME" ] ; then
+  mkdir -p "$(dirname $TORHOME)"
   busybox addgroup -S tor && busybox adduser -h "$TORHOME" -S -G tor tor
   su -s /bin/sh - tor -c "mkdir -p env ; echo $TORHOME > env/HOME"
 fi

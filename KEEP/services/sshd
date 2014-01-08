@@ -1,6 +1,7 @@
 #!/bin/sh
 # sshd starts whatever ssh service is installed, preferably openssh... if you still want
 # to use dropbear after you installed openssh, run the dropbear service instead
+[ "$1" = "--prereqs" ] && exit 0
 MYDIR=$(dirname "$(readlink -f "$0")")
 if [ -x "$MYDIR"/../openssh/run ] ; then
   exec "$MYDIR"/../openssh/run
