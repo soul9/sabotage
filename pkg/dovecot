@@ -13,7 +13,7 @@ openssl
 [build]
 ./configure -C --prefix="$butch_prefix" \
   --sbindir="$butch_prefix"/bin \
-  --without-lzma --without-gc || exit 1
+  --without-lzma --without-gc --without-bzlib || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 [ -e "$butch_prefix"/etc/dovecot/dovecot.conf ] || \
