@@ -10,6 +10,7 @@ python
 openssl
 libxml2
 libxslt
+readline
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
