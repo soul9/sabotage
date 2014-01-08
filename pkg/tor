@@ -1,9 +1,10 @@
 [mirrors]
-https://www.torproject.org/dist/tor-0.2.3.25.tar.gz
+https://www.torproject.org/dist/tor-0.2.4.20.tar.gz
 
 [main]
-filesize=3190011
-sha512=c15f9356abc41bd1c663d37e674386debc29b0a5887e1120a0318ffb97ada1a04d57756175f01f13549f179f73916e2af18566575a656154ff71ec050fc99651
+filesize=2867180
+sha512=a1ca690a427698a99792ea7e9d0705ce5c783f6aa10f8a78673fad5cc70b5ed62bbe3a66f3b03f1c534af91783a4ba910ec90d40628d37d7912e97fb3d672da8
+
 
 [deps]
 openssl
