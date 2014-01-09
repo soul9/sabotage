@@ -1,9 +1,9 @@
 [build]
 IS="$K"/bin/install-service
-"$IS" --log crond "$K"/services/crond
-"$IS" dmesg "$K"/services/dmesg
-"$IS" tty1 "$K"/services/tty1
-"$IS" tty2 "$K"/services/tty2
-"$IS" tty3 "$K"/services/tty3
-"$IS" tty4 "$K"/services/tty4
-"$IS" ttyS0 "$K"/services/ttyS0
+"$IS" --log --force crond "$K"/services/crond
+"$IS" --force dmesg "$K"/services/dmesg
+"$IS" --force tty1 "$K"/services/tty1
+"$IS" --force tty2 "$K"/services/tty2
+"$IS" --force tty3 "$K"/services/tty3
+"$IS" --force tty4 "$K"/services/tty4
+"$IS" --force ttyS0 "$K"/services/ttyS0

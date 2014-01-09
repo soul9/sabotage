@@ -21,4 +21,4 @@ make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 IS="$K"/bin/install-service
-"$IS" --down --log tor "$K"/services/tor
+"$IS" --down --log --force tor "$K"/services/tor

@@ -33,4 +33,4 @@ if [ ! -e "$butch_prefix"/etc/postfix/main.cf ] ; then
 fi
 
 IS="$K"/bin/install-service
-"$IS" --down --log postfix "$K"/services/postfix
+"$IS" --down --log --force postfix "$K"/services/postfix
