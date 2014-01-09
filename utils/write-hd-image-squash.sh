@@ -32,6 +32,7 @@ die_unloop() {
 
 die_unmount() {
 	umount "$mountdir" || die_unloop 'Failed to unmount /boot'
+	umount "$contents"/sys "$contents"/proc "$contents"/dev
 	die_unloop "$1"
 }
 
@@ -93,20 +94,6 @@ fi
 [ ! -x "$contents"/bin/mksquashfs ] && die 'mksquashfs must be in $contents (try installing squashfs-tools on the target)'
 [ ! -x "$contents"/bin/mcopy ] && die 'mcopy not found in $contents (try installing mtools)'
 [ ! -x "$contents"/bin/mkfs.vfat ] && die 'no mkfs.vfat, install dosfstools on target'
-
-tempcnts="$(mktemp -d)"
-cp -a "$contents"/* "$tempcnts"
-contents="$tempcnts"
-
-mount --bind /dev "$contents/dev"
-mount -t proc proc "$contents/proc"
-mount -t sysfs sys "$contents/sys"
-chroot "$contents" << EOF || die_unmount 'Failed to mkfs.vfat loop for /'
-for i in /etc/service/*/run; do
-  \$i --prereqs
-done
-EOF
-umount "$contents/dev" "$contents/proc" "$contents/sys"
 
 imagesize="$3"
 [ -z "$imagesize" ] && usage
@@ -180,6 +167,7 @@ mount --bind /dev "$contents/dev"
 mount -t proc proc "$contents/proc"
 mount -t sysfs sys "$contents/sys"
 chroot "$contents" mkfs.vfat "$loopdev" || die_unloop 'Failed to mkfs.vfat loop for /'
+sync
 umount "$contents/dev" "$contents/proc" "$contents/sys"
 
 mount "$loopdev" "$mountdir" || die_unloop 'Failed to mount loop for /'
@@ -234,15 +222,21 @@ chroot "$contents" syslinux -i $loopdev || die_unmount 'Failed to install syslin
 umount "$contents/dev" "$contents/proc" "$contents/sys"
 
 sync
-echo_bold "copying contents, this will take a while"
-if [ ! -d "$contents" ]; then
-	time tar -C "$mountdir" -zxf "$contents" || die_unmount 'Failed to extract /'
-fi
 
 echo_bold ' 6) applying root perms'
 $MYDIR/root-perms.sh "$contents"
 
 echo_bold ' 7) creating squash'
+mount --bind /dev "$contents"/dev
+mount -t proc proc "$contents"/proc
+mount -t sysfs sys "$contents"/sys
+chroot "$contents" /bin/sh << EOF || die_unmount 'Failed to run service prereqs'
+for i in /etc/service/*/run; do
+  [ ! -e "\$(dirname \$i)"/down ] && \$i --prereqs || echo "\$i --prereqs failed"
+done
+EOF
+umount "$contents"/dev "$contents"/proc "$contents"/sys
+
 if [ "$clear_builds" = "1" ] ; then
   buildexclude='src/build/**'
 fi
@@ -251,7 +245,7 @@ if [ "$copy_tarballs" != "1" ] ; then
 fi
 rm "$contents"/root.sqsh.img
 
-chroot "$contents" mksquashfs / /root.sqsh.img -wildcards -e '**.sqsh.img' 'proc/**' 'sys/**' 'dev/**' 'boot/**' $tarexclude $buildexclude
+chroot "$contents" mksquashfs / /root.sqsh.img -p 'bin/su m 4755 root root' -wildcards -e '**.sqsh.img' 'proc/**' 'sys/**' 'dev/**' 'boot/**' $tarexclude $buildexclude
 
 time cp "$contents"/root.sqsh.img "$mountdir"/
 
@@ -282,5 +276,4 @@ losetup -d "$loopdev"
 
 # cleanup
 rmdir "$mountdir" || die "Failed to remove $mountdir"
-rm -r "$tempcnts"
 echo_bold 'Done.'
