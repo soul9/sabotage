@@ -1,0 +1,19 @@
+[mirrors]
+http://www.issihosts.com/haveged/haveged-1.8.tar.gz
+
+[main]
+filesize=459893
+sha512=770ea9f4f47a0121ba4712269ab1f6796cf4522ab4a44f04b154f9c76732899ee01d747ff8e614e01be6f08726ed7d3b1429940960d810a2d7aa883eb9a849f0
+
+[deps]
+zlib
+
+[build]
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
+
+IS="$K"/bin/install-service
+"$IS" --down --log haveged "$K"/services/haveged
