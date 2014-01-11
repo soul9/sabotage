@@ -4,11 +4,11 @@ pcre
 zlib
 
 [mirrors]
-http://nginx.org/download/nginx-1.5.7.tar.gz
+http://nginx.org/download/nginx-1.5.8.tar.gz
 
 [main]
-filesize=779985
-sha512=e84f24a70c3abe0371e69fd6e80094e774be0943754d61d9535db6a95a5cf9a2372de9b90e43c9990e576debd93d15132214ad6e71a9d1964a2b9c3229d2dc7e
+filesize=790523
+sha512=a7366551c84f0f3b82107cc2891f85a7721448af52c3169c3704635268920fcd78739858b26fbaf16fccf9026f76071f974313c4f8e2b00a75e413c1369f8f85
 
 [build]
 patch -p1 < "$K"/nginx.patch || exit 1
