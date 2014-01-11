@@ -13,7 +13,8 @@ sha512=a7366551c84f0f3b82107cc2891f85a7721448af52c3169c3704635268920fcd78739858b
 [build]
 patch -p1 < "$K"/nginx.patch || exit 1
 
-./configure \
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags" ./configure \
   --with-http_ssl_module --with-ipv6 \
   --prefix="$butch_prefix" \
   --sbin-path="$butch_prefix/bin/nginx" \
