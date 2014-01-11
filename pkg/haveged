@@ -9,11 +9,11 @@ sha512=770ea9f4f47a0121ba4712269ab1f6796cf4522ab4a44f04b154f9c76732899ee01d747ff
 zlib
 
 [build]
-CFLAGS="$optcflags" \
-LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 IS="$K"/bin/install-service
-"$IS" --down --log haveged "$K"/services/haveged
+"$IS" --force --down --log haveged "$K"/services/haveged
