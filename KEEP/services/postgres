@@ -1,10 +1,12 @@
 #!/bin/sh
 SRVDIR=/srv/postgres
 if [ ! -d "$SRVDIR" ] ; then
-	busybox addgroup -S postgres && busybox adduser -h "$SRVDIR" -S -G postgres postgres
-	su -s /bin/sh - postgres -c \
-	  "initdb --locale=C --auth=\"md5\" $SRVDIR/data >$SRVDIR/initlog 2>&1" \
-	  || exit 1
+  busybox addgroup -S postgres && busybox adduser -h "$SRVDIR" -S -G postgres postgres
+  echo postgres > /tmp/pgpw
+  su -s /bin/sh -c \
+    "initdb --locale=C --auth=\"md5\" --pwfile=/tmp/pgpw $SRVDIR/data >$SRVDIR/initlog 2>&1" \
+    postgres || exit 1
+  rm /tmp/pgpw
 fi
 [ "$1" = "--prereqs" ] && exit 0
 

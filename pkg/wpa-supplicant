@@ -30,4 +30,4 @@ if [ ! -e "$butch_prefix"/etc/wpa_supplicant.conf ]; then
 fi
 
 IS="$K"/bin/install-service
-"$IS" --down --log wpa_supplicant "$K"/services/wpa_supplicant
+"$IS" --down --log --force wpa_supplicant "$K"/services/wpa_supplicant

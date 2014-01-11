@@ -10,6 +10,7 @@ python
 openssl
 libxml2
 libxslt
+readline
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
@@ -23,4 +24,4 @@ make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 IS="$K"/bin/install-service
-"$IS" --down --log postgres "$K"/services/postgres
+"$IS" --down --log --force postgres "$K"/services/postgres
