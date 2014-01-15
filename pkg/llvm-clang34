@@ -16,6 +16,7 @@ tar xf "$C"/compiler-rt-3.4.src.tar.gz || exit 1
 mv ./compiler-rt-3.4 ./projects/compiler-rt
 
 patch -p1 < "$K"/llvm34.patch || exit 1
+patch -p1 < "$K"/llvm34-dynlinker.patch || exit 1
 
 conflags='--enable-libffi --enable-optimized --enable-shared 
 	--disable-docs --enable-targets=all --prefix='"$butch_prefix"
