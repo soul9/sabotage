@@ -12,3 +12,32 @@ sed -i 's@INSTALL_TOP= /usr/local@INSTALL_TOP='"$butch_install_dir""$butch_prefi
 
 make -j$MAKE_THREADS MYCFLAGS="-fPIC $optcflags" MYLDFLAGS="$optldflags" linux || exit 1
 make INSTALL_TOP="$butch_install_dir""$butch_prefix" install || exit 1
+mkdir -p "$dest"/lib/pkgconfig
+for subver in 1 2 ; do
+cat << EOF > "$dest"/lib/pkgconfig/lua-5.${subver}.pc
+majver=5
+minver=$subver
+relver=0
+version=\${majver}.\${minver}.\${relver}
+abiver=5.$subver
+
+prefix=$butch_prefix
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+libname=lua
+includedir=\${prefix}/include
+
+INSTALL_LMOD=\${prefix}/share/lua/\${abiver}
+INSTALL_CMOD=${prefix}/lib/lua/${abiver}
+
+Name: lua
+Description: Just-in-time compiler for Lua
+URL: http://luajit.org
+Version: \${version}
+Requires:
+Libs: -L\${libdir} -l\${libname}
+Libs.private: -Wl,-E -lm -ldl
+Cflags: -I\${includedir}
+
+EOF
+done
