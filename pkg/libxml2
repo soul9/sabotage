@@ -22,3 +22,5 @@ CFLAGS="-D_GNU_SOURCE -fPIC" ./configure -C \
   --disable-silent-rules || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+sed -i 's@-lxml2@-lxml2 -lz -llzma@' "$butch_install_dir""$butch_prefix"/lib/pkgconfig/libxml-2.0.pc
