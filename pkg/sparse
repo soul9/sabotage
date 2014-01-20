@@ -1,0 +1,16 @@
+[main]
+filesize=222768
+sha512=cd4d1479fc227a3fe05ebe6a4ee20ae6ea6d46c6d99f1844184135ad2e884b9ef8f87bd9a1f66be79654555df91f6866dde4130db1902820e5c8ce1ba6ae82c1
+
+[mirrors]
+https://www.kernel.org/pub/software/devel/sparse/dist/sparse-0.4.4.tar.gz
+
+[deps]
+
+[build]
+cat <<EOF > local.mk
+PREFIX="$butch_prefix"
+CFLAGS+="-D_GNU_SOURCE $optcflags"
+EOF
+LDFLAGS="-static $optldflags" make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
