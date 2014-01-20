@@ -18,6 +18,8 @@ make DESTDIR="$butch_install_dir" install || exit 1
 
 dest="$butch_install_dir""$butch_prefix"
 
+if [ -n "$LUAJIT_REPLACE_LUA" ] ; then
+
 mkdir -p "$dest"/include/lua
 ( cd "$dest"/include/luajit-2.0/
   for i in *.h ; do
@@ -56,3 +58,5 @@ Libs.private: -Wl,-E -lm -ldl
 Cflags: -I\${includedir}
 
 EOF
+
+fi
