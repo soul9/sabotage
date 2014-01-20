@@ -6,6 +6,7 @@ filesize=5310295
 sha512=6ebe40acebd779dc7d647595d4bd5db700615d333b53024fd8e36c7541a2c32677a77655bac475a5cb3add9742cef6d9c7e8e12d8c1105f7e76a3d10e2fea95e
 
 [deps]
+pcre
 
 [build]
 #patch -p1 < "$K"/some.patch || exit 1
