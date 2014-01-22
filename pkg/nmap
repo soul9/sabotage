@@ -12,16 +12,21 @@ zlib-dynamic
 lua
 dynamic-toolchain
 openssl
+gnu-getopt
 
 [build]
 patch -p1 < "$K/nmap-configure-pcap_suitable.patch" || exit 1
 patch -p1 < "$K/nmap-nbase_h.patch" || exit 1
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
-  CXXFLAGS="-DIPPROTO_MAX=256" \
+patch -p1 < "$K"/nmap-ldflags.patch || exit 1
+
+GNU_GETOPT="-Dgetopt=gnu_getopt -Dgetopt_long=gnu_getopt_long -Dgetopt_long_only=gnu_getopt_long_only"
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE $GNU_GETOPT $optcflags" \
+CXXFLAGS="-DIPPROTO_MAX=256 $CFLAGS" \
+LDFLAGS="$optldflags -lgnu_getopt" \
   ./configure -C --prefix="$butch_prefix" \
     --without-subversion --without-nmap-update --without-zenmap \
     --without-ndiff \
     ac_cv_working_getaddrinfo=yes ac_cv_working_getnameinfo=yes || exit 1
 
 make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make DESTDIR="$butch_install_dir" install STRIP=true || exit 1
