@@ -10,6 +10,7 @@ filesize=768800
 sha512=0ed4f630f0c95e563fcccc3c00b76175911d6828b55632b88c1c173566d8abc92a307f9cea058fa0be2ab7523714e7643ddb081892acfbacc9c02226cd318e65
 
 [build]
+patch -p1 < "$K"/kernel-headers.patch || exit 1
 make ARCH="$A" prefix="$butch_prefix" DESTDIR="$butch_install_dir" install \
   || exit 1
 dest="$butch_install_dir""$butch_prefix"
