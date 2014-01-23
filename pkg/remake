@@ -1,0 +1,18 @@
+[mirrors]
+http://downloads.sourceforge.net/project/bashdb/remake/3.82+dbg-0.9/remake-3.82+dbg0.9.tar.bz2
+
+[main]
+filesize=1152677
+sha512=94682e9d0317088456dac683d67be320fe10bb06a3384969fafefe091558b215105ba3c96a7c1d4e0d970ea2dc5c4f535a704256fe7a4eaa87bec11d78d074cf
+
+[deps]
+stage0_musl
+kernel-headers
+
+[build]
+[ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
+#patch -p1 < "$K/make-3.82-upstream_fixes-3.patch" || exit 1
+CC="$CC -static" ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
+# __BEOS__ to use a shipped ar.h
+make -j$MAKE_THREADS CFLAGS=-D__BEOS__ || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
