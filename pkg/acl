@@ -7,6 +7,7 @@ tardir=acl-2.2.52
 http://download.savannah.gnu.org/releases/acl/acl-2.2.52.src.tar.gz
 
 [deps]
+attr
 
 [build]
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="-static $optldflags" \
