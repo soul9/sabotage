@@ -13,6 +13,6 @@ libexif
 libxt
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE make -j$MAKE_THREADS PREFIX="$butch_prefix" exif=1 help=1 || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" \
+  make -j$MAKE_THREADS PREFIX="$butch_prefix" exif=1 help=1 || exit 1
 make PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
