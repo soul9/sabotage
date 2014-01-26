@@ -1,11 +1,14 @@
 #!/bin/sh
 SRVDIR=/var/spool/postfix
+DATADIR=/var/lib/postfix
 if ! grep -q '^postfix:' /etc/passwd ; then
   busybox addgroup -S postfix
   busybox addgroup -S postdrop
   busybox adduser -h "$SRVDIR" -s /bin/false -S -D -G postfix postfix
   chgrp -R postfix $SRVDIR
   chown -R postfix $SRVDIR
+  chgrp -R postfix $DATADIR
+  chown -R postfix $DATADIR
   chmod -R o= $SRVDIR
 fi
 if [ ! -f /etc/postfix/postfix.key ] ; then
@@ -13,10 +16,7 @@ if [ ! -f /etc/postfix/postfix.key ] ; then
     -subj '/C=US/ST=Oregon/L=Portland/CN=invalid.org' \
     -keyout /etc/postfix/postfix.key || exit 1
 fi
-postmap /etc/postfix/virtual
-[ ! -f /etc/aliases ] && touch /etc/aliases && postalias /etc/aliases
-chgrp -R postfix /etc/postfix/
-chmod -R 640 /etc/postfix/
+[ ! -f "$DATADIR"/aliases ] && touch "$DATADIR"/aliases && postalias "$DATADIR"/aliases
+postmap "$DATADIR"/virtual
 [ "$1" = "--prereqs" ] && exit 0
-
-exec /lib/postfix/master -d
+exec /lib/postfix/master -d 2>&1
