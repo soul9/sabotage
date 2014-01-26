@@ -1,3 +1,20 @@
 #!/bin/sh
 [ "$1" = "--prereqs" ] && exit 0
-exec crond -f -d8
+bindrwdir() {
+  dir="$1"
+  user=$2
+  group=$3
+  if ! touch "$dir"/test; then
+    if [ ! -e /mnt/sabotagerw/"$dir" ]; then
+      mkdir -p /mnt/sabotagerw/"$dir"
+      cp -a "$dir"/* /mnt/sabotagerw/"$dir"
+      chown -R $user /mnt/sabotagerw/"$dir"
+      chgrp -R $group /mnt/sabotagerw/"$dir"
+    fi
+    mount --bind /mnt/sabotagerw/"$dir" "$dir"
+  else
+    rm "$dir"/test
+  fi
+}
+bindrwdir /var/spool/cron/crontabs root root
+exec crond -f -d8  2>&1

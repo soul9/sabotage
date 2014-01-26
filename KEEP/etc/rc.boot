@@ -52,9 +52,13 @@ if ! $rw ; then
 	echo "non-writable fs detected, mounting tmpfs to /var and /tmp"
 	# tmpfs defaults to -o size=50%
 	mount -t tmpfs -o mode=1777 tmpfs /tmp
-	mount -t tmpfs -o size=1M,mode=751 tmpfs /var
-	ln -sf /tmp /var/tmp
-	mkdir -p /var/spool/cron/crontabs /var/service /var/log /var/empty
+	if [ ! -e /mnt/sabotagerw ]; then
+		mount -t tmpfs -o size=1M,mode=751 tmpfs /var
+		mkdir -p /var/spool/cron/crontabs /var/service /var/log /var/empty
+		ln -sf /tmp /var/tmp
+	else
+		mount --bind /tmp /var/tmp
+	fi
 	( cd /etc/service
 	for i in * ; do
 		# we copy the services instead of symlinking, so subdirs can be created

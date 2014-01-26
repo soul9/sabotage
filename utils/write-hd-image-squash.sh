@@ -256,6 +256,8 @@ echo_bold ' 8) creating initramfs'
   mkdir -p initramfs/bin
   cp "$contents"/opt/busybox/bin/busybox initramfs/bin
   ln -s busybox initramfs/bin/sh
+  cp "$contents"/opt/dosfstools/bin/fsck.fat initramfs/bin
+  cp "$contents"/opt/btrfs-progs/bin/btrfsck initramfs/bin
   cp "$contents"/src/KEEP/initramfs.init initramfs/init
   chmod +x initramfs/init
   mkdir initramfs/boot initramfs/newroot initramfs/sbin initramfs/proc initramfs/sys

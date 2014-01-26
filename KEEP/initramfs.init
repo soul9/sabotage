@@ -7,9 +7,30 @@ mdev -s
 get_opt() {
   echo "$@" | cut -d "=" -f 2
 }
-init="/sbin/init"
+mountrw() {
+  mount -t tmpfs -o size=4M,mode=751 tmpfs /newroot/mnt
+  mkdir /newroot/mnt/sabotagerw
+  if [ "$rw" != "tmpfs" ]; then
+    btrfsck --repair "$rw"
+    mount "$rw" /newroot/mnt/sabotagerw
+  fi
+  for dir in /var/log /var/empty /var/run /root /home; do
+    if [ ! -e /newroot/mnt/sabotagerw/"$dir" ]; then
+      mkdir -p /newroot/mnt/sabotagerw/"$dir"
+      cp -a /newroot/"$dir"/* /newroot/mnt/sabotagerw/"$dir"
+    fi
+    mount --bind /newroot/mnt/sabotagerw/"$dir" /newroot/"$dir"
+  done
+  mkdir -p /newroot/mnt/sabotagerw/var/tmp /newroot/mnt/sabotagerw/var/service \
+           /newroot/mnt/sabotagerw/etc/
+  cat /newroot/etc/resolv.conf > /newroot/mnt/sabotagerw/etc/resolv.conf
+  mount --bind /newroot/mnt/sabotagerw/var/service /newroot/var/service
+  mount --bind /newroot/mnt/sabotagerw/etc/resolv.conf /newroot/etc/resolv.conf
+}
+init="/bin/init"
 boot="/dev/sda1"
 sqsh_root="/root.sqsh.img"
+rw="tmpfs"
 for i in $(cat /proc/cmdline); do
   case $i in
     boot\=*)
@@ -17,6 +38,9 @@ for i in $(cat /proc/cmdline); do
       ;;
     init\=*)
       init=$(get_opt $i)
+      ;;
+    rw\=*)
+      rw=$(get_opt $i)
       ;;
     sqsh_root\=*)
       sqsh_root=$(get_opt $i)
@@ -29,8 +53,10 @@ for i in $(seq 10); do
   mdev -s
 done
 
-mount -o umask=077 "${boot}" /boot
+fsck.fat -a "${boot}"
+mount -o ro,umask=077 "${boot}" /boot
 mount -o loop -t squashfs "/boot/${sqsh_root}" /newroot
+mountrw &> /dev/null
 if [ -x "/newroot/${init}" ] ; then
   mount --move /boot /newroot/boot
   mount --move /dev /newroot/dev

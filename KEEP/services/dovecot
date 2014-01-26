@@ -17,5 +17,22 @@ if [ ! -f /etc/dovecot/dovecot.key ] ; then
   chmod -R 640 /etc/dovecot/
 fi
 [ "$1" = "--prereqs" ] && exit 0
-
-exec dovecot -F
+bindrwdir() {
+  dir="$1"
+  user=$2
+  group=$3
+  if ! touch "$dir"/test; then
+    if [ ! -e /mnt/sabotagerw/"$dir" ]; then
+      mkdir -p /mnt/sabotagerw/"$dir"
+      cp -a "$dir"/* /mnt/sabotagerw/"$dir"
+      chown -R $user /mnt/sabotagerw/"$dir"
+      chgrp -R $group /mnt/sabotagerw/"$dir"
+    fi
+    mount --bind /mnt/sabotagerw/"$dir" "$dir"
+  else
+    rm "$dir"/test
+  fi
+}
+bindrwdir $DOVECOT_HOME dovecot dovecot
+bindrwdir /var/lib/dovecot dovecot dovecot
+exec dovecot -F 2>&1
