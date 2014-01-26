@@ -244,7 +244,7 @@ if [ "$copy_tarballs" != "1" ] ; then
   tarexclude='src/tarballs/**'
 fi
 rm "$contents"/root.sqsh.img
-
+mkdir -p "$contents"/var/run
 chroot "$contents" mksquashfs / /root.sqsh.img -p 'bin/su m 4755 root root' -wildcards -e '**.sqsh.img' 'proc/**' 'sys/**' 'dev/**' 'boot/**' $tarexclude $buildexclude
 
 time cp "$contents"/root.sqsh.img "$mountdir"/
