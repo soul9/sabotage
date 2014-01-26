@@ -26,6 +26,6 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="-static $optldflags" \
                  --disable-schedutils --disable-wall --disable-bash-completion \
                  --disable-pg-bell --disable-use-tty-group \
                  --disable-makeinstall-chown --disable-makeinstall-setuid \
-                 --enable-libblkid || exit 1
+                 --enable-libblkid --enable-partx || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
