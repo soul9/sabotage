@@ -17,5 +17,4 @@ if [ ! -f /etc/dovecot/dovecot.key ] ; then
   chmod -R 640 /etc/dovecot/
 fi
 [ "$1" = "--prereqs" ] && exit 0
-
-exec dovecot -F
+exec dovecot -F 2>&1
