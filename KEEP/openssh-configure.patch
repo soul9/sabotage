@@ -8,14 +8,6 @@
  int
  main ()
  {
-@@ -8174,6 +8175,7 @@
- /* end confdefs.h.  */
- 
- #include <stdio.h>
-+#include <stdlib.h>
- #include <zlib.h>
- 
- int
 @@ -10827,6 +10829,7 @@
  
  #include <stdio.h>
