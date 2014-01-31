@@ -3,9 +3,9 @@
 # to use dropbear after you installed openssh, run the dropbear service instead
 MYDIR=$(dirname "$(readlink -f "$0")")
 if [ -x "$MYDIR"/../openssh/run ]; then
-  exec "$MYDIR"/../openssh/run $*
+  exec "$MYDIR"/../openssh/run "$@"
 elif [ -x "$MYDIR"/../dropbear/run ]; then
-  exec "$MYDIR"/../dropbear/run $*
+  exec "$MYDIR"/../dropbear/run "$@"
 else
   exit 1
 fi
