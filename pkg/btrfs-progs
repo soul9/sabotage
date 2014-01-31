@@ -17,11 +17,17 @@ attr
 libblkid
 
 [build]
-patch -p1 < "$K"/btrfs-progs.patch
-make prefix="$butch_prefix" CFLAGS="$optcflags" \
+patch -p1 < "$K"/btrfs-progs.patch || exit 1
+make prefix="$butch_prefix" CFLAGS="-DXATTR_NAME_MAX=255 \
+       -DXATTR_LIST_MAX=65536 -DXATTR_SIZE_MAX=65536 \
+       -DPATH_MAX=4096 $optcflags" \
      LDFLAGS="$optldflags" -j$MAKE_THREADS || exit 1
-make prefix="$butch_prefix" CFLAGS="$optcflags" \
+
+make prefix="$butch_prefix" CFLAGS="-DXATTR_NAME_MAX=255 \
+       -DXATTR_LIST_MAX=65536 -DXATTR_SIZE_MAX=65536 \
+       -DPATH_MAX=4096 $optcflags" \
      LDFLAGS="$optldflags" -j$MAKE_THREADS static || exit 1
+
 make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
 install -D -m 755 btrfs.static "$butch_install_dir"/"$butch_prefix"/bin/btrfs.static
 install -D -m 755 mkfs.btrfs.static "$butch_install_dir"/"$butch_prefix"/bin/mkfs.btrfs.static
