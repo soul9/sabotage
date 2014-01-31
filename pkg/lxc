@@ -22,8 +22,8 @@ sed -i 's@-Wall -Werror@-Wall@' configure
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
    ./configure -C --prefix="$butch_prefix" \
-            --bindir=/bin \
-            --sbindir=/bin \
+            --bindir="$butch_prefix"/bin \
+            --sbindir="$butch_prefix"/bin \
             --with-usernic-db=/var/run/lxc/nics \
             || exit 1
 

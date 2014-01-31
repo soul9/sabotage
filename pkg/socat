@@ -25,4 +25,4 @@ CFLAGS="-DNETDB_INTERNAL=-1 $optcflags" LDFLAGS="$optldflags" \
 #            --disable-sctp \
 
 make PREFIX="$butch_prefix" -j$MAKE_THREADS all || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
