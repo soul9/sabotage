@@ -52,9 +52,7 @@ if ! $rw ; then
 	echo "non-writable fs detected, mounting tmpfs to /var and /tmp"
 	# tmpfs defaults to -o size=50%
 	mount -t tmpfs -o mode=1777 tmpfs /tmp
-	if [ ! -e /rw ]; then
-		mount -t tmpfs -o size=1M,mode=751 tmpfs /var
-	fi
+	mount -t tmpfs -o size=1M,mode=751 tmpfs /var
 	mkdir -p /var/spool/cron/crontabs /var/service /var/log /var/empty
 	ln -sf /tmp /var/tmp
 	( cd /etc/service
