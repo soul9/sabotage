@@ -14,7 +14,8 @@ kernel-headers
 [build]
 patch -p1 < "$K"/lvm2.patch || exit 1
 
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags"
+  ./configure -C --prefix="$butch_prefix" || exit 1
 
 # of course redhat assumes *gnu* sed:
 # http://www.redhat.com/archives/linux-lvm/2013-January/msg00039.html

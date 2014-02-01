@@ -1,0 +1,16 @@
+[deps]
+bash
+git
+
+[build]
+dest="$S/build"
+if [ -d "$dest/linux-firmware-git" ]; then
+	cd "$dest/linux-firmware-git"
+	git pull || exit 1
+else
+	mkdir -p "$dest"
+	cd "$dest"
+	git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/firmware/linux-firmware.git linux-firmware-git || exit 1
+	cd linux-firmware-git
+fi
+make SHELL=/bin/bash DESTDIR="$butch_install_dir" install || exit 1
