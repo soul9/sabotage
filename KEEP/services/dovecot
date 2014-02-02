@@ -1,11 +1,15 @@
 #!/bin/sh
 DOVECOT_HOME=/var/run/dovecot/login
+SRVDIR=/var/lib/dovecot
 if [ ! -d "$DOVECOT_HOME" ] ; then
   mkdir -p "$(dirname $DOVECOT_HOME)"
   busybox addgroup -S dovecot
   busybox adduser -h "$DOVECOT_HOME" -s /bin/nologin -S -D -G dovecot dovecot
   busybox addgroup -S dovenull
   busybox adduser -h "$DOVECOT_HOME" -s /bin/nologin -S -D -G dovenull dovenull
+  install -D -d -m 755 "$SRVDIR"
+  chown -R dovecot "$SRVDIR"
+  chgrp -R dovecot "$SRVDIR"
 fi
 if [ ! -f /etc/dovecot/dovecot.key ] ; then
   openssl req -new -x509 -days 3650 -nodes -out /etc/dovecot/dovecot.crt \
@@ -15,5 +19,4 @@ if [ ! -f /etc/dovecot/dovecot.key ] ; then
   chmod -R 640 /etc/dovecot/
 fi
 [ "$1" = "--prereqs" ] && exit 0
-
-exec dovecot -F
+exec dovecot -F 2>&1

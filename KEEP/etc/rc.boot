@@ -53,8 +53,8 @@ if ! $rw ; then
 	# tmpfs defaults to -o size=50%
 	mount -t tmpfs -o mode=1777 tmpfs /tmp
 	mount -t tmpfs -o size=1M,mode=751 tmpfs /var
-	ln -sf /tmp /var/tmp
 	mkdir -p /var/spool/cron/crontabs /var/service /var/log /var/empty
+	ln -sf /tmp /var/tmp
 	( cd /etc/service
 	for i in * ; do
 		# we copy the services instead of symlinking, so subdirs can be created
