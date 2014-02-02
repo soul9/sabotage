@@ -1,10 +1,8 @@
 [mirrors]
-http://downloads.sourceforge.net/project/mikmod/libmikmod/3.2.0/libmikmod-3.2.0.tar.gz
-
+http://downloads.sourceforge.net/project/mikmod/libmikmod/3.3.5/libmikmod-3.3.5.tar.gz
 [main]
-filesize=873258
-sha512=1f48adb4e1540bb9d2ea90c2f1fd1fb2fc494ae2dd0a6bceb20a8f7f7101f37f8c967b0ce36d5e09943d3afe9319f533867d80e5b5552439d300691bee70e33d
-
+filesize=1288856
+sha512=ded555754dcc582a112386ad80c11a29c77d696a184a593964449a6c2c024da5d4cc59133a20d0e0e18a6fbad710a5d8ff567527654c91dff06e070749442aab
 [deps]
 
 [build]

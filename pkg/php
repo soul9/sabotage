@@ -1,10 +1,8 @@
 [mirrors]
-http://www.php.net/distributions/php-5.4.15.tar.bz2
-
+http://www.php.net/distributions/php-5.4.24.tar.bz2
 [main]
-filesize=11662269
-sha512=4535ea672e138447d4255406c7e93fb8152819e3540058473aed032a25b962061369b7225f4e39d7d1883e74d4b8978c27a1a20db946049deccfe5a596b2175c
-
+filesize=12256796
+sha512=c4bf209c9da183d0fa4aa96ea1e58e93f8034bd23dbe009dfc15a432416cb9fde441627d0068a9ddbd6e8ca273d97096e169dfe2c1a3cc99e49f2a181b664c6c
 [deps]
 gettext
 freetype
