@@ -27,5 +27,9 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="-static $optldflags" \
                  --disable-pg-bell --disable-use-tty-group \
                  --disable-makeinstall-chown --disable-makeinstall-setuid \
                  --enable-libblkid --enable-partx || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS libblkid.la libblkid/blkid.pc || exit 1
+dest="$butch_install_dir""$butch_prefix"
+install -D -m 644 .libs/libblkid.a "$dest"/lib/libblkid.a || exit 1
+install -D -m 644 .libs/libblkid.la "$dest"/lib/libblkid.la || exit 1
+install -D -m 644 libblkid/blkid.pc "$dest"/lib/pkgconfig/blkid.pc || exit 1
+install -D -m 644 libblkid/src/blkid.h "$dest"/include/blkid/blkid.h || exit 1
