@@ -23,3 +23,5 @@ make CURL_LIBCURL="/lib/libcurl.a /lib/libssl.a /lib/libcrypto.a" \
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/bin
 cp gitk-git/gitk "$dest"/bin/ || exit 1
+ln -sf git "$dest"/bin/git-receive-pack
+ln -sf git "$dest"/bin/git-upload-archive
