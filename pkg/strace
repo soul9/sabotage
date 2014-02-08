@@ -16,10 +16,7 @@ sed -i -e 's/include <linux\/socket.h>/include <sys\/socket.h>/g' configure
 
 archflags=
 if [ "$A" = "arm" ] ; then
-	archflags="-D__NR_SYSCALL_BASE=0 -Dsigcontext_struct=sigcontext"
-	cp $K/strace-arm_hack.h ./hack.h
-	echo '#include "hack.h"' >> defs.h
-	patch -p1 < "$K/strace-arm_util.patch" || exit 1
+	patch -p1 < "$K"/strace-arm_process.patch || exit 1
 elif [ "$A" = "mips" ] ; then
 	cp "$K"/gdb-sgidefs.h sgidefs.h
 	sed -i 's,HAVE_STRUCT___OLD_KERNEL_STAT,HAVE_LAZY_CONFIGURE_WRITERS,' configure
