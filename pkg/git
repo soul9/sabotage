@@ -17,8 +17,8 @@ make CURL_LIBCURL="/lib/libcurl.a /lib/libssl.a /lib/libcrypto.a" \
   CC="$CC" HOSTCC="$HOSTCC" \
   prefix="$butch_prefix" gitexecdir="$butch_prefix"/lib/git-core \
   NO_TCLTK=1 NO_PYTHON=1 NO_EXPAT=1 NO_GETTEXT=1 \
-  CFLAGS="$optcflags" LDFLAGS="$optldflags" \
-  DESTDIR="$butch_install_dir" -j$MAKE_THREADS all install  || exit 1
+  CFLAGS="$optcflags" LDFLAGS="$optldflags -static" \
+  DESTDIR="$butch_install_dir" -j$MAKE_THREADS V=1 all install  || exit 1
 
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/bin
