@@ -10,6 +10,10 @@ sha512=c30cda0af9463942e40b5d70a95e69b0640bf0b79d9d9dfa1a61d9d8b9ee05f553fd240be
 
 [build]
 VERSION=5.16.3
+
+#workaround for issue #185
+patch -p1 < "$K"/perl-arm-gcc473bug.patch
+
 # with empty prefix, perl will disregard the prefix parameters entirely, failing to build
 [ -z "$butch_prefix" ] && butch_prefix=/
 
