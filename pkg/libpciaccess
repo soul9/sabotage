@@ -8,6 +8,7 @@ sha512=312d891c1337256c9aeeda2c743907ce8c51444a165a97d2007fd2f8d05cafab37cf16e85
 
 [build]
 patch -p1 < "$K"/libpciaccess_PATH_MAX.patch || exit 1
+patch -p1 < "$K"/libpciaccess-arm.patch || exit 1
 
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
