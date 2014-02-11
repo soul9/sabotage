@@ -140,7 +140,7 @@ done
 # the latter to use less movable parts.
 
 "$dest"/bin/gcc -dumpspecs > "$dest"/lib/gcc/specs || exit 1
-sed -i 's,-lgcc_s,-lgcc_eh,' "$dest"/lib/gcc/specs
+sed -i 's,-lgcc_s,-lgcc_eh -lc,' "$dest"/lib/gcc/specs
 
 if [ "$A" = x86_64 ] ; then
 	mv "$dest"/lib64/* "$dest"/lib/ || true
