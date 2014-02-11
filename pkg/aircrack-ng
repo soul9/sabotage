@@ -9,6 +9,7 @@ sha512=c1f680b9093748a5d398fe99ca122639019d03aad14f59f423da4644f1e207ee0cdd82bbf
 iw
 openssl
 sqlite
+procps
 
 [build]
 make -j$MAKE_THREADS || exit 1
