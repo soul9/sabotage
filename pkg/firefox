@@ -20,6 +20,7 @@ python
 
 [build]
 FF_VERSION=26.0
+export SHELL=/bin/sh
 patch -p1 < "$K"/firefox-virtualenv.patch || exit 1
 patch -p1 < "$K"/firefox-getprotobyname_r.patch || exit 1
 patch -p1 < "$K"/firefox-finite.patch || exit 1
