@@ -1,10 +1,10 @@
 [mirrors]
-http://releases.mozilla.org/pub/mozilla.org/firefox/releases/26.0/source/firefox-26.0.source.tar.bz2
-ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/26.0/source/firefox-26.0.source.tar.bz2
+http://releases.mozilla.org/pub/mozilla.org/firefox/releases/27.0.1/source/firefox-27.0.1.source.tar.bz2
+ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/27.0.1/source/firefox-27.0.1.source.tar.bz2
 
 [main]
-filesize=127526380
-sha512=c0933eeb39aa1d5d83d4c85885b87e0b817d945eec4fe8fc1b15256008f14308fbf98d5a83217c112e1ad247133f839f6ad74156eed7b159d32d0fce26532713
+filesize=129249507
+sha512=5c51ff422ff1b02b5542622baec27ced5a543b141f6c129a4c12b2644a719e27d1e1ad92a12f0d4d9d23d1ed033f24b4ca46e9f1e8737c89dd633b66c86429ee
 tardir=mozilla-release
 
 [deps]
@@ -17,10 +17,13 @@ libpng
 bzip2
 perl
 python
+libxt
+mesalib
 
 [build]
-FF_VERSION=26.0
+FF_VERSION=27.0.1
 export SHELL=/bin/sh
+
 patch -p1 < "$K"/firefox-virtualenv.patch || exit 1
 patch -p1 < "$K"/firefox-getprotobyname_r.patch || exit 1
 patch -p1 < "$K"/firefox-finite.patch || exit 1
@@ -30,6 +33,7 @@ patch -p1 < "$K"/firefox-hunspell.patch || exit 1
 
 cat << EOF > mozconfig
 mk_add_options MOZ_MAKE_FLAGS="-j$MAKE_THREADS"
+mk_add_options MOZ_GL_DEFAULT_PROVIDER=NONE
 ac_add_options --disable-dbus
 ac_add_options --disable-necko-wifi
 ac_add_options --disable-libnotify
@@ -38,10 +42,16 @@ ac_add_options --disable-replace-malloc
 ac_add_options --disable-wrap-malloc
 
 ac_add_options --disable-profiling
+ac_add_options --disable-shark
+ac_add_options --disable-callgrind
+ac_add_options --disable-vtune
+
 # this option breaks the build
 #ac_add_options --disable-webspeech
 # disabling ogg as the makefile forgets to add -logg -lvorbis
 ac_add_options --disable-ogg
+ac_add_options --disable-opus
+ac_add_options --disable-webgl
 
 
 # GStreamer is necessary for H.264 video playback in HTML5 Video Player;

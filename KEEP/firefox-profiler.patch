@@ -29,3 +29,20 @@
  /* a crapy version of getline, because it's not included in old bionics */
  static ssize_t getline(char **lineptr, size_t *n, FILE *stream)
  {
+--- mozilla-release.org/tools/profiler/platform-linux.cc
++++ mozilla-release/tools/profiler/platform-linux.cc
+@@ -560,12 +560,14 @@
+ 
+ void TickSample::PopulateContext(void* aContext)
+ {
++#ifdef __GLIBC__
+   MOZ_ASSERT(aContext);
+   ucontext_t* pContext = reinterpret_cast<ucontext_t*>(aContext);
+   if (!getcontext(pContext)) {
+     context = pContext;
+     SetSampleContext(this, aContext);
+   }
++#endif
+ }
+ 
+ void OS::SleepMicro(int microseconds)
