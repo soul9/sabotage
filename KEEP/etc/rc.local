@@ -6,6 +6,7 @@
 do_init_devices=false
 do_static_ip=false
 do_dhcp=false
+do_nat_router=false
 do_init_alsa=false
 do_kmap=false
 do_disable_overcommit=true
@@ -40,6 +41,15 @@ elif $do_dhcp ; then
 
 	if=eth0
 	dhclient $if
+fi
+
+if $do_nat_router ; then
+	wan=wlan0
+	lan=eth0
+	echo 1 > /proc/sys/net/ipv4/ip_forward
+	iptables --table nat --append POSTROUTING --out-interface $wan \
+	         -j MASQUERADE
+	iptables --append FORWARD --in-interface $lan -j ACCEPT
 fi
 
 if $do_init_alsa ; then
