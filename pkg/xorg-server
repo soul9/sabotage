@@ -21,8 +21,8 @@ ftp://ftp.x.org/pub/individual/xserver/xorg-server-1.14.3.tar.bz2
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 sed -i 's/termio.h/termios.h/' hw/xfree86/os-support/xf86_OSlib.h 
-LDFLAGS="-lfontenc -lfreetype -lz -lxcb -lXdmcp -lXau" \
-  CFLAGS="-D__gid_t=gid_t -D__uid_t=uid_t -DNOFILES_MAX=256 -D_GNU_SOURCE -I$butch_prefix/include/pixman-1" \
+LDFLAGS="-lfontenc -lfreetype -lz -lxcb -lXdmcp -lXau $optldflags" \
+  CFLAGS="-D__gid_t=gid_t -D__uid_t=uid_t -DNOFILES_MAX=256 -D_GNU_SOURCE -I$butch_prefix/include/pixman-1 $optcflags" \
   ./configure -C --prefix="$butch_prefix" \
     --enable-kdrive --enable-kdrive-evdev || exit 1
 make -j$MAKE_THREADS || exit 1
