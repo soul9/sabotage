@@ -29,6 +29,9 @@ patch -p1 < "$K"/mesalib-strtod.patch || exit 1
 patch -p1 < "$K"/mesalib-strtof.patch || exit 1
 patch -p1 < "$K"/mesalib-fpclassify.patch || exit 1
 
+archflags=
+[ "$A" = arm ] && archflags=--with-dri-drivers=swrast
+
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
   --sysconfdir="$butch_prefix"/etc \
   --without-gallium-drivers \
@@ -44,7 +47,7 @@ CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
   --enable-xa                    \
   --disable-gbm                  \
   --enable-glx-tls               \
-  --with-egl-platforms="x11" \
+  --with-egl-platforms="x11" $archflags \
   || exit 1
 
 echo true >  bin/missing
