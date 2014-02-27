@@ -4,7 +4,7 @@ git
 
 [build]
 dest="$S/build/"
-if [ -d "$dest/musl-git" ] ; then
+if [ -d "$dest/musl-git/.git" ] ; then
 	cd "$dest/musl-git"
 	git pull || exit 1
 else
