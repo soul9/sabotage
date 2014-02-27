@@ -1,6 +1,7 @@
 [deps]
 libxext
 inputproto
+libxfixes
 
 [main]
 filesize=440969

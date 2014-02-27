@@ -1,6 +1,7 @@
 [deps]
 xproto
 libx11
+randrproto
 
 [main]
 filesize=315165
