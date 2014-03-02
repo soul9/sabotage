@@ -1,16 +1,15 @@
 [deps]
 
 [mirrors]
-http://mirror.wzff.de/sabotage/tarballs/kernel-headers-3.12.6-1.tar.xz
-http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/kernel-headers-3.12.6-1.tar.xz
-http://codu.org/~rofl/tarballs/kernel-headers-3.12.6-1.tar.xz
+http://ftp.barfooze.de/pub/sabotage/tarballs/kernel-headers-3.12.6-3.tar.xz
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/kernel-headers-3.12.6-3.tar.xz
+http://codu.org/~rofl/tarballs/kernel-headers-3.12.6-3.tar.xz
 
 [main]
-filesize=768800
-sha512=0ed4f630f0c95e563fcccc3c00b76175911d6828b55632b88c1c173566d8abc92a307f9cea058fa0be2ab7523714e7643ddb081892acfbacc9c02226cd318e65
+filesize=756544
+sha512=f55c43eb52662065470bc0dd0bcbead5352db04ec8e2ecf2a308d34b8b99eb452a82dd2ba18f25ff5896db48ad35a8624b331883c5aa9924323d2ea4edbf87b6
 
 [build]
-patch -p1 < "$K"/kernel-headers.patch || exit 1
 make ARCH="$A" prefix="$butch_prefix" DESTDIR="$butch_install_dir" install \
   || exit 1
 dest="$butch_install_dir""$butch_prefix"
