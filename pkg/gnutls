@@ -1,10 +1,10 @@
 [mirrors]
-ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/gnutls-3.1.9.1.tar.xz
+ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/gnutls-3.2.12.tar.xz
+http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/gnutls/v3.2/gnutls-3.2.12.tar.xz
 
 [main]
-filesize=5058704
-sha512=53a68240ca6e01fdcb4907a72a7ed574b02f9a0bcde26199d17c9468323ab21aed1e7b0be0a196ac55c0a8831328292142c2a46583f839232ffedb7b6723e618
-tardir=gnutls-3.1.9
+filesize=5136220
+sha512=e028ad6b7170571c348523aef30cc16b583198d72d3486f2881bf9b77594e7ecb75568c429159e76cd578efa4e16703d2b845f7c0e8be445072fc33af9d6c3ea
 
 [deps]
 libnettle
