@@ -1,15 +1,13 @@
 [mirrors]
-http://luajit.org/download/LuaJIT-2.0.1.tar.gz
+http://luajit.org/download/LuaJIT-2.0.2.tar.gz
 
 [main]
-filesize=841399
-sha512=a5af5772d00dfedcf1c3449b1d74d45af25d111c91931735ad80f2c7a3b7837b51807eb3a0ce12688e38352ad32cdd70bea35b53906c945ddf86dfd706118518
+filesize=843031
+sha512=c1afea13ec61a59f37d1f61fc50bcac47208d9d4f0a80689b74e901ad2b34294b6c89a0b4eef54b43f3d2db411660da61b191b0bbfba4ba2f97743a9ee4484e3
 
 [deps]
 
 [build]
-patch -p1 < "$K"/luajit-2.0.1-hotfix1.patch || exit 1
-
 sed -i 's,export PREFIX=,-include config.mak #,' Makefile
 echo "export PREFIX = $butch_prefix" > config.mak
 echo "export DESTDIR = $butch_install_dir" >> config.mak
@@ -27,10 +25,10 @@ mkdir -p "$dest"/include/lua
   done
 )
 
-ln -s libluajit-5.1.so.2.0.1 "$dest"/lib/liblua.so
+ln -s libluajit-5.1.so.2.0.2 "$dest"/lib/liblua.so
 ln -s libluajit-5.1.a "$dest"/lib/liblua.a
-ln -s libluajit-5.1.so.2.0.1 "$dest"/lib/libluajit-5.1.so.2
-ln -s libluajit-5.1.so.2.0.1 "$dest"/lib/libluajit-5.1.so
+ln -s libluajit-5.1.so.2.0.2 "$dest"/lib/libluajit-5.1.so.2
+ln -s libluajit-5.1.so.2.0.2 "$dest"/lib/libluajit-5.1.so
 
 cat << EOF > "$dest"/lib/pkgconfig/lua.pc
 majver=5
