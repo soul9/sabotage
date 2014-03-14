@@ -7,6 +7,7 @@ sha512=b969797d4c93aabefa4b66e0ad3d2c3ccedd3324e68bb1fa81d383f1e867d24ce2fb91851
 [deps]
 python
 setuptools
+wget
 
 [build]
 python setup.py build || exit 1
