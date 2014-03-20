@@ -1086,7 +1086,7 @@ ac_cv_header_sys_stropts_h=${ac_cv_header_sys_stropts_h='yes'}
 ac_cv_header_sys_strtio_h=${ac_cv_header_sys_strtio_h='no'}
 ac_cv_header_sys_syscall_h=${ac_cv_header_sys_syscall_h='yes'}
 ac_cv_header_sys_sysconfig_h=${ac_cv_header_sys_sysconfig_h='no'}
-ac_cv_header_sys_sysctl_h=${ac_cv_header_sys_sysctl_h='yes'}
+ac_cv_header_sys_sysctl_h=${ac_cv_header_sys_sysctl_h='no'}
 ac_cv_header_sys_sysinfo_h=${ac_cv_header_sys_sysinfo_h='yes'}
 ac_cv_header_sys_sysmacros_h=${ac_cv_header_sys_sysmacros_h='yes'}
 ac_cv_header_sys_sysmp_h=${ac_cv_header_sys_sysmp_h='no'}
