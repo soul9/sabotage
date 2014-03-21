@@ -9,6 +9,14 @@ if [ -z "$R" ] ; then
 fi
 
 mkdir -p "$R"/src/tarballs
+linux32=
+if [ $(uname -m) = "x86_64" ] && [ "$A" = i386 ] ; then
+	[ -x ./linux32 ] && linux32=./linux32 || {
+		$CC KEEP/linux32.c -static -s -Os -o ./linux32 && linux32=./linux32 || \
+		echo -ne "warning: trying to chroot into i386 rootfs on x86_64" \
+		         "kernel and building linux32 command failed\n"
+	}
+fi
 
 if [ ! -z "$SUPER" ] ; then
 	CHROOT=./super_chroot
@@ -44,7 +52,8 @@ set_title() {
 set_title "SABOTAGE CHROOT $(basename $R)"
 
 echo "Entering chroot..."
-"$CHROOT" "$R" /bin/env -i \
+
+$linux32 "$CHROOT" "$R" /bin/env -i \
     HOME=/root TERM="$TERM" PS1='\u:\w$ ' \
     /bin/sh --login
 
