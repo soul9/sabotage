@@ -15,6 +15,7 @@ git
 screen
 tcpdump
 tree
+wget
 wireless-tools
 wpa-supplicant
 xz
