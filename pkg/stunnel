@@ -1,9 +1,9 @@
 [mirrors]
-http://www.stunnel.org/downloads/stunnel-4.56.tar.gz
+http://www.stunnel.org/downloads/stunnel-5.00.tar.gz
 
 [main]
-filesize=540032
-sha512=1d708d574b6e2886fb0553081166f7b90e8572a8ccf7e7bf8d7ec13c8f8f760e93f3a2b9eab78a35ba0eeb5750d7c7e328a98dd428e915176c78a2250453dc15
+filesize=586738
+sha512=ddbaeacbb5a7cf7f7eb2d3bd890a3c1c3103b02d1a582fae3cd5d1bb4f11570e1683a4f708f750705df2844a3c79d3e5a99f02385f1fb4cea0bc7debff377a75
 
 [deps]
 openssl
