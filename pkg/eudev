@@ -14,13 +14,14 @@ patch -p1 < "$K"/eudev-Handle-1-return-from-sysconf.patch || exit 1
 # https://github.com/gentoo/eudev/issues/75
 # https://github.com/gentoo/eudev/issues/70
 CFLAGS="-D_GNU_SOURCE $optcflags" \
-LDFLAGS="$optldflags" \
+LDFLAGS="$optldflags -lblkid" \
   ./configure -C --prefix="$butch_prefix" \
   --disable-manpages \
   --disable-keymap \
+  --disable-blkid \
 || exit 1
 
-make -j$MAKE_THREADS || exit 1
+make -j$MAKE_THREADS V=1 || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 dest="$butch_install_dir""$butch_prefix"
