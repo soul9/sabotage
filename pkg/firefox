@@ -46,6 +46,8 @@ ac_add_options --disable-shark
 ac_add_options --disable-callgrind
 ac_add_options --disable-vtune
 
+ac_add_options --disable-elf-hack
+
 # this option breaks the build
 #ac_add_options --disable-webspeech
 # disabling ogg as the makefile forgets to add -logg -lvorbis
@@ -127,13 +129,23 @@ EOF
 
 find . -name '*.[ch]' | xargs sed -i s'@#include <sys/cdefs.h>@#define __P(x) x@g'
 
-CFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
-CXXFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
+# prevent overriding our own CFLAGS with built-in -O3 -g by appending
+sed -i 's@MOZ_OPTIMIZE_FLAGS=@MOZ_OPTIMIZE_FLAGS= #@g' configure
+sed -i 's@MOZ_PGO_OPTIMIZE_FLAGS=@MOZ_PGO_OPTIMIZE_FLAGS= #@g' configure
+sed -i 's@MOZ_DEBUG_FLAGS=@MOZ_DEBUG_FLAGS= #@g' configure
+sed -i 's@HOST_OPTIMIZE_FLAGS=@HOST_OPTIMIZE_FLAGS= #@g' configure
+
+allflags="-D_GNU_SOURCE $optcflags -I$PWD/include $optldflags -Wl,--no-keep-memory"
+# on arm binutils 2.24 assertion failure is triggered due to some of the cflags
+# in the default butch config. see issue #186
+[ "$A" = arm ] && allflags="-D_GNU_SOURCE -I$PWD/include -Os -g0 -fno-unwind-tables -fno-asynchronous-unwind-tables -Wa,--noexecstack -Wl,--no-keep-memory"
+CFLAGS="$allflags" \
+CXXFLAGS="$allflags" \
 make -f client.mk || exit 1
 
 # TODO: check whether this step is actually necessary
-CFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
-CXXFLAGS="-D_GNU_SOURCE $optcflags -I$PWD/include" \
+CFLAGS="$allflags" \
+CXXFLAGS="$allflags" \
 make -C firefox-build-dir/browser/installer || exit 1
 
 dest="$butch_install_dir""$butch_prefix"
