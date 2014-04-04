@@ -1,12 +1,12 @@
 [deps]
 
 [mirrors]
-http://ftp.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_20130119.tar.gz
+http://ftp.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_20140325.tar.xz
 
 [main]
-filesize=301542
-sha512=604697ca7961aa3dfe82a44924ab35e9e1cb102c3525b4c97985b642dfc6e7cba99e47096308adecd0cd1e76d907dd1444e3e86fa756ce3be639dbdf8c0c2455
-tardir=ca-certificates-20130119
+filesize=278816
+sha512=6645740d61da78845facce6e3881c64f51e945a454cb26cead6e7df4887f1f3797bea217cebaffaae22a76fa3867ee20dee7b1d5200df20b85878a0c6029c2f8
+tardir=ca-certificates
 
 [build]
 
