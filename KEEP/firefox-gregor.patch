@@ -294,18 +294,6 @@ diff -r 06549f98901b toolkit/crashreporter/google-breakpad/src/third_party/lss/l
  
      LSS_INLINE _syscall4(int, newfstatat,         int,   d,
                           const char *,            p,
-diff -r 06549f98901b toolkit/library/Makefile.in
---- a/toolkit/library/Makefile.in	Fri Aug 02 14:36:52 2013 +0000
-+++ b/toolkit/library/Makefile.in	Fri Aug 02 14:42:20 2013 +0000
-@@ -427,7 +427,7 @@
- 
- 
- ifdef MOZ_CUBEB
--ifdef MOZ_ALSA
-+ifdef MOZ_ALSA_LIBS
- EXTRA_DSO_LDOPTS += $(MOZ_ALSA_LIBS)
- endif
- ifdef MOZ_PULSEAUDIO
 diff -r 06549f98901b toolkit/mozapps/update/common/updatedefines.h
 --- a/toolkit/mozapps/update/common/updatedefines.h	Fri Aug 02 14:36:52 2013 +0000
 +++ b/toolkit/mozapps/update/common/updatedefines.h	Fri Aug 02 14:42:20 2013 +0000
@@ -432,3 +420,14 @@ diff -r 06549f98901b tools/profiler/shared-libraries-linux.cc
  #endif
  #include <features.h>
  #include <dlfcn.h>
+--- a/toolkit/library/Makefile.in
++++ b/toolkit/library/Makefile.in
+@@ -199,7 +199,7 @@
+ endif
+ 
+ 
+-ifdef MOZ_ALSA
++ifdef MOZ_ALSA_LIBS
+ EXTRA_DSO_LDOPTS += $(MOZ_ALSA_LIBS)
+ endif
+ 
