@@ -18,17 +18,6 @@
  #include "PlatformMacros.h"
  #include "nsAutoPtr.h"
  
---- mozilla-release.org/tools/profiler/shared-libraries-linux.cc	2013-10-25 22:27:44.000000000 +0000
-+++ mozilla-release/tools/profiler/shared-libraries-linux.cc	2013-10-31 03:02:11.965958222 +0000
-@@ -14,7 +14,7 @@
- #include "platform.h"
- #include "shared-libraries.h"
- 
--#if !defined(__GLIBC__) && ANDROID_VERSION < 18
-+#if !defined(__GLIBC__) && defined(ANDROID) && ANDROID_VERSION < 18
- /* a crapy version of getline, because it's not included in old bionics */
- static ssize_t getline(char **lineptr, size_t *n, FILE *stream)
- {
 --- mozilla-release.org/tools/profiler/platform-linux.cc
 +++ mozilla-release/tools/profiler/platform-linux.cc
 @@ -560,12 +560,14 @@

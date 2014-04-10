@@ -1,10 +1,10 @@
 [mirrors]
-http://releases.mozilla.org/pub/mozilla.org/firefox/releases/27.0.1/source/firefox-27.0.1.source.tar.bz2
-ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/27.0.1/source/firefox-27.0.1.source.tar.bz2
+http://releases.mozilla.org/pub/mozilla.org/firefox/releases/28.0/source/firefox-28.0.source.tar.bz2
+ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/28.0/source/firefox-28.0.source.tar.bz2
 
 [main]
-filesize=129249507
-sha512=5c51ff422ff1b02b5542622baec27ced5a543b141f6c129a4c12b2644a719e27d1e1ad92a12f0d4d9d23d1ed033f24b4ca46e9f1e8737c89dd633b66c86429ee
+filesize=134968426
+sha512=9334b45d8b56829e7061b87c377aae80e48060e127dfc3eb6a6996590dd92268bd0273203094cdf9aa22fda8128ab9ed1e5fd6fee3e93a430359c0a0631090f7
 tardir=mozilla-release
 
 [deps]
@@ -24,12 +24,17 @@ mesalib
 FF_VERSION=27.0.1
 export SHELL=/bin/sh
 
-patch -p1 < "$K"/firefox-virtualenv.patch || exit 1
-patch -p1 < "$K"/firefox-getprotobyname_r.patch || exit 1
-patch -p1 < "$K"/firefox-finite.patch || exit 1
-patch -p1 < "$K"/firefox-gregor.patch || exit 1
-patch -p1 < "$K"/firefox-profiler.patch || exit 1
-patch -p1 < "$K"/firefox-hunspell.patch || exit 1
+PATCH() {
+	echo "$1"
+	patch -p1 < "$K"/"$1"
+}
+
+PATCH firefox-virtualenv.patch || exit 1
+PATCH firefox-getprotobyname_r.patch || exit 1
+PATCH firefox-finite.patch || exit 1
+PATCH firefox-gregor.patch || exit 1
+PATCH firefox-profiler.patch || exit 1
+PATCH firefox-hunspell.patch || exit 1
 
 cat << EOF > mozconfig
 mk_add_options MOZ_MAKE_FLAGS="-j$MAKE_THREADS"
@@ -73,6 +78,8 @@ ac_add_options --disable-gstreamer
 ac_add_options --disable-webm
 ac_add_options --disable-webrtc
 ac_add_options --disable-libjpeg-turbo
+
+ac_add_options --disable-pulseaudio
 
 # If you have installed xulrunner uncomment the next two ac_add_options lines
 # and check that the sdk will be set by running pkg-config in a subshell
