@@ -1,10 +1,9 @@
 [mirrors]
-http://ftp.de.debian.org/debian/pool/main/p/procps/procps_3.3.4.orig.tar.xz
-
+http://ftp.de.debian.org/debian/pool/main/p/procps/procps_3.3.9.orig.tar.xz
 [main]
-filesize=523268
-sha512=a8b1bc197df5ec3f03be3fced99caaf2215100f555a6cf94e7dcde25e9d413b921f7a736b466c1538229ae84956410ceb3d33679c97cf87e53624466512d2c9c
-tardir=procps-ng-3.3.4
+filesize=560812
+sha512=62c7270aa48b4346a3198f306d1cb8474f64650bfb67e8cc6c4d41923e50c31c95b3a0367a464823fb50a6137ec0c6352006292ac85b50caf730ec8ec35eb553
+tardir=procps-ng-3.3.9
 
 [deps]
 
@@ -43,7 +42,7 @@ cat << EOF > include/sys/dir.h
 EOF
 
 
-STRIP=true CFLAGS="-O0 -g -D_GNU_SOURCE -DGLOB_TILDE=0 -DAF_INET6=10 -DAF_INET=2" ./configure \
+STRIP=true CFLAGS="-O0 -g -D_GNU_SOURCE -DGLOB_TILDE=0 -DAF_INET6=10 -DAF_INET=2" ./configure --without-ncurses \
   -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
