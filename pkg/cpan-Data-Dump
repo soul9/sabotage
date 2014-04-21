@@ -1,14 +1,10 @@
+[mirrors]
+http://www.cpan.org/authors/id/G/GA/GAAS/Data-Dump-1.22.tar.gz
+[main]
+filesize=20621
+sha512=b4d8d493b0b1707d3d33058d90663f55f335933ea57ac36ab99b4d1ffd1c932d21b161778cfdf622a94ce5ca40a943bca0efc1baf25e1db12f34a54741eef149
 [deps]
 perl
-
-[mirrors]
-http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/Data-Dump-1.21.tar.gz
-
-[main]
-filesize=20132
-sha512=25a11d3f7b0d075a4bea58848b7b3f4dfde19c8c294632714d674426ea7bb0cdea33ac09ec03d4ba0135ce5ba68bb7072ace93cbd4cb04c17f76f424919fe20b
-
 [build]
 perl Makefile.PL || exit 1
 make -j$MAKE_THREADS && make test && make DESTDIR="$butch_install_dir" install || exit 1
-
