@@ -1,10 +1,8 @@
 [mirrors]
-http://github.com/Orc/discount/archive/196a7aea975a9643b1dcc51ec6088c99f17dc717.tar.gz
+http://www.pell.portland.or.us/~orc/Code/discount/discount-2.1.6.tar.bz2
 [main]
-filesize=106400
-sha512=c041ef6f8ffd8a2d2fd7095ac20354f85a4188414579077982bd18c1b102b4b94d9fefc088d08a2a38fd57f1ddc8f9128f0b6704d58e04e8ab33635ba12900d8
-tardir=discount-196a7aea975a9643b1dcc51ec6088c99f17dc717
-
+filesize=83823
+sha512=75e2fcc31f670bab77a3658a684054971998e91ad14743814480a4d24a59285dea1fe922d16c8d1c868250c417963a80282b8fe278021240ba424b840dd4df8e
 [build]
 sed -i 's@/usr/local@'"$butch_prefix"'@g' Makefile
 sed -i 's@/usr/local@'"$butch_prefix"'@g' config.sub
