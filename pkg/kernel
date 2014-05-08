@@ -3,17 +3,17 @@ gcc4
 grsec
 
 [mirrors]
-http://www.kernel.org/./pub/linux/kernel/v3.x/linux-3.13.5.tar.xz
-ftp://ftp.kernel.org/pub/linux/kernel/v3.x/linux-3.13.5.tar.xz
-http://ftp.free.fr/pub/linux/kernel/v3.x/linux-3.13.5.tar.xz
-http://ftp.heanet.ie/mirrors/linux/kernel/v3.x/linux-3.13.5.tar.xz
+http://www.kernel.org/./pub/linux/kernel/v3.x/linux-3.14.3.tar.xz
+ftp://www.kernel.org/pub/linux/kernel/v3.x/linux-3.14.3.tar.xz
+http://ftp.free.fr/pub/linux/kernel/v3.x/linux-3.14.3.tar.xz
+http://ftp.heanet.ie/mirrors/linux/kernel/v3.x/linux-3.14.3.tar.xz
 
 [main]
-filesize=77204892
-sha512=db202eee600cf93b31d0b482266508c70bf89e3db22a4b00cc63385b6b286d64e0e2d177c3e686c296c6d6280f902c2c11dde79892e6b580ab373dbd2ed49a97
+filesize=78400396
+sha512=e17825a3717e7a86a79602f52d5453aa91f65760f3348366490fd6855923d94b000f88abc55044cd5ad58e75f0fc0dc6639240fe4567d29a61d4d4b31ae116ad
 
 [build]
-GRSEC_VER=grsecurity-3.0-3.13.5-201402241943
+GRSEC_VER=grsecurity-3.0-3.14.3-201405071928
 
 # get into menuconfig using
 # make HOSTCFLAGS="-D_GNU_SOURCE" HOSTLDFLAGS=-lncurses menuconfig
