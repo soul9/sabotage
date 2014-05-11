@@ -21,7 +21,7 @@ libxt
 mesalib
 
 [build]
-FF_VERSION=27.0.1
+FF_VERSION=28.0
 export SHELL=/bin/sh
 
 PATCH() {
