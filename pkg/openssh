@@ -18,10 +18,8 @@ patch -p1 < "$K"/openssh-sys_param.patch || exit 1
 # prevent from installing some things (keysign and maybe others) setuid.
 sed -i 's@-m 4711@-m 0750@g' Makefile.in
 
-# work around for issue #104 until we come up with a proper patch
-issue104cflags="-fno-builtin-exit -D__noreturn__="
 CC="gcc -D_BSD_SOURCE -DMISSING_FD_MASK -DMISSING_NFDBITS" \
-CFLAGS="$issue104cflags $optcflags" \
+CFLAGS="$optcflags" \
   ./configure -C --prefix="$butch_prefix" \
   --sbindir="$butch_prefix"/bin --libexecdir="$butch_prefix"/lib/ssh \
   --sysconfdir="$butch_prefix"/etc/ssh \
