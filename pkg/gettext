@@ -9,6 +9,7 @@ sha512=ee2a2cf41bd97e6358a0f1877b68be08582e95fae94286e79dec4db64f954c28474f5e0b4
 [deps]
 
 [build]
+patch -p1 < "$K"/gettext-tiny-noop.patch || exit 1
 echo prefix="$butch_prefix" > config.mak
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
