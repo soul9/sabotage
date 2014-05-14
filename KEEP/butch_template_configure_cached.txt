@@ -54,11 +54,13 @@ if $butch_do_custom_destdir ; then
 	butch_install_dir="$butch_custom_destdir"
 	if $butch_do_cleanup_custom_destdir ; then
 		rm -rf "$butch_custom_destdir"
-		if %BUTCH_IS_REBUILD && [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
+		if [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
 		(
 			# remove left-over symlinks
 			cd "$butch_prefix"/
-			cat "$filelist" | xargs rm
+			while read i ; do
+				[ -L "$i" ] && rm "$i"
+			done < "$filelist"
 		)
 		fi
 	fi
