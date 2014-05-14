@@ -25,9 +25,7 @@ CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
   LDFLAGS="-lz $optldflags" make -j$MAKE_THREADS || exit 1
 make BINDIR=/bin DESTDIR="$butch_install_dir" install || exit 1
 
-if [ ! -e "$butch_prefix"/etc/wpa_supplicant.conf ]; then
-  install -D -m 600 "$K"/wpa_supplicant.conf "$butch_prefix"/etc/wpa_supplicant.conf
-fi
+install -D -m 600 "$K"/wpa_supplicant.conf "$butch_install_dir""$butch_prefix"/etc/wpa_supplicant.conf
 
 IS="$K"/bin/install-service
 "$IS" --down --log --force wpa_supplicant "$K"/services/wpa_supplicant
