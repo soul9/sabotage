@@ -18,6 +18,7 @@ butch_do_cleanup_custom_destdir=true
 butch_do_relocate=true
 butch_do_filelists=true
 butch_do_create_tarball=false
+[ -z "$butch_do_overwrite_on_copy" ] && butch_do_overwrite_on_copy=false
 
 butch_filelists="$S/filelists/"
 butch_tarballs_used="$S/tarballs_used.txt"
@@ -142,7 +143,9 @@ cd "$butch_install_dir"
 relocate() {
 	local dir=$1
 	local backlinks=$2
-	local target_root=$backlinks/"$butch_custom_destdir_base"/"$dir"
+	local do_copy=$3
+	local abs_target="$butch_custom_destdir_base"/"$dir"
+	local target_root="$backlinks""$abs_target"
 	[ -d "$butch_install_dir/$dir" ] || return 0
 	echo mkdir -p "$butch_root_dir"/"$dir"
 	mkdir -p "$butch_root_dir"/"$dir"
@@ -152,11 +155,18 @@ relocate() {
 	for i in * ; do
 		if [ ! -L "$i" ] && [ -d "$i" ] ; then
 			local save="$PWD"
-			relocate "$dir/$i" "$backlinks/.."
+			relocate "$dir/$i" "$backlinks/.." $do_copy
 			cd "$save"
 		elif [ -f "$i" ] || [ -L "$i" ] ; then
-			echo ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
-			ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
+			if $do_copy ; then
+				if $butch_do_overwrite_on_copy || [ ! -e "$butch_root_dir"/"$dir"/"$i" ] ; then
+					echo cp -a "$abs_target"/"$i" "$butch_root_dir"/"$dir"/"$i"
+					cp -a "$abs_target"/"$i" "$butch_root_dir"/"$dir"/"$i"
+				fi
+			else
+				echo ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
+				ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
+			fi
 		else
 			echo "UNKNOWN object $i"
 		fi
@@ -182,8 +192,11 @@ if $have_files ; then
 			mv usr/* .
 		fi
 
-		for loc in bin sbin etc include lib libexec share var srv ; do
-			relocate $loc ..
+		for loc in bin sbin include lib libexec share ; do
+			relocate $loc .. false
+		done
+		for loc in etc var srv ; do
+			relocate $loc .. true
 		done
 	fi
 
