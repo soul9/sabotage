@@ -7,13 +7,13 @@ expat
 libffi
 
 [mirrors]
-https://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.xz
-ftp://ftp.lv.freebsd.org/pub/FreeBSD/distfiles/python/Python-2.7.5.tar.xz
-http://distfiles.lesslinux.org/Python-2.7.5.tar.xz
+https://www.python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
+ftp://ftp.lv.freebsd.org/pub/FreeBSD/distfiles/python/Python-2.7.6.tar.xz
+http://distfiles.lesslinux.org/Python-2.7.6.tar.xz
 
 [main]
-filesize=10252148
-sha512=c4691199d770cc4130604cd801375967ae0bb8a39ef34e01a4c8ab58d1c23ae83a1b493305178c4317c5622a19857750d33ffc3f10075becd5766ae664c68ee1
+filesize=10431288
+sha512=e56e6cdd96ff7bcb680d11ad606c00f4264e413fc43ba7605b2d2e4a743fd6e464cbedabf18b461f742102e936f45d840302a99665b5f988b1df08b25285c238
 
 [build]
 # work around buggy installer which puts stuff into prefix directly (omitting destdir) when
