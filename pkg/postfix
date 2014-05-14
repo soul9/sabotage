@@ -26,19 +26,14 @@ rm "$dest"/bin/* || exit 1
 mv "$dest"/sbin/* "$dest"/bin/ || exit 1
 rm -rf "$dest"/usr "$dest"/sbin || exit 1 
 
-mkdir "$butch_prefix"/etc/postfix
-if [ ! -e "$butch_prefix"/etc/postfix/main.cf ] ; then
-  mkdir -p "$dest"/share/doc
-  mv "$dest"/etc/postfix "$dest"/share/doc || exit 1
-  install -D -m 644 "$K"/postfix-main.cf "$butch_prefix"/etc/postfix/main.cf
-  install -D -m 644 "$K"/postfix-master.cf "$butch_prefix"/etc/postfix/master.cf
-  install -D -m 644 "$K"/postfix-virtual "$butch_prefix"/etc/postfix/virtual
-  echo "Edit 'virtual' to route mail to users, then reload with 'postmap /etc/postfix/virtual'." > "$butch_prefix"/etc/postfix/README
-  echo "See /share/doc/postfix for further information." >> "$butch_prefix"/etc/postfix/README
-else
-  mkdir -p "$dest"/share/doc
-  mv "$dest"/etc/postfix "$dest"/share/doc || exit 1
-fi
+mv "$dest"/etc/postfix "$dest"/share/doc || exit 1
+install -D -m 644 "$K"/postfix-main.cf "$dest"/etc/postfix/main.cf
+install -D -m 644 "$K"/postfix-master.cf "$dest"/etc/postfix/master.cf
+install -D -m 644 "$K"/postfix-virtual "$dest"/etc/postfix/virtual
+cat << EOF > "$dest"/etc/postfix/README
+Edit 'virtual' to route mail to users, then reload with 'postmap /etc/postfix/virtual'.
+See /share/doc/postfix for further information.
+EOF
 
 IS="$K"/bin/install-service
 "$IS" --down --log --force postfix "$K"/services/postfix
