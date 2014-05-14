@@ -10,11 +10,13 @@ sqlite
 
 [build]
 patch -p1 < "$K"/reaver_u_char.patch || exit 1
+patch -p1 < "$K"/reaver_DESTDIR.patch || exit 1
 
 cd src
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" || exit 1
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS CONFDIR="$butch_prefix"/var/lib || exit 1
+make DESTDIR="$butch_install_dir" CONFDIR="$butch_prefix"/var/lib install \
+ || exit 1
