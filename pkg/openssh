@@ -48,8 +48,10 @@ make DESTDIR="$butch_install_dir" install-nokeys || exit 1
 IS="$K"/bin/install-service
 "$IS" --down --log --force openssh "$K"/services/openssh
 
-mv "$butch_install_dir"/etc/ssh/sshd_config "$butch_install_dir"/etc/ssh/sshd_config.default || exit 1
-cat << 'EOF' > "$butch_install_dir"/etc/ssh/sshd_config
+dest="$butch_install_dir""$butch_prefix"
+
+mv "$dest"/etc/ssh/sshd_config "$dest"/etc/ssh/sshd_config.default || exit 1
+cat << 'EOF' > "$dest"/etc/ssh/sshd_config
 Port 22
 Protocol 2
 Ciphers chacha20-poly1305@openssh.com,aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr
