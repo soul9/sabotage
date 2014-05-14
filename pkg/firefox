@@ -39,6 +39,7 @@ PATCH firefox-gregor.patch || exit 1
 PATCH firefox-profiler.patch || exit 1
 PATCH firefox-hunspell.patch || exit 1
 PATCH firefox-29-configure.patch || exit 1
+PATCH firefox-29-pthread_t.patch || exit 1
 
 cat << EOF > mozconfig
 mk_add_options MOZ_MAKE_FLAGS="-j$MAKE_THREADS"
