@@ -1,9 +1,11 @@
 #!/bin/sh
 
+[ -z "$butch_do_overwrite_on_copy" ] && butch_do_overwrite_on_copy=false
+
 relocate() {
-        local target_root=$1
-        local dir=$2
-        local backlinks=$3
+        local dir=$1
+        local backlinks=$2
+	local do_copy=$3
         mkdir -p /$dir
         [ -d "$butch_install_dir/$dir" ] || return 0
         cd "$butch_install_dir/$dir" || return 1
@@ -11,12 +13,19 @@ relocate() {
         for i in * ; do
                 if [ ! -L "$i" ] && [ -d "$i" ] ; then
                         local save="$PWD"
-                        relocate "$target_root" "$dir/$i" "$backlinks/.."
+                        relocate "$dir/$i" "$backlinks/.." $do_copy
                         cd "$save"
                 elif [ -f "$i" ] || [ -L "$i" ] ; then
-                        target="$target_root/$dir/$i"
-                        echo "ln -sf $backlinks/$butch_install_dir/$dir/$i $target"
-                        ln -sf "$backlinks/$butch_install_dir/$dir/$i" "$target"
+                        target="/$dir/$i"
+			if $do_copy ; then
+				if $butch_do_overwrite_on_copy || [ ! -e "$target" ] ; then
+					echo cp -a "$butch_install_dir/$dir/$i" "$target"
+					cp -a "$butch_install_dir/$dir/$i" "$target"
+				fi
+			else
+        	                echo "ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" $target"
+                	        ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" "$target"
+			fi
                 else
                         echo "UNKNOWN object $i"
                 fi
@@ -33,14 +42,16 @@ if [ -z "$1" ] ; then
 	exit 1
 fi
 
-butch_root=/
 ec=0
 
 for pkg ; do
 	butch_install_dir=/opt/"$pkg"
 	if [ -d "$butch_install_dir" ] ; then
-		for loc in bin sbin etc include lib libexec share var ; do
-			relocate "$butch_root" $loc ..
+		for loc in bin sbin include lib libexec share ; do
+			relocate $loc .. false
+		done
+		for loc in etc var ; do
+			relocate $loc .. true
 		done
 	else
 		echo "warning: package $pkg does not seem to be installed" >&2
