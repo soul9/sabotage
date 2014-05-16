@@ -1,0 +1,21 @@
+[mirrors]
+http://downloads.sourceforge.net/p7zip/p7zip_9.20.1_src_all.tar.bz2
+
+[main]
+filesize=3835235
+sha512=7bb8a276aaefc4a83364e45633c48527de44c6b1205344f3356db570582f30f81d82a94938c99a7ad193587b584cc1c03219c28249de40018bdaee6c3b2a022a
+tardir=p7zip_9.20.1
+
+[deps]
+
+[build]
+#patch -p1 < "$K"/some.patch || exit 1
+
+# FIXME: implement proper DESTDIR handling and CFLAGS passing
+
+sed -i -e 's/chmod 555/chmod 755/' -e 's/chmod 444/chmod 644/' install.sh &&
+make all3 || exit 1
+
+make DEST_HOME="$butch_prefix" \
+     DEST_MAN="$butch_prefix"/share/man \
+     DEST_SHARE_DOC="$butch_prefix"/share/doc/p7zip-9.20.1 install || exit 1
