@@ -2,12 +2,12 @@
 stage0_gcc
 
 [mirrors]
-http://www.musl-libc.org/releases/musl-1.1.0.tar.gz
-http://www.etalabs.net/musl/releases/musl-1.1.0.tar.gz
+http://www.musl-libc.org/releases/musl-1.1.1.tar.gz
+http://www.etalabs.net/musl/releases/musl-1.1.1.tar.gz
 
 [main]
-filesize=877291
-sha512=72dab085fa56a2f02d407074b9a4c1d409624df74924ed385b174a767113aa0a4112bd22d3eaf465b31a14b8e60a15997d6042421994673977de306ee8738b3d
+filesize=876663
+sha512=5182deb80a35c8a4009d71098c95a16e5ab9bd03186443917652f0c521d2980183e203256493a69e8230b6a0c4848ca8e44de9e8c851a511cd37d0d41f91b14f
 
 [build]
 # do not rebuild stage0 packages once we're past that stage
