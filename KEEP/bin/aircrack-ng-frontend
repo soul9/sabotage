@@ -13,7 +13,7 @@ monitor=mon0
 [ -e ./aircrack-vars.sh ] && . ./aircrack-vars.sh
 
 [ x$1 = x ] && {
-	echo "usage: $0 [mon|test|dump|assoc|arp(r)|crack(k)|deauth]"
+	echo "usage: $0 [mon|test|dump|assoc|arp(r)|crack(k)|deauth|stopmon]"
 	echo "run each of the commands in the above order"
 	echo "and all of them except the first 2 in an own term"
 	echo "deauth requires as additional parameter the mac of the client"
@@ -69,4 +69,6 @@ if [ x$1 = xdeauth ] ; then
 	fi
 	aireplay-ng -0 1 -a $ap_mac -c $2 $wlanif
 fi
+
+[ x$1 = xstopmon ] && airmon-ng stop $monitor
 
