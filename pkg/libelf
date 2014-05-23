@@ -1,6 +1,8 @@
 [mirrors]
 http://codu.org/~rofl/tarballs/libelf-compat-0.152c001.tar.bz2
 http://ftp.barfooze.de/pub/sabotage/tarballs/libelf-compat-0.152c001.tar.bz2
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/libelf-compat-0.152c001.tar.bz2
+http://dl.2f30.org/mirrors/sabotage/tarballs/libelf-compat-0.152c001.tar.bz2
 
 [main]
 filesize=122231

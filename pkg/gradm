@@ -7,6 +7,8 @@ bison
 http://grsecurity.net/stable/gradm-3.0-201311242038.tar.gz
 http://codu.org/~rofl/tarballs/gradm-3.0-201311242038.tar.gz
 http://ftp.barfooze.de/pub/sabotage/tarballs/gradm-3.0-201311242038.tar.gz
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/gradm-3.0-201311242038.tar.gz
+http://dl.2f30.org/mirrors/sabotage/tarballs/gradm-3.0-201311242038.tar.gz
 
 [main]
 filesize=81944
