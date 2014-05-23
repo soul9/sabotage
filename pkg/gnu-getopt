@@ -1,6 +1,6 @@
 [mirrors]
 http://codu.org/~rofl/gnu-getopt-0.0.1.tar.bz2
-http://mirror.wzff.de/sabotage/tarballs/gnu-getopt-0.0.1.tar.bz2
+http://ftp.barfooze.de/pub/sabotage/tarballs/gnu-getopt-0.0.1.tar.bz2
 
 [main]
 filesize=6664

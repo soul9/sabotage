@@ -1,6 +1,6 @@
 [mirrors]
 https://dev.archlinux.org/~thomas/capchroot/capchroot-0.1.tar.gz
-http://mirror.wzff.de/sabotage/tarballs/capchroot-0.1.tar.gz
+http://ftp.barfooze.de/pub/sabotage/tarballs/capchroot-0.1.tar.gz
 
 [main]
 filesize=10122
