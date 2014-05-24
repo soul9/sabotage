@@ -1,17 +1,14 @@
 [mirrors]
-http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.3.tar.gz
+http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.4.tar.gz
 
 [main]
-filesize=583311
-sha512=a6cc390795c0cf36bf70f4f141db3e176c81df0d6754fe2e6a95ef59385a70e7ce006fe81b83deff5b32e06cc771d03c5c7ba1140be64b2d252719e8aa2058f3
+filesize=601913
+sha512=ae243d0336acff50e91e4ed9d306beb4705559775518e6dc122ec18a1530e59e2c531cf54f4b79899a1569ca18d343fce255071b45c41df1357bddfe926692aa
 
 [deps]
 libtorrent
 
 [build]
-patch -p1 < "$K"/rtorrent-termios.patch || exit 1
-patch -p1 < "$K"/rtorrent-dirent.patch || exit 1
-patch -p1 < "$K"/rtorrent-signal.patch || exit 1
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
