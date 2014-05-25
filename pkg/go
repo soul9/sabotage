@@ -1,18 +1,12 @@
-[main]
-filesize=9519109
-sha512=c5ded60ba6db97107669146e1723fa5efbd89eb7432a6584b831549fe19f257c658a7cad19ee0033e305eb360e84fd18e67a6445ad0f945166b4d7315adbae7f
-tardir=go
-
 [mirrors]
-http://go.googlecode.com/files/go1.2.src.tar.gz
-
+http://storage.googleapis.com/golang/go1.2.2.src.tar.gz
+[main]
+filesize=9520571
+sha512=4e3cfb655888f064a447f969dbb12666f7f9b4300d860d8718a9a374135da6e137f887eec48feb171769ba1c11e3646806f67fcebf9acb257dcb8f8fc77b9050
+tardir=go
 [deps]
 bash
-
 [build]
-sed -i '105d' ./include/libc.h || exit 1
-sed -i 's:#include <sys/signal.h>:#include <signal.h>:' ./src/libmach/linux.c || exit 1
-cd src
-./all.bash
-cd ../../ && mv go /local
-exit 0
+patch -p1 < "$K"/go.patch || exit 1
+cd ./src && ./all.bash 
+cd ../../ && cp -ar go/* "$butch_install_dir""$butch_prefix" || exit 1 
