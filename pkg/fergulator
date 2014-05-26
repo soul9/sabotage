@@ -1,0 +1,17 @@
+[deps]
+libglew
+libglu
+libxrandr
+go
+git
+sdl
+sdl-gfx
+sdl-image
+[build]
+repo="github.com/scottferg/Fergulator"
+
+dest="$butch_install_dir""$butch_prefix"
+srcdest="$S"/build/"$butch_package_name"
+GOROOT="$butch_root_dir"/opt/go GOPATH="$dest" go get "$repo" || exit 1
+[ -d "$srcdest" ] && rm -rf "$srcdest"
+mv -f "$dest"/src "$srcdest" || exit 1
