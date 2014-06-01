@@ -12,7 +12,8 @@ gdbm
 
 [build]
 patch -p1 < "$K"/ruby-io.patch || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C \
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+./configure -C \
   --prefix="$butch_prefix" \
   rb_cv_binary_elf=yes \
   || exit 1
