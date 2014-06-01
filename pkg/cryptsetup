@@ -16,7 +16,8 @@ libdevmapper
 [build]
 patch -p1 < "$K"/cryptsetup-devpath.patch || exit 1
 patch -p1 < "$K"/cryptsetup-random.patch || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" \
   --with-crypto_backend=openssl || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
