@@ -115,6 +115,8 @@ for f in $("$dest"/bin/busybox --list); do
 	  trylink "$dest"/bin/"$f"
 done
 
+ln -sf busybox "$dest"/bin/sh
+
 echo symlinks done.
 
 for p in true false ; do
