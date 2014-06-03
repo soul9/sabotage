@@ -9,13 +9,11 @@ tardir=p7zip_9.20.1
 [deps]
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
-
-# FIXME: implement proper DESTDIR handling and CFLAGS passing
-
+sed -i 's/-pipe -s//' makefile.machine &&
 sed -i -e 's/chmod 555/chmod 755/' -e 's/chmod 444/chmod 644/' install.sh &&
-make all3 || exit 1
+make all3 -j$MAKE_THREADS OPTFLAGS="$optcflags" LDFLAGS="$optldflags" || exit 1
 
-make DEST_HOME="$butch_prefix" \
-     DEST_MAN="$butch_prefix"/share/man \
-     DEST_SHARE_DOC="$butch_prefix"/share/doc/p7zip-9.20.1 install || exit 1
+dest="$butch_install_dir""$butch_prefix"
+make DEST_HOME="$dest" \
+     DEST_MAN="$dest"/share/man \
+     DEST_SHARE_DOC="$dest"/share/doc/p7zip-9.20.1 install || exit 1
