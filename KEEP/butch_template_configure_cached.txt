@@ -15,7 +15,7 @@ butch_do_cleanup_builddir=true
 butch_do_custom_destdir=true
 # the options below all require a custom destdir to be set.
 butch_do_cleanup_custom_destdir=true
-butch_do_relocate=true
+[ -z "$butch_do_relocate" ] && butch_do_relocate=true
 butch_do_filelists=true
 butch_do_create_tarball=false
 [ -z "$butch_do_overwrite_on_copy" ] && butch_do_overwrite_on_copy=false
