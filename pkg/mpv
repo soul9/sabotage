@@ -1,20 +1,20 @@
-[main]
-filesize=2475744
-sha512=2a5c87950c7950f79537c155cc444ff13a462a8ab5b5a03419e5f9cc4706a5d030798801243284e24ffa34a4d8a216bdd134d91defde28aacaa5d3b2c4c538c1
-tardir=mpv-0.2.1
-
 [mirrors]
-https://github.com/mpv-player/mpv/archive/v0.2.1.tar.gz
-
+https://github.com/mpv-player/mpv/archive/v0.3.10.tar.gz
+[main]
+filesize=2520710
+sha512=fdf84439747e24b4278f09427fc22d6497d2105cf94cd3c45dfb134af917f81c4748d618e962fb13a9db2b7a260a88a409590d10aae71ac987831bc3d293196e
+tardir=mpv-0.3.10
 [deps]
 ffmpeg
 wget
 libass
 lua
-
+python
 [build]
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" || exit 1
+./bootstrap.py
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./waf configure --prefix="$butch_prefix" || exit 1
+
+./waf build -j$MAKE_THREADS || exit 1
+./waf install --destdir="$butch_install_dir" || exit 1
