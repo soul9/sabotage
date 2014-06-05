@@ -10,7 +10,7 @@ filesize=876663
 sha512=5182deb80a35c8a4009d71098c95a16e5ab9bd03186443917652f0c521d2980183e203256493a69e8230b6a0c4848ca8e44de9e8c851a511cd37d0d41f91b14f
 
 [build]
-
+patch -p1 < "$K"/musl-111-dns_vuln.patch || exit 1
 CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
 if [ "$A" = "powerpc" ] ; then
 cat << EOF >> config.mak
