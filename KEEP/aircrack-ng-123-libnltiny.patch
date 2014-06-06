@@ -1,0 +1,26 @@
+--- aircrack-ng-1.2-beta3/common.mak
++++ aircrack-ng-1.2-beta3.patched/common.mak
+@@ -45,20 +45,11 @@
+ ifeq ($(OSNAME), cygwin)
+ 	COMMON_CFLAGS   += -DCYGWIN
+ else ifneq ($(libnl), false)
+-	NL3xFOUND := $(shell $(PKG_CONFIG) --atleast-version=3.2 libnl-3.0 && echo Y)
+-	ifneq ($(NL3xFOUND),Y)
+-		NL31FOUND := $(shell $(PKG_CONFIG) --exact-version=3.1 libnl-3.1 && echo Y)
+-			ifneq ($(NL31FOUND),Y)
+-				NL3FOUND := $(shell $(PKG_CONFIG) --atleast-version=3 libnl-3.0 && echo Y)
+-			ifneq ($(NL3FOUND),Y)
+-				NL1FOUND := $(shell $(PKG_CONFIG) --atleast-version=1 libnl-1 && echo Y)
+-			endif
+-		endif
+-	endif
++	NL1FOUND := Y
+ 
+-
+ 	ifeq ($(NL1FOUND),Y)
+-		NLLIBNAME = libnl-1
++		NLLIBNAME = libnl-tiny
++		LIBS += -lnl-tiny
+ 	endif
+ 
+ 	ifeq ($(NL3xFOUND),Y)

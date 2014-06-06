@@ -1,16 +1,21 @@
 [mirrors]
-http://download.aircrack-ng.org/aircrack-ng-1.2-beta2.tar.gz
+http://download.aircrack-ng.org/aircrack-ng-1.2-beta3.tar.gz
 
 [main]
-filesize=3447205
-sha512=c1f680b9093748a5d398fe99ca122639019d03aad14f59f423da4644f1e207ee0cdd82bbf001ba64b8aacc5523282ab22fad0a2bc26a1035659dc1cdf13f9f96
+filesize=2053021
+sha512=f6d17be10b8277f08d8867b4ced5a89f9de13cc59767958a6c617e583724d0baaafdda6c14ef3c1671cada2a5abdf885b49728910fb64d70a41ace9043b3e372
 
 [deps]
 iw
 openssl
 sqlite
 procps
+libnl-tiny
+ethtool
 
 [build]
+patch -p1 < "$K"/aircrack-ng-123-uint.patch  || exit 1
+patch -p1 < "$K"/aircrack-ng-123-libnltiny.patch  || exit 1
+
 make -j$MAKE_THREADS || exit 1
 make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
