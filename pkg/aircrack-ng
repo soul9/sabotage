@@ -16,6 +16,7 @@ ethtool
 [build]
 patch -p1 < "$K"/aircrack-ng-123-uint.patch  || exit 1
 patch -p1 < "$K"/aircrack-ng-123-libnltiny.patch  || exit 1
+patch -p1 < "$K"/aircrack-ng-123-sigint.patch  || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1

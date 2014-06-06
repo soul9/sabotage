@@ -1,0 +1,24 @@
+--- aircrack-ng-1.2-beta3.org/src/airodump-ng.c
++++ aircrack-ng-1.2-beta3/src/airodump-ng.c
+@@ -4616,7 +4616,7 @@
+         alarm( 1 );
+         G.do_exit = 1;
+         signal( SIGALRM, sighandler );
+-        printf( "\n" );
++        dprintf(1, "\n" );
+     }
+ 
+     if( signum == SIGSEGV )
+@@ -4629,10 +4629,9 @@
+ 
+     if( signum == SIGALRM )
+     {
+-        fprintf( stderr, "Caught signal 14 (SIGALRM). Please"
++        dprintf( 2, "Caught signal 14 (SIGALRM). Please"
+                          " contact the author!\33[?25h\n\n" );
+-        fflush( stdout );
+-        exit( 1 );
++        _exit( 1 );
+     }
+ 
+     if( signum == SIGCHLD )
