@@ -17,7 +17,7 @@ monitor=${wlanif}mon
 	echo "run each of the commands in the above order"
 	echo "and all of them except the first 2 in an own term"
 	echo "deauth requires as additional parameter the mac of the client"
-	echo "monz/stopmonz use the new airmon-cz tool which works better with"
+	echo "monz/stopmonz use the new airmon-zc tool which works better with"
 	echo "recent kernels, but it uses wlan0mon instead of mon0 as dev name"
 	exit 1
 }
