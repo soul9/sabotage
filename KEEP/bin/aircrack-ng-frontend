@@ -6,17 +6,19 @@ ownmac=00:ba:db:01:00:00
 ap_mac=00:ca:fe:00:00:00
 essid=victim
 wlanif=wlan0
-# monitor interface assigned by airmon-ng
-monitor=mon0
+# monitor interface assigned by airmon-ng(mon0)/airmon-zc(wlan0mon)
+monitor=${wlanif}mon
 
 # you can override the above values by putting them into ./aircrack-vars.sh
 [ -e ./aircrack-vars.sh ] && . ./aircrack-vars.sh
 
 [ x$1 = x ] && {
-	echo "usage: $0 [mon|test|dump|assoc|arp(r)|crack(k)|deauth|stopmon]"
+	echo "usage: $0 [mon|monz|test|dump|assoc|arp(r)|crack(k)|deauth|stopmon|stopmonz]"
 	echo "run each of the commands in the above order"
 	echo "and all of them except the first 2 in an own term"
 	echo "deauth requires as additional parameter the mac of the client"
+	echo "monz/stopmonz use the new airmon-cz tool which works better with"
+	echo "recent kernels, but it uses wlan0mon instead of mon0 as dev name"
 	exit 1
 }
 
@@ -27,6 +29,7 @@ monitor=mon0
 }
 
 [ x$1 = xmon ] && airmon-ng start $wlanif $channel
+[ x$1 = xmonz ] && airmon-zc start $wlanif $channel
 
 # all of the below commands require that monitor device was set up with "mon"
 
@@ -71,4 +74,5 @@ if [ x$1 = xdeauth ] ; then
 fi
 
 [ x$1 = xstopmon ] && airmon-ng stop $monitor
+[ x$1 = xstopmonz ] && airmon-zc stop $monitor
 
