@@ -1,6 +1,10 @@
 *.bz2
 *.gz
 *.xz
-tarballs/*
 config
 super_chroot
+tarballs_used.txt
+build/*
+filelists/*
+logs/*
+tarballs/*

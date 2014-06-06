@@ -1,14 +1,12 @@
+[mirrors]
+http://www.openssl.org/source/openssl-1.0.1h.tar.gz
+[main]
+filesize=4475692
+sha512=687d12ae13e364b15622f68933894050d577a4f8647bd68c7e9e86eb9d9f49cd2ebb0da3c5d3ded0a8746cf7b87e23b167b536116aa9a0402d7e7cc2ee401a92
 [deps]
 zlib
 perl
 patch
-
-[mirrors]
-http://www.openssl.org/source/openssl-1.0.1g.tar.gz
-[main]
-filesize=4509047
-sha512=66ebbad3c8ad98a07b486d39d0c3ae62b00133f8f2877cf8b97c461e7c7f40b29cf9c3cae82cf73a92dcf1daa63d33aa76c910fbcbe60158589fc7cb48f41e6d
-
 [build]
 # https://github.com/entoo/portage/tree/gentoo.org/dev-libs/openssl
 
@@ -35,7 +33,7 @@ epatch "${FILESDIR}"/${PN}-1.0.0d-windres.patch #373743
 epatch "${FILESDIR}"/${PN}-1.0.0h-pkg-config.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-parallel-build.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-x32.patch
-epatch0 "${FILESDIR}"/${PN}-1.0.1e-ipv6.patch
+epatch "${FILESDIR}"/${PN}-1.0.1h-ipv6.patch
 
 # disable fips in the build
 # make sure the man pages are suffixed #302165
