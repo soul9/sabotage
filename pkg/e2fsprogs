@@ -10,11 +10,11 @@ kernel-headers
 libblkid
 
 [build]
-CFLAGS="$optcflags -D__uint64_t=u_int64_t -fPIC" \
+CFLAGS="-D_GNU_SOURCE $optcflags -D__uint64_t=u_int64_t -fPIC" \
 LDFLAGS="$optldflags -static" \
   ./configure -C --prefix="$butch_prefix" --with-root-prefix="$butch_prefix" \
   --sbindir="$butch_prefix"/bin --disable-nls --disable-libblkid || exit 1
-make -j$MAKE_THREADS || exit 1
+make V=1 -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 make DESTDIR="$butch_install_dir" install-libs || exit 1
 
