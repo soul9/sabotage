@@ -1,0 +1,20 @@
+[mirrors]
+http://gitorious.org/tome2/tome2/archive/610a2e1502ea39e28f23daff7a39cc9c2c254944.tar.gz
+[main]
+filesize=3650411
+sha512=ccc01e59e5c6d79f88e3d1d353e322aeb17b077df3dcc9bae92e8a671cb7d8cc7015b9007d16ddc8deb49255ee3ebea21f5470a0aec147f6d9a21ca49e4dd39b
+tardir=tome2-tome2
+[deps]
+cmake
+jansson
+ncurses
+wget
+[build]
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  cmake -DSYSTEM_INSTALL:BOOL=true . || exit 1
+
+for i in `grep -rl '/usr' *`; do sed -i 's:/usr::g' $i; done
+for i in `grep -rl '/local' *`; do sed -i 's:/local::g' $i; done
+
+make -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
