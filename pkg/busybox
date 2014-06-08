@@ -60,9 +60,11 @@ fi
 # make KBUILD_VERBOSE=1 CC="$CC" HOSTCC="$HOSTCC" \
 # HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS || exit 1
 
+[ -z "$HOSTCC" ] && HOSTCC="$CC"
+
 make V=1 LDFLAGS=-static HOSTLDFLAGS=-static \
 CFLAGS_busybox="$debugcflags -Wl,-z,muldefs -Werror-implicit-function-declaration" \
-HOSTCC="$CC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
+HOSTCC="$HOSTCC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
 echo busybox build complete
 
 # make true and false binaries so scripts using it are faster
@@ -87,13 +89,15 @@ busybox_bin=busybox
 [ "$DEBUGBUILD" = "1" ] && busybox_bin=busybox_unstripped
 # on armv4tl and mips, the stripped busybox binary is buggy - argv parsing is broken somehow:
 # this manifests when trying to use enter-chroot script which fails.
-[ "$A" = "arm" ] || [ "$A" = "mips" ] && busybox_bin=busybox_unstripped
+#[ "$A" = "arm" ] || [ "$A" = "mips" ] && busybox_bin=busybox_unstripped
 
 echo cp "$busybox_bin" "$dest"/bin/busybox
 cp "$busybox_bin" "$dest"/bin/busybox || exit 1
 
 echo check if busybox works:
-"$dest"/bin/busybox --list >/dev/null|| exit 1
+if [ -z $CROSS_COMPILE ] ; then
+	"$dest"/bin/busybox --list >/dev/null|| exit 1
+fi
 
 trylink() {
 	if [ ! -e bb-link ] ; then
@@ -109,7 +113,7 @@ trylink() {
 	fi
 }
 
-for f in $("$dest"/bin/busybox --list); do
+for f in $($HOSTCC -E -include include/autoconf.h -DMAKE_LINKS include/applets.h | sed -e 's/^LINK BB_DIR_BIN //' -e 's/^LINK BB_DIR_SBIN //' -e 's/LINK BB_DIR_ROOT //' -e '/^#/d' -e '/^}/d' -e '/^[ ]*$/d' | sort -u); do
 	#echo ln -sf busybox "$dest"/bin/"$f"
 	[ ! -f "$butch_root_dir/bin/$f" ] && \
 	  trylink "$dest"/bin/"$f"
