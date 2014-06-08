@@ -22,4 +22,5 @@ ln -sf libedit.a "$dest"/lib/libreadline.a
 ln -sf libedit.so "$dest"/lib/libreadline.so
 mkdir -p "$dest"/include/readline
 touch "$dest"/include/readline/history.h
+touch "$dest"/include/readline/tilde.h
 ln -sf ../editline/readline.h "$dest"/include/readline/readline.h
