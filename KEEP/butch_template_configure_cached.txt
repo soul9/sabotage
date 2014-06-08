@@ -8,6 +8,8 @@ printf "%s: start\n" "`date`"
 # that butch uses (R,S,C...).
 %BUTCH_CONFIG
 
+[ -z "$B" ] && B=$S/build
+
 # some settings to influence this script...
 # note that you could set similar stuff using env variables.
 butch_do_config_cache=true
@@ -20,8 +22,8 @@ butch_do_filelists=true
 butch_do_create_tarball=false
 [ -z "$butch_do_overwrite_on_copy" ] && butch_do_overwrite_on_copy=false
 
-butch_filelists="$S/filelists/"
-butch_tarballs_used="$S/tarballs_used.txt"
+[ -z "$butch_filelists" ] && butch_filelists="$S/filelists/"
+[ -z "$butch_tarballs_used" ] && butch_tarballs_used="$S/tarballs_used.txt"
 butch_created_tarball_dest="$S/dist/"
 
 butch_package_name=%BUTCH_PACKAGE_NAME
@@ -76,7 +78,7 @@ fi
 butch_cache_dir="$C"
 
 # this is were stuff gets extracted to and built in
-butch_build_root="$S/build/$butch_package_name"
+butch_build_root="$B/$butch_package_name"
 butch_build_dir="$butch_build_root/%BUTCH_TARDIR"
 
 #this is the location of our optimized config.cache
