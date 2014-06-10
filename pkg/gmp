@@ -15,9 +15,10 @@ abihack=
 [ "$A" = "i386" ] && abihack="ABI=32"
 
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CC="$CC -static" \
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Wno-implicit $optcflags" \
-./configure -C \
+./configure -C $xconfflags \
   --prefix="$butch_prefix" --with-pic --disable-shared $abihack || exit 1
 
 make -j$MAKE_THREADS || exit 1
