@@ -10,7 +10,9 @@ http://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-CC="$CC -static" CFLAGS="$optcflags" ./configure -C --prefix="$butch_prefix" --disable-shared || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CC="$CC -static" CFLAGS="$optcflags" ./configure -C $xconfflags \
+  --prefix="$butch_prefix" --disable-shared || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 dest="$butch_install_dir""$butch_prefix"
