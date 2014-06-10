@@ -10,9 +10,11 @@ zlib
 sshd-service
 
 [build]
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CPPFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE" \
 CFLAGS="$optcflags" \
-LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
+LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 
 # TODO : edit generated options.h
 
