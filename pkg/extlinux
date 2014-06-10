@@ -17,7 +17,7 @@ http://ftp.uni-ulm.de/pub/mirrors/kernel.org/utils/boot/syslinux/4.xx/syslinux-4
 
 sed -i '/#define statfs/d;/#undef statfs/d' libinstaller/linuxioctl.h
 
-"$CC" -Wall "$K"/extlinux-bin2c-replacement.c -o libinstaller/bin2c.pl || exit 1
+$HOSTCC -Wall "$K"/extlinux-bin2c-replacement.c -o libinstaller/bin2c.pl || exit 1
 
 PATH="$PATH:$PWD/libinstaller" make -j$MAKE_THREADS -C libinstaller CC="$CC" PERL="" || exit 1
 make -j$MAKE_THREADS -C extlinux \
