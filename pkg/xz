@@ -10,7 +10,8 @@ sha512=a07a05ad02e054e0aba15e293ed7d68d2c636cfb0409fef674cce7fa08ba4a1d958781adf
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 # the stage0 arm toolchain has a slightly broken libgcc (with external deps to libc)
 # this package is the only one that fails to build.
 # so let it depend on the stage1 toolchain. another fix could be to add -lc at the
@@ -18,6 +19,6 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
     --disable-nls --with-pic --enable-shared \
-    --enable-static || exit 1
+    --enable-static $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
