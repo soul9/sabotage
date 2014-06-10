@@ -1,26 +1,26 @@
 #!/bin/sh
-
+#set -x
 [ -z "$butch_do_overwrite_on_copy" ] && butch_do_overwrite_on_copy=false
 
 relocate() {
         local dir=$1
         local backlinks=$2
 	local do_copy=$3
-        mkdir -p /$dir
-        [ -d "$butch_install_dir/$dir" ] || return 0
-        cd "$butch_install_dir/$dir" || return 1
-        echo "relocating $butch_install_dir/$dir"
+        mkdir -p "$butch_root"/$dir
+        [ -d "$butch_root""$butch_install_dir/$dir" ] || return 0
+        cd "$butch_root""$butch_install_dir/$dir" || return 1
+        echo "relocating $butch_root$butch_install_dir/$dir"
         for i in * ; do
                 if [ ! -L "$i" ] && [ -d "$i" ] ; then
                         local save="$PWD"
                         relocate "$dir/$i" "$backlinks/.." $do_copy
                         cd "$save"
                 elif [ -f "$i" ] || [ -L "$i" ] ; then
-                        target="/$dir/$i"
+                        target="$butch_root/$dir/$i"
 			if $do_copy ; then
 				if $butch_do_overwrite_on_copy || [ ! -e "$target" ] ; then
-					echo cp -a "$butch_install_dir/$dir/$i" "$target"
-					cp -a "$butch_install_dir/$dir/$i" "$target"
+					echo cp -a "$butch_root$butch_install_dir/$dir/$i" "$target"
+					cp -a "$butch_root$butch_install_dir/$dir/$i" "$target"
 				fi
 			else
         	                echo "ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" $target"
@@ -45,8 +45,10 @@ fi
 ec=0
 
 for pkg ; do
+	[ "$R" = "/" ] && R=
+	butch_root=$R
 	butch_install_dir=/opt/"$pkg"
-	if [ -d "$butch_install_dir" ] ; then
+	if [ -d "$R""$butch_install_dir" ] ; then
 		for loc in bin sbin include lib libexec share ; do
 			relocate $loc .. false
 		done

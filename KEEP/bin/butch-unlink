@@ -17,6 +17,7 @@ fi
 
 while read f ; do
 	fs=$(printf "%s\n" "$f" | sed 's,^.,,g')
+	[ "$R" = "/" ] || fs="$R""$fs"
 	if [ -L "$fs" ] ; then
 		rm -f "$fs" && echo "$fs removed successfully"
 	fi
