@@ -9,8 +9,9 @@ sha512=ab8e17f712c0609e5e7e7caeec79c4bb28d1d6e1c837d2a9c2e7a691156f58c6770375d8c
 http://www.nano-editor.org/dist/v2.3/nano-2.3.1.tar.gz
 
 [build]
-LDFLAGS="-static -s -Wl,--gc-sections" CFLAGS="-Os -ftree-dce -fdata-sections -ffunction-sections" \
-./configure -C --prefix="$butch_prefix" \
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+LDFLAGS="-static $optldflags" CFLAGS="$optcflags" \
+./configure -C --prefix="$butch_prefix" $xconfflags \
   --enable-utf8 \
   --disable-wrapping || exit 1
 make -j$MAKE_THREADS || exit 1
