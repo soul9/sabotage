@@ -12,8 +12,11 @@ filesize=80211
 sha512=3acb571412dedc2587203ed05537ce3adbaa64f2fab4f561da9824917c15e2ea771db7525f9a026261086f4ae196c3a5183e1bb3d33e14fdd779fbe74e6215c3
 
 [build]
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 patch -p1 < "$K"/pkgconf-fix-empty-prefix.patch || exit 1
-CFLAGS="$CFLAGS -D_GNU_SOURCE -D_BSD_SOURCE" ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="$CFLAGS -D_GNU_SOURCE -D_BSD_SOURCE $optcflags" \
+LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 ln -sf pkgconf "$butch_install_dir/bin/pkg-config"
