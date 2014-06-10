@@ -11,10 +11,16 @@ bison
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -DIPPROTO_HOPOPTS=0 -I$butch_prefix/include/libnl-tiny \
-$optcflags" \
+[ -n "$CROSS_COMPILE" ] && \
+xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-pcap=linux"
+# package causes gcc breakage when lto is used
+optldflags=$(printf "%s" "$optldflags"|sed 's/-flto//g')
+optldflags=$(printf "%s" "$optcflags"|sed 's/-flto//g')
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -DIPPROTO_HOPOPTS=0 \
+-I$butch_root_dir$butch_prefix/include/libnl-tiny $optcflags" \
 LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" ac_cv_type_u_int64_t=yes || exit 1
+  ./configure -C --prefix="$butch_prefix" \
+  ac_cv_type_u_int64_t=yes $xconfflags || exit 1
 sed -i 's@-lnl-genl@-lnl-tiny@' Makefile
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
