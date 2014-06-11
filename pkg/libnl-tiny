@@ -14,8 +14,8 @@ patch -p1 < "$K/libnl-tiny_if_h.patch"
 
 cp "$K"/libnl-tiny-src-Makefile src/Makefile
 
-CFLAGS="-fPIC $optcflags" make -C src -j$MAKE_THREADS || exit 1
-make -C src libnl-tiny.a || exit 1
+CFLAGS="-fPIC $optcflags" make CC="$CC" -C src -j$MAKE_THREADS || exit 1
+make CC="$CC" -C src libnl-tiny.a || exit 1
 
 echo installing headers
 dest="$butch_install_dir/"include/libnl-tiny
