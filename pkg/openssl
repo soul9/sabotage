@@ -34,6 +34,7 @@ epatch "${FILESDIR}"/${PN}-1.0.0h-pkg-config.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-parallel-build.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-x32.patch
 epatch "${FILESDIR}"/${PN}-1.0.1h-ipv6.patch
+epatch "${FILESDIR}"/${PN}-LD-nonsense.patch 
 
 # disable fips in the build
 # make sure the man pages are suffixed #302165
@@ -65,8 +66,20 @@ $optcflags"
 export LDFLAGS="$optldflags"
 
 disable_asm=
-#disable_asm=no-asm
-
+if [ -n "$CROSS_COMPILE" ] ; then
+  # xconfflags="--host=$($CC -dumpmachine)"
+#  CROSS_COMPILE=
+# disable_asm="no-asm"
+export MACHINE=$A
+export  SYSTEM=Linux
+# need to add -L$R/lib to *CFLAGS*, because the build system strips off any
+# -L paths it doesnt like from LDFLAGS.
+export CFLAGS="$CFLAGS -I$butch_root_dir$butch_prefix/include -L$butch_root_dir$butch_prefix/lib"
+export LDFLAGS="-L$butch_root_dir$butch_prefix/lib $LDFLAGS"
+# openssl concatenates $CROSS_COMPILE and $CC, so CC becomes 
+# mips-linux-musl-mips-linux-musl-gcc
+export CC=gcc
+fi
 ./config --prefix="$butch_prefix" --openssldir="$butch_prefix"/etc/ssl \
   --libdir="$butch_prefix"/lib no-dso $disable_asm zlib enable-md2 $CFLAGS
 
@@ -93,7 +106,8 @@ disable_asm=
 
 make -j$MAKE_THREADS depend || exit 1
 make -j$MAKE_THREADS build_libs || exit 1
-make -j$MAKE_THREADS build-shared build_apps openssl.pc libssl.pc libcrypto.pc || exit 1
+make -j$MAKE_THREADS build-shared || exit 1
+make -j$MAKE_THREADS build_apps openssl.pc libssl.pc libcrypto.pc || exit 1
 echo XXX make install
 make -j$MAKE_THREADS INSTALL_PREFIX="$butch_install_dir" MANDIR="${butch_prefix}/share/man" install || exit 1
 
