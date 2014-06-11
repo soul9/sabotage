@@ -59,13 +59,8 @@ if $butch_do_custom_destdir ; then
 	if $butch_do_cleanup_custom_destdir ; then
 		rm -rf "$butch_custom_destdir"
 		if [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
-		(
-			# remove left-over symlinks
-			cd "$butch_prefix"/
-			while read i ; do
-				[ -L "$i" ] && rm "$i"
-			done < "$filelist"
-		)
+			"$K"/bin/butch-unlink "$butch_package_name"
+			rm "$filelist"
 		fi
 	fi
 else
