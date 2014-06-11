@@ -143,40 +143,6 @@ echo "post buildscript phase..."
 cd "$butch_install_dir"
 [ `ls | wc -l` = "0" ] && have_files=false || have_files=true
 
-relocate() {
-	local dir=$1
-	local backlinks=$2
-	local do_copy=$3
-	local abs_target="$butch_custom_destdir_base"/"$dir"
-	local target_root="$backlinks""$abs_target"
-	[ -d "$butch_install_dir/$dir" ] || return 0
-	echo mkdir -p "$butch_root_dir"/"$dir"
-	mkdir -p "$butch_root_dir"/"$dir"
-
-	cd "$butch_install_dir/$dir" || return 1
-	echo "relocating $butch_install_dir/$dir"
-	for i in * ; do
-		if [ ! -L "$i" ] && [ -d "$i" ] ; then
-			local save="$PWD"
-			relocate "$dir/$i" "$backlinks/.." $do_copy
-			cd "$save"
-		elif [ -f "$i" ] || [ -L "$i" ] ; then
-			if $do_copy ; then
-				if $butch_do_overwrite_on_copy || [ ! -e "$butch_root_dir"/"$dir"/"$i" ] ; then
-					echo cp -a "$abs_target"/"$i" "$butch_root_dir"/"$dir"/"$i"
-					cp -a "$abs_target"/"$i" "$butch_root_dir"/"$dir"/"$i"
-				fi
-			else
-				echo ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
-				ln -sf "$target_root"/"$i" "$butch_root_dir"/"$dir"/"$i"
-			fi
-		else
-			echo "UNKNOWN object $i"
-		fi
-	done
-	echo "relocation done"
-}
-
 if $have_files ; then
 	# here you could place some code that makes a tarball out of $butch_install_dir
 	# moves the contents to / or create some sort of package file list.
@@ -189,18 +155,7 @@ if $have_files ; then
 
 	if $butch_do_relocate ; then
 		# now we make a symlink from each file into butch_prefix
-		echo relocating...
-
-		if [ -d usr ] ; then
-			mv usr/* .
-		fi
-
-		for loc in bin sbin include lib libexec share ; do
-			relocate $loc .. false
-		done
-		for loc in etc var srv ; do
-			relocate $loc .. true
-		done
+		"$K"/bin/butch-relocate "$butch_package_name"
 	fi
 
 	if $butch_do_create_tarball ; then
