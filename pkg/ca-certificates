@@ -10,14 +10,14 @@ tardir=ca-certificates
 openssl
 
 [build]
-
-patch -p1 < $K/ca-certificates.patch || exit 1
+mkdir -p "$butch_install_dir""$butch_prefix"/share/ca-certificates/mozilla
+patch -p1 < "$K"/ca-certificates.patch || exit 1
 cp "$K"/certdata2pem.c mozilla/
 cat << EOF > mozilla/Makefile
 all: a.out
 	./a.out
 a.out:
-	\$(CC) -Wall -Wextra -O0 -g certdata2pem.c
+	\$(HOSTCC) -Wall -Wextra -O0 -g certdata2pem.c
 clean:
 	-rm -f *.crt
 install:
