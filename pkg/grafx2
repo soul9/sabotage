@@ -9,6 +9,7 @@ tardir=grafx2
 [deps]
 sdl
 sdl-image
+sdl-ttf
 lua
 
 [build]
