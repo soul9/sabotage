@@ -18,10 +18,7 @@ archflags=
 if [ "$A" = "arm" ] ; then
 	patch -p1 < "$K"/strace-arm_process.patch || exit 1
 elif [ "$A" = "mips" ] ; then
-	cp "$K"/gdb-sgidefs.h sgidefs.h
-	sed -i 's,HAVE_STRUCT___OLD_KERNEL_STAT,HAVE_LAZY_CONFIGURE_WRITERS,' configure
-	patch -p1 < "$K"/strace-mips-signal.patch || exit 1
-	patch -p1 < "$K"/strace-mips-system.patch || exit 1
+	sed -i 's,sgidefs\.h,asm/sgidefs.h,' defs.h
 elif [ "$A" = "powerpc" ] ; then
 	cp "$K"/ppc-regs.h . || exit 1
 	archflags="-Dsigcontext_struct=sigcontext -include ppc-regs.h"
@@ -30,13 +27,15 @@ elif [ "$A" = "powerpc" ] ; then
 	patch -p1 < "$K"/strace-ppc-process.patch || exit 1
 fi
 
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+
 #CFLAGS="-static $archflags -D_GNU_SOURCE -DHAVE_LONG_LONG_OFF_T -DFPE_FLTUND=5 -DHAVE_SYS_REG_H \
 #-D__sched_priority=sched_priority -Dbool=int -DPTRACE_POKEUSR=PTRACE_POKEUSER \
 #-DMSG_EXCEPT=020000 -Dloff_t=int64_t $optcflags" \
 CFLAGS="$archflags -Dsigcontext_struct=sigcontext $optcflags" \
 LDFLAGS="$optldflags -static" \
  ./configure -C --prefix="$butch_prefix" \
- ac_cv_have_long_long_off_t=yes || exit 1
+ ac_cv_have_long_long_off_t=yes $xconfflags || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
