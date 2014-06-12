@@ -10,7 +10,7 @@ filesize=883627
 sha512=54d279efea6e122567c936e47401df5c0f1493c42eb3199b0ba3053b1882a864fc1a71d19ad945bc4f328407231c54a7897413e37f4bc33337a243c044a26b4a
 
 [build]
-CC="$butch_prefix/bin/gcc" ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
+./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
 if [ "$A" = "powerpc" ] ; then
 cat << EOF >> config.mak
 LDFLAGS += -Wl,--secure-plt
