@@ -33,7 +33,9 @@ patch -p1 < "$K"/gdb-76-configure-ash.patch || exit 1
 # fix mips build ...
 cp "$K"/gdb-sgidefs.h gdb/sgidefs.h
 
-libibertyfix libiberty
+"$K"/bin/libibertyfix libiberty
+# total madness: gdb uses libiberty *AND* gnulib
+"$K"/bin/gnulibfix gdb/gnulib/import
 
 mkdir build
 cd build
@@ -76,7 +78,8 @@ if [ -n "$CROSS_COMPILE" ] ; then
 fi
 
 LDFLAGS="-static $optldflags" \
-CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $optcflags $archflags" \
+CFLAGS="-Dgnu_fnmatch=fnmatch \
+ -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -O0 $optcflags $archflags" \
 ../configure -C \
   --prefix="$butch_prefix" --disable-werror --disable-tls \
   --with-system-zlib=yes $gdbserverflags $xconfflags $targets \
