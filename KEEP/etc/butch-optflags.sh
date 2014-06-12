@@ -6,7 +6,7 @@
 isgcc3() {
 	local mycc="$CC"
 	[ -z "$mycc" ] && mycc=gcc
-	"$mycc" --version | grep "3.4.6" >/dev/null
+	$mycc --version | grep "3.4.6" >/dev/null
 }
 
 optcflags="-fdata-sections -ffunction-sections -Os -g0 -fno-unwind-tables -fno-asynchronous-unwind-tables -Wa,--noexecstack"
@@ -20,3 +20,10 @@ else
 	[ "$STAGE" = "0" ] || isgcc3 || optcflags="$optcflags -ftree-dce"
 fi
 
+if [ "$BRUTE" = 2 ] ; then
+	optcflags="$optcflags -s -Os -flto -fwhole-program"
+	optldflags="$optldflags -flto -fwhole-program"
+elif [ "$BRUTE" = 1 ] ; then
+        optcflags="$optcflags -s -Os -flto"
+        optldflags="$optldflags -flto"
+fi
