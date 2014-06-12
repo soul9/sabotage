@@ -7,8 +7,9 @@ sha512=6b56aca3c859c28d463e1aa755f4f004087985573a8e012a8371780d6b7cbfa8587d5b0bf
 xz
 gettext
 [build]
-gnulibfix lib
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-./configure -C --prefix="$butch_prefix" || exit 1
+GNULIB_CPPFLAGS=$("$K"/bin/gnulibfix lib)
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+CFLAGS="-D_GNU_SOURCE $optcflags $GNULIB_CPPFLAGS" LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
