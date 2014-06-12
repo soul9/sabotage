@@ -16,10 +16,14 @@ http://lynx.isc.org/current/lynx2.8.8dev.9.tar.bz2
 
 sed -i 's/define ACCEPT_ALL_COOKIES FALSE/define ACCEPT_ALL_COOKIES TRUE/' userdefs.h
 
-CFLAGS="-include termcap.h -D_GNU_SOURCE -I$butch_prefix/include/openssl $optcflags" \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+
+CFLAGS="-D_GNU_SOURCE -I$butch_root_dir$butch_prefix/include/openssl $optcflags" \
 LDFLAGS="$optldflags" \
+LIBS="-lncurses -lssl -lcrypto -lz" \
   ./configure -C --prefix="$butch_prefix" --sysconfdir="$butch_prefix"/etc --mandir="$butch_prefix"/share/man \
-  --with-ssl --disable-nls --enable-ipv6  || exit 1
+  --with-ssl --disable-nls --enable-ipv6  $xconfflags || exit 1
 #passing -jXXX to make has no effect on this pkg
 make || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
