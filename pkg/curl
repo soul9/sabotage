@@ -11,15 +11,18 @@ filesize=2145655
 sha512=55518ab24139e9c7f61bcccabb89ed3c2f769320d97975a3644a32645d4f88bc5df29c413c3591f930aad39e1a264fcf2d3f444aeb9926bd066b8e947f73c210
 
 [build]
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed s'/musl/gnu/')"
 CPPFLAGS="-D_GNU_SOURCE" \
 CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" \
+LIBS="-lssl -lcrypto -lz" \
 ./configure -C \
   --prefix="$butch_prefix" \
   --with-ssl \
   --enable-ipv6 \
   --with-ca-path="$butch_prefix"/etc/ssl/certs \
-  --with-random=/dev/urandom || exit 1
+  --with-random=/dev/urandom $xconfflags || exit 1
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
