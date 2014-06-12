@@ -33,4 +33,5 @@ ln -sf libnl-tiny.a "$dest/"libnl.a
 echo installing pkgconfig
 dest="$butch_install_dir/"lib/pkgconfig
 mkdir -p "$dest"
-cp -f ./files/libnl-tiny.pc "$dest/" || exit 1
+cp -f ./files/libnl-tiny.pc "$dest"/ || exit 1
+cp -f ./files/libnl-tiny.pc "$dest"/libnl-2.0.pc || exit 1
