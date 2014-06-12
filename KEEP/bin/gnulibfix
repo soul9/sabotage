@@ -176,4 +176,10 @@ wctob
 EOF
 `
 #fixme check fsusage
-for i in $culprits ; do empty_file "$dir"/$i.c ; done
+flags="-Drpl_tzset=tzset -Drpl_localtime=localtime -Dgnu_fnmatch=fnmatch \
+       -Dposix_fnmatch=fnmatch -Drpl_gmtime=gmtime"
+for i in $culprits ; do
+	empty_file "$dir"/$i.c
+	flags="$flags -Drpl_$i=$i"
+done
+printf "%s\n" "$flags"
