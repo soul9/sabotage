@@ -1,17 +1,17 @@
 [mirrors]
-http://ftp.barfooze.de/pub/sabotage/tarballs/gettext-tiny-0.0.3.tar.bz2
-http://codu.org/~rofl/tarballs/gettext-tiny-0.0.3.tar.bz2
-http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/gettext-tiny-0.0.3.tar.bz2
-http://dl.2f30.org/mirrors/sabotage/tarballs/gettext-tiny-0.0.3.tar.bz2
+http://ftp.barfooze.de/pub/sabotage/tarballs/gettext-tiny-0.0.4.tar.bz2
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/gettext-tiny-0.0.4.tar.bz2
+http://dl.2f30.org/mirrors/sabotage/tarballs/gettext-tiny-0.0.4.tar.bz2
 
 [main]
-filesize=8908
-sha512=ee2a2cf41bd97e6358a0f1877b68be08582e95fae94286e79dec4db64f954c28474f5e0b49f91279fdd5b1eb024e5c000410d8f45ffa02537f472f7e7e6bccdd
+filesize=8874
+sha512=719a0fe328bc24ecd6af1b23fd4436f07258a4d598e434b98057735d2ad8e3fc5567374a2f4c8e9e1d0bd76b93ad6555a9d0c448f1429d56776ae9cbcff8235b
 
 [deps]
 
 [build]
 patch -p1 < "$K"/gettext-tiny-noop.patch || exit 1
+patch -p1 < "$K"/gettext-tiny-msgmerge-configure.patch || exit 1
 echo prefix="$butch_prefix" > config.mak
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
