@@ -3,34 +3,34 @@
 [ -z "$butch_do_overwrite_on_copy" ] && butch_do_overwrite_on_copy=false
 
 relocate() {
-        local dir=$1
-        local backlinks=$2
+	local dir=$1
+	local backlinks=$2
 	local do_copy=$3
-        mkdir -p "$butch_root"/$dir
-        [ -d "$butch_root""$butch_install_dir/$dir" ] || return 0
-        cd "$butch_root""$butch_install_dir/$dir" || return 1
-        echo "relocating $butch_root$butch_install_dir/$dir"
+	mkdir -p "$butch_root"/$dir
+	[ -d "$butch_root""$butch_install_dir/$dir" ] || return 0
+	cd "$butch_root""$butch_install_dir/$dir" || return 1
+	[ -n "$V" ] && echo "relocating $butch_root$butch_install_dir/$dir"
         for i in * ; do
-                if [ ! -L "$i" ] && [ -d "$i" ] ; then
-                        local save="$PWD"
-                        relocate "$dir/$i" "$backlinks/.." $do_copy
-                        cd "$save"
-                elif [ -f "$i" ] || [ -L "$i" ] ; then
-                        target="$butch_root/$dir/$i"
+		if [ ! -L "$i" ] && [ -d "$i" ] ; then
+			local save="$PWD"
+			relocate "$dir/$i" "$backlinks/.." $do_copy
+			cd "$save"
+		elif [ -f "$i" ] || [ -L "$i" ] ; then
+			target="$butch_root/$dir/$i"
 			if $do_copy ; then
 				if $butch_do_overwrite_on_copy || [ ! -e "$target" ] ; then
 					echo cp -a "$butch_root$butch_install_dir/$dir/$i" "$target"
 					cp -a "$butch_root$butch_install_dir/$dir/$i" "$target"
 				fi
 			else
-        	                echo "ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" $target"
-                	        ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" "$target"
+				echo "ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" $target"
+			        ln -sf "$backlinks""$butch_install_dir"/"$dir"/"$i" "$target"
 			fi
-                else
-                        echo "UNKNOWN object $i"
+		else
+			[ -n "$V" ] && echo "UNKNOWN object $i"
                 fi
-        done
-        echo "relocation done"
+	done
+	[ -n "$V" ] && echo "relocation done"
 }
 
 if [ -z "$1" ] ; then
