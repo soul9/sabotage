@@ -1,9 +1,8 @@
 [mirrors]
-http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-3.0-full-src.tar.gz
+http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-all-3.1.tar.gz
 [main]
-filesize=6143522
-sha512=bf99891da59f46e0d74064208d6c31875b075a103a501f5ca34efb1a240a6813ed5e056df8bc93c395d5756b58c24a4ca5feefadc4ab81faed48a6598f18612a
-tardir=netsurf-full-3.0
+filesize=5764177
+sha512=50035895e99d5e16ef41b8b5fe484fee4458807b1c3b2b44284d702b8fbf325fc26cf89d9f550817f17bb35dd8dfce7eda1674f6aa636cfd1a62a5a91bacb89a
 
 [deps]
 libpng
@@ -15,31 +14,20 @@ libglade
 libmng
 liblcms
 flex
+perl
+cpan-HTML-Parser
 
 [build]
-patch -p1 < "$K"/netsurf-3.0-searchengines.patch || exit 1
-patch -p1 < "$K"/netsurf-3.0-scrollspeed.patch || exit 1
-# we supply the gperf-generated C file to avoid a dependency on it
-cp "$K"/netsurf-3.0.src_colors.c src/libsvgtiny-0.1.0/src/src_colors.c || exit 1
-cat << EOF > src/libsvgtiny-0.1.0/src/Makefile
-DIR_SOURCES := svgtiny.c svgtiny_gradient.c svgtiny_list.c
-SOURCES := \$(SOURCES) \$(BUILDDIR)/src_colors.c
-
-\$(BUILDDIR)/src_colors.c: src/src_colors.c
-	\$(CP) \$< \$@
-
-include \$(NSBUILD)/Makefile.subdir
-EOF
-
 # FIXME: netsurfs Makefile suppresses parallel builds
 CFLAGS="-I$butch_prefix/include/cairo/" NETSURF_USE_BMP=NO \
  make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
-# g_get_language_names returns "C" only, but there's no such directory
+# g_get_language_names returns "C" only, but the symlink is messed up
 # this causes missing translations (file name is "Messages") and the welcome page
 # not to be found
 dest="$butch_install_dir""$butch_prefix"
+rm -rf "$dest"/share/netsurf/C
 ln -sf en "$dest"/share/netsurf/C
 
 mkdir -p "$dest"/share/applications
