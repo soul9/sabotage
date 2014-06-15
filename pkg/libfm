@@ -11,15 +11,19 @@ sha512=12af732321a99320ea05e2692877c9d9631a83394ceecf559ab84874599f6d7646d353595
 
 [deps]
 gtk+2
+menu-cache
+
+[deps.host]
 pkgconf
 perl
 cpan-XML-Parser
 intltool
-menu-cache
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags -lffi -lz -lgmodule-2.0 -lglib-2.0 -lgtk-x11-2.0 -lgthread-2.0" \
+./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags || exit 1
 
 for i in po ; do
 	printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
