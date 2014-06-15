@@ -19,7 +19,7 @@ liblcms
 perl
 cpan-HTML-Parser
 flex
-gprof
+gperf
 
 [build]
 # FIXME: netsurfs Makefile suppresses parallel builds
