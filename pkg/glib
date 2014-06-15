@@ -2,9 +2,11 @@
 musl
 libffi
 gettext
-pkgconf
 zlib
+
+[deps.host]
 perl
+pkgconf
 
 [mirrors]
 http://ftp.gnome.org/pub/gnome/sources/glib/2.36/glib-2.36.3.tar.xz
@@ -20,11 +22,13 @@ for p in glib-gtimer-varargs glib-no_python ; do
 done
 
 this_dir="$PWD"
-[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 
-CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Dloff_t=off_t $debugflags" ./configure -C \
+CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Dloff_t=off_t $optcflags" \
+LDFLAGS="$optldflags" ./configure -C $xconfflags \
   --prefix="$butch_prefix" --disable-modular-tests --disable-selinux --disable-fam \
-  --disable-silent-rules || exit 1
+  --disable-silent-rules glib_cv_stack_grows=no glib_cv_uscore=no \
+  ac_cv_func_posix_getpwuid_r=yes ac_cv_func_posix_getgrgid_r=yes || exit 1
 
 echo '#include <string.h>' >> config.h
 
@@ -35,3 +39,5 @@ make V=1 -j$MAKE_THREADS DESTDIR="$butch_install_dir" \
   LDFLAGS="-Wl,-rpath-link=$this_dir/gthread/.libs/ -Wl,-rpath-link=$this_dir/gmodule/.libs/" \
   || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
+
