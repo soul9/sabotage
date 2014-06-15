@@ -1,19 +1,24 @@
 [mirrors]
-http://download.gnome.org/sources/atk/2.9/atk-2.9.4.tar.xz
-http://ftp.acc.umu.se/pub/GNOME/sources/atk/2.9/atk-2.9.4.tar.xz
+http://download.gnome.org/sources/atk/2.11/atk-2.11.3.tar.xz
+http://ftp.acc.umu.se/pub/GNOME/sources/atk/2.11/atk-2.11.3.tar.xz
 
 [main]
-filesize=639276
-sha512=2355bb2ca2cd96d9996da8378a3f1f6d9978f4ed686e13ea384e96e52d6ffba26bcd0d7cb67d753c89b1645c46761a23f393719c8fbc81ba0d400891715549da
+filesize=649816
+sha512=143fba9172d223528a6275f42dfd0ec1e08b858ab23a8241095ea25fef5c9169eae48ba26074777007969bfd835cda8daae0636fea779dfcb71fdef10f216cf5
 
 [deps]
 glib
+
+[deps.host]
 perl
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
-  --disable-glibtest --disable-silent-rules --enable-gtk-doc-html=no || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags -lffi -lz" \
+./configure -C --prefix="$butch_prefix" $xconfflags \
+  --disable-glibtest --disable-silent-rules --enable-gtk-doc-html=no \
+  --enable-introspection=no || exit 1
 
 for i in po ; do
         printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
@@ -21,3 +26,5 @@ done
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
+
