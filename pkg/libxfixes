@@ -10,5 +10,10 @@ sha512=b47c841db169d1b329eec9deb555799cd087a466326840f1f5349303ba79cff5850b1bb69
 http://xorg.freedesktop.org/releases/individual/lib/libXfixes-5.0.1.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags -lxcb -lXau" \
+./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
+
