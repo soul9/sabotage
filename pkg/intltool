@@ -1,4 +1,8 @@
-[deps]
+[deps.host]
+perl
+cpan-XML-Parser
+
+[deps.run]
 perl
 cpan-XML-Parser
 

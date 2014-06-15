@@ -7,6 +7,8 @@ sha512=974b1c078c8d7b82f8d026e384811c016fa95cb62942fc12717edd993cb1660bc004bee5f
 
 [deps]
 cairo
+
+[deps.host]
 pkgconf
 
 [build]

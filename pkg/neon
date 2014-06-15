@@ -1,8 +1,10 @@
 [deps]
 musl
-pkgconf
 openssl
 expat
+
+[deps.host]
+pkgconf
 
 [main]
 filesize=882267

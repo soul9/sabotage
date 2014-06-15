@@ -1,6 +1,8 @@
 [deps]
-dynamic-toolchain
 ncurses
+
+[deps.host]
+dynamic-toolchain
 
 [main]
 filesize=15139737

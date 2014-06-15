@@ -8,6 +8,8 @@ sha512=cbfa2ea8f4584e61060d56e52f405d1e67dc04d08b75179dde58d2ed20b78eae78b04650a
 
 [deps]
 libnl-tiny
+
+[deps.host]
 pkgconf
 
 [build]

@@ -8,6 +8,8 @@ tardir=libcap-2.22
 
 [deps]
 attr
+
+[deps.host]
 perl
 
 [build]

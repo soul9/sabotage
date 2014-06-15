@@ -5,7 +5,7 @@ http://nodejs.org/dist/v0.10.2/node-v0.10.2.tar.gz
 filesize=12813547
 sha512=88615b4450ff10e70f4f53ec159518c1385da747e44dfb6c42dcf386c41b62048a9b77838036cf620202da1812c60893809f6aca2202e90b20158eb0f00aa60a
 
-[deps]
+[deps.host]
 dynamic-toolchain
 python
 

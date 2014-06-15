@@ -5,7 +5,6 @@ busybox
 e2fsprogs
 gcc4
 gmp
-m4
 mpc
 mpfr
 musl

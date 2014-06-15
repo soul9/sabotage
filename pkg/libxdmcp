@@ -1,5 +1,7 @@
-[deps]
+[deps.host]
 pkgconf
+
+[deps]
 xproto
 
 [main]

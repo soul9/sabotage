@@ -1,7 +1,9 @@
 [deps]
 musl
-pkgconf
 readline
+
+[deps.host]
+pkgconf
 
 [mirrors]
 http://www.sqlite.org/2013/sqlite-autoconf-3080002.tar.gz

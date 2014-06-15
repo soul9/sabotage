@@ -7,8 +7,10 @@ sha512=69d5b3b2131658d7ffd5be86bcb0a5966fe9446a7cae1138cb2849d5ccf64f58fc9cc16cc
 
 [deps]
 atk
-pkgconf
 glibmm
+
+[deps.host]
+pkgconf
 
 [build]
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1

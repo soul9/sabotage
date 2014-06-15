@@ -1,6 +1,8 @@
 [deps]
 apr
 musl
+
+[deps.host]
 pkgconf
 
 [main]

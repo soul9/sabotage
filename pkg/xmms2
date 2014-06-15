@@ -8,9 +8,11 @@ sha512=478103d80264c0cb32912e828f74d0f5b2f10fe310f530a87ebecda7ca547a69e238cd572
 
 [deps]
 sqlite
+glib
+
+[deps.host]
 python
 dynamic-toolchain
-glib
 
 [build]
 # xmms2's waf is broken: when prefix is empty, it will not install any dso's into /lib

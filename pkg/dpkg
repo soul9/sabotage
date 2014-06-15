@@ -9,8 +9,10 @@ http://http.debian.net/debian/pool/main/d/dpkg/dpkg_1.16.12.tar.xz
 [deps]
 zlib
 bzip2
-perl
 ncurses
+
+[deps.host]
+perl
 
 [build]
 patch -p1 < "$K"/dpkg.patch || exit 1

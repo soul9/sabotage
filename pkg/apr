@@ -1,5 +1,7 @@
 [deps]
 musl
+
+[deps.host]
 pkgconf
 
 [main]

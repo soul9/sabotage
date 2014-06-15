@@ -5,7 +5,7 @@ http://www.nasm.us/pub/nasm/releasebuilds/2.10.09/nasm-2.10.09.tar.xz
 filesize=686416
 sha512=089216f84f2d202c65d8223f5e66423995f96c2feebb0b8c6380761d36739a1a0f9cd2c4102bffd09646f12fd152da562c9be9e1ec2d62619dc78ed2012a0208
 
-[deps]
+[deps.host]
 perl
 
 [build]

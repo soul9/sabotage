@@ -9,8 +9,10 @@ libx11
 libxext
 glib
 libxml2
-pkgconf
 pango
+
+[deps.host]
+pkgconf
 
 [build]
 patch -p1 < "$K/openbox-git.patch" || exit 1

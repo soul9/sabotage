@@ -7,8 +7,10 @@ http://mirror.anl.gov/pub/linux/utils/usb/usbutils/usbutils-006.tar.xz
 ftp://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-006.tar.xz
 http://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-006.tar.xz
 
-[deps]
+[deps.host]
 dynamic-toolchain
+
+[deps]
 libusbx
 
 [build]

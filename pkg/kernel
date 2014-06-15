@@ -1,5 +1,7 @@
-[deps]
+[deps.host]
 gcc4
+
+[deps]
 grsec
 
 [mirrors]

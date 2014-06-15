@@ -1,4 +1,4 @@
-[deps]
+[deps.host]
 gcc4
 
 [mirrors]

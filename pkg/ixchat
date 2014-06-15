@@ -11,6 +11,12 @@ sha512=d87ac9188cd428f721945b3d938c6673fafc22b9a08d03fe084b10f602dc68ff93b08a048
 [deps]
 gtk+2
 openssl
+
+[deps.host]
+perl
+python
+
+[deps.run]
 perl
 python
 

@@ -1,12 +1,17 @@
 [mirrors]
 http://www.openssl.org/source/openssl-1.0.1h.tar.gz
+
 [main]
 filesize=4475692
 sha512=687d12ae13e364b15622f68933894050d577a4f8647bd68c7e9e86eb9d9f49cd2ebb0da3c5d3ded0a8746cf7b87e23b167b536116aa9a0402d7e7cc2ee401a92
+
 [deps]
 zlib
+
+[deps.host]
 perl
 patch
+
 [build]
 # https://github.com/entoo/portage/tree/gentoo.org/dev-libs/openssl
 

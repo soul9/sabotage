@@ -1,15 +1,20 @@
 [mirrors]
 https://github.com/mpv-player/mpv/archive/v0.3.10.tar.gz
+
 [main]
 filesize=2520710
 sha512=fdf84439747e24b4278f09427fc22d6497d2105cf94cd3c45dfb134af917f81c4748d618e962fb13a9db2b7a260a88a409590d10aae71ac987831bc3d293196e
 tardir=mpv-0.3.10
+
 [deps]
 ffmpeg
-wget
 libass
 lua
+
+[deps.host]
 python
+wget
+
 [build]
 ./bootstrap.py
 

@@ -1,10 +1,13 @@
 [deps]
-m4
 gmp
 mpfr
 mpc
+
+[deps.host]
+m4
 zlib
 libelf
+
 
 [mirrors]
 http://ftpmirror.gnu.org/gcc/gcc-4.7.3/gcc-4.7.3.tar.bz2

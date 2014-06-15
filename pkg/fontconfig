@@ -1,7 +1,9 @@
 [deps]
 freetype
-pkgconf
 expat
+
+[deps.host]
+pkgconf
 
 [main]
 filesize=1526089

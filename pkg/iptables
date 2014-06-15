@@ -1,8 +1,10 @@
 [deps]
 musl
-pkgconf
 kernel-headers
 gnu-getopt
+
+[deps.host]
+pkgconf
 
 [main]
 filesize=507123

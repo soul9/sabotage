@@ -10,9 +10,11 @@ libpcap
 pcre
 zlib
 lua
-dynamic-toolchain
 openssl
 gnu-getopt
+
+[deps.host]
+dynamic-toolchain
 
 [build]
 patch -p1 < "$K/nmap-configure-pcap_suitable.patch" || exit 1

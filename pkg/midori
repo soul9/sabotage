@@ -10,8 +10,10 @@ tardir=midori-0.5.5
 
 [deps]
 librsvg
-python
 webkitgtk1
+
+[deps.host]
+python
 vala
 
 [build]

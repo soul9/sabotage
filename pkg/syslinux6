@@ -1,9 +1,11 @@
 [deps]
 kernel-headers
-perl
-nasm
 gnu-efi-libs
 mtools
+
+[deps.host]
+perl
+nasm
 
 [main]
 filesize=9772883
