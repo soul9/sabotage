@@ -13,6 +13,11 @@ glib
 #patch -p1 < "$K/some.patch"
 sed -i 's@sys/fcntl.h@fcntl.h@' libmenu-cache/menu-cache.c
 sed -i 's@sys/fcntl.h@fcntl.h@' menu-cache-daemon/menu-cached.c
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags -D_GNU_SOURCE" \
+LDFLAGS="$optldflags -lffi -lz -lgmodule-2.0 -lglib-2.0" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
+
