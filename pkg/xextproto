@@ -6,6 +6,9 @@ sha512=c2b60f07c16f850c5fce2aeec071654d34d88f9c775a4386286f597bcce437a124ed3f8c9
 http://xorg.freedesktop.org/releases/individual/proto/xextproto-7.2.1.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
