@@ -26,18 +26,42 @@ sha512=e56e6cdd96ff7bcb680d11ad606c00f4264e413fc43ba7605b2d2e4a743fd6e464cbedabf
 # this doesn't work well with our symlink relocation strategy.
 patch -p1 < "$K"/python273-pathsearch.patch || exit 1
 patch -p1 < "$K"/python-fix-posix-close-clash.patch || exit 1
+patch -p1 < "$K"/python-xcompile.patch || exit 1
 
-debugflags=
-[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --build=$($HOSTCC -dumpmachine)"
 
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -fPIC $optcflags" \
 LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" \
-  --with-system-expat --with-system-ffi || exit 1
+  --with-system-expat --with-system-ffi $xconfflags \
+  ac_cv_file__dev_ptmx=yes || exit 1
+
+if [ -n "$CROSS_COMPILE" ] ; then
+	cp pyconfig.h pyconfig.h.target
+	for i in SIZEOF_LONG SIZEOF_PTHREAD_T SIZEOF_SIZE_T SIZEOF_TIME_T SIZEOF_VOID_P SIZEOF_UINTPTR_T ; do
+		sed -i 's,#define '$i',//,' pyconfig.h
+	done
+	printf "%s\n" 'int main() { printf("%zu\n", sizeof(time_t)); }' > foo.c
+	$HOSTCC -include time.h -include stdio.h foo.c || exit 1
+	l=$(./a.out)
+cat << EOF >> pyconfig.h
+#define SIZEOF_LONG __SIZEOF_LONG__
+#define SIZEOF_PTHREAD_T SIZEOF_LONG
+#define SIZEOF_SIZE_T SIZEOF_LONG
+#define SIZEOF_VOID_P SIZEOF_LONG
+#define SIZEOF_UINTPTR_T SIZEOF_LONG
+#define SIZEOF_TIME_T $l
+EOF
+	make Parser/pgen CC="$HOSTCC" -j$MAKE_THREADS || exit 1
+	cp pyconfig.h.target pyconfig.h
+else
+	make Parser/pgen -j$MAKE_THREADS || exit 1
+fi
 
 # python does not use the user CFLAGS as last element, so they override our
 # optimization and debug level with their hardcoded one.
 # thus the usage of EXTRA_CFLAGS to get into the last position.
-EXTRA_CFLAGS="$debugflags" make -j$MAKE_THREADS  || exit 1
+EXTRA_CFLAGS="$optcflags" make -j$MAKE_THREADS || exit 1
 
 make DESTDIR="$butch_install_dir" install || exit 1
 
