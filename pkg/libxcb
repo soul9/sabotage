@@ -3,16 +3,35 @@ xcb-proto
 libpthread-stubs
 libxau
 libxslt
+python
 
 [mirrors]
-http://xcb.freedesktop.org/dist/libxcb-1.9.1.tar.bz2
-
+http://xcb.freedesktop.org/dist/libxcb-1.10.tar.bz2
 [main]
-filesize=373312
-sha512=541d6e07b1a0da61c3cc1dbdae50ce4e55f1a27e79e277db5af192d02c8360bb3958c597d6692f2c6afcf009ae7b312459f65e8c8d2f1bcc446f7f512bacdd41
+filesize=475211
+sha512=c29ab5027498635d58fd7bfcd77899a406116b25fa8c4ec6513fc1395d8a0f99f602ad20b507660a62000b6fc879860d182cafd29af590e8b14f55150a064f7a
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-./configure -C --prefix="$butch_prefix" --disable-build-docs || exit 1
-make -j$MAKE_THREADS || exit 1
+if [ -n "$CROSS_COMPILE" ] ; then
+	xconfflags="--host=$($CC -dumpmachine)"
+	export PYTHONHOME="$butch_root_dir$butch_prefix"
+fi
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" \
+  --disable-build-docs $xconfflags || exit 1
+
+patch_status() {
+	kv=$(printf 'S["%s"]="%s"\n' "$1" "$2")
+	sed -i 's,^S.*'$1'.*=.*$,'"$kv"',' config.status
+}
+
+if [ -n "$CROSS_COMPILE" ] ; then
+patch_status XCBPROTO_XCBINCLUDEDIR "$butch_root_dir""$butch_prefix"/share/xcb
+patch_status XCBPROTO_XCBPYTHONDIR "$butch_root_dir""$butch_prefix"/lib/python2.7/site-packages
+sh config.status
+fi
+
+make V=1 -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
