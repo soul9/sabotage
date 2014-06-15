@@ -11,15 +11,20 @@ libjpeg
 libpng
 glib
 xz
+
+[deps.host]
 perl
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue" > tests/Makefile.in
-[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g"
-CFLAGS="-D_GNU_SOURCE $debugflags" LDFLAGS="-ljpeg -ltiff -lz -llzma -ljpeg" ./configure -C \
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="-D_GNU_SOURCE $optcflags" \
+LDFLAGS="$optldflags -ljpeg -ltiff -lz -llzma -ljpeg -lffi" \
+  ./configure -C \
   --prefix="$butch_prefix" \
-  --disable-nls || exit 1
-make -j$MAKE_THREADS || exit 1
+  --disable-introspection \
+  --disable-nls $xconfflags gio_can_sniff=yes || exit 1
+make V=1 -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 dest="$butch_install_dir""$butch_prefix"
@@ -33,9 +38,15 @@ cp -r contrib/gdk-pixbuf-xlib/*.h "$dest2"
 # the makefile uses gdk-pixbuf-query-loaders on libpixbufloader-*.la,
 #  and since these point to prefix, the referenced .so files are not found.
 
+if [ -z "$CROSS_COMPILE" ] ; then
 LD_LIBRARY_PATH="$butch_prefix/lib:$dest/lib" \
 "$dest"/bin/gdk-pixbuf-query-loaders "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-*.so \
   > "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache || exit 1
 
 sed -i 's,^"'"$dest"',",g' "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache || exit 1
+else
+	echo "XXXXXXXXXX WARNING: need to run gdk-pixbuf-query-loaders on target fs XXXXXXXXXX"
+fi
+
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
 
