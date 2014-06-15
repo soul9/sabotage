@@ -1,14 +1,14 @@
 [mirrors]
-http://www.stunnel.org/downloads/stunnel-5.01.tar.gz
+http://www.stunnel.org/downloads/stunnel-5.02.tar.gz
+
 [main]
-filesize=587962
-sha512=6855ae37ef0cf7736a05dbbbe130b28c44e0bedb8e55b6cda8ed6149af1c94cd1c9dc27a78a48cabfdc30dda2c31ae98a4216e04efdc4051315138c2573db444
+filesize=590655
+sha512=2f1c44b06188e3bd347b97544122eb9bc0c2a4227e6c4bab184ddef8a35300c09451d836dbd97de3d9656c69ff4ad8f0573e54cdb738bdd751388bd93d0417a6
 
 [deps]
 openssl
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
