@@ -11,15 +11,11 @@ jansson
 ncurses
 
 [deps.host]
-wget
 cmake
+wget
 
 [build]
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  cmake -DSYSTEM_INSTALL:BOOL=true . || exit 1
-
-for i in `grep -rl '/usr' *`; do sed -i 's:/usr::g' $i; done
-for i in `grep -rl '/local' *`; do sed -i 's:/local::g' $i; done
-
+cmake -DCMAKE_INSTALL_PREFIX="$butch_prefix" -DSYSTEM_INSTALL:BOOL=true . || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
