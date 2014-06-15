@@ -1,12 +1,12 @@
 [mirrors]
-http://downloads.sourceforge.net/project/mikmod/libmikmod/3.3.5/libmikmod-3.3.5.tar.gz
+http://downloads.sourceforge.net/project/mikmod/libmikmod/3.3.6/libmikmod-3.3.6.tar.gz
+
 [main]
-filesize=1288856
-sha512=ded555754dcc582a112386ad80c11a29c77d696a184a593964449a6c2c024da5d4cc59133a20d0e0e18a6fbad710a5d8ff567527654c91dff06e070749442aab
-[deps]
+filesize=1288510
+sha512=708008d162bac1a17b090a3a56e3078bb3ce42cb0d54b1e57963881d060198e841654ec7a72212aa9dc0e5c8bd95ec1c41ddd58e2db8c6e91a29d22d7bf363a0
 
 [build]
-#patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
