@@ -1,14 +1,13 @@
 #!/bin/sh
-filesize='65176'
-sha512='23f81cafdf3d81a4598560caaf8becbccdced79d09e033405f0434a7d4a823f8f19ba2501d8f14a8c41c53d461238a276e7771f0c7f274264949c964834ef0df'
-version=0.3.0
+filesize='66427'
+sha512='b9e8fdadef67f6efc8696f9dcd32f6766accdcbdf33184453553e318db8d46876208996ca480a93c66f3d2ff28fe9baf3e1bcc3ca77eb9baf687daeba484e2f5'
+version=0.4.0
 
 filename="$C"/butch-$version.tar.bz2
 
 if [ -z "$BUTCH_BIN" ] ; then
 
-tarxf http://codu.org/~rofl/ butch-$version .tar.bz2 butch ||
-tarxf http://mirror.wzff.de/butch/ butch-$version .tar.bz2 butch ||
+tarxf http://ftp.barfooze.de/pub/butch/ butch-$version .tar.bz2 butch ||
 tarxf http://foss.aueb.gr/mirrors/linux/butch/ butch-$version .tar.bz2 butch
 
 getfilesize() {

@@ -1,11 +1,10 @@
 [mirrors]
-http://codu.org/~rofl/butch-0.3.0.tar.bz2
-http://ftp.barfooze.de/pub/butch/butch-0.3.0.tar.bz2
-http://foss.aueb.gr/mirrors/linux/butch/butch-0.3.0.tar.bz2
+http://ftp.barfooze.de/pub/butch/butch-0.4.0.tar.bz2
+http://foss.aueb.gr/mirrors/linux/butch/butch-0.4.0.tar.bz2
 
 [main]
-filesize=65176
-sha512=23f81cafdf3d81a4598560caaf8becbccdced79d09e033405f0434a7d4a823f8f19ba2501d8f14a8c41c53d461238a276e7771f0c7f274264949c964834ef0df
+filesize=66427
+sha512=b9e8fdadef67f6efc8696f9dcd32f6766accdcbdf33184453553e318db8d46876208996ca480a93c66f3d2ff28fe9baf3e1bcc3ca77eb9baf687daeba484e2f5
 tardir=butch
 
 [deps]
@@ -15,7 +14,7 @@ stage0_musl
 # set environment variable BUTCH_FROM_GIT to 1 if you want to test the latest butch
 if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 	rm -rf butch
-	git clone https://github.com/rofl0r/butch
+	git clone https://github.com/sabotage-linux/butch
 fi
 
 # prepare build config...
