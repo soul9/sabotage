@@ -21,10 +21,10 @@ elif [ "$A" = "mips" ] ; then
 	sed -i 's,sgidefs\.h,asm/sgidefs.h,' defs.h
 elif [ "$A" = "powerpc" ] ; then
 	cp "$K"/ppc-regs.h . || exit 1
-	archflags="-Dsigcontext_struct=sigcontext -include ppc-regs.h"
+	archflags="-include ppc-regs.h"
 	patch -p1 < "$K"/strace-ppc-defs.patch || exit 1
-	patch -p1 < "$K"/strace-ppc-util.patch || exit 1
-	patch -p1 < "$K"/strace-ppc-process.patch || exit 1
+	patch -p1 < "$K"/strace-ppc-signal.patch || exit 1
+	patch -p1 < "$K"/strace-ppc-syscall.patch || exit 1
 fi
 
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
