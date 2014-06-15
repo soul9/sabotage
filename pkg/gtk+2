@@ -10,10 +10,17 @@ pango
 cairo
 atk
 gdk-pixbuf
-pkgconf
 libx11
 libxext
 libxrender
+libxdamage
+libxcomposite
+libxcursor
+libxrandr
+libxinerama
+
+[deps.host]
+pkgconf
 
 [build]
 patch -p1 < "$K"/gtk-icontheme-fallback.patch || exit 1
@@ -33,11 +40,12 @@ for i in gtk/gtkaliasdef.c gtk/gtkalias.h ; do
         rm -f "$i" && touch "$i"
 done
 
-
-[ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
-
-CFLAGS="-D_GNU_SOURCE $debugflags" ./configure -C --prefix="$butch_prefix"\
- --disable-rebuilds  --disable-glibtest || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="-D_GNU_SOURCE $optcflags" \
+LDFLAGS="$optldflags -lxcb -lXau -lpangocairo-1.0 -lpixman-1 -lz -lpangoft2-1.0 -lffi -lpng15 -lcairo -lpango-1.0 -lexpat -lxcb-xvmc -lxcb-shm -lxcb-render -lXrender -lXext -lX11 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lfreetype -lfontconfig -ltiff -llzma -ljpeg -lgio-2.0" \
+  ./configure -C --prefix="$butch_prefix"\
+ --disable-rebuilds  --disable-glibtest \
+ --disable-cups --disable-introspection $xconfflags || exit 1
 
 echo '#include <string.h>' >> config.h
 
@@ -56,8 +64,13 @@ cp -R docs/faq/html "$dest"/share/doc/gtk+-2.24.10/faq &&
 cp -R docs/tutorial/html "$dest"/share/doc/gtk+-2.24.10/tutorial &&
 install -m644 docs/*.txt "$dest"/share/doc/gtk+-2.24.10
 
+
+if [ -z "$CROSS_COMPILE" ] ; then
 LD_LIBRARY_PATH="$dest"/lib \
   "$dest"/bin/gtk-query-immodules-2.0 > "$dest"/etc/gtk-2.0/gtk.immodules || exit 1
+else
+	echo "XXXXXXX WARNING gtk-query-immodules-2.0 needs to be run on the target rootfs XXXXXXX"
+fi
 
 cat > "$dest"/etc/gtk-2.0/gtkrc << "EOF"
 include "/share/themes/Clearlooks/gtk-2.0/gtkrc"
@@ -66,3 +79,5 @@ EOF
 
 # add missing pkgconfig dependency
 sed -i 's@gio-2.0@gio-2.0 gmodule-2.0@' "$dest"/lib/pkgconfig/gtk+-x11-2.0.pc
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
+
