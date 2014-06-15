@@ -22,3 +22,4 @@ CFLAGS="$optcflags" LDFLAGS="$optldflags" \
     --enable-static $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/liblzma.la
