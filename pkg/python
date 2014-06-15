@@ -7,13 +7,13 @@ expat
 libffi
 
 [mirrors]
-https://www.python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
-ftp://ftp.lv.freebsd.org/pub/FreeBSD/distfiles/python/Python-2.7.6.tar.xz
-http://distfiles.lesslinux.org/Python-2.7.6.tar.xz
+https://www.python.org/ftp/python/2.7.7/Python-2.7.7.tar.xz
+ftp://ftp.lv.freebsd.org/pub/FreeBSD/distfiles/python/Python-2.7.7.tar.xz
+http://distfiles.lesslinux.org/Python-2.7.7.tar.xz
 
 [main]
-filesize=10431288
-sha512=e56e6cdd96ff7bcb680d11ad606c00f4264e413fc43ba7605b2d2e4a743fd6e464cbedabf18b461f742102e936f45d840302a99665b5f988b1df08b25285c238
+filesize=10496500
+sha512=ea2101feeb41da953b078b93977bd320a937f4047d074fbed568c7c73b1dfe433a66f7f14009ad7160862694a1b378e61f688831b655dcab8a8825e0d1a9acff
 
 [build]
 # work around buggy installer which puts stuff into prefix directly (omitting destdir) when
@@ -25,7 +25,6 @@ sha512=e56e6cdd96ff7bcb680d11ad606c00f4264e413fc43ba7605b2d2e4a743fd6e464cbedabf
 # additionally it searches for stuff only relative to its own binary.
 # this doesn't work well with our symlink relocation strategy.
 patch -p1 < "$K"/python273-pathsearch.patch || exit 1
-patch -p1 < "$K"/python-fix-posix-close-clash.patch || exit 1
 patch -p1 < "$K"/python-xcompile.patch || exit 1
 
 [ -n "$CROSS_COMPILE" ] && \
