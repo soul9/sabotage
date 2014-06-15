@@ -14,10 +14,12 @@ http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.10.93.tar.bz
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
-
-debug_flags=
-[ "$DEBUGBUILD" = "1" ] && debug_flags="-O0 -g3"
-
-CFLAGS="-D_GNU_SOURCE $debug_flags" ./configure -C --prefix="$butch_prefix" || exit 1
-make || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="-D_GNU_SOURCE $optcflags" \
+LDFLAGS="$optldflags" \
+LIBS=-lz \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+make -j$MAKE_THREADS V=1 || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+rm "$butch_install_dir""$butch_prefix"/lib/*.la
