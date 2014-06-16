@@ -36,7 +36,7 @@ patch -p1 < "$K"/gcc473-powerpc-libc-stack-end.patch || exit 1
 
 # fix specs file generation. this prevents libgcc_s from being used.
 # not only is it slower, it'll cause assertion errors in ld.
-sed -i 's,-lgcc_s,-lgcc_eh -lc,' gcc/gcc.c
+sed -i 's,-lgcc_s,--start-group -lgcc_eh -lgcc -lc --end-group,' gcc/gcc.c
 
 # we're doing a bit of hack to place the g++ contents in this folder
 # the build system isnt really laid out for extracting multiple tarballs into
