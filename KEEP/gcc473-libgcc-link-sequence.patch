@@ -1,0 +1,11 @@
+--- gcc-4.7.3.org/gcc/config/gnu-user.h
++++ gcc-4.7.3/gcc/config/gnu-user.h
+@@ -87,7 +87,7 @@
+ 
+ #undef LINK_GCC_C_SEQUENCE_SPEC
+ #define LINK_GCC_C_SEQUENCE_SPEC \
+-  "%{static:--start-group} %G %L %{static:--end-group}%{!static:%G}"
++  "--start-group %G %{static:%L} --end-group"
+ 
+ /* Use --as-needed -lgcc_s for eh support.  */
+ #ifdef HAVE_LD_AS_NEEDED
