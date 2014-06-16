@@ -7,6 +7,7 @@ sha512=ae243d0336acff50e91e4ed9d306beb4705559775518e6dc122ec18a1530e59e2c531cf54
 
 [deps]
 libtorrent
+ncurses
 
 [build]
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
