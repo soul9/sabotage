@@ -6,6 +6,7 @@ sha512=d80e18b00e9e696a30b954c0d92e5f2f773fd9a7a0a944cf6cabb69c1798e671506580daa
 
 [deps]
 libjpeg
+libstdc++
 zlib
 xz
 

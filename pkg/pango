@@ -8,6 +8,7 @@ sha512=ba0697819fcddb25424977ed22deae087cee33f5b455b44a7890e76b7bcb3d4014420cd1d
 [deps]
 glib
 fontconfig
+libstdc++
 libx11
 libxft
 cairo
