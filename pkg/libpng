@@ -8,11 +8,9 @@ sha512=e658dccce8c4de084e9cc4a00526252cc484e3a20f04e3143c799125603363212c143f05d
 zlib
 
 [build]
-#patch -p1 < "$K/some.patch"
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm "$butch_install_dir""$butch_prefix"/lib/*.la
 

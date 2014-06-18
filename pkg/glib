@@ -22,7 +22,8 @@ for p in glib-gtimer-varargs glib-no_python ; do
 done
 
 this_dir="$PWD"
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Dloff_t=off_t $optcflags" \
 LDFLAGS="$optldflags" ./configure -C $xconfflags \
@@ -39,5 +40,4 @@ make V=1 -j$MAKE_THREADS DESTDIR="$butch_install_dir" \
   LDFLAGS="-Wl,-rpath-link=$this_dir/gthread/.libs/ -Wl,-rpath-link=$this_dir/gmodule/.libs/" \
   || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm "$butch_install_dir""$butch_prefix"/lib/*.la
 

@@ -14,7 +14,8 @@ python
 
 [build]
 patch -p1 < "$K"/libxml2-pthread.patch
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
 CFLAGS="-D_GNU_SOURCE -fPIC $optcflags" \
 LDFLAGS="$optldflags" \
 ./configure -C \
@@ -39,4 +40,3 @@ make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
 sed -i 's@-lxml2@-lxml2 -lz -llzma@' "$butch_install_dir""$butch_prefix"/lib/pkgconfig/libxml-2.0.pc
-rm "$butch_install_dir""$butch_prefix"/lib/libxml2.la

@@ -14,7 +14,7 @@ sha512=c29ab5027498635d58fd7bfcd77899a406116b25fa8c4ec6513fc1395d8a0f99f602ad20b
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 if [ -n "$CROSS_COMPILE" ] ; then
-	xconfflags="--host=$($CC -dumpmachine)"
+	xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 	export PYTHONHOME="$butch_root_dir$butch_prefix"
 fi
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
@@ -34,4 +34,3 @@ fi
 
 make V=1 -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm "$butch_install_dir""$butch_prefix"/lib/*.la

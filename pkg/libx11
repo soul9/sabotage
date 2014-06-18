@@ -16,9 +16,9 @@ sha512=c8609ff34d1fe71f35b35e0273a872ccded4d824c8afdcca37e1779d37bf667cb814e0ead
 http://xorg.freedesktop.org/releases/individual/lib/libX11-1.6.2.tar.bz2
 
 [build]
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
   --disable-loadable-xcursor $xconfflags || exit 1
 make V=1 DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
-rm "$butch_install_dir""$butch_prefix"/lib/*.la

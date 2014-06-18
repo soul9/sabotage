@@ -10,12 +10,12 @@ libxext
 xineramaproto
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 CFLAGS="$optcflags -D_GNU_SOURCE" \
-LDFLAGS="$optldflags -lXext -lxcb -lxcb-xvmc -lXau -lX11" \
-./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" $xconfflags \
+  ac_cv_func__XEatDataWords=yes || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm "$butch_install_dir""$butch_prefix"/lib/*.la
 

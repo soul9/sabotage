@@ -20,9 +20,9 @@ cpan-XML-Parser
 intltool
 
 [build]
-#patch -p1 < "$K/some.patch"
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
-CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags -lffi -lz -lgmodule-2.0 -lglib-2.0 -lgtk-x11-2.0 -lgthread-2.0 -lgdk-x11-2.0 -lxcb -lXau -lpixman-1 -lpng15 -lexpat -lxcb-xvmc -lxcb-shm -lxcb-render -ltiff -llzma -ljpeg -lXrender -lXinerama -lXrandr -lXcursor -lXext -lpangocairo-1.0 -lX11 -lXcomposite -lXdamage -lXfixes -latk-1.0 -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lfreetype -lfontconfig -lmenu-cache" \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')  --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
 ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags || exit 1
 
 for i in po ; do

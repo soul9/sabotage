@@ -16,8 +16,9 @@ cairo
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 patch -p1 < "$K/pango-querymodules-prefix.patch"
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
-CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags -lffi -lpixman-1 -lz -lxcb -lpng -lfontconfig -lexpat -lfreetype -lXau -lxcb-xvmc -lxcb-shm -lxcb-render -lXrender -lXext -lX11" \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
 CXXFLAGS="$optcflags" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
   --enable-introspection=no || exit 1
@@ -32,5 +33,4 @@ LD_LIBRARY_PATH="$dest"/lib \
 else
 	echo "XXXXXXXXXXX WARNING: you must run pango-querymodules in the target rootfs! XXXXXXXXXX"
 fi
-rm "$butch_install_dir""$butch_prefix"/lib/*.la
 

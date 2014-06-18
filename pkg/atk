@@ -14,8 +14,9 @@ perl
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
-CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags -lffi -lz" \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
   --disable-glibtest --disable-silent-rules --enable-gtk-doc-html=no \
   --enable-introspection=no || exit 1
@@ -26,5 +27,4 @@ done
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm "$butch_install_dir""$butch_prefix"/lib/*.la
 

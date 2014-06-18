@@ -40,9 +40,10 @@ for i in gtk/gtkaliasdef.c gtk/gtkalias.h ; do
         rm -f "$i" && touch "$i"
 done
 
-[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
-LDFLAGS="$optldflags -lxcb -lXau -lpangocairo-1.0 -lpixman-1 -lz -lpangoft2-1.0 -lffi -lpng15 -lcairo -lpango-1.0 -lexpat -lxcb-xvmc -lxcb-shm -lxcb-render -lXrender -lXext -lX11 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lfreetype -lfontconfig -ltiff -llzma -ljpeg -lgio-2.0" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   ./configure -C --prefix="$butch_prefix"\
  --disable-rebuilds  --disable-glibtest \
  --disable-cups --disable-introspection $xconfflags || exit 1
@@ -79,5 +80,4 @@ EOF
 
 # add missing pkgconfig dependency
 sed -i 's@gio-2.0@gio-2.0 gmodule-2.0@' "$dest"/lib/pkgconfig/gtk+-x11-2.0.pc
-rm "$butch_install_dir""$butch_prefix"/lib/*.la
 
