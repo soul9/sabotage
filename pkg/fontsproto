@@ -9,6 +9,9 @@ sha512=728d4df6d65b811cc2516cddcd1ba53aadf75521450baaad27ae10448e8eda66c4898369b
 http://xorg.freedesktop.org/releases/individual/proto/fontsproto-2.1.2.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

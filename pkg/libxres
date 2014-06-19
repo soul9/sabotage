@@ -11,6 +11,10 @@ sha512=796a79ab694317910442cb10a936711df9dde95764eef11efb8dedc85114977e56409de2f
 http://xorg.freedesktop.org/releases/individual/lib/libXres-1.0.7.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags \
+  ac_cv_func__XEatDataWords=yes || exit 1
+make V=1 DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

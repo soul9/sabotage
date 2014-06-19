@@ -10,7 +10,9 @@ sha512=8e18d5a0309d69fbd410f8e3e5393f8a49852c2684aa2d2f0c460cf9e1f0fb88810885551
 intltool
 
 [build]
-#patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

@@ -15,7 +15,10 @@ libxml2
 mkdir .deps
 touch .deps/update_mime_database-update-mime-database.Tpo
 
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+CFLAGS="$optcflags -D_GNU_SOURCE" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 
 sed -i 's@$(AM_V_at)$(am__mv) $(DEPDIR)/update_mime_database-update-mime-database.Tpo@#@' Makefile
 

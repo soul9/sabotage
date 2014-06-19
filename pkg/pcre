@@ -10,10 +10,12 @@ http://sourceforge.net/projects/pcre/files/pcre/8.34/pcre-8.34.tar.bz2
 zlib
 
 [build]
-#patch -p1 < "$K/some.patch"
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 CXXFLAGS=${CFLAGS} \
 LDFLAGS="$optldflags" \
-./configure -C --prefix="$butch_prefix" --enable-utf8 --enable-unicode-properties --enable-pcregrep-libz --disable-cpp || exit 1
+./configure -C --prefix="$butch_prefix" $xconfflags \
+  --enable-utf8 --enable-unicode-properties \
+  --enable-pcregrep-libz --disable-cpp || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

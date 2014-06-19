@@ -9,6 +9,9 @@ sha512=ce8c8fda178ac7fb22b192d4a0f707a96f42ecd550ae8e6ddd7e1ed0067951ef955f7bee6
 ftp://ftp.x.org/pub/individual/proto/resourceproto-1.2.0.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

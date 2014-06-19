@@ -12,6 +12,9 @@ sha512=e0905592b7ef65acb8298b9807f90e68d18eddf3112c6232c1c774603c95ca7ec7f6db161
 http://xorg.freedesktop.org/releases/individual/lib/libfontenc-1.1.2.tar.bz2
 
 [build]
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

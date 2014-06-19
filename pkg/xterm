@@ -12,13 +12,17 @@ sha512=c13d618e2849460747e59c5cde74d0554b283e906452d356f14a3c8d31db1ad63b5ebbcd1
 ftp://invisible-island.net/xterm/xterm-269.tgz
 
 [build]
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 # Gleiches mit gleichem vergelten.
-CFLAGS="-include termcap.h -g -D__GNU__ -D__GLIBC__=2 -D__GLIBC_MINOR__=10 -D_POSIX_SOURCE -D_GNU_SOURCE" ./configure -C \
+CFLAGS="-include termcap.h -g -D__GNU__ -D__GLIBC__=2 -D__GLIBC_MINOR__=10 -D_POSIX_SOURCE -D_GNU_SOURCE $optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C \
   --prefix="$butch_prefix" \
   --mandir=/share/man \
   --enable-256-color \
   --enable-wide-chars \
-  ac_cv_header_lastlog_h=no cf_cv_path_lastlog=no || exit 1
+  ac_cv_header_lastlog_h=no cf_cv_path_lastlog=no $xconfflags || exit 1
 cat <<EOF >>ptyx.h
 #ifndef HACKY_HACKY_GETPT 
 #define HACKY_HACKY_GETPT

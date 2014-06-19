@@ -29,6 +29,16 @@ sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' inclu
 
 THIS="$PWD"
 
+debugcflags=
+debugflags=
+if [ "$DEBUGBUILD" = 1 ] ; then
+	debugflags=--with-debug
+	debugcflags="-O0 -g3"
+fi
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+
 # by default alsa-lib uses --with-versioned, which will create 2 sets of functions,
 # one for the old ABI that was deprecated over 10 years ago, and the current one,
 # with versioning symbols. since musl's symlinker previously didn't support
@@ -38,18 +48,13 @@ THIS="$PWD"
 # symbol version, so this isn't strictly needed anymore - however using the versioned
 # stuff still bloats up the library with obsolete ancient junk nobody uses.
 
-debugcflags=
-debugflags=
-if [ "$DEBUGBUILD" = 1 ] ; then
-	debugflags=--with-debug
-	debugcflags="-O0 -g3"
-fi
-
-CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -Os $debugcflags" ./configure -C \
+CFLAGS="-include stdlib.h -D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -Os $debugcflags $optcflags" \
+LDFLAGS="$optldflags" \
+  ./configure -C \
 	 --prefix="$butch_prefix" \
          --disable-python \
          --without-versioned \
-         $debugflags || exit 1
+         $debugflags $xconfflags || exit 1
 
 find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1
 

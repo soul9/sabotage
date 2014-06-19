@@ -11,6 +11,9 @@ sha512=3c9642006dbc7a74f91263aa3a94711a95ee436b03d97ef51fce2bc2f602c25589606e1fc
 http://xorg.freedesktop.org/releases/individual/lib/libXv-1.0.10.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

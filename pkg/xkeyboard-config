@@ -11,7 +11,9 @@ sha512=b7d3c6ede10a9f00c56328bd8e7fa01073031e29549f5d08a6a273670248a4ce6a58d994e
 ftp://ftp.x.org/pub/individual/data/xkeyboard-config-1.4.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" \
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" $xconfflags \
   --with-xkb_base="$butch_prefix"/share/X11/xkb --with-xkb-rules-symlink=xorg || exit 1
 
 for i in po ; do

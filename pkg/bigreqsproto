@@ -9,6 +9,8 @@ sha512=9c2f98191169f7bca69601fcea5ddcb45d50b3a6bae087a2d6ee2d83f9729155b23268ad4
 http://xorg.freedesktop.org/releases/individual/proto/bigreqsproto-1.1.2.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

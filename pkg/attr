@@ -10,9 +10,13 @@ tardir=attr-2.4.47
 
 [build]
 patch -p1 < "$K"/attr-cdefs.patch || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CPPFLAGS="-D_GNU_SOURCE" \
 CFLAGS="$optcflags" \
-LDFLAGS="$optldflags" ./configure -C --enable-gettext=no --prefix="$butch_prefix" || exit 1
+LDFLAGS="$optldflags" \
+  ./configure -C --enable-gettext=no \
+  --prefix="$butch_prefix" $xconfflags || exit 1
 
 for i in po ; do
 	printf 'all:\n\ttrue\ninstall:\n\ttrue\ninstall-lib:\n\ttrue\ninstall-dev:\n\ttrue\nclean:\n\ttrue\n' > "$i"/Makefile

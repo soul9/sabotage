@@ -11,10 +11,14 @@ gtk+2
 libglade
 
 [build]
-patch -p1 < "$K/obconf-git.patch"
-patch -p1 < "$K/obconf-implicit.patch"
+patch -p1 < "$K"/obconf-git.patch
+patch -p1 < "$K"/obconf-implicit.patch
 
-CFLAGS=-D_GNU_SOURCE LDFLAGS="-llzma -lz" ./configure -C \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags -D_GNU_SOURCE" \
+LDFLAGS="$optldflags -llzma -lz -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C $xconfflags \
   --prefix="$butch_prefix" \
   --disable-nls || exit 1
 printf '#include <ctype.h>\n' >> config.h

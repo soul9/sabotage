@@ -9,6 +9,8 @@ sha512=bbce91c35413a39ff8b70e5fddccea0e47af3e8f1cfc562b8acc2785ea350a04166799b29
 ftp://ftp.x.org/pub/individual/proto/dmxproto-2.3.1.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

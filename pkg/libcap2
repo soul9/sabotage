@@ -15,7 +15,8 @@ perl
 [build]
 sed -i 's@/bin/bash@/bin/sh@g' progs/capsh.c || exit 1
 make -j$MAKE_THREADS prefix="$butch_prefix" lib=lib \
-  CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" || exit 1
+  CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  BUILD_CC="$HOSTCC" CC="$CC" || exit 1
 
 make RAISE_SETFCAP=no FAKEROOT="$butch_install_dir" prefix="$butch_prefix" lib=lib install || exit 1
 LIBDIR=$butch_install_dir$butch_prefix/lib

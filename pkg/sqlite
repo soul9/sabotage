@@ -71,7 +71,7 @@ Libs: -lsqlite3 -lreadline
 Libs.private: 
 Cflags:
 EOF
-make all CC=$CC CFLAGS="$optcflags -fPIC -O0" CPPFLAGS="$CPPFLAGS" -j2 || exit 1
+make all CC="$CC" CFLAGS="$optcflags -fPIC -O0" CPPFLAGS="$CPPFLAGS" -j2 || exit 1
 make DESTDIR="$butch_install_dir" prefix="$butch_prefix" install || exit 1
 
 fi

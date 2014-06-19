@@ -10,7 +10,11 @@ sha512=8a9fce3b1d7a577a914d662b5a36dc43d56f16ae9318bbaf09fbd28ee572a69f40b7960d6
 
 [mirrors]
 http://xorg.freedesktop.org/releases/individual/driver/xf86-input-evdev-2.8.1.tar.bz2
+
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+make V=1 DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

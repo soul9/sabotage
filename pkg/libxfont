@@ -14,6 +14,10 @@ sha512=c0e28d9213464ff3bf8e756da21ef3108bc6cb37b2bfd99787a4dd1ed224e65b778a3b184
 http://xorg.freedesktop.org/releases/individual/lib/libXfont-1.4.6.tar.bz2
 
 [build]
-CFLAGS="-D_GNU_SOURCE -DNOFILES_MAX=256 -Dfd_mask=long" ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
+LDFLAGS="$optldflags" \
+CFLAGS="$optcflags -D_GNU_SOURCE -DNOFILES_MAX=256 -Dfd_mask=long" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 

@@ -8,7 +8,8 @@ sha512=bc8dfc90cac1a83cbb34e33cea805bfaa9597694a285fb69d55224fc52987c0199415b380
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

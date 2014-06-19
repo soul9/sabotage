@@ -9,6 +9,9 @@ sha512=dce0d4da1dd703a6cdfe7676537034d43c9e84d70f20afdfe59be7929a97fbd077fa7026e
 ftp://ftp.x.org/pub/individual/proto/xf86driproto-2.1.1.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
 
