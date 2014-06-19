@@ -16,8 +16,9 @@ export HOSTCC=gcc
 # mips and arm set this flag automatically
 #export SKIP_KERNEL_COMPILE=1
 
-# this script will copy the config.cache template into the actual builddir
-# you can disable this line and then the configure cache won't get used.
+# the build template used.
+# the default one creates packages in $R/opt/$package_name, uses a config.cache
+# and symlinks packages into the rootdir.
 export BUTCH_BUILD_TEMPLATE="$K/butch_template_configure_cached.txt"
 
 # export so stage0 specific code paths are not taken in build scripts
