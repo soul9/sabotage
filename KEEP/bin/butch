@@ -37,6 +37,7 @@ prefetch:	download package(s) and all missing dependencies
 print:		pretty-print the specified package
 download:	==prefetch
 rebuild:	unlink, download, rebuild, relocate package(s), but not their dependencies
+checktarballs:	check if filesize of tarballs (if existent) matches packages
 
 all download related actions are only done when needed, i.e. the tarball is missing.
 
@@ -61,6 +62,7 @@ case $1 in
 	files) shift; prog=butch-files;;
 	search) shift; prog=butch-search;;
 	print) shift; prog=butch-print;;
+	checktarballs) shift; prog=butch-checktarballs;;
 	unlink) shift ; prog=butch-unlink;; #remove links of pkg
 	relink|relocate) shift; prog=butch-relocate;; #relinks the pkg into /
 	update) export BUTCH_SKIPLIST=gcc3:stage0:stage0_musl:stage0_gcc:stage0_prepare:"$BUTCH_SKIPLIST" ;;
