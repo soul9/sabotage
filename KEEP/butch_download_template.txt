@@ -1,0 +1,16 @@
+#!/bin/sh
+%BUTCH_CONFIG
+butch_cache_dir="$C"
+tmp=/tmp/butchdl.$$
+rc=0
+echo "in case the download process was killed, see $tmp for wget output"
+if ! wget -O "$butch_cache_dir/%BUTCH_TARBALL.wip" -c '%BUTCH_MIRROR_URL' $wgetflags \
+  2>$tmp ; then
+	rc=1
+	grep 404 < $tmp > /dev/null && rc=44
+else
+	mv "$butch_cache_dir"/"%BUTCH_TARBALL".wip "$butch_cache_dir"/"%BUTCH_TARBALL"
+fi
+cat $tmp
+rm $tmp
+exit $rc
