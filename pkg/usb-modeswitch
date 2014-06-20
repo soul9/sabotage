@@ -1,0 +1,25 @@
+[mirrors]
+http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-2.2.0.tar.bz2
+
+[main]
+filesize=261888
+sha512=1311365c580035361e961ffefb84acf88771aae17d4b084733f2e0d10ac2ad770cf7d3b64c1c6cc400f19082530b425714f3afb88d10d6023e3798261a982e67
+
+[deps]
+usb-modeswitch-data
+libusbx
+
+[build]
+cd jim/autosetup
+patch -p1 < "$K"/config.sub-musl.patch || exit 1
+cd ..
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine)"
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure --prefix="$butch_prefix" $xconfflags || exit 1
+cd ..
+
+make V=1 -j$MAKE_THREADS -C jim lib || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
