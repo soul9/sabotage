@@ -17,6 +17,18 @@ fluidsynth
 # but save from glib dependency hell.
 
 printf "%s\n%s\n" 'extern void Mix_QuitFluidSynth();' 'extern int Mix_InitFluidSynth();' > patch.h
-CFLAGS="-D_GNU_SOURCE -include patch.h" ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+cat << EOF > libmikmod-config
+#!/bin/sh
+echo -lmikmod
+EOF
+chmod +x libmikmod-config
+export PATH="$PWD:$PATH"
+CFLAGS="$optcflags " \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+CPPFLAGS="-D_GNU_SOURCE -include patch.h" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
