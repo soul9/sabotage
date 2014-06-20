@@ -11,6 +11,7 @@ is quite new in sabotage, breakage is to be expected.
 Native builds though are well tested and can be considered very stable.
 
 ## Requirements:
+
 * ~4G free disk space
 * root access, or a linux 3.8+ host kernel with USER_NS support 
   (only for native build)
@@ -18,7 +19,8 @@ Native builds though are well tested and can be considered very stable.
 * git
 * lots of time and a fair bit of Linux knowledge
 
-## X-Compile Requirements;
+## X-Compile Requirements
+
 * latest musl-cross for your target arch
 * latest butch >= 0.4.0 installed and compiled for the build host in $PATH
 * pkgconf symlinked as pkg-config in PATH (before other pkg-config versions)
@@ -37,9 +39,9 @@ https://github.com/sabotage-linux/sabotage
 or use a ready-to-boot disk image either for qemu, vbox 
 or to extract the rootfs, to be found at:
 
-  DE : http://ftp.barfooze.de/pub/sabotage/
-  GR : http://foss.aueb.gr/mirrors/linux/sabotage/
-  UK : http://dl.2f30.org/mirrors/sabotage/
+* DE : http://ftp.barfooze.de/pub/sabotage/
+* GR : http://foss.aueb.gr/mirrors/linux/sabotage/
+* UK : http://dl.2f30.org/mirrors/sabotage/
 
 the DE mirror is the master from which the other mirrors are synced
 after some hours.
@@ -53,7 +55,8 @@ http://openwall.com/lists/sabotage/
 **READ THE COOKBOOK FIRST**.
 
 ## Native Build instructions:
-** DO NOT RUN SCRIPTS YOU HAVE NOT READ**.
+
+**DO NOT RUN SCRIPTS YOU HAVE NOT READ**.
 
     cp KEEP/config.stage0 config
     vi config
@@ -100,10 +103,10 @@ creation of filelists, etc.
 
 ## X-Compile instructions:
 
-   cp KEEP/config.cross .
-   vi config.cross #set your vars
-   A=microblaze CONFIG=./config.cross utils/setup-rootfs #initialize rootfs
-   A=microblaze CONFIG=./config.cross butch install nano #start building stuff
+    cp KEEP/config.cross .
+    vi config.cross #set your vars
+    A=microblaze CONFIG=./config.cross utils/setup-rootfs #initialize rootfs
+    A=microblaze CONFIG=./config.cross butch install nano #start building stuff
 
 when you're done compiling, exit the chroot and
 - either use the rootfs directly (by copying it to some disk)
@@ -162,13 +165,17 @@ use a meaningful commit message that mentions the package name.
 
 
 ## CONTACT
-There is a mailinglist sabotage@lists.openwall.com, mail
-sabotage-subscribe@lists.openwall.com and follow instructions to get
-on it.  Archives are at http://openwall.com/lists/sabotage/
+There is a mailinglist: sabotage@lists.openwall.com,
+mail sabotage-subscribe@lists.openwall.com and follow instructions to get on it.
+
+Archives are at http://openwall.com/lists/sabotage/ .
+
 You can also /join #sabotage or #musl on irc.freenode.net for realtime help.
 
 ## DONATIONS
+
 donations in bitcoins are welcome and can be sent to
+
 1HXhSKSyBUGAAga29WbpTkKGpruQq9J8Bb .
 
 
