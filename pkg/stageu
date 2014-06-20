@@ -1,9 +1,0 @@
-[deps]
-gcc4
-gmp
-m4
-mpc
-mpfr
-musl
-dynamic-toolchain
-zlib

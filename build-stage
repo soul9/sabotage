@@ -11,8 +11,6 @@ fi
 # ./build-stage 1 is only for building a fresh stage1 from WITHIN sabotage. To
 # build from out of sabotage, you need to ./build-stage 0, then build stage1
 # with butch from within the built system.
-# there's now an additional stage "u". it allows to use butch with sabotage packages
-# in a custom prefix.
 STAGE="$1"
 if [ ! "$STAGE" ]
 then
@@ -29,9 +27,8 @@ mkdir -p "$K" "$C" "$S" "$R" "$LOGPATH"
 . "$H"/utils/sabotage-prereqs
 . "$H"/utils/utils
 . "$H"/utils/prepare-rootfs
-if [ "$STAGE" = "0" ] || [ "$STAGE" = "u" ] ; then
+if [ "$STAGE" = "0" ] ; then
 	CC_SAVE="$CC"
-	[ "$STAGE" = "u" ] && CC=musl-gcc
 	. "$H"/utils/build-butch
 	CC="$CC_SAVE"
 fi
@@ -49,16 +46,6 @@ EOF
 if [ "$STAGE" = "0" ] ; then
 	# build stage0
 	CONFIG="$H/config" BUTCHDB="$R"/var/lib/butch.db "$R"/bin/butch install stage0
-elif [ "$STAGE" = "u" ] ; then
-	mv "$R/bin/butch" "$R/bin/butch"
-	path_save="$PATH"
-	export PATH="$R/bin/:$PATH"
-	export STAGEU=1
-	if "$R/bin/butch" install stage0 ; then
-		CC="musl-gcc"
-		"$R/bin/butch" install stageu
-	fi
-	export PATH=$path_save
 else
 	# build stage1
 	butch install stage1

@@ -14,7 +14,6 @@ http://www.busybox.net/downloads/busybox-1.20.2.tar.bz2
 
 [build]
 
-[ "$STAGE" = "U" ] && exit 0
 if [ "$STAGE" = "0" ] ; then
 	CC="$butch_root_dir"/bin/musl-gcc
 	PATCH="$butch_root_dir"/bin/patch
