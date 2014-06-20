@@ -46,13 +46,6 @@ cp -r "$H"/KEEP "$S"/
 gcc424
 EOF
 
-# NOTE
-# installation starts all over if installed.dat is not there.
-# to manually continue a stage0 build, run
-#     $R/bin/butch install stage0
-# in case the build failed or was interrupted.
-rm -f "$S"/pkg/installed.dat
-
 if [ "$STAGE" = "0" ] ; then
 	# build stage0
 	CONFIG="$H/config" BUTCHDB="$R"/var/lib/butch.db "$R"/bin/butch install stage0
