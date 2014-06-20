@@ -6,11 +6,16 @@ sha512=6b579517b9caba293ccf88c8806689076ef9c122e5424c704a81a4c461dbc67147dadee1b
 
 [deps]
 libogg
+gcc4
 
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
 # libvorbis wants emmintrin.h and similar stuff, which is in /include/gcc
-CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/gcc" \
-  ./configure -C --prefix="$butch_prefix" || exit 1
+CPPLAGS="-D_GNU_SOURCE -I$butch_root_dir$butch_prefix/include/gcc" \
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
