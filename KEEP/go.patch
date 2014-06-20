@@ -8,17 +8,6 @@
  #undef  setjmp
  #define setjmp		p9setjmp
  #define putenv		p9putenv
---- a/src/libmach/linux.c
-+++ b/src/libmach/linux.c
-@@ -32,7 +32,7 @@
- #include <unistd.h>
- #include <dirent.h>
- #include <sys/ptrace.h>
--#include <sys/signal.h>
-+#include <signal.h>
- #include <sys/wait.h>
- #include <errno.h>
- #include <libc.h>
 --- a/src/pkg/os/user/lookup_unix.go
 +++ b/src/pkg/os/user/lookup_unix.go
 @@ -9,7 +9,6 @@
