@@ -12,6 +12,10 @@ dynamic-toolchain
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-CFLAGS="-D_POSIX_SOURCE -D_BSD_SOURCE -DTIMESPEC_TO_TIMEVAL=" ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+CPPFLAGS="-D_POSIX_SOURCE -D_BSD_SOURCE -DTIMESPEC_TO_TIMEVAL=" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 DESTDIR="$butch_install_dir" install || exit 1
