@@ -22,11 +22,9 @@ printf -- "Building stage %d\n" "$STAGE"
 # enable verbose printing, abort on error
 set -e -x
 
-mkdir -p "$K" "$C" "$S" "$R" "$LOGPATH"
-
 . "$H"/utils/sabotage-prereqs
 . "$H"/utils/utils
-. "$H"/utils/prepare-rootfs
+. "$H"/utils/setup-rootfs
 if [ "$STAGE" = "0" ] ; then
 	CC_SAVE="$CC"
 	. "$H"/utils/build-butch

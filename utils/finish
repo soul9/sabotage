@@ -11,7 +11,7 @@ cp -r "$H"/pkg "$R"/src/
 
 # For building a stage1 chroot from in sabotage
 mkdir -p "$R"/src/utils
-cp "$H"/utils/utils "$H"/utils/prepare-rootfs "$H"/utils/finish "$R"/src/utils/
+cp "$H"/utils/utils "$H"/utils/setup-rootfs "$H"/utils/finish "$R"/src/utils/
 cp "$H"/build-stage "$R"/src/
 cp "$H"/enter-chroot "$R"/src/
 
@@ -19,6 +19,5 @@ cp "$K"/config.stage1 "$R"/src/config
 echo "export A=$A" >> "$R"/src/config
 [ -z "$MAKE_THREADS" ] || sed -i "s@MAKE_THREADS=1@MAKE_THREADS=$MAKE_THREADS@" "$R"/src/config
 
-echo nameserver 8.8.8.8 > "$R"/etc/resolv.conf
 ln -s /proc/mounts "$R"/etc/mtab
 
