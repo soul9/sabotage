@@ -60,7 +60,7 @@ if $butch_do_custom_destdir ; then
 		rm -rf "$butch_custom_destdir"
 		if [ "$butch_do_filelists" ] && [ -e "$filelist" ] ; then
 			"$K"/bin/butch-unlink "$butch_package_name"
-			rm "$filelist"
+			rm -f "$filelist"
 		fi
 	fi
 else
