@@ -1,4 +1,4 @@
-[deps]
+[deps.host]
 stage0_gcc
 
 [mirrors]

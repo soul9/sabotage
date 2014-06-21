@@ -7,7 +7,7 @@ filesize=66427
 sha512=b9e8fdadef67f6efc8696f9dcd32f6766accdcbdf33184453553e318db8d46876208996ca480a93c66f3d2ff28fe9baf3e1bcc3ca77eb9baf687daeba484e2f5
 tardir=butch
 
-[deps]
+[deps.host]
 stage0_musl
 
 [build]
