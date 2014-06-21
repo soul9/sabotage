@@ -9,6 +9,10 @@ sha512=e93604a79d693ccc4be5ba4b41bb3f046186d95ebfdb075f8b201adde8405299cf34011c4
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+CPPFLAGS=-D_GNU_SOURCE \
+  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

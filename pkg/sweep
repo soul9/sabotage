@@ -19,9 +19,20 @@ glib
 
 [build]
 patch -p1 < "$K"/sweep-default-device.patch || exit 1
-
-CFLAGS=-D_GNU_SOURCE LDFLAGS="-lgmodule-2.0" ./configure -C \
+cp -f "$K"/config.sub .
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags -lgmodule-2.0 -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+CPPFLAGS=-D_GNU_SOURCE \
+  ./configure -C $xconfflags \
+  --with-ogg-includes=$butch_root_dir$butch_prefix/include \
+  --with-vorbis-includes=$butch_root_dir$butch_prefix/include \
+  --disable-speex --disable-oggtest --disable-vorbistest \
   --prefix="$butch_prefix" || exit 1
+
+# included libtool version is too old.
+[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
 
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1

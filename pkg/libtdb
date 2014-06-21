@@ -18,6 +18,9 @@ patch -p1 < "$K"/tdb-help.patch || exit 1
 # and of course uses some glibc specific crap (strtouq)
 cp -f "$K"/config.sub .
 
-CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
+CPPFLAGS=-D_GNU_SOURCE \
+  ./configure --prefix="$butch_prefix" $xconfflags || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
