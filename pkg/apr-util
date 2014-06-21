@@ -4,7 +4,6 @@ musl
 
 [deps.host]
 pkgconf
-bash
 
 [main]
 filesize=635000
@@ -33,7 +32,6 @@ CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   --disable-util-dso || exit 1
 echo '#define APR_HAVE_CRYPT_H 1' >> include/private/apu_config.h
 [ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
-sed -i 's,/bin/sh,/bin/bash,' libtool
 make CC="$CC" -j$MAKE_THREADS LIBTOOL=$PWD/libtool || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 
