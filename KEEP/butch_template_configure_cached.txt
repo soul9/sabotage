@@ -85,7 +85,7 @@ butch_configure_cache="$K/config.cache"
 user_optimizations_file="$butch_root_dir"/etc/butch-optflags.sh
 if [ -e "$user_optimizations_file" ] ; then
 	printf "sourcing user defined optimization config %s\n" "$user_optimizations_file"
-	source "$user_optimizations_file"
+	. "$user_optimizations_file"
 else
 	printf "user optimization file %s not found.\n" "$user_optimizations_file"
 fi
