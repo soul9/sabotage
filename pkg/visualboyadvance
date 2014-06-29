@@ -1,0 +1,20 @@
+[main]
+filesize=211672
+sha512=9b6d6df2e57cb963190546b11cdfed5b14a51017721f272a94bd141b5a2719f7d6e56407a444423b3a9353bf2d0ea383b70bd9546ed6364f8340411adb9ce2c4
+
+[mirrors]
+http://ftp.barfooze.de/pub/sabotage/tarballs/VisualBoyAdvanceSDL-1.8.0.tar.xz
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/VisualBoyAdvanceSDL-1.8.0.tar.xz
+http://dl.2f30.org/mirrors/sabotage/tarballs/VisualBoyAdvanceSDL-1.8.0.tar.xz
+
+[deps]
+sdl
+libpng
+zlib
+
+[build]
+make PROGS=VisualBoyAdvance \
+     CFLAGS="$optcflags" \
+     LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+     prefix="$butch_prefix" DESTDIR="$butch_install_dir" \
+     -j$MAKE_THREADS install || exit 1
