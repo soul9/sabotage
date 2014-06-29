@@ -11,6 +11,7 @@ openssl
 zlib
 
 [build]
+patch -p1 < "$K"/wpa_supplicant-fflush.patch || exit 1
 cd wpa_supplicant
 cp defconfig .config
 # libnl-tiny seems to implement the netlink (libnl) 2 API, thus the
