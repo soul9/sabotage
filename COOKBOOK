@@ -30,8 +30,8 @@ see the wiki page "boostrap to hd image" or utils/write-hd-image.sh
   with the default template, butch will use /opt/packagename as DESTDIR for installs.
   the contents of that dir will then be symlinked into / in a stow-ish manner.
 
-  use "butch-unlink" command to remove symlinks to a specific package.
-  use "relocate.sh" command to create symlinks for a pkg which is unlinked.
+  use "butch unlink" command to remove symlinks to a specific package.
+  use "butch relink" command to create symlinks for a pkg which is unlinked.
 
 == Bootstrapping the system
 
@@ -61,11 +61,8 @@ setting a static ip address:
 - route add default gw 192.168.0.1
   you can put that into a script which is automatically started from /etc/rc.local
 
-generate sshd keys
-- butch install sshd-keys
-
 start sshd
-- /bin/sshd
+- sv u sshd
 
 == System Administration
 
@@ -77,6 +74,31 @@ distribution!
 Sabotage does not follow FHS.  /usr is a legacy symlink to /, /sbin is
 a legacy symlink to /bin.  Software should be installed with
 --prefix=/.  The times of a seperate root partition are long over.
+
+packages are installed into /opt/$packagename and symlinked to /.
+
+/src is where software gets built in and packages are searched for. 
+/src/pkg	: package recipes, used by butch
+/src/KEEP	: patches and other additional files referenced from pkg scripts
+/src/tarballs	: upstream tarballs for software releases.
+/src/logs	: logfiles from builds
+/src/build	: directory to build packages in.
+                  can grow quite big so it may be emptied from time to time...
+/src/filelists	: one filelist per package, used by some butch commands.
+
+/src is not required for sabotage to operate correctly once it has been set up,
+as long as you don't want to use the build manager on that install.
+
+if you run your sabotage system, you may want to clone the upstream
+repo into /src/sabotage and create symlinks to KEEP and pkg in the git repo.
+
+    git clone git://github.com/sabotage-linux/sabotage /src/sabotage
+    rm -rf /src/pkg /src/KEEP
+    ln -sf /src/sabotage/pkg /src/pkg
+    ln -sf /src/sabotage/KEEP /src/KEEP
+
+that way you can issue a git pull in /src/sabotage to update,
+and have your pkg and KEEP directories always pointing to the latest version.
 
 Everything below /local is yours, use it wisely.  Software not
 packaged by Sabotage should not touch stuff outside, it could possibly
