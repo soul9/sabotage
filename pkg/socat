@@ -9,8 +9,12 @@ sha512=0b2f4bac91143b7b57465ded4ba58dbacdd050ce34dddfc01933643b488cef2eec8041971
 openssl
 
 [build]
-CFLAGS="-DNETDB_INTERNAL=-1 $optcflags" LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')
+
+CFLAGS="-DNETDB_INTERNAL=-1 $optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure --prefix="$butch_prefix" $xconfflags \
             --bindir=/bin \
             --sbindir=/bin \
             --enable-help \
