@@ -13,7 +13,7 @@ CFLAGS="-DNETDB_INTERNAL=-1 $optcflags" LDFLAGS="$optldflags" \
   ./configure --prefix="$butch_prefix" \
             --bindir=/bin \
             --sbindir=/bin \
-            --disable-help \
+            --enable-help \
             --disable-readline \
             --disable-filan \
             --disable-sycls
