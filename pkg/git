@@ -25,3 +25,4 @@ mkdir -p "$dest"/bin
 cp gitk-git/gitk "$dest"/bin/ || exit 1
 ln -sf git "$dest"/bin/git-receive-pack
 ln -sf git "$dest"/bin/git-upload-archive
+mv "$dest"/share/perl5 "$dest"/lib/
