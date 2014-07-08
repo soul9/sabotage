@@ -1,0 +1,18 @@
+[deps.host]
+perl
+
+[deps.run]
+perl
+
+[deps]
+
+[mirrors]
+
+[main]
+
+[build]
+perl Makefile.PL || exit 1
+make -j$MAKE_THREADS && \
+make test && \
+make DESTDIR="$butch_install_dir" install || exit 1
+
