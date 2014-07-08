@@ -135,17 +135,22 @@ settings (see examples provided in there), then run "startx".
 also check /etc/xinitrc for X11 keyboard config.
 
 ## NOTE TO CONTRIBUTORS
-if you want to add packages, start from KEEP/package.template .
-cp KEEP/package.template pkg/my_new_pkg
-use utils/dlinfo.sh http://1.2.3.4/my_new_pkg.tar.xz
+
+if you want to add packages, start from KEEP/pkg_skel/autoconf template.
+
+    cp KEEP/pkg_skel/autoconf pkg/my_new_pkg
+    utils/dlinfo.sh http://1.2.3.4/my_new_pkg.tar.xz
+
 that'll spit out the filesize, sha512sum boilerplate for easy copy&paste.
 
 please do not use HTTPS or FTP mirrors.
 HTTPS is unsupported by busybox wget, and FTP is a broken, ancient protocol
 which needs a second data connection (i.e. open port on the client).
+
 this can cause problems when behind a NAT router or socks proxy.
 Downloads from git or other source repositories are not desired, because
 that would introduce a build-time dependency on an internet connection.
+
 sabotage is designed so you can download all packages in advance when you
 have internet connection, and then build everything offline.
 
