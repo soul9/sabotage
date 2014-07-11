@@ -1,0 +1,28 @@
+[mirrors]
+http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.0.0.tar.gz
+http://ftp.ch.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.0.0.tar.gz
+
+[main]
+filesize=2670313
+sha512=c945f4c1b77f2b54fa2445cd5d9263545630b4fe5d603d7740ba7c1bb9f50ba5557635c073f518708c18d03af17a6ff58b104c665338fc727130c4ae95a8e3da
+
+[deps]
+
+[build]
+patch -p1 < "$K"/libressl-glibc.patch || exit 1
+
+sed -i 's/-Werror//' configure
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" \
+  --disable-werror --disable-nls $xconfflags || exit 1
+
+#[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
+
+make V=1 -j$MAKE_THREADS || exit 1
+make DESTDIR="$butch_install_dir" install || exit 1
