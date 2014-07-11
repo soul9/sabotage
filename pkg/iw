@@ -15,9 +15,7 @@ pkgconf
 [build]
 patch -p1 < "$K"/iw-libnl-tiny.patch
 CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
-  -DCONFIG_LIBNL20 \
-  -Dnl_handle=nl_sock -Dnl_handle_alloc_cb=nl_socket_alloc_cb \
-  -Dnl_handle_destroy=nl_socket_free \
+  -DCONFIG_LIBNL20 -DLIBNL1_COMPAT \
   -D__int32_t=int32_t -D__int16_t=int16_t -D__uint8_t=uint8_t \
   -D__uint32_t=uint32_t -D__uint16_t=uint16_t \
   -include stdint.h $optcflags" \
