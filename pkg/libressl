@@ -26,3 +26,47 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
 
 make V=1 -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
+
+dest="$butch_install_dir""$butch_prefix"
+mkdir -p "$dest"/lib/pkgconfig
+cat << EOF > "$dest"/lib/pkgconfig/openssl.pc
+prefix=$butch_prefix
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: OpenSSL
+Description: Secure Sockets Layer and cryptography libraries and tools
+Version: 1.0.1h
+Requires: libssl libcrypto
+EOF
+
+cat << EOF > "$dest"/lib/pkgconfig/libssl.pc
+prefix=$butch_prefix
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: OpenSSL-libssl
+Description: Secure Sockets Layer and cryptography libraries
+Version: 1.0.1h
+Requires.private: libcrypto
+Libs: -L\${libdir} -lssl
+Libs.private: -Wl,-Bsymbolic -ldl -lz
+Cflags: -I\${includedir}
+EOF
+
+cat << EOF > "$dest"/lib/pkgconfig/libcrypto.pc
+prefix=$butch_prefix
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: OpenSSL-libcrypto
+Description: OpenSSL cryptography library
+Version: 1.0.1h
+Requires:
+Libs: -L\${libdir} -lcrypto
+Libs.private: -Wl,-Bsymbolic -ldl -lz
+Cflags: -I\${includedir}
+EOF
