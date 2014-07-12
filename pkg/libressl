@@ -10,6 +10,7 @@ sha512=c945f4c1b77f2b54fa2445cd5d9263545630b4fe5d603d7740ba7c1bb9f50ba5557635c07
 
 [build]
 patch -p1 < "$K"/libressl-glibc.patch || exit 1
+patch -p1 < "$K"/libressl-entropy-nonsense.patch || exit 1
 
 sed -i 's/-Werror//' configure
 
