@@ -13,6 +13,7 @@ do_disable_overcommit=true
 do_protected_symlinks=false
 do_protected_hardlinks=true
 do_allow_user_ping=true
+do_disable_ipv6=false
 
 if $do_allow_user_ping ; then
 	# give groups 1000 - MAX access.
@@ -115,3 +116,6 @@ if $do_protected_hardlinks ; then
 	echo "1" > /proc/sys/fs/protected_hardlinks
 fi
 
+if $do_disable_ipv6 ; then
+	echo "1" > /proc/sys/net/ipv6/conf/all/disable_ipv6
+fi
