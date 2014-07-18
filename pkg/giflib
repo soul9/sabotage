@@ -1,9 +1,9 @@
-[main]
-filesize=506050
-sha512=f47954218ed7d3415cc195a1031a688fcb7dd2bc2b394491830e6b5f5332903ed7c4433b795cd3da9ac53bfc969fe94bec2a4e66b15c0385c732c01b1b7e5057
-
 [mirrors]
-http://downloads.sourceforge.net/sourceforge/giflib/giflib-4.1.6.tar.bz2
+http://downloads.sourceforge.net/project/giflib/giflib-5.1.0.tar.bz2
+
+[main]
+filesize=621155
+sha512=5e32fe6fb69298a3ba06842b33cadf33409a8ca92eef3625cedd40cfd99535a994eaa8beae0eff4fa82747937b851af5d5f895c9e58368d6b703df5e2b0bb245
 
 [deps]
 libx11
@@ -11,5 +11,7 @@ libx11
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+printf 'all:\n\ttrue\n\ninstall:\n\ttrue\n\nclean:\n\ttrue\n\ndistclean:\n\ttrue' \
+  > doc/Makefile
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
