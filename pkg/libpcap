@@ -1,11 +1,11 @@
 [mirrors]
-http://www.tcpdump.org/release/libpcap-1.3.0.tar.gz
-http://www.uk.tcpdump.org/release/libpcap-1.3.0.tar.gz
-http://tcpdump.cybermirror.org/release/libpcap-1.3.0.tar.gz
+http://www.tcpdump.org/release/libpcap-1.6.1.tar.gz
+http://www.uk.tcpdump.org/release/libpcap-1.6.1.tar.gz
+http://tcpdump.cybermirror.org/release/libpcap-1.6.1.tar.gz
 
 [main]
-filesize=608967
-sha512=c023abb3da7b9f62835fa04ca43b50203d7e3da7b624d09a693c8b02fd531c3845e1c86cbc587ae02816614133f5342585f6a2985fdaf92889fcfaca7bfb8908
+filesize=651061
+sha512=721f20ccf93d0a033945a8ed618dad2aeb7334eea26ee128f2eebf65e19bd6523698191e59e727adb83b96f4ca45f2f218f9af94af9923453c06a57cab36487b
 
 [deps]
 libnl-tiny
@@ -15,9 +15,9 @@ flex
 bison
 
 [build]
-patch -p1 < "$K"/libpcap-configure.patch || exit 1
 [ -n "$CROSS_COMPILE" ] && \
 xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-pcap=linux"
+
 # package causes gcc breakage when lto is used
 if [ x$A = xmips ] ; then
   optldflags=$(printf "%s" "$optldflags"|sed 's/-flto//g')
