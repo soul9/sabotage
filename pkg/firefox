@@ -19,6 +19,7 @@ libxt
 mesalib
 libogg
 libvorbis
+icu
 
 [deps.host]
 yasm
@@ -43,9 +44,6 @@ PATCH firefox-hunspell.patch || exit 1
 
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1008851
 PATCH firefox-31-nonascii.patch || exit 1
-
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1046186
-PATCH firefox-31-icu.patch || exit 1
 
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1041962
 PATCH firefox-31-basename.patch || exit 1
@@ -110,6 +108,7 @@ ac_add_options --with-system-libevent
 #ac_add_options --with-system-libvpx
 #ac_add_options --with-system-nspr
 #ac_add_options --with-system-nss
+ac_add_options --with-system-icu
 
 # It is recommended not to touch anything below this line
 ac_add_options --prefix=/$butch_prefix
