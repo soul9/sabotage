@@ -102,22 +102,6 @@ diff -r 06549f98901b media/webrtc/trunk/testing/gtest/src/gtest.cc
  #if GTEST_OS_LINUX
  
  // TODO(kenton@google.com): Use autoconf to detect availability of
-diff -r 06549f98901b netwerk/sctp/src/netinet/sctp_bsd_addr.c
---- a/netwerk/sctp/src/netinet/sctp_bsd_addr.c	Fri Aug 02 14:36:52 2013 +0000
-+++ b/netwerk/sctp/src/netinet/sctp_bsd_addr.c	Fri Aug 02 14:42:20 2013 +0000
-@@ -49,11 +49,9 @@
- #include <netinet/sctp_sysctl.h>
- #include <netinet/sctp_indata.h>
- #if !defined(__Userspace_os_Windows)
-+#include <unistd.h>
- #if defined(ANDROID)
--#include <unistd.h>
- #include <ifaddrs-android-ext.h>
--#else
--#include <sys/unistd.h>
- #endif
- #endif
- 
 diff -r 06549f98901b netwerk/sctp/src/netinet/sctp_os_userspace.h
 --- a/netwerk/sctp/src/netinet/sctp_os_userspace.h	Fri Aug 02 14:36:52 2013 +0000
 +++ b/netwerk/sctp/src/netinet/sctp_os_userspace.h	Fri Aug 02 14:42:20 2013 +0000
@@ -142,20 +126,6 @@ diff -r 06549f98901b netwerk/sctp/src/netinet/sctp_pcb.c
  #ifdef __FreeBSD__
  #include <sys/cdefs.h>
  __FBSDID("$FreeBSD: head/sys/netinet/sctp_pcb.c 246687 2013-02-11 21:02:49Z tuexen $");
-@@ -69,11 +71,10 @@
- #endif
- #if defined(__Userspace__)
- #if !defined(__Userspace_os_Windows)
-+#include <netdb.h>
-+#include <unistd.h>
- #if defined(ANDROID)
--#include <unistd.h>
- #include <ifaddrs-android-ext.h>
--#else
--#include <sys/unistd.h>
- #endif
- #endif
- #include <user_socketvar.h>
 diff -r 06549f98901b netwerk/sctp/src/user_queue.h
 --- a/netwerk/sctp/src/user_queue.h	Fri Aug 02 14:36:52 2013 +0000
 +++ b/netwerk/sctp/src/user_queue.h	Fri Aug 02 14:42:20 2013 +0000
@@ -420,14 +390,3 @@ diff -r 06549f98901b tools/profiler/shared-libraries-linux.cc
  #endif
  #include <features.h>
  #include <dlfcn.h>
---- a/toolkit/library/Makefile.in
-+++ b/toolkit/library/Makefile.in
-@@ -199,7 +199,7 @@
- endif
- 
- 
--ifdef MOZ_ALSA
-+ifdef MOZ_ALSA_LIBS
- EXTRA_DSO_LDOPTS += $(MOZ_ALSA_LIBS)
- endif
- 

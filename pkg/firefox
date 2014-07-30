@@ -1,10 +1,10 @@
 [mirrors]
-http://releases.mozilla.org/pub/mozilla.org/firefox/releases/29.0.1/source/firefox-29.0.1.source.tar.bz2
-ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/29.0.1/source/firefox-29.0.1.source.tar.bz2
+http://releases.mozilla.org/pub/mozilla.org/firefox/releases/31.0/source/firefox-31.0.source.tar.bz2
+ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/31.0/source/firefox-31.0.source.tar.bz2
 
 [main]
-filesize=142735471
-sha512=a1ebff4f4f3359bed54eae229e54de22a92adb0dbfe627a71e8e4e41330c9fbe17e238aafe1342a377a7cb96f2b26e23c723238800a8e91dba21d8b6feedbe35
+filesize=147507120
+sha512=43e8f538591afde4c1bb4f0651df32a77456c5445204d0538d90112258e1f2cc90b822777799b96b97682b8fc1d8b5648dd3e3648a9392db0dc432c1e8520c85
 tardir=mozilla-release
 
 [deps]
@@ -30,7 +30,7 @@ FF_VERSION=29.0.1
 export SHELL=/bin/sh
 
 PATCH() {
-	echo "$1"
+	echo "***** $1 *****"
 	patch -p1 < "$K"/"$1"
 }
 
@@ -40,7 +40,16 @@ PATCH firefox-finite.patch || exit 1
 PATCH firefox-gregor.patch || exit 1
 PATCH firefox-profiler.patch || exit 1
 PATCH firefox-hunspell.patch || exit 1
-PATCH firefox-29-configure.patch || exit 1
+
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1008851
+PATCH firefox-31-nonascii.patch || exit 1
+
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1046186
+PATCH firefox-31-icu.patch || exit 1
+
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1041962
+PATCH firefox-31-basename.patch || exit 1
+
 PATCH firefox-29-pthread_t.patch || exit 1
 
 cat << EOF > mozconfig

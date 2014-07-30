@@ -1,6 +1,6 @@
 --- mozilla-release.org/configure
 +++ mozilla-release/configure
-@@ -25339,7 +25339,7 @@
+@@ -25848,7 +25848,7 @@
    fi
  fi
  
@@ -9,18 +9,18 @@
  
  
  # Static build options
-@@ -28174,7 +28174,7 @@
+@@ -28922,7 +28922,7 @@
      (''' EXPAND_LIBS_LIST_STYLE ''', r''' $EXPAND_LIBS_LIST_STYLE ''')
      (''' EXPAND_LIBS_ORDER_STYLE ''', r''' $EXPAND_LIBS_ORDER_STYLE ''')
      (''' CL_INCLUDES_PREFIX ''', r''' $CL_INCLUDES_PREFIX ''')
 -    (''' NONASCII ''', r''' $NONASCII ''')
-+    (''' NONASCII ''', "$NONASCII")
-     (''' JS_SHARED_LIBRARY ''', r''' $JS_SHARED_LIBRARY ''')
++    (''' NONASCII ''', r''' "$NONASCII" ''')
      (''' LIBXUL_LIBS ''', r''' $LIBXUL_LIBS ''')
      (''' GKMEDIAS_SHARED_LIBRARY ''', r''' $GKMEDIAS_SHARED_LIBRARY ''')
+     (''' ZLIB_IN_MOZGLUE ''', r''' $ZLIB_IN_MOZGLUE ''')
 --- mozilla-release.org/js/src/configure
 +++ mozilla-release/js/src/configure
-@@ -14968,7 +14968,7 @@
+@@ -14858,7 +14858,7 @@
    fi
  fi
  
@@ -29,12 +29,12 @@
  
  
  if test -n "$GNU_CC" -a -z "$CLANG_CC"; then
-@@ -16306,7 +16306,7 @@
+@@ -16451,7 +16451,7 @@
      (''' EXPAND_LIBS_LIST_STYLE ''', r''' $EXPAND_LIBS_LIST_STYLE ''')
      (''' EXPAND_LIBS_ORDER_STYLE ''', r''' $EXPAND_LIBS_ORDER_STYLE ''')
      (''' CL_INCLUDES_PREFIX ''', r''' $CL_INCLUDES_PREFIX ''')
 -    (''' NONASCII ''', r''' $NONASCII ''')
-+    (''' NONASCII ''', "$NONASCII")
++    (''' NONASCII ''', r''' "$NONASCII" ''')
      (''' JS_NATIVE_EDITLINE ''', r''' $JS_NATIVE_EDITLINE ''')
      (''' JS_DISABLE_SHELL ''', r''' $JS_DISABLE_SHELL ''')
      (''' EDITLINE_LIBS ''', r''' $EDITLINE_LIBS ''')
