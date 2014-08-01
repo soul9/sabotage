@@ -16,8 +16,6 @@ pixman
 # WARNING this package needs more than 512 MB ram to build
 
 patch -p1 < "$K"/qemu-170-openpty.patch || exit 1
-patch -p1 < "$K"/qemu-170-ffsll.patch || exit 1
-patch -p1 < "$K"/qemu-170-ffsl.patch || exit 1
 patch -p1 < "$K"/qemu-170-sigset_t.patch || exit 1
 
 CFLAGS="-D_GNU_SOURCE -Dflock64=flock -D__SIGRTMIN=32 -D__SIGRTMAX=\(NSIG-1\)"
