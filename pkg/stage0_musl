@@ -2,18 +2,16 @@
 stage0_gcc
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-1.1.3.tar.gz
-http://www.musl-libc.org/releases/musl-1.1.3.tar.gz
+http://www.etalabs.net/musl/releases/musl-1.1.4.tar.gz
+http://www.musl-libc.org/releases/musl-1.1.4.tar.gz
 
 [main]
-filesize=844982
-sha512=c580c700d609eced15dc398ff6dcbc2e38fab24eaa5ea80a58c3d41d9f749579cce328bbad149f2b5975533d6ec051e6cc08be3bea4d65e143fc850745bf24c2
+filesize=866376
+sha512=a46fb1db23f518beaa959e9bebcb3bf0574e583c197792d30dcd52b3974e3c285594984207043d317859fc5552f1d303a5686e9fbe3b8825df6346de7f917f9f
 
 [build]
 # do not rebuild stage0 packages once we're past that stage
 test "$STAGE" = "0" || exit 0
-
-patch -p1 < "$K"/musl-1.1.3-mips-regression.patch || exit 1
 
 CC=$R/bin/gcc ./configure --enable-gcc-wrapper \
   --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
