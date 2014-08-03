@@ -33,6 +33,7 @@ patch -p1 < "$K"/gcc473-dliterate-configure-var.patch || exit 1
 patch -p1 < "$K"/gcc473-arm-hwcap.patch || exit 1
 patch -p1 < "$K"/gcc473-config-sub.patch || exit 1
 patch -p1 < "$K"/gcc473-powerpc-libc-stack-end.patch || exit 1
+patch -p1 < "$K"/gcc-474-universal-initializer-no-warning.patch || exit 1
 
 # fix specs file generation. this prevents libgcc_s from being used.
 # not only is it slower, it'll cause assertion errors in ld.
