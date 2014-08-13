@@ -1,4 +1,5 @@
 #!/bin/sh
+start=$(date +%s)
 printf "%s: start\n" "`date`"
 
 # ALL VARIABLES STARTING WITH % WILL BE REPLACED BY BUTCH
@@ -163,3 +164,4 @@ if $have_files ; then
 fi
 
 printf "%s: done.\n" "`date`"
+[ -n "$start" ] && printf "total build time: %d seconds.\n" $(($(date +%s) - $start))
