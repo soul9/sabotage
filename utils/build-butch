@@ -1,14 +1,14 @@
 #!/bin/sh
-filesize='66427'
-sha512='b9e8fdadef67f6efc8696f9dcd32f6766accdcbdf33184453553e318db8d46876208996ca480a93c66f3d2ff28fe9baf3e1bcc3ca77eb9baf687daeba484e2f5'
-version=0.4.0
+filesize='55660'
+sha512='c0565c79d937e5e971fbb78b8b68b80f2583949bd6d3256e2a7c538707d772cd4801b431903539d9b8c1ce57fc7cc0c63d633e9a931915e3821a799ee12e9805'
+version=0.5.0
 
 filename="$C"/butch-$version.tar.bz2
 
 if [ -z "$BUTCH_BIN" ] ; then
 
-tarxf http://ftp.barfooze.de/pub/butch/ butch-$version .tar.bz2 butch ||
-tarxf http://foss.aueb.gr/mirrors/linux/butch/ butch-$version .tar.bz2 butch
+tarxf http://ftp.barfooze.de/pub/butch/ butch-$version .tar.bz2 ||
+tarxf http://foss.aueb.gr/mirrors/linux/butch/ butch-$version .tar.bz2
 
 getfilesize() {
 	wc -c "$1" | cut -d " " -f 1
@@ -36,14 +36,11 @@ if [ "$sha" != "$sha512" ]; then
     exit 1
 fi
 
-# this speeds up compilation a bit
-echo "CFLAGS=-O0" > butch/config.mak
-
 # if on arm or mips, we only use one build thread to not exhaust memory
 [ "$A" = "arm" ] || [ "$A" = "mips" ] && sed -i \
   's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
 
-./build.sh
+MAKEFLAGS=-j$MAKE_THREADS ./build.sh
 BUTCH_BIN=butch/butch
 
 fi

@@ -1,11 +1,10 @@
 [mirrors]
-http://ftp.barfooze.de/pub/butch/butch-0.4.0.tar.bz2
-http://foss.aueb.gr/mirrors/linux/butch/butch-0.4.0.tar.bz2
+http://ftp.barfooze.de/pub/butch/butch-0.5.0.tar.bz2
+http://foss.aueb.gr/mirrors/linux/butch/butch-0.5.0.tar.bz2
 
 [main]
-filesize=66427
-sha512=b9e8fdadef67f6efc8696f9dcd32f6766accdcbdf33184453553e318db8d46876208996ca480a93c66f3d2ff28fe9baf3e1bcc3ca77eb9baf687daeba484e2f5
-tardir=butch
+filesize=55660
+sha512=c0565c79d937e5e971fbb78b8b68b80f2583949bd6d3256e2a7c538707d772cd4801b431903539d9b8c1ce57fc7cc0c63d633e9a931915e3821a799ee12e9805
 
 [deps.host]
 stage0_musl
