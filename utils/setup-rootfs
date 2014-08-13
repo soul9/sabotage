@@ -19,10 +19,10 @@ mkdir -p src/logs var/log/sshd var/log/crond var/log/dmesg
 mkdir -p var/empty var/service var/lib var/spool/cron/crontabs
 
 # usr and sbin are a mistake
-ln -s . usr
-ln -s bin sbin
+ln -sfn . usr
+ln -sfn bin sbin
 
-ln -s ../tmp var/tmp
+ln -sfn ../tmp var/tmp
 chmod 1777 tmp
 chmod 700 root
 
