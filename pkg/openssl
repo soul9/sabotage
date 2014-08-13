@@ -1,9 +1,9 @@
 [mirrors]
-http://www.openssl.org/source/openssl-1.0.1h.tar.gz
+http://www.openssl.org/source/openssl-1.0.1i.tar.gz
 
 [main]
-filesize=4475692
-sha512=687d12ae13e364b15622f68933894050d577a4f8647bd68c7e9e86eb9d9f49cd2ebb0da3c5d3ded0a8746cf7b87e23b167b536116aa9a0402d7e7cc2ee401a92
+filesize=4422117
+sha512=6cbcdcec8568236e8f20f0461f93df8a193a0ad88102ff548443e6ec87e2a7f649e314beee1e6bafda693934b4fb142244b61d14bf736828dda09e277b941d93
 
 [deps]
 zlib
