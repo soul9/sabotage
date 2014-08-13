@@ -15,3 +15,6 @@ python
 python setup.py build || exit 1
 python setup.py install --prefix="$butch_prefix" \
        --root="$butch_install_dir" || exit 1
+dest="$butch_install_dir""$butch_prefix"
+mkdir -p "$dest"/share/cvs2svn
+cp cvs2git-example.options "$dest"/share/cvs2svn/
