@@ -2,6 +2,7 @@
 gmp
 mpfr
 mpc
+zlib
 
 [deps.host]
 m4
