@@ -1,17 +1,16 @@
 [deps]
 
 [mirrors]
-http://ftp.barfooze.de/pub/sabotage/tarballs/kernel-headers-3.12.6-3.tar.xz
-http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/kernel-headers-3.12.6-3.tar.xz
-http://codu.org/~rofl/tarballs/kernel-headers-3.12.6-3.tar.xz
-http://dl.2f30.org/mirrors/sabotage/tarballs/kernel-headers-3.12.6-3.tar.xz
+http://ftp.barfooze.de/pub/sabotage/tarballs/kernel-headers-3.12.6-5.tar.xz
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/kernel-headers-3.12.6-5.tar.xz
+http://codu.org/~rofl/tarballs/kernel-headers-3.12.6-5.tar.xz
+http://dl.2f30.org/mirrors/sabotage/tarballs/kernel-headers-3.12.6-5.tar.xz
 
 [main]
-filesize=756544
-sha512=f55c43eb52662065470bc0dd0bcbead5352db04ec8e2ecf2a308d34b8b99eb452a82dd2ba18f25ff5896db48ad35a8624b331883c5aa9924323d2ea4edbf87b6
+filesize=757200
+sha512=f6a8eff1c93556aced47c0ac962b8356c3394ad9b25dcfe425a87d26f35391608a9d06f7f5010c1146fa4959c2093ca01ab251b2215f6c21298827ab0fc01032
 
 [build]
-patch -p1 < "$K"/kernel-headers_tcphdr.patch || exit 1
 make ARCH="$A" prefix="$butch_prefix" DESTDIR="$butch_install_dir" install \
   || exit 1
 dest="$butch_install_dir""$butch_prefix"
