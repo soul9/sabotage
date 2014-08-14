@@ -1,15 +1,26 @@
-[main]
-filesize=7009201
-sha512=fdd3c230f4f7a687d36db1b8f7baab5e553cf55756e2d49a88ffaa4260c8cb949897dec9f48655e96608ef0093ac101b60c132060f06c711c0ab81aa3f148b5c
-
 [mirrors]
-http://ftp.gnu.org/gnu/bash/bash-4.2.tar.gz
+http://ftp.gnu.org/gnu/bash/bash-4.3.tar.gz
+
+[main]
+filesize=7955839
+sha512=a852b8e46ee55568dce9d23a30a9dbd1c770c2d2a4bc91e1c3177d723b31b32c5d69d19704a93f165891b409b9dd2cc65723372044e2bd0ee49ed59a11512651
 
 [deps]
 
 [build]
-
-CFLAGS="$optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" --without-bash-malloc --disable-nls || exit 1
-make -j$MAKE_THREADS || exit 1
+# FIXME: bash has a ton of configure tests with broken defaults
+# for crosscompiling. breakage could for example be introduced by
+# "checking for offset of exit status... 0" (due to crosscompile)
+# on a native x86_64 run we get 8 (bash_cv_wexitstatus_offset)
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+CFLAGS="$optcflags" LDFLAGS="$optldflags -static" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags \
+  --without-bash-malloc \
+  --disable-rpath --enable-history bash_cv_getenv_redef=no \
+  --enable-job-control bash_cv_sys_named_pipes=yes \
+  --disable-nls || exit 1
+#  --with-installed-readline ac_cv_rl_version=5.0 \
+make -j$MAKE_THREADS READLINE_LIB=-l:lib/readline/libreadline.a || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
