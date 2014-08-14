@@ -16,14 +16,6 @@ OPTIONS = -DMNG_BUILD_SO -DMNG_FULL_CMS
 # where "make install" puts libmng.a,libmng.so*,libmng.h,libmng_conf.h,libmng_types.h
 prefix=/usr/local
 
-ZLIBLIB=$(prefix)/lib
-ZLIBINC=$(prefix)/include
-JPEGLIB=$(prefix)/lib
-JPEGINC=$(prefix)/include
-LCMSLIB=$(prefix)/lib
-LCMSINC=$(prefix)/include
-
-
 ALIGN=
 # for i386:
 #ALIGN=-malign-loops=2 -malign-functions=2
