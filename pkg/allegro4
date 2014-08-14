@@ -1,5 +1,7 @@
 [mirrors]
-http://surfnet.dl.sourceforge.net/project/alleg/allegro/4.4.2/allegro-4.4.2.tar.gz
+http://downloads.sourceforge.net/project/alleg/allegro/4.4.2/allegro-4.4.2.tar.gz
+http://switch.dl.sourceforge.net/project/alleg/allegro/4.4.2/allegro-4.4.2.tar.gz
+http://heanet.dl.sourceforge.net/project/alleg/allegro/4.4.2/allegro-4.4.2.tar.gz
 
 [main]
 filesize=4674902
