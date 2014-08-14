@@ -9,6 +9,7 @@ sha512=44a231943582005024300f3d73ae7720fdc6f501fbd4685170a6da2ecdf44e3d15b95d2e6
 libxml2
 glib
 intltool
+gdk-pixbuf
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
