@@ -16,7 +16,8 @@ patch -p1 < "$K"/lsof-dsock.patch || exit 1
 
 ./Configure -n linux || exit 1
 
-make -j$MAKE_THREADS CDEF="$optcflags" LDFLAGS="$optldflags -static" || exit 1
+make -j$MAKE_THREADS CC="$CC" CDEF="$optcflags" \
+  LDFLAGS="$optldflags -static" || exit 1
 
 dest="$butch_install_dir""$butch_prefix"
 install -D -m 755 lsof "$dest"/bin/lsof && \
