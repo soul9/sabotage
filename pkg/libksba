@@ -6,6 +6,7 @@ filesize=624704
 sha512=51023119346fb7ffa31eee205376b7efb0fab42dee73c669c3174c2ebf4100008d3f508f8d49da27b1ea865c46d407b430c47ce503a8d63c069f59132ee638d9
 
 [deps]
+libgpg-error
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
