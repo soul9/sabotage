@@ -9,9 +9,16 @@ sha512=761f60d9197bcb08c3ac150190194c90c2848478bfb61769c8a5325b5060ce81ff6f5d03f
 
 [build]
 #patch -p1 < "$K"/some.patch || exit 1
-
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" || exit 1
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+BUILD_CC="$HOSTCC" \
+CFLAGS="-D_GNU_SOURCE $optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags \
+  --without-readline \
+  --with-openssl="$butch_root_dir""$butch_prefix" \
+  --with-ecdsa=yes --with-gost=yes --with-randomdev=/dev/urandom || exit 1
 
 for i in dns isc bind9 isccfg lwres ; do
   make -j$MAKE_THREADS -C lib/$i || exit 1
