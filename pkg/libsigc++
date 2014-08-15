@@ -9,8 +9,13 @@ sha512=8c9aa63c56e978ec3e38fda9919ffbba173b97342d0e19d0ae3126e9edb97aa1d42e79897
 pkgconf
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+CPPFLAGS=-D_GNU_SOURCE \
+CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags \
 --disable-silent-rules\
 --disable-documentation \
 || exit 1
