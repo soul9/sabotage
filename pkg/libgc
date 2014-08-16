@@ -1,5 +1,5 @@
 [mirrors]
-http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.2d.tar.gz
+http://www.hboehm.info/gc/gc_source/gc-7.2d.tar.gz
 
 [main]
 filesize=1263064
