@@ -13,5 +13,6 @@ cat <<EOF > local.mk
 PREFIX = $butch_prefix
 CFLAGS += -D_GNU_SOURCE $optcflags
 EOF
-LDFLAGS="-static $optldflags" make -j$MAKE_THREADS V=1 HAVE_GTK2=no || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+LDFLAGS="-static $optldflags" \
+make Q= V=1 CC="$CC" -j$MAKE_THREADS HAVE_GTK2=no || exit 1
+make HAVE_GTK2=no V=1 DESTDIR="$butch_install_dir" install || exit 1
