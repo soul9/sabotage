@@ -44,11 +44,12 @@ sed -i '/^.touch./d' Makefile  # we don't have futimes
 # when libc functions like getpwuid call getline.
 patch -p1 < "$K"/9base-ed-getline.patch || exit 1
 
-stuff_to_build="ascii bc cleanname dc ed factor fmt freq getflags hoc join \
+stuff_to_build="yacc ascii bc cleanname dc ed factor fmt freq getflags hoc join \
 look mk mtime pbd primes rc read sam troff unicode"
 
 sed -i 's/SUBDIRS  =/FOO =/' Makefile
-[ -n "$CROSS_COMPILE" ] && stuff_to_build=$(echo "$stuff_to_build" | sed 's/hoc //')
+[ -n "$CROSS_COMPILE" ] && \
+  stuff_to_build=$(echo "$stuff_to_build" | sed -e 's/hoc //' -e 's/yacc //')
 echo "SUBDIRS=lib9 $stuff_to_build" >> config.mk
 
 make -j$MAKE_THREADS || exit 1
