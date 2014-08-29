@@ -1,13 +1,14 @@
 [mirrors]
-http://golang.org/dl/go1.3.src.tar.gz
+https://golang.org/dl/go1.3.src.tar.gz
 
 [main]
 filesize=10046547
 sha512=342ccad7790ea856315fc1bea1a745a4ceb444f66cd9d2eaa3486d68e431ee99e697f490fb5f33594d59d42d80eec02a04f6cb7726d8709a32115edf18ffe244
 tardir=go
 
-[deps]
+[deps.host]
 bash
+wget
 
 [build]
 patch -p1 < "$K"/go.patch || exit 1
