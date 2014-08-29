@@ -4,11 +4,19 @@ retries=5
 butch_cache_dir="$C"
 tmp=/tmp/butchdl.$$
 rc=0
-wget --help 2>&1 | grep BusyBox || retryf="--tries=$retries"
+append() {
+eval "$1=\"\${$1} \$2\""
+eval "$1=\${$1# }"
+}
+if ! wget --help 2>&1 | grep BusyBox ; then
+	append wgetflags "--tries=$retries"
+	append wgetflags --no-check-certificate
+fi
+
 echo "in case the download process was killed, see $tmp for wget output"
 for url in %BUTCH_MIRROR_URLS ; do
-if ! wget -O "$butch_cache_dir/%BUTCH_TARBALL.wip" -c "$url" \
-  $wgetflags $retryf 2>$tmp ; then
+if ! wget $wgetflags -O "$butch_cache_dir/%BUTCH_TARBALL.wip" -c "$url" \
+   >$tmp 2>&1 ; then
 	rc=1
 	grep 404 < $tmp > /dev/null && rc=44
 	cat $tmp
