@@ -7,17 +7,19 @@ sha512=f6d17be10b8277f08d8867b4ced5a89f9de13cc59767958a6c617e583724d0baaafdda6c1
 
 [deps]
 libpcap
-iw
 openssl
 sqlite
-procps
 libnl-tiny
+
+[deps.run]
+iw
+procps
 ethtool
 
 [build]
 patch -p1 < "$K"/aircrack-ng-123-uint.patch  || exit 1
 patch -p1 < "$K"/aircrack-ng-123-libnltiny.patch  || exit 1
 patch -p1 < "$K"/aircrack-ng-123-sigint.patch  || exit 1
-
+[ -n "$CROSS_COMPILE" ] && export CC="$CC -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib"
 make -j$MAKE_THREADS || exit 1
 make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
