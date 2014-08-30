@@ -32,6 +32,8 @@ CFLAGS="$CPPFLAGS $optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib \
 -lgthread-2.0 -lglib-2.0 -lportablexdr" \
   ./configure --prefix="$butch_prefix" --disable-nls $xconfflags \
+  --mandir="$butch_prefix"/share/man \
+  --sbindir="$butch_prefix"/bin \
   --with-libnet=$butch_root_dir$butch_prefix || exit 1
 
 make V=1 -j$MAKE_THREADS || exit 1
