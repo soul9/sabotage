@@ -1,6 +1,6 @@
 [mirrors]
 http://www.kernel.org/pub/linux/utils/util-linux/v2.23/util-linux-2.23.1.tar.xz
-ftp://www.kernel.org/pub/linux/utils/util-linux/v2.23/util-linux-2.23.1.tar.xz
+http://ftp.free.fr/mirrors/ftp.kernel.org/linux/utils/util-linux/v2.23/util-linux-2.23.1.tar.xz
 
 [main]
 filesize=3368432
