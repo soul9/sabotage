@@ -24,4 +24,4 @@ LIBS="-lpcap -lnl-tiny" \
   --without-crypto ac_cv_path_PCAP_CONFIG=$tru || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
-rm "$butch_install_dir""$butch_prefix"/sbin/tcpdump.4.3.0
+rm "$butch_install_dir""$butch_prefix"/sbin/tcpdump.4.6.1
