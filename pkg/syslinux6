@@ -19,6 +19,12 @@ http://ftp.hosteurope.de/mirror/ftp.kernel.org/pub/linux/utils/boot/syslinux/sys
 http://ftp.uni-ulm.de/pub/mirrors/kernel.org/utils/boot/syslinux/6.xx/syslinux-6.02.tar.bz2
 
 [build]
+
+[ "$A" = "i386" ] || \
+  [ "$A" = "x86_64" ] || ( \
+    echo "WARNING: syslinux6 only supports the pc architecture"
+    exit 0
+  )
 sed -i 's,codepage com32 lzo core memdisk mbr memdump gpxe sample,codepage com32 core mbr,g' Makefile
 sed -i 's,diag libinstaller dos win32 win64 dosutil txt,libinstaller txt,g' Makefile
 sed -i 's,win32/syslinux.exe win64/syslinux64.exe,,g' Makefile

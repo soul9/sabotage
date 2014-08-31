@@ -1,10 +1,11 @@
 [mirrors]
-http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.13.tar.gz
-http://files.directadmin.com/services/all/mysql/mysql-5.6.13.tar.gz
+http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.20.tar.gz
+http://files.directadmin.com/services/all/mysql/mysql-5.6.20.tar.gz
 
 [main]
-filesize=35951160
-sha512=56d3aa84c0ed69fcdb7706117398d555aaec0c20fe09364cd6d4a6b3e3af8644825d7cb886dbfd3fe630bfd318306090359f04f2558cf499915a9f1648520a82
+filesize=32979820
+sha512=c4bcc2a209616a38c04a4679cc7a76b354f0d7d3dda860b82b9cdb4746f897aa5c8204a440e1c65f55d81b2ac526b205dd0ba28786ba21778cc068efd71403ac
+
 
 [deps.host]
 cmake
@@ -15,6 +16,7 @@ readline
 
 [build]
 patch -p1 < "$K"/mysql-srv_buf_size.patch || exit 1
+patch -p1 < "$K"/mysql-cflags.patch || exit 1
 
 # prevent installation of 10K tests, 180MB, + and additional 35MB of symlinks
 DISABLE_TESTS=true
@@ -28,6 +30,7 @@ if $DISABLE_TESTS ; then
 fi
 
 mkdir build && cd build
+
 
 cmake \
   -DCMAKE_INSTALL_PREFIX=$butch_prefix \
@@ -62,13 +65,11 @@ cmake \
   -DCMAKE_C_FLAGS="-D__STDC_ISO_10646__ -DSHM_R=0400 -DSHM_W=0400" \
   -DWITH_READLINE=OFF \
   -DWITH_LIBEDIT=system \
+  -DDEFAULT_MYSQL_HOME="/" \
+  -DDEFAULT_CHARSET_HOME="/" \
+  -DURMOM=ON \
+  -DMYSQLS_MOMS_CFLAGS="-DTHD_LIB_LT=1 -Dthd_lib_detected=2" \
       .. || exit 1
-
-sed -i 's@/\* #undef DEFAULT_CHARSET_HOME \*/@#define DEFAULT_CHARSET_HOME ""@' include/config.h
-sed -i 's@/\* #undef DEFAULT_CHARSET_HOME \*/@#define DEFAULT_CHARSET_HOME ""@' include/my_config.h
-
-sed -i 's@/\* #undef DEFAULT_MYSQL_HOME \*/@#define DEFAULT_MYSQL_HOME ""@' include/config.h
-sed -i 's@/\* #undef DEFAULT_MYSQL_HOME \*/@#define DEFAULT_MYSQL_HOME ""@' include/my_config.h
 
 make -j$MAKE_THREADS VERBOSE=1 || exit 1
 

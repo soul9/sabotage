@@ -6,7 +6,7 @@ sha512=77ac39349ee4ce40a1e5e96be18191afbfda3fb92b41d1c588ac5b98d1677fd111107bae4
 tardir=tomoyo-tools
 
 [mirrors]
-http://sourceforge.jp/frs/redir.php?m=jaist&f=/tomoyo/53357/tomoyo-tools-2.5.0-20120414.tar.gz
+'http://sourceforge.jp/frs/redir.php?m=jaist&f=/tomoyo/53357/tomoyo-tools-2.5.0-20120414.tar.gz'
 
 [build]
 make -j$MAKE_THREADS CFLAGS="-D_GNU_SOURCE -D__WALL=0x40000000 -D_LARGEFILE64_SOURCE" || exit 1

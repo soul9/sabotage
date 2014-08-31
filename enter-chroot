@@ -2,6 +2,7 @@
 [ -z "$CONFIG" ] && CONFIG=./config
 . "$CONFIG"
 export H="$PWD"
+ret=0
 
 if [ -z "$R" ] ; then
 	echo 'no R environment var set, your config is broken'
@@ -55,7 +56,7 @@ echo "Entering chroot..."
 
 $linux32 "$CHROOT" "$R" /bin/env -i \
     HOME=/root TERM="$TERM" PS1='\u:\w$ ' \
-    /bin/sh --login
+    /bin/sh --login || ret=1
 
 tryumount() {
 	dest="$1"
@@ -81,4 +82,4 @@ set_title "sabotage"
 
 #echo empty line so we get a proper prompt back
 echo
-
+exit $ret

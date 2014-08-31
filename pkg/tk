@@ -8,6 +8,7 @@ tardir=tk8.6.0
 
 [deps]
 tcl
+libx11
 
 [build]
 #patch -p1 < "$K/some.patch" || exit 1
@@ -16,5 +17,5 @@ CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
 make -j$MAKE_THREADS || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
 dest="$butch_install_dir""$butch_prefix"
-mdkir -p "$dest"/bin
+mkdir -p "$dest"/bin
 ln -sf wish8.6 "$dest"/bin/wish || exit 1
