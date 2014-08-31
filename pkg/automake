@@ -9,8 +9,6 @@ filesize=1421396
 sha512=e938422378e302dc32725a5bde98a7f2867c6fb6507361e3233ce22a17c7f04d11fd21f3c6e45548f2255817b871e347e312de3b263cad545b12befb6e7476ca
 
 [build]
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
-printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > lib/Automake/tests/Makefile.in
 ./configure -C --prefix="$butch_prefix" || exit 1
 make || exit 1
 make DESTDIR="$butch_install_dir" install || exit 1
