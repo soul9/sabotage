@@ -16,7 +16,6 @@ readline
 
 [build]
 patch -p1 < "$K"/mysql-srv_buf_size.patch || exit 1
-patch -p1 < "$K"/mysql-cflags.patch || exit 1
 
 # prevent installation of 10K tests, 180MB, + and additional 35MB of symlinks
 DISABLE_TESTS=true
@@ -32,7 +31,7 @@ fi
 mkdir build && cd build
 
 
-cmake \
+CC="$CC -DTHD_LIB_LT=1 -Dthd_lib_detected=2" cmake \
   -DCMAKE_INSTALL_PREFIX=$butch_prefix \
   -DINSTALL_DOCDIR=share/doc/mysql \
   -DINSTALL_DOCREADMEDIR=share/doc/mysql \
@@ -68,10 +67,10 @@ cmake \
   -DDEFAULT_MYSQL_HOME="/" \
   -DDEFAULT_CHARSET_HOME="/" \
   -DURMOM=ON \
-  -DMYSQLS_MOMS_CFLAGS="-DTHD_LIB_LT=1 -Dthd_lib_detected=2" \
+  -DMYSQLS_MOMS_CFLAGS="" \
       .. || exit 1
 
-make -j$MAKE_THREADS VERBOSE=1 || exit 1
+CC="$CC -DTHD_LIB_LT=1 -Dthd_lib_detected=2" make -j$MAKE_THREADS VERBOSE=1 || exit 1
 
 #  -DWITH_READLINE=OFF \
 #  -DWITH_LIBEDIT=system \
