@@ -84,7 +84,7 @@ mkdir -p "$fs"/share/kmap
 for i in $slitaz_set ; do
 	k=$(basename $i)
 	k=${k%.map.gz} # strips off .map.gz from $k
-	"$fs"/bin/loadkeys -b "$fs"/share/keymaps/i386/$i > "$fs"/share/kmap/$k.kmap
+	"$fs"/bin/loadkeys -b "$fs"/share/keymaps/i386/$i > "$fs"/share/kmap/$k.kmap || echo "ERROR: loadkeys...$i"
 done
 
 replace_stuff=true
