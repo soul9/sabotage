@@ -77,7 +77,7 @@ export MACHINE=$A
 export  SYSTEM=Linux
 # need to add -L$R/lib to *CFLAGS*, because the build system strips off any
 # -L paths it doesnt like from LDFLAGS.
-export CFLAGS="$CFLAGS -I$butch_root_dir$butch_prefix/include -L$butch_root_dir$butch_prefix/lib"
+export CFLAGS="$CFLAGS -isystem$butch_root_dir$butch_prefix/include -L$butch_root_dir$butch_prefix/lib"
 export LDFLAGS="-L$butch_root_dir$butch_prefix/lib $LDFLAGS"
 # openssl concatenates $CROSS_COMPILE and $CC, so CC becomes 
 # mips-linux-musl-mips-linux-musl-gcc
