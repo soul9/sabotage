@@ -38,9 +38,6 @@ sed -i 's@HAVE_DECL_HOWMANY 1@HAVE_DECL_HOWMANY 0@' config.h
 
 make -j$MAKE_THREADS || exit 1
 
-chown root:root /var/empty
-chmod 0755 /var/empty
-
 #key generation is disabled for packaging
 #the sshd service will create the keys on service prereqs
 make DESTDIR="$butch_install_dir" install-nokeys || exit 1
