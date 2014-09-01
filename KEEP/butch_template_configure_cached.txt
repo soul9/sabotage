@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 start=$(date +%s)
 printf "%s: start\n" "`date`"
@@ -129,7 +128,9 @@ printf "%s: start build\n" "`date`"
 # this will be replaced by the contents of the pkg's [build] section.
 # note that all critical commands in the buildscript should use || exit 1
 # so that it aborts on error!
+set -e
 %BUTCH_BUILDSCRIPT
+set +e
 
 printf "%s: end build\n" "`date`"
 echo "post buildscript phase..."
