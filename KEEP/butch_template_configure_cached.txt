@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 start=$(date +%s)
 printf "%s: start\n" "`date`"
@@ -125,6 +124,7 @@ if %BUTCH_HAVE_TARBALL ; then
 	fi
 fi
 
+set -e
 printf "%s: start build\n" "`date`"
 # this will be replaced by the contents of the pkg's [build] section.
 # note that all critical commands in the buildscript should use || exit 1
@@ -133,6 +133,7 @@ printf "%s: start build\n" "`date`"
 
 printf "%s: end build\n" "`date`"
 echo "post buildscript phase..."
+set +e
 
 # a package that doesn't want to be handled by the code below this line
 # can just call exit 0 as the last statement
