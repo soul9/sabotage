@@ -1,9 +1,9 @@
 [mirrors]
-https://golang.org/dl/go1.3.src.tar.gz
+https://storage.googleapis.com/golang/go1.3.1.src.tar.gz
 
 [main]
-filesize=10046547
-sha512=342ccad7790ea856315fc1bea1a745a4ceb444f66cd9d2eaa3486d68e431ee99e697f490fb5f33594d59d42d80eec02a04f6cb7726d8709a32115edf18ffe244
+filesize=10047964
+sha512=3d35c823e6f5264044c299a38ff425519dcf07bdc1b37a2362108be23ff1442f747ef8fe659df33b2588327a5ec8d9e85f4fd24929d8e23a8ede96a63d6f90ff
 tardir=go
 
 [deps.host]
@@ -12,7 +12,7 @@ wget
 
 [build]
 patch -p1 < "$K"/go.patch || exit 1
-cd ./src && ./all.bash 
+cd ./src && ./make.bash 
 cd ../../ && cp -ar go/* "$butch_install_dir""$butch_prefix" || exit 1 
 [ -h "$butch_root_dir""$butch_prefix"/bin/go ] && rm "$butch_root_dir""$butch_prefix"/bin/go
 [ -h "$butch_root_dir""$butch_prefix"/bin/gofmt ] && rm "$butch_root_dir""$butch_prefix"/bin/gofmt
