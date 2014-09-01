@@ -12,7 +12,7 @@ wget
 
 [build]
 patch -p1 < "$K"/go.patch || exit 1
-cd ./src && ./all.bash 
+cd ./src && ./make.bash 
 cd ../../ && cp -ar go/* "$butch_install_dir""$butch_prefix" || exit 1 
 [ -h "$butch_root_dir""$butch_prefix"/bin/go ] && rm "$butch_root_dir""$butch_prefix"/bin/go
 [ -h "$butch_root_dir""$butch_prefix"/bin/gofmt ] && rm "$butch_root_dir""$butch_prefix"/bin/gofmt
