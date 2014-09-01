@@ -48,9 +48,7 @@ sed -i \
 	-e '/DIRS/s: fips : :g' \
 	-e '/^MANSUFFIX/s:=.*:=ssl:' \
 	-e '/^MAKEDEPPROG/s:=.*:=$(CC):' \
-	-e $(has noman FEATURES \
-		&& echo '/^install:/s:install_docs::' \
-		|| echo '/^MANDIR=/s:=.*:=/usr/share/man:') \
+	-e '/^MANDIR=/s:=.*:='"$butch_prefix"'/share/man:' \
 	Makefile.org \
 	|| die
 # show the actual commands in the log
