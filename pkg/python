@@ -39,7 +39,7 @@ if [ -n "$CROSS_COMPILE" ] ; then
 	for i in SIZEOF_LONG SIZEOF_PTHREAD_T SIZEOF_SIZE_T SIZEOF_TIME_T SIZEOF_VOID_P SIZEOF_UINTPTR_T ; do
 		sed -i 's,#define '$i',//,' pyconfig.h
 	done
-	printf "%s\n" 'int main() { printf("%zu\n", sizeof(time_t)); }' > foo.c
+	printf "%s\n" 'int main() { printf("%zu\n", sizeof(time_t)); return 0;}' > foo.c
 	$HOSTCC -include time.h -include stdio.h foo.c || exit 1
 	l=$(./a.out)
 cat << EOF >> pyconfig.h
