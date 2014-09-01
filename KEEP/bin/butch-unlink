@@ -9,7 +9,9 @@ if [ -z "$pkg" ] ; then
 	echo 'need package name as argv!'
 	exit 1
 fi
-fl=$S/filelists/$pkg.txt
+
+[ -z "$butch_filelists" ] && butch_filelists="$S"/filelists
+fl="$butch_filelists"/"$pkg".txt
 if [ ! -e "$fl" ] ; then
 	echo "filelist $fl does not exist, probably the program is not installed"
 	exit 1
