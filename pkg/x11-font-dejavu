@@ -13,10 +13,10 @@ confddir="$butch_install_dir/etc/fonts/conf.d"
 confadir="$butch_install_dir/etc/fonts/conf.avail"
 
 mkdir -p "$fontsdir" "$confddir" "$confadir"
-install -o root -g root -m 0644 ttf/*.ttf "$fontsdir/"
+install -m 0644 ttf/*.ttf "$fontsdir/"
 
 cd fontconfig
-install -o root -g root -m644 *.conf "$confadir/"
+install -m644 *.conf "$confadir/"
 for x in *.conf; do
   ln -s ../conf.avail/$x "$confddir/"
 done
