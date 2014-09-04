@@ -1,16 +1,14 @@
 [mirrors]
-http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.0.2.tar.gz
-http://ftp.ch.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.0.2.tar.gz
+http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.0.5.tar.gz
+http://ftp.ch.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.0.5.tar.gz
 
 [main]
-filesize=2677180
-sha512=4233ba34ee361524ba61946b7bbde9998bee7ebe8b1185ada249d835e6ec23c5ed104ba891e2f091f7c8c766eb2a4ea252200af1926455f277d8fa07b2a5c61f
+filesize=2679116
+sha512=b795835eda11781666312151904f6e8b7b444cf99ff4f6d7d3fe659869257e1fee5d2883b747071aecf7c7ccb8f2268e348567a84c9a67efdb2602c744d26177
 
 [deps]
 
 [build]
-patch -p1 < "$K"/libressl-glibc.patch || exit 1
-
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) \
   --with-sysroot=$butch_root_dir"
