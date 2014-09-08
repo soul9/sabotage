@@ -1,0 +1,15 @@
+[mirrors]
+https://github.com/ocaml/camlp4/archive/4.02.0+1.tar.gz
+
+[main]
+filesize=645250
+sha512=cb35912c6a26b79daa43cff1f5efcea0bc7e84a8b1951cce9c567c052a8e7e696abf89f71d32ffc54da66c3c8b910ecc57c83716539463e9739e9fa4857bc313
+tardir=camlp4-4.02.0-1
+
+[deps.host]
+ocaml
+
+[build]
+./configure --libdir="$butch_install_dir""$butch_prefix"/lib/ocaml --bindir="$butch_install_dir""$butch_prefix"/bin
+make
+make install
