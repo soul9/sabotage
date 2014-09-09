@@ -1,9 +1,9 @@
 [mirrors]
-http://luajit.org/download/LuaJIT-2.0.2.tar.gz
+http://luajit.org/download/LuaJIT-2.0.3.tar.gz
 
 [main]
-filesize=843031
-sha512=c1afea13ec61a59f37d1f61fc50bcac47208d9d4f0a80689b74e901ad2b34294b6c89a0b4eef54b43f3d2db411660da61b191b0bbfba4ba2f97743a9ee4484e3
+filesize=844927
+sha512=7b3e3de22ac3602299b5918b60801e45a3278e547a15c16fdae7359538d4ada27ba664935d5f97c7409f330c2f8efeaae9ea03415f5e9d5a9d81e022cd5d36e0
 
 [deps]
 
