@@ -11,11 +11,18 @@ zlib
 zziplib
 
 [build]
-patch -p1 < "$K"/milkytracker-64bit.patch || exit 1
-patch -p1 < "$K"/milkytracker-gzip.patch || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+patch -p1 < "$K"/milkytracker-64bit.patch
+patch -p1 < "$K"/milkytracker-gzip.patch
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 # install desktop file
 dest="$butch_install_dir""$butch_prefix"
