@@ -20,10 +20,16 @@ patch -p1 < "$K"/boost-endian.patch || exit 1
 
 # FIXME there's no DESTDIR support, thus internal hardcoded paths will be all wrong
 # https://svn.boost.org/trac/boost/ticket/7846
-CFLAGS=-D_GNU_SOURCE ./bootstrap.sh --prefix="$butch_install_dir""$butch_prefix" || exit 1
+CC=gcc CFLAGS=-D_GNU_SOURCE ./bootstrap.sh --prefix="$butch_install_dir""$butch_prefix" || exit 1
+
+cat << EOF > tools/build/v2/user-config.jam
+using gcc : foo : $CXX ;
+EOF
 
 sed -i 's@tm_gmtoff@__tm_gmtoff@g' libs/locale/src/std/../util/numeric.hpp
 sed -i 's@tm_zone@__tm_zone@g' libs/locale/src/std/../util/numeric.hpp
 
-./b2 stage threading=multi link=shared -j$MAKE_THREADS || exit 1
-./b2 install threading=multi link=shared || exit 1
+# boost wants to build some asm stuff which fails on mips, but the rest is properly
+# built/installed, so we must catch the error return code
+./b2 toolset=gcc-foo -d+2 stage threading=multi link=shared -j$MAKE_THREADS || echo ERROR1
+./b2 -d+2 install threading=multi link=shared || echo ERROR2
