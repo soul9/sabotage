@@ -6,6 +6,7 @@ filesize=251195
 sha512=264bb7c8db2f190ef0ca38584ec81999ab588f54e03119c5214c40bb8925b0eb407fac483a03e40cc8a220f6748ddff7d3a7392da3803418276b0d263b866449
 
 [deps]
+readline
 
 [build]
 sed -i "s@#define LUA_ROOT\t"'"/usr/local/"@#define LUA_ROOT "/"@' src/luaconf.h || exit 1
