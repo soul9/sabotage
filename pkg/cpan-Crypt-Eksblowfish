@@ -10,6 +10,8 @@ filesize=36302
 sha512=ca66a1ca4fd71388f25dc77c943e2416ed8534576309dd75f19a7219457418140c1bd21887d61918c34d3d6f9e11ea822b4661d30c6edf7f3673bbcd9a00a51b
 
 [build]
-perl Makefile.PL || exit 1
-make -j$MAKE_THREADS && make test && make DESTDIR="$butch_install_dir" install || exit 1
+perl Makefile.PL
+make -j$MAKE_THREADS
+[ -z "$CROSS_COMPILE" ] && make test
+make DESTDIR="$butch_install_dir" install
 
