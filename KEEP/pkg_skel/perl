@@ -11,8 +11,8 @@ perl
 [deps]
 
 [build]
-perl Makefile.PL || exit 1
-make -j$MAKE_THREADS && \
-make test && \
-make DESTDIR="$butch_install_dir" install || exit 1
+perl Makefile.PL
+make -j$MAKE_THREADS
+[ -z "$CROSS_COMPILE" ] && make test
+make DESTDIR="$butch_install_dir" install
 
