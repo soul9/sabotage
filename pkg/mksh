@@ -1,8 +1,8 @@
 [mirrors]
-http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R48.tgz
+http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R50b.tgz
 [main]
-filesize=362932
-sha512=eea8e7a0dce54692feef165ef6da120e9451e64d6185e7b09bb2f81b5165f8a3dfc090ec748de3a91b7ddbed2562d15664f3dfd9b58bdb8a185ffeca7781d003
+filesize=372648
+sha512=0170401d0722575dd81f853b6730b008171fe57cd7e6df7d1d401db28e318a2b9f654676160148cb2443237bfa42d0efcfbc16e52715dc6425e192569e3fa286
 tardir=mksh
 
 [deps]
