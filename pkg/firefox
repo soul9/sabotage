@@ -140,8 +140,6 @@ ac_add_options --with-system-zlib
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 EOF
-sed -i 's@ ""@@' browser/base/Makefile.in &&
-
 mkdir -p include/sys
 cat << EOF > include/sys/cdefs.h
 #ifndef __P
