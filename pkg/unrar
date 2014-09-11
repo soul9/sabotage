@@ -1,0 +1,47 @@
+[mirrors]
+http://download.gna.org/unrar/unrar-0.0.1.tar.gz
+
+[main]
+filesize=315463
+sha512=87195721b22a5482573adf051984506327aab803d1dd26bd89e795e98a40e9500e1064ec5ca6499f758e791bf5f2588e4c38241029650df69cda6cc4bda2217b
+
+[deps]
+argp
+
+[build]
+#patch -p1 < "$K"/some.patch
+cat << EOF > src/error.h
+#include <stdio.h>
+#include <string.h>
+#define HAVE_PROGRAM_INVOCATION_SHORT_NAME
+#define PROGRAM_NAME "unrar"
+
+#define error(status, errnum, ...) \
+  do { fflush(stdout); \
+       dprintf(2, PROGRAM_NAME ": "); \
+       dprintf(2, __VA_ARGS__); \
+       if(errnum) dprintf(2, ": %s", strerror(errnum)); \
+       dprintf(2, "\n"); \
+       if(status) exit(status); \
+  } while(0)
+
+#define error_at_line(status, errnum, fn, line, ...) \
+  do { fflush(stdout); \
+       dprintf(2, PROGRAM_NAME ": %s:%d", fn, (int) line); \
+       dprintf(2, __VA_ARGS__); \
+       if(errnum) dprintf(2, ": %s", strerror(errnum)); \
+       dprintf(2, "\n"); \
+       if(status) exit(status); \
+  } while(0)
+EOF
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -largp -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
