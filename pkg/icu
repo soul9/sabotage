@@ -9,6 +9,7 @@ tardir=icu
 [deps]
 
 [build]
+patch -p1 < "$K"/icu-timezone.patch
 cd source
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
