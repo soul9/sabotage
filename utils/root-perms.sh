@@ -13,4 +13,4 @@ fi
 for dir in / etc bin boot home include info lib libexec mnt root sbin share src srv sys tmp usr var ; do
         chown -R root:root "$1"/$dir
 done
-chmod 0755 var/empty
+chmod 0755 "$1"/var/empty
