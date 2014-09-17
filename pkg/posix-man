@@ -2,8 +2,8 @@
 less
 
 [mirrors]
-http://www.kernel.org/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2013-a.tar.xz
 ftp://www.kernel.org/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2013-a.tar.xz
+http://www.kernel.org/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2013-a.tar.xz
 http://mirror.anl.gov/pub/linux/docs/man-pages/man-pages-posix/man-pages-posix-2013-a.tar.xz
 
 [main]

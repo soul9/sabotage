@@ -1,6 +1,6 @@
 [mirrors]
-http://ftp.kernel.org/pub/software/utils/pciutils/pciutils-3.2.1.tar.xz
 ftp://ftp.kernel.org/pub/software/utils/pciutils/pciutils-3.2.1.tar.xz
+http://ftp.kernel.org/pub/software/utils/pciutils/pciutils-3.2.1.tar.xz
 
 [main]
 filesize=282268

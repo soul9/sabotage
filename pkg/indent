@@ -1,4 +1,5 @@
 [mirrors]
+ftp://mirrors.kernel.org/gnu/indent/indent-2.2.10.tar.gz
 http://mirrors.kernel.org/gnu/indent/indent-2.2.10.tar.gz
 
 [main]
