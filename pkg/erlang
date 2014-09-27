@@ -1,0 +1,26 @@
+[mirrors]
+http://www.erlang.org/download/otp_src_17.3.tar.gz
+
+[main]
+filesize=67050599
+sha512=89d005fc3fdb4dc76c191b6e6a35e03f66ce01d765ba4f58cdd812d358025c62e032443d7ae73fea5b06bf6f27c9bf4e786f8090627ecb1e1309b88b82892910
+tardir=otp_src_17.3
+
+[deps.host]
+ncurses
+
+[build]
+patch -p1 < "$K"/erlang.patch
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+
+#[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
