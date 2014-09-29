@@ -11,7 +11,7 @@ openssl
 zlib
 
 [build]
-patch -p1 < "$K"/wpa_supplicant-fflush.patch || exit 1
+patch -p1 < "$K"/wpa_supplicant-fflush.patch
 cd wpa_supplicant
 cp defconfig .config
 
@@ -21,8 +21,8 @@ CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
   -D__int32_t=int32_t -D__int16_t=int16_t -D__uint8_t=uint8_t \
   -D__uint32_t=uint32_t -D__uint16_t=uint16_t \
   -include stdint.h $optcflags" \
-  LDFLAGS="-lz $optldflags" make -j$MAKE_THREADS CONFIG_LIBNL_TINY=y || exit 1
-make BINDIR=/bin DESTDIR="$butch_install_dir" install || exit 1
+  LDFLAGS="-lz $optldflags" make -j$MAKE_THREADS CONFIG_LIBNL_TINY=y
+make BINDIR=/bin DESTDIR="$butch_install_dir" install
 
 install -D -m 600 "$K"/wpa_supplicant.conf "$butch_install_dir""$butch_prefix"/etc/wpa_supplicant.conf
 

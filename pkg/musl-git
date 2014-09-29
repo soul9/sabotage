@@ -6,11 +6,11 @@ git
 dest="$S/build/"
 if [ -d "$dest/musl-git/.git" ] ; then
 	cd "$dest/musl-git"
-	git pull || exit 1
+	git pull
 else
 	mkdir -p "$dest"
 	cd "$dest"
-	git clone git://git.musl-libc.org/musl musl-git || exit 1
+	git clone git://git.musl-libc.org/musl musl-git
 	cd musl-git
 fi
 
@@ -27,6 +27,6 @@ fi
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g3" >> config.mak
 
 make clean
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 

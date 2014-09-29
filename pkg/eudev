@@ -11,7 +11,7 @@ libblkid
 glib
 
 [build]
-patch -p1 < "$K"/eudev-Handle-1-return-from-sysconf.patch || exit 1
+patch -p1 < "$K"/eudev-Handle-1-return-from-sysconf.patch
 
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
@@ -25,12 +25,12 @@ LDFLAGS="$optldflags -lblkid" \
   --disable-keymap \
   --disable-blkid \
   --disable-introspection \
-|| exit 1
 
-patch -p1 < "$K"/libtool-sysroot.patch || exit 1
 
-make -j$MAKE_THREADS V=1 || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+patch -p1 < "$K"/libtool-sysroot.patch
+
+make -j$MAKE_THREADS V=1
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 # prevent renaming of ethernet interfaces

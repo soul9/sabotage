@@ -10,4 +10,4 @@ fuse
 
 [build]
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
-./configure -C --prefix="$butch_prefix" && make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install || exit 1
+./configure -C --prefix="$butch_prefix" && make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install

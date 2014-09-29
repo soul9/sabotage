@@ -14,6 +14,6 @@ http://ftp.gnu.org/gnu/gzip/gzip-1.4.tar.xz
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
 CPPFLAGS="-Drpl_fdopendir=fdopendir -DS_IRWXUGO=0777 -DO_BINARY=0" \
 ./configure -C $xconfflags \
-  --prefix="$butch_prefix" || exit 1
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --prefix="$butch_prefix"
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

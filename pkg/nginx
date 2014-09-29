@@ -11,7 +11,7 @@ filesize=790523
 sha512=a7366551c84f0f3b82107cc2891f85a7721448af52c3169c3704635268920fcd78739858b26fbaf16fccf9026f76071f974313c4f8e2b00a75e413c1369f8f85
 
 [build]
-patch -p1 < "$K"/nginx.patch || exit 1
+patch -p1 < "$K"/nginx.patch
 
 CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" ./configure \
@@ -28,7 +28,7 @@ LDFLAGS="$optldflags" ./configure \
   --http-proxy-temp-path="$butch_prefix"/var/spool/nginx/proxy \
   --http-scgi-temp-path="$butch_prefix"/var/spool/nginx/scgi \
   --http-uwsgi-temp-path="$butch_prefix"/var/spool/nginx/uwsgi \
-  || exit 1
-make -j$MAKE_THREADS || exit 1
-make install DESTDIR="$butch_install_dir" || exit 1
+
+make -j$MAKE_THREADS
+make install DESTDIR="$butch_install_dir"
 mkdir -p "$butch_install_dir""$butch_prefix"/var/spool/nginx

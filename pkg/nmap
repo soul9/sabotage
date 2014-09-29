@@ -17,9 +17,9 @@ gnu-getopt
 dynamic-toolchain
 
 [build]
-patch -p1 < "$K/nmap-configure-pcap_suitable.patch" || exit 1
-patch -p1 < "$K/nmap-nbase_h.patch" || exit 1
-patch -p1 < "$K"/nmap-ldflags.patch || exit 1
+patch -p1 < "$K/nmap-configure-pcap_suitable.patch"
+patch -p1 < "$K/nmap-nbase_h.patch"
+patch -p1 < "$K"/nmap-ldflags.patch
 
 GNU_GETOPT="-Dgetopt=gnu_getopt -Dgetopt_long=gnu_getopt_long -Dgetopt_long_only=gnu_getopt_long_only"
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE $GNU_GETOPT $optcflags" \
@@ -28,7 +28,7 @@ LDFLAGS="$optldflags -lgnu_getopt" \
   ./configure -C --prefix="$butch_prefix" \
     --without-subversion --without-nmap-update --without-zenmap \
     --without-ndiff \
-    ac_cv_working_getaddrinfo=yes ac_cv_working_getnameinfo=yes || exit 1
+    ac_cv_working_getaddrinfo=yes ac_cv_working_getnameinfo=yes
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install STRIP=true || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install STRIP=true

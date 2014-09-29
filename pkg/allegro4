@@ -15,7 +15,7 @@ alsa-lib
 libjpeg
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 mkdir build && cd build
 
@@ -26,10 +26,10 @@ cmake \
   -DCMAKE_LD_FLAGS="$optldflags" \
   -DWANT_TESTS=OFF \
   -DWANT_TOOLS=OFF \
-.. || exit 1
+..
 
 mkdir -p docs
 cp -r ../docs/txt docs/
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

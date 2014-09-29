@@ -9,11 +9,11 @@ sha512=264bb7c8db2f190ef0ca38584ec81999ab588f54e03119c5214c40bb8925b0eb407fac483
 readline
 
 [build]
-sed -i "s@#define LUA_ROOT\t"'"/usr/local/"@#define LUA_ROOT "/"@' src/luaconf.h || exit 1
-sed -i 's@INSTALL_TOP= /usr/local@INSTALL_TOP='"$butch_install_dir""$butch_prefix"'@' Makefile || exit 1
+sed -i "s@#define LUA_ROOT\t"'"/usr/local/"@#define LUA_ROOT "/"@' src/luaconf.h
+sed -i 's@INSTALL_TOP= /usr/local@INSTALL_TOP='"$butch_install_dir""$butch_prefix"'@' Makefile
 
-make CC="$CC" -j$MAKE_THREADS MYCFLAGS="-fPIC $optcflags" MYLDFLAGS="$optldflags" linux || exit 1
-make INSTALL_TOP="$butch_install_dir""$butch_prefix" install || exit 1
+make CC="$CC" -j$MAKE_THREADS MYCFLAGS="-fPIC $optcflags" MYLDFLAGS="$optldflags" linux
+make INSTALL_TOP="$butch_install_dir""$butch_prefix" install
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/lib/pkgconfig
 for subver in 1 2 ; do

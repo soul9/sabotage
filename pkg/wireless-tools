@@ -17,5 +17,5 @@ if [ x"$A" = xmips ] ; then
   optcflags=$(printf "%s" "$optcflags"|sed 's/-flto//g')
 fi
 make CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE $optcflags" \
-     LDFLAGS="$optldflags -static" PREFIX="$butch_prefix" -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+     LDFLAGS="$optldflags -static" PREFIX="$butch_prefix" -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

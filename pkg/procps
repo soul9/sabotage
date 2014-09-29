@@ -8,7 +8,7 @@ tardir=procps-ng-3.3.9
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 cat << EOF > include/error.h
 #include <stdio.h>
 #include <string.h>
@@ -51,9 +51,9 @@ CFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
   --without-ncurses \
-  || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 mv $dest/usr/bin/* $dest/bin/

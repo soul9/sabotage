@@ -10,6 +10,6 @@ sha512=61118a57c3918b516d250fdba917cc32d85576aa46fe84b4632e6cb1cd0e00dba76cd3666
 [mirrors]
 http://xorg.freedesktop.org/releases/individual/driver/xf86-video-nouveau-1.0.9.tar.bz2
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+./configure -C --prefix="$butch_prefix"
+make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 

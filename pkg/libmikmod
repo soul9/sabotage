@@ -8,7 +8,7 @@ sha512=708008d162bac1a17b090a3a56e3078bb3ce42cb0d54b1e57963881d060198e841654ec7a
 [build]
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 rm "$butch_install_dir""$butch_prefix"/bin/libmikmod-config

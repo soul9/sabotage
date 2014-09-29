@@ -10,7 +10,7 @@ filesize=866376
 sha512=a46fb1db23f518beaa959e9bebcb3bf0574e583c197792d30dcd52b3974e3c285594984207043d317859fc5552f1d303a5686e9fbe3b8825df6346de7f917f9f
 
 [build]
-./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
+./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 if [ "$A" = "powerpc" ] ; then
 cat << EOF >> config.mak
 LDFLAGS += -Wl,--secure-plt
@@ -22,8 +22,8 @@ fi
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 [ "$butch_prefix" = "/" ] && butch_prefix=
 dest=$butch_install_dir$butch_prefix

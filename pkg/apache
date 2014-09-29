@@ -10,7 +10,7 @@ apr
 apr-util
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 CFLAGS=-D_GNU_SOURCE ./configure -C \
   --prefix="$butch_prefix" \
   --sysconfdir="$butch_prefix"/etc \
@@ -19,6 +19,6 @@ CFLAGS=-D_GNU_SOURCE ./configure -C \
   --localstatedir="$butch_prefix"/var \
   --datadir="$butch_prefix"/srv/www \
   --libexecdir="$butch_prefix"/libexec/apache \
-  --exec-prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --exec-prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

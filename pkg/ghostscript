@@ -21,7 +21,7 @@ lcms2
 # http://downloads.sourceforge.net/gs-fonts/ghostscript-fonts-std-8.11.tar.gz
 # http://downloads.sourceforge.net/gs-fonts/gnu-gs-fonts-other-6.0.tar.gz
 
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 # get rid of in-tree lib copies, so the system ones are picked up
 rm -rf expat freetype lcms2 jpeg libpng zlib
@@ -31,10 +31,10 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --enable-dynamic \
   --disable-static \
   --with-system-libtiff \
-|| exit 1
 
-make -j$MAKE_THREADS so || exit 1
-make DESTDIR="$butch_install_dir" soinstall || exit 1
+
+make -j$MAKE_THREADS so
+make DESTDIR="$butch_install_dir" soinstall
 
 dest="$butch_install_dir""$butch_prefix"
 # in the dynamic build, gsx and gsc are equivalent to gs,

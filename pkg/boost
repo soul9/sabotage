@@ -15,12 +15,12 @@ dynamic-toolchain
 
 [build]
 # https://svn.boost.org/trac/boost/ticket/7847
-patch -p1 < "$K"/boost-execinfo.patch || exit 1
-patch -p1 < "$K"/boost-endian.patch || exit 1
+patch -p1 < "$K"/boost-execinfo.patch
+patch -p1 < "$K"/boost-endian.patch
 
 # FIXME there's no DESTDIR support, thus internal hardcoded paths will be all wrong
 # https://svn.boost.org/trac/boost/ticket/7846
-CC=gcc CFLAGS=-D_GNU_SOURCE ./bootstrap.sh --prefix="$butch_install_dir""$butch_prefix" || exit 1
+CC=gcc CFLAGS=-D_GNU_SOURCE ./bootstrap.sh --prefix="$butch_install_dir""$butch_prefix"
 
 cat << EOF > tools/build/v2/user-config.jam
 using gcc : foo : $CXX ;

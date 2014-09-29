@@ -11,13 +11,13 @@ openssl
 gdbm
 
 [build]
-patch -p1 < "$K"/ruby-io.patch || exit 1
+patch -p1 < "$K"/ruby-io.patch
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
 ./configure -C \
   --prefix="$butch_prefix" \
   rb_cv_binary_elf=yes \
-  || exit 1
+
  # the elf test is broken, it uses cat -e which is gnu only
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

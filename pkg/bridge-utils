@@ -9,7 +9,7 @@ sha512=4e525fbd3defb509664ef3b728d9e5edfb92beaebdb5d7733d8203fb38cb3f4bb54d02dc1
 
 [build]
 
-patch -p1 < "$K"/bridge-utils.patch || exit 1
+patch -p1 < "$K"/bridge-utils.patch
 
 # since bridgeutils package comes without configure script, rather than
 # relying on autoreconf -r etc, we just throw *.c at gcc.
@@ -21,10 +21,10 @@ cat << EOF > config.h
 #define PACKAGE_VERSION 15
 EOF
 
-gcc -static -Os -s -fwhole-program -flto -I. -I libbridge/ -include sys/types.h `find . -name '*.c'` -o brctl.out || exit 1
+gcc -static -Os -s -fwhole-program -flto -I. -I libbridge/ -include sys/types.h `find . -name '*.c'` -o brctl.out
 
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/bin
-cp brctl.out "$dest"/bin/brctl || exit 1
+cp brctl.out "$dest"/bin/brctl
 mkdir -p "$dest"/share/man/man8
 cp doc/brctl.8 "$dest"/share/man/man8/

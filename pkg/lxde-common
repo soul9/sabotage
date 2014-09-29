@@ -10,9 +10,9 @@ sha512=44848286ccf3aa269df1680e14a8d3c41be1c2af956bd5121fc05d97a892fdc13d1e74191
 
 [build]
 #patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 dest="$butch_install_dir""$butch_prefix"
 cp -f "$K"/sabotage-menu.png  "$dest"/share/lxde/images/
 cp -f "$K"/panel "$dest"/share/lxpanel/profile/LXDE/panels/panel

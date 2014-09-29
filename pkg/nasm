@@ -9,5 +9,5 @@ sha512=089216f84f2d202c65d8223f5e66423995f96c2feebb0b8c6380761d36739a1a0f9cd2c41
 perl
 
 [build]
-CC="$CC" CFLAGS="$optcflags" LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" || exit 1
-make PREFIX="$butch_prefix" INSTALLROOT="$butch_install_dir" -j$MAKE_THREADS all install || exit 1
+CC="$CC" CFLAGS="$optcflags" LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix"
+make PREFIX="$butch_prefix" INSTALLROOT="$butch_install_dir" -j$MAKE_THREADS all install

@@ -11,6 +11,6 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > gnulib-tests/Makefile.in
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CFLAGS="$optcflags" LDFLAGS="$optldflags -static" \
-  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

@@ -8,7 +8,7 @@ sha512=a852b8e46ee55568dce9d23a30a9dbd1c770c2d2a4bc91e1c3177d723b31b32c5d69d1970
 [deps]
 
 [build]
-# Shellshock patching (CVE-2014-7169 and CVE-2014-6271) 
+# Shellshock patching (CVE-2014-7169 and CVE-2014-6271)
 patch -p0 < "$K"/bash43-import-functions.patch
 
 # FIXME: bash has a ton of configure tests with broken defaults
@@ -23,7 +23,7 @@ CFLAGS="$optcflags" LDFLAGS="$optldflags -static" \
   --without-bash-malloc \
   --disable-rpath --enable-history bash_cv_getenv_redef=no \
   --enable-job-control bash_cv_sys_named_pipes=yes \
-  --disable-nls || exit 1
+  --disable-nls
 #  --with-installed-readline ac_cv_rl_version=5.0 \
-make -j$MAKE_THREADS READLINE_LIB=-l:lib/readline/libreadline.a || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS READLINE_LIB=-l:lib/readline/libreadline.a
+make DESTDIR="$butch_install_dir" install

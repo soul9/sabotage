@@ -15,6 +15,6 @@ http://xorg.freedesktop.org/releases/individual/lib/libXfixes-5.0.1.tar.bz2
 CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
-  ac_cv_func__XEatDataWords=yes || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+  ac_cv_func__XEatDataWords=yes
+make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 

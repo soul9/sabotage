@@ -9,7 +9,7 @@ tardir=.
 [deps]
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 mv Makefile Makefile.org
 cat << EOF > Makefile
 PACKAGE=        tzcode
@@ -56,4 +56,4 @@ make -j$MAKE_THREADS \
   LDFLAGS="$optldflags" \
   PREFIX="$butch_prefix" \
   DESTDIR="$butch_install_dir" \
-  all install || exit 1
+  all install

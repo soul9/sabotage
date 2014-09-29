@@ -9,12 +9,12 @@ tardir=tinygc
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-#make -j$MAKE_THREADS || exit 1
-#make DESTDIR="$butch_install_dir" install || exit 1
+#patch -p1 < "$K/some.patch"
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
+#make -j$MAKE_THREADS
+#make DESTDIR="$butch_install_dir" install
 gcc -DGC_THREADS -DGC_FASTCALL= -DGC_CLIBDECL= -shared -fPIC \
-  tinygc.c -o libgc.so -Wl,-soname=libgc.so || exit 1
+  tinygc.c -o libgc.so -Wl,-soname=libgc.so
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/lib
 mv libgc.so "$dest"/lib

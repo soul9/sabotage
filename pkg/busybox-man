@@ -17,5 +17,5 @@ cp $K/busybox.stage1.config .config
 
 make V=1 HOSTCFLAGS="-D_GNU_SOURCE" docs/busybox.1
 
-mkdir -p "$butch_install_dir/share/man/man1" || exit 1
-cp docs/busybox.1 "$butch_install_dir/share/man/man1" || exit 1
+mkdir -p "$butch_install_dir/share/man/man1"
+cp docs/busybox.1 "$butch_install_dir/share/man/man1"

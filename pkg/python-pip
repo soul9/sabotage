@@ -13,5 +13,5 @@ setuptools
 wget
 
 [build]
-python setup.py build || exit 1
-python setup.py install --prefix="$butch_prefix" --root="$butch_install_dir" || exit 1
+python setup.py build
+python setup.py install --prefix="$butch_prefix" --root="$butch_install_dir"

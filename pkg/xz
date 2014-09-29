@@ -19,6 +19,6 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
     --disable-nls --with-pic --enable-shared \
-    --enable-static $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+    --enable-static $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

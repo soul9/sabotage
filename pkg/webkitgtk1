@@ -27,6 +27,6 @@ CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
 	--with-gtk=2.0 --disable-webkit2 --disable-jit --disable-geolocation \
 	--disable-fast-malloc --disable-glibtest \
 	--disable-silent-rules --disable-gtk-doc-html \
-	|| exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+	
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

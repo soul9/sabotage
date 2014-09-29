@@ -25,19 +25,19 @@ gperf
 patch -p1 < "$K"/netsurf-gperf-warning.patch
 # FIXME: netsurfs Makefile suppresses parallel builds
 CFLAGS="-I$butch_prefix/include/cairo/" NETSURF_USE_BMP=NO \
- make Q= -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+ make Q= -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/share/applications
 cat << EOF > "$dest"/share/applications/netsurf.desktop
 [Desktop Entry]
-Name=Netsurf 
+Name=Netsurf
 Comment=Web Browser
-Exec=netsurf 
-Icon=netsurf 
+Exec=netsurf
+Icon=netsurf
 MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;
 Terminal=false
 Type=Application
-Categories=GTK;Network;WebBrowser; 
+Categories=GTK;Network;WebBrowser;
 EOF

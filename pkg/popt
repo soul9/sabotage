@@ -13,10 +13,10 @@ dynamic-toolchain
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CFLAGS="$optcflags -D_GNU_SOURCE" \
 LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
 for i in po ; do
         printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
 done
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

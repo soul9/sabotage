@@ -15,7 +15,7 @@ zlib
 scons
 
 [build]
-patch -p1 < "$K"/serf-format-UB.patch || exit 1
+patch -p1 < "$K"/serf-format-UB.patch
 cat << EOF > apr-1-config
 #!/bin/sh
 res=\$($butch_root_dir$butch_prefix/bin/apr-1-config "\$@")
@@ -41,8 +41,8 @@ scons CC="$(replace_cc_arg1)" CFLAGS="-D_GNU_SOURCE $optcflags" LINKFLAGS="$optl
   PREFIX="$butch_prefix" APR=$PWD/apr-1-config APU=$PWD/apr-1-config \
   ZLIB="$butch_root_dir""$butch_prefix" \
   OPENSSL="$butch_root_dir""$butch_prefix" \
-  -j$MAKE_THREADS || exit 1
+  -j$MAKE_THREADS
 
 mkdir -p "$butch_install_dir""$butch_prefix"
 
-scons install --install-sandbox="$butch_install_dir" || exit 1
+scons install --install-sandbox="$butch_install_dir"

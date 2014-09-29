@@ -1,7 +1,7 @@
 [build]
 dest="$butch_install_dir""$butch_prefix"
 dest2="$dest"/lib/pkgconfig
-mkdir -p "$dest2" || exit 1
+mkdir -p "$dest2"
 
 cat << EOF > "$dest2"/gnome-icon-theme.pc
 prefix=

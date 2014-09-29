@@ -12,15 +12,15 @@ tardir=tcl8.6.0
 sqlite
 
 [build]
-patch -p1 < "$K"/tcl-stat64.patch || exit 1
+patch -p1 < "$K"/tcl-stat64.patch
 rm -rf pkgs/*sqlit*
 cd unix
 rm -rf *sqlit*
 rm -rf pkgs/*sqlit*
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS CFLAGS_DEFAULT= || exit 1
+  ./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS CFLAGS_DEFAULT=
 # https://sourceforge.net/tracker/?func=detail&aid=3598282&group_id=10894&atid=110894
 export LD_LIBRARY_PATH=.
-make DESTDIR="$butch_install_dir" install || exit 1
+make DESTDIR="$butch_install_dir" install
 cd ..

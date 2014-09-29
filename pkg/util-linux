@@ -6,10 +6,10 @@ ncurses
 mkdir -p "$butch_build_dir"
 cd "$butch_build_dir"
 rm -rf util-linux-2.23.1
-tar xf "$C"/util-linux-2.23.1.tar.xz || exit 1
+tar xf "$C"/util-linux-2.23.1.tar.xz
 cd util-linux-2.23.1
-patch -p1 < "$K"/util-linux.patch || exit 1
-patch -p1 < "$K"/util-linux-hexdump.patch || exit 1
+patch -p1 < "$K"/util-linux.patch
+patch -p1 < "$K"/util-linux-hexdump.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 LDFLAGS="-Wl,-static $optldflags" \
@@ -22,6 +22,6 @@ LDFLAGS="-Wl,-static $optldflags" \
   --disable-switch_root --disable-kill --disable-login      \
   --disable-sulogin --disable-su --disable-more             \
   --disable-wall --disable-use-tty-group \
-  || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

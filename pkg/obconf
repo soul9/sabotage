@@ -22,7 +22,7 @@ CFLAGS="$optcflags -D_GNU_SOURCE" \
 LDFLAGS="$optldflags -llzma -lz -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   ./configure -C $xconfflags \
   --prefix="$butch_prefix" \
-  --disable-nls || exit 1
+  --disable-nls
 printf '#include <ctype.h>\n' >> config.h
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

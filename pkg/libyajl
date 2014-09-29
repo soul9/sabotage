@@ -11,12 +11,12 @@ ruby
 cmake
 
 [build]
-patch -p1 < "$K"/yajl-test.patch || exit 1
+patch -p1 < "$K"/yajl-test.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" || exit 1
+  ./configure --prefix="$butch_prefix"
 
 sed -i 's@all: distro doc test@all: distro@' Makefile
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

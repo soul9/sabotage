@@ -9,11 +9,11 @@ http://ftp.linux.org.uk/pub/linux/Networking/netkit/bsd-finger-0.17.tar.gz
 [deps]
 
 [build]
-patch -p1 < "$K"/bsd-finger-0.17.diff || exit 1
-patch -p1 < "$K"/bsd-finger-lprint.patch || exit 1
+patch -p1 < "$K"/bsd-finger-0.17.diff
+patch -p1 < "$K"/bsd-finger-lprint.patch
 
-./configure --prefix="$butch_prefix" || exit 1
-cat << EOF >MCONFIG 
+./configure --prefix="$butch_prefix"
+cat << EOF >MCONFIG
 BINDIR=$butch_prefix/bin
 SBINDIR=$butch_prefix/bin
 MANDIR=$butch_prefix/share/man
@@ -29,9 +29,9 @@ LDFLAGS= $optldflags -static
 LIBS=
 EOF
 
-make -j$MAKE_THREADS || exit 1
+make -j$MAKE_THREADS
 # the Makefile doesn't use mkdir -p as it should
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/share/man/man1 "$dest"/share/man/man8 "$dest"/bin
 
-make install || exit 1
+make install

@@ -9,14 +9,14 @@ sha512=06420df987429bdec6aea216046548cb7d1e1ed004e140c01692625dfb9149cc42ad98755
 termcap
 
 [build]
-patch -p1 < "$K"/libedit_readlineh.patch || exit 1
+patch -p1 < "$K"/libedit_readlineh.patch
 
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -D__STDC_ISO_10646__ $optcflags" \
-  ./configure -C --prefix="$butch_prefix" --enable-widec $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ./configure -C --prefix="$butch_prefix" --enable-widec $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 # use libedit as a readline drop-in replacement (it has 10 KLOC less, 20 instead of 30)
 dest="$butch_install_dir""$butch_prefix"

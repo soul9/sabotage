@@ -6,6 +6,6 @@ sha512=0c998fda9fe01c9296a3453966c0449c9968f4f5f989065ca65f0da3830ae8d805699d0ee
 [deps]
 xorg
 [build]
-sed -i 's:lib64:lib:g' ./config/Makefile.linux || exit 1 
-make -j$MAKE_THREADS || exit 1
-GLEW_DEST="$butch_install_dir""$butch_prefix" make install || exit 1
+sed -i 's:lib64:lib:g' ./config/Makefile.linux
+make -j$MAKE_THREADS
+GLEW_DEST="$butch_install_dir""$butch_prefix" make install

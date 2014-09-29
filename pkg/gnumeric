@@ -11,7 +11,7 @@ goffice
 gettext
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
@@ -21,12 +21,12 @@ CPPFLAGS=-D_GNU_SOURCE CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
   --without-python \
-  --without-perl || exit 1
+  --without-perl
 [ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
 for i in po po-functions ; do
 	printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
 done
 
-make V=1 -j$MAKE_THREADS || exit 1
+make V=1 -j$MAKE_THREADS
 sed -i 's@install-data-hook-omf:@install-data-hook-omf:\n\ttrue\n\nfoobar:@' doc/C/Makefile
-make DESTDIR="$butch_install_dir" install || exit 1
+make DESTDIR="$butch_install_dir" install

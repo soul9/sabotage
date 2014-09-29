@@ -11,7 +11,7 @@ sha512=8b293bca847a49da416f0b84056846f63703ae96a34cc890673befcc015424bba0781e8d4
 gdbm
 
 [build]
-patch -p1 < "$K"/tdb-help.patch || exit 1
+patch -p1 < "$K"/tdb-help.patch
 
 # this package is 12 years old and doesnt recognise x86_64
 # there is a recent fork of fedora / redhat, but it is 4 times as big
@@ -21,6 +21,6 @@ cp -f "$K"/config.sub .
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
 CPPFLAGS=-D_GNU_SOURCE \
-  ./configure --prefix="$butch_prefix" $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ./configure --prefix="$butch_prefix" $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

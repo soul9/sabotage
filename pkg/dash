@@ -8,7 +8,7 @@ sha512=77ad016fa5fb3fcb0d940b29d3fa914f546d79cdf2221ed47e4dec6d3a005b25d2d32ee1f
 [deps]
 
 [build]
-patch -p1 < "$K"/dash-fix.patch || exit 1
+patch -p1 < "$K"/dash-fix.patch
 
 cat << EOF > nl.c
 #include <stdio.h>
@@ -20,7 +20,7 @@ int main() {
 
 EOF
 # dash mkbuiltins script depends on "nl"
-$HOSTCC nl.c -o nl || exit 1
+$HOSTCC nl.c -o nl
 export PATH="$PWD:$PATH"
 
 [ -n "$CROSS_COMPILE" ] && \
@@ -29,7 +29,7 @@ export PATH="$PWD:$PATH"
 
 LC_CTYPE=C CFLAGS="-D_GNU_SOURCE -D__KLIBC__ $optcflags -g" \
 LDFLAGS="$optldflags -static" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
 
-LC_CTYPE=C make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+LC_CTYPE=C make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

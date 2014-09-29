@@ -7,7 +7,7 @@ sha512=2a72de62b14f194dd4902901facbf44551d6fa6a5f00bb5461ee2c99de277744d8c8032d9
 [deps]
 
 [build]
-$CC $optcflags -static tree.c unix.c html.c xml.c hash.c color.c -o tree $optldflags || exit 1
+$CC $optcflags -static tree.c unix.c html.c xml.c hash.c color.c -o tree $optldflags
 dest="$butch_install_dir""$butch_prefix"
-install -D tree "$dest"/bin/tree || exit 1
-install -D doc/tree.1 "$dest"/share/man/man1/tree.1 || exit 1
+install -D tree "$dest"/bin/tree
+install -D doc/tree.1 "$dest"/share/man/man1/tree.1

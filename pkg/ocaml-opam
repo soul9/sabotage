@@ -12,7 +12,7 @@ ocaml-camlp4
 curl
 
 [build]
-./configure --prefix="$butch_prefix" 
+./configure --prefix="$butch_prefix"
 make lib-ext
 make
 make DESTDIR="$butch_install_dir" install

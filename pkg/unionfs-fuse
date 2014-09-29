@@ -11,4 +11,4 @@ fuse
 [build]
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   make -j$MAKE_THREADS DESTDIR="$butch_install_dir" PREFIX="$butch_prefix" \
-  SBINDIR="$butch_prefix/bin" install || exit 1
+  SBINDIR="$butch_prefix/bin" install

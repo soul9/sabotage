@@ -9,8 +9,8 @@ flex
 ncurses
 util-linux
 [build]
-patch -p1 < "$K"/nethack-options.patch || exit 1
-sh ./sys/unix/setup.sh x || exit 1
-sed -i "s@PREFIX   = /@PREFIX = $butch_install_dir$butch_prefix@" Makefile || exit 1
-make all || exit 1
-make install || exit 1
+patch -p1 < "$K"/nethack-options.patch
+sh ./sys/unix/setup.sh x
+sed -i "s@PREFIX   = /@PREFIX = $butch_install_dir$butch_prefix@" Makefile
+make all
+make install

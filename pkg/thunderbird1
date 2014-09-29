@@ -17,19 +17,19 @@ gtk+2
 libIDL
 
 [build]
-patch -p1 < "$K"/thunderbird1-getprotobyname_r.patch || exit 1
-patch -p1 < "$K"/thunderbird1-linux-detection.patch || exit 1
-patch -p1 < "$K"/thunderbird1-chrome-registry.patch || exit 1
-patch -p1 < "$K"/thunderbird1-useragent.patch || exit 1
+patch -p1 < "$K"/thunderbird1-getprotobyname_r.patch
+patch -p1 < "$K"/thunderbird1-linux-detection.patch
+patch -p1 < "$K"/thunderbird1-chrome-registry.patch
+patch -p1 < "$K"/thunderbird1-useragent.patch
 
 # https://bugzilla.mozilla.org/show_bug.cgi?id=416463
 rm xpcom/obsolete/component/nsFileSpecImpl.h \
    xpcom/obsolete/component/nsIRegistry.idl \
    xpcom/obsolete/component/nsIRegistryUtils.h \
-   xpcom/obsolete/component/regExport.cpp || exit 1
+   xpcom/obsolete/component/regExport.cpp
 
-cp xpinstall/cleanup/InstallCleanupDefines.h xpfe/bootstrap/ || exit 1
-cp xpinstall/cleanup/InstallCleanupDefines.h toolkit/xre/ || exit 1
+cp xpinstall/cleanup/InstallCleanupDefines.h xpfe/bootstrap/
+cp xpinstall/cleanup/InstallCleanupDefines.h toolkit/xre/
 
 #  --enable-xpcom-obsolete \
 #  --disable-xul \
@@ -64,7 +64,7 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --disable-libIDLtest \
   --disable-glibtest \
   --disable-cookies \
-|| exit 1
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

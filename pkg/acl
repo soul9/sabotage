@@ -15,7 +15,7 @@ attr
   --with-sysroot=$butch_root_dir"
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="-static $optldflags" \
   ./configure -C --prefix="$butch_prefix" --disable-shared $xconfflags \
-                 --enable-static --enable-gettext=no || exit 1
+                 --enable-static --enable-gettext=no
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install install-lib install-dev || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install install-lib install-dev

@@ -13,14 +13,14 @@ libtiff
 giflib
 
 [build]
-patch -p1 < "$K"/liblepton_pngio.patch || exit 1
-patch -p1 < "$K"/liblepton-makefile.patch || exit 1
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+patch -p1 < "$K"/liblepton_pngio.patch
+patch -p1 < "$K"/liblepton-makefile.patch
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
 cd src
 
 sed -i 's/HAVE_LIBGIF/1/' gifio.c
 
-make -j$MAKE_THREADS -f makefile.static CC="$CC -ansi -D_BSD_SOURCE -DANSI" || exit 1
+make -j$MAKE_THREADS -f makefile.static CC="$CC -ansi -D_BSD_SOURCE -DANSI"
 
 # installing headers
 dest="$butch_install_dir/include/leptonica"
@@ -30,6 +30,6 @@ cp *.h "$dest"/
 #installing lib
 dest="$butch_install_dir/lib"
 mkdir -p "$dest"
-cp ../lib/nodebug/liblept.a "$dest"/ || exit 1
+cp ../lib/nodebug/liblept.a "$dest"/
 
-#make DESTDIR="$butch_install_dir" -f makefile.static install || exit 1
+#make DESTDIR="$butch_install_dir" -f makefile.static install

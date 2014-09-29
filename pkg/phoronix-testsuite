@@ -10,4 +10,4 @@ http://www.phoronix.net/downloads/phoronix-test-suite/releases/phoronix-test-sui
 php
 
 [build]
-DESTDIR="$butch_install_dir" ./install-sh / || exit 1
+DESTDIR="$butch_install_dir" ./install-sh /

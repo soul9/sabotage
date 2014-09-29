@@ -12,13 +12,13 @@ libvirt
 python-virtinst
 
 [build]
-patch -p1 < "$K"/virt-manager-no-dbus.patch || exit 1
+patch -p1 < "$K"/virt-manager-no-dbus.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" || exit 1
+  ./configure -C --prefix="$butch_prefix"
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 exit 1 # virt-manager depends on gconf, this needs to be fixed
 

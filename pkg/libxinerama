@@ -15,7 +15,7 @@ xineramaproto
 CFLAGS="$optcflags -D_GNU_SOURCE" \
 LDFLAGS="$optldflags" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
-  ac_cv_func__XEatDataWords=yes || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ac_cv_func__XEatDataWords=yes
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 

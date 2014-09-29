@@ -17,7 +17,7 @@ libgpg-error
   --with-sysroot=$butch_root_dir"
 CPPFLAGS=-D_GNU_SOURCE  CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" --disable-asm $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" --disable-asm $xconfflags
 [ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

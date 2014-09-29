@@ -8,7 +8,7 @@ sha512=d7c5e54b6d4d8b9211f0006ca8786f7609d180cc1aaebf4f25e7e35e12959779cf6644735
 http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
 
 [build]
-patch -p1 < "$K"/ncurses-cross-include.patch || exit 1
+patch -p1 < "$K"/ncurses-cross-include.patch
 # prevent pulling in the hosts termcap.h which may conflict - plus it doesn't
 # define everything ncurses expects from its own termcap.h
 ln -s termcap.h include/termcap_internal.h
@@ -34,9 +34,9 @@ CFLAGS="-D_GNU_SOURCE $optcflags -fPIC" ./configure -C \
    --enable-sigwinch --with-fallbacks="linux vt100 xterm xterm256-color" \
    --prefix="$butch_prefix" --includedir="$butch_prefix"/include --mandir="$butch_prefix"/share/man \
    --disable-nls --without-dlsym \
-   --without-cxx-binding $xconfflags </dev/ptmx || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+   --without-cxx-binding $xconfflags </dev/ptmx
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 (

@@ -6,6 +6,6 @@ repo="github.com/uriel/cgd"
 
 dest="$butch_install_dir""$butch_prefix"
 srcdest="$S"/build/"$butch_package_name"
-GOROOT="$butch_root_dir"/opt/go GOPATH="$dest" go get "$repo" || exit 1
+GOROOT="$butch_root_dir"/opt/go GOPATH="$dest" go get "$repo"
 [ -d "$srcdest" ] && rm -rf "$srcdest"
-mv -f "$dest"/src "$srcdest" || exit 1
+mv -f "$dest"/src "$srcdest"

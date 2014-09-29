@@ -9,12 +9,12 @@ sha512=50ae0e8ace862520c01a707b3cf9a19591dc1081f6fc38c7fdccc81e36dd94b3cbe9db00c
 ncurses
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
   --disable-unicode \
-  || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

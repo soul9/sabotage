@@ -12,9 +12,9 @@ sha512=fc47f5d25197c631754efe05a349edb556d072807ecef19b41f17c1a8f39c95221be64926
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) --with-libtool-sysroot=$butch_root_dir"
 CFLAGS=-D_GNU_SOURCE ./configure -C \
-  --prefix="$butch_prefix" $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --prefix="$butch_prefix" $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 dest="$butch_install_dir""$butch_prefix"
 if [ "$A" = x86_64 ] ; then
 	mv "$dest"/lib64/* "$dest"/lib/ || true

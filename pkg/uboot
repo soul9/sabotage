@@ -8,11 +8,11 @@ ftp://ftp.denx.de/pub/u-boot/u-boot-2013.07.tar.bz2
 [deps]
 
 [build]
-patch -p1 < "$K"/uboot-ulong.patch || exit 1
+patch -p1 < "$K"/uboot-ulong.patch
 
 make HOSTCFLAGS_XXX+="-D_GNU_SOURCE $optcflags" \
   HOSTLDFLAGS_XXX+="$optldflags" \
-  tools -j$MAKE_THREADS || exit 1
+  tools -j$MAKE_THREADS
 
 dest="$butch_install_dir""$butch_prefix"
-install -D -m 755 tools/mkimage "$dest"/bin/mkimage || exit 1
+install -D -m 755 tools/mkimage "$dest"/bin/mkimage

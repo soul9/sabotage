@@ -17,7 +17,7 @@ bison
 # for further reference on how this package is supposed to be used, we only use it
 # to strip the keymaps off.
 for p in kbd kbd-1.15.3-upstream_fixes-1 kbd-1.15.3-backspace-1 kbd-1.15.3-busyboxkmap ; do
-	patch -p1 < "$K"/$p.patch || exit 1
+	patch -p1 < "$K"/$p.patch
 done
 
 #fix bug in spanish transl.
@@ -32,9 +32,9 @@ touch -d '2011-05-07 08:30' configure.ac
 
 CFLAGS="-D_GNU_SOURCE -DSIGIOT=SIGABRT" \
 ./configure -C --prefix="$butch_prefix" \
-  --disable-nls $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --disable-nls $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 #http://hg.slitaz.org/wok/file/3f989c266063/kbd-base/stuff/keymaps-path.list
 slitaz_set=`cat << EOF
@@ -73,7 +73,7 @@ qwertz/sg-latin1.map.gz
 qwertz/slovene.map.gz
 EOF
 `
-# slitaz installs only these files to save space. 
+# slitaz installs only these files to save space.
 # so do we
 # see http://hg.slitaz.org/wok/file/3f989c266063/kbd-base/receipt
 

@@ -8,9 +8,9 @@ sha512=3b9242805a042dc6bf53bfa8355f5f157425a944c49a780ae131642484463aa63cf629590
 libcap2
 
 [build]
-patch -p1 < "$K/pax-utils-cvs.patch" || exit 1
+patch -p1 < "$K/pax-utils-cvs.patch"
 #touch man/scanmacho.1
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
 make depend
-make -j$MAKE_THREADS || exit 1
-make PREFIX="$butch_install_dir$butch_prefix" install || exit 1
+make -j$MAKE_THREADS
+make PREFIX="$butch_install_dir$butch_prefix" install

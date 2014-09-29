@@ -35,8 +35,8 @@ CFLAGS += -I. -D_GNU_SOURCE $optcflags
 LDFLAGS += $optldflags -lncurses -lcurl -lgcrypt
 EOF
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 )
 
 # RCB flags needed to compile

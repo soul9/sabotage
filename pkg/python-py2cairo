@@ -13,7 +13,7 @@ cairo
 [ -z "$butch_prefix" ] && butch_prefix=/
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./waf configure --prefix="$butch_prefix" || exit 1
+  ./waf configure --prefix="$butch_prefix"
 
-./waf build -j$MAKE_THREADS || exit 1
-DESTDIR="$butch_install_dir" ./waf install || exit 1
+./waf build -j$MAKE_THREADS
+DESTDIR="$butch_install_dir" ./waf install

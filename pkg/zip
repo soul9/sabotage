@@ -9,7 +9,7 @@ sha512=c1c3d62bf1426476c0f9919b568013d6d7b03514912035f09ee283226d94c978791ad2af5
 
 [build]
 make -f unix/Makefile generic_gcc -j$MAKE_THREADS \
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" || exit 1
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags"
 
-make prefix="$butch_install_dir""$butch_prefix" -f unix/Makefile install || exit 1
+make prefix="$butch_install_dir""$butch_prefix" -f unix/Makefile install
 

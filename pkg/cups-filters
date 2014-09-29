@@ -16,7 +16,7 @@ poppler
 # in case this package doesnt work properly,
 # install lcms2 may help (this is noted as a required dep in BLFS)
 
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
@@ -25,7 +25,7 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --with-pdftops-path="$butch_prefix"/bin/gs \
   --disable-avahi \
   --disable-static \
-|| exit 1
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

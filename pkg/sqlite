@@ -16,9 +16,9 @@ sha512=936a5b8c809891883e11bb881edcc851ca25c55325699889ab123337aea37afa36129ea80
 
 [build]
 if false ; then
-./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 else
 
 read CPPFLAGS << EOF
@@ -68,10 +68,10 @@ Name: SQLite
 Description: SQL database engine
 Version: 3.8.0.2
 Libs: -lsqlite3 -lreadline
-Libs.private: 
+Libs.private:
 Cflags:
 EOF
-make all CC="$CC" CFLAGS="$optcflags -fPIC -O0" CPPFLAGS="$CPPFLAGS" -j2 || exit 1
-make DESTDIR="$butch_install_dir" prefix="$butch_prefix" install || exit 1
+make all CC="$CC" CFLAGS="$optcflags -fPIC -O0" CPPFLAGS="$CPPFLAGS" -j2
+make DESTDIR="$butch_install_dir" prefix="$butch_prefix" install
 
 fi

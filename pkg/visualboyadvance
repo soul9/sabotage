@@ -17,4 +17,4 @@ make PROGS=VisualBoyAdvance \
      CFLAGS="$optcflags" \
      LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
      prefix="$butch_prefix" DESTDIR="$butch_install_dir" \
-     -j$MAKE_THREADS install || exit 1
+     -j$MAKE_THREADS install

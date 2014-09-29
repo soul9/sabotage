@@ -19,5 +19,5 @@ make \
    -DVERSION=\\\"0.4.1\\\" -D_BSD_SOURCE -D_XOPEN_SOURCE=600" \
  LDFLAGS="$optldflags -lX11 -lXext -lXft -lfontconfig -lfreetype" \
  PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" \
-  -j$MAKE_THREADS all install  || exit 1
-#make DESTDIR="$butch_install_dir" install || exit 1
+  -j$MAKE_THREADS all install
+#make DESTDIR="$butch_install_dir" install

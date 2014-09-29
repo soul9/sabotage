@@ -9,10 +9,10 @@ http://znc.in/releases/znc-1.4.tar.gz
 openssl
 
 [build]
-patch -p1 < "$K"/znc.patch || exit 1
+patch -p1 < "$K"/znc.patch
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
-  
+  ./configure --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
+

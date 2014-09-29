@@ -18,4 +18,4 @@ elif [ "$A" != "x86_64" ]; then
   exit 0
 fi
 make CC="$CC" PREFIX="$butch_prefix" INSTALLROOT="$butch_install_dir" \
-  -j1 all install || exit 1
+  -j1 all install

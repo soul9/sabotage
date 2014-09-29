@@ -11,16 +11,16 @@ sha512=5db19299fd4607c943ceaceaf5ef666d03f6473d09957233055564ed6b2e916383835436c
 gtk+2
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 CXXFLAGS="-D_GNU_SOURCE $optcflags" \
 LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" --enable-unicode || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ./configure -C --prefix="$butch_prefix" --enable-unicode
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 (
   cd contrib/src/stc
-  make -j$MAKE_THREADS || exit 1
-  make DESTDIR="$butch_install_dir" install || exit 1
+  make -j$MAKE_THREADS
+  make DESTDIR="$butch_install_dir" install
 )
 

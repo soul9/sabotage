@@ -15,11 +15,11 @@ wireless-tools
 intltool
 
 [build]
-patch -p1 < "$K"/lxpanel-linux.patch || exit 1
+patch -p1 < "$K"/lxpanel-linux.patch
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
 CFLAGS="$optcflags -D_GNU_SOURCE" \
 LDFLAGS="$optldflags -lgmodule-2.0 -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

@@ -15,9 +15,9 @@ sha512=a08430d0beb4a751b1608d148f4fc3d1077a689f5f7197b830a2768d66238b69de2614448
 [build]
 printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > test/Makefile.in
 
-patch -p1 < "$K"/alsa-lib_mask_inline.patch || exit 1
+patch -p1 < "$K"/alsa-lib_mask_inline.patch
 
-sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' include/global.h || exit 1
+sed -i 's,#if !defined(_POSIX_C_SOURCE) && !defined(_POSIX_SOURCE),#if 0,' include/global.h
 
 THIS="$PWD"
 
@@ -46,9 +46,9 @@ LDFLAGS="$optldflags" \
 	 --prefix="$butch_prefix" \
          --disable-python \
          --without-versioned \
-         $debugflags $xconfflags || exit 1
+         $debugflags $xconfflags
 
-find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \; || exit 1
+find . -name Makefile -exec sed -i 's,STRIP = strip,STRIP = echo,' "{}" \;
 
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

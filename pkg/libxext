@@ -15,6 +15,6 @@ http://xorg.freedesktop.org/releases/individual/lib/libXext-1.3.2.tar.bz2
   xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
-  ac_cv_func__XEatDataWords=yes || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+  ac_cv_func__XEatDataWords=yes
+make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 

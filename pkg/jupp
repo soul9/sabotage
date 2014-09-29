@@ -18,5 +18,5 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   --sysconfdir=/etc \
   --disable-dependency-tracking \
   --disable-termidx &&
-make V=1 -j $MAKE_THREADS && 
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 -j $MAKE_THREADS &&
+make DESTDIR="$butch_install_dir" install

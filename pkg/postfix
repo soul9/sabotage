@@ -15,19 +15,19 @@ dovecot
 [build]
 CCARGS="-DNO_NIS -DUSE_TLS -DUSE_SASL_AUTH -DDEF_SASL_SERVER_TYPE=\"dovecot\"" \
 AUXLIBS="-lssl -lcrypto" make -f Makefile.init makefiles
-make -j$MAKE_THREADS || exit 1
+make -j$MAKE_THREADS
 sh postfix-install -non-interactive \
    install_root="$butch_install_dir" \
    daemon_directory="$butch_prefix"/lib/postfix \
-   manpage_directory="$butch_prefix"/share/man || exit 1
+   manpage_directory="$butch_prefix"/share/man
 
 dest="$butch_install_dir""$butch_prefix"
-mv "$dest"/usr/* "$dest"/ || exit 1
-rm "$dest"/bin/* || exit 1
-mv "$dest"/sbin/* "$dest"/bin/ || exit 1
-rm -rf "$dest"/usr "$dest"/sbin || exit 1 
+mv "$dest"/usr/* "$dest"/
+rm "$dest"/bin/*
+mv "$dest"/sbin/* "$dest"/bin/
+rm -rf "$dest"/usr "$dest"/sbin
 
-mv "$dest"/etc/postfix "$dest"/share/doc || exit 1
+mv "$dest"/etc/postfix "$dest"/share/doc
 install -D -m 644 "$K"/postfix-main.cf "$dest"/etc/postfix/main.cf
 install -D -m 644 "$K"/postfix-master.cf "$dest"/etc/postfix/master.cf
 install -D -m 644 "$K"/postfix-virtual "$dest"/etc/postfix/virtual

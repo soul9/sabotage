@@ -41,6 +41,6 @@ CFLAGS="-D_BSD_SOURCE -D_GNU_SOURCE" ./configure -C  \
   --with-db4="$pfx" --with-gmp="$pfx" \
   --with-libedit="$pfx" --with-freetype-dir="$pfx" \
   --enable-maintainer-zts \
-|| exit 1
-make -j$MAKE_THREADS || exit 1
-make INSTALL_ROOT="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make INSTALL_ROOT="$butch_install_dir" install

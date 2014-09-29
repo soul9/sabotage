@@ -8,11 +8,11 @@ sha512=405fbb4fc9ca8a59f34488205f403e77d4f184b08d344efbec6a8f558cac0512ee6cda1dc
 
 [build]
 CC="$CC" CFLAGS="$optcflags -D_GNU_SOURCE -fPIC" LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" || exit 1
+  ./configure --prefix="$butch_prefix"
 #busybox mktemp -u is broken and returns empty string
 #sed -i 's,mktemp -u,mktemp,g' Makefile
-make -j$MAKE_THREADS  || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 # make install is broken
 ranlib libz.a

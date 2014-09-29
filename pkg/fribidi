@@ -11,7 +11,7 @@ http://fribidi.org/download/fribidi-0.19.5.tar.bz2
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 cp -f "$K"/config.sub .
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

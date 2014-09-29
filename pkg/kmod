@@ -10,7 +10,7 @@ sha512=67a03cabe9d81c14eb0bef20f3c8ff4614418cb2b2c3e1428d8a57399372ecdce6e403399
 [build]
 
 for i in kmod kmod-test-stdout kmod-test-glibc-assumption kmod-static-assert ; do
-	patch -p1 < "$K"/"$i".patch || exit 1
+	patch -p1 < "$K"/"$i".patch
 done
 
 [ -n "$CROSS_COMPILE" ] && \
@@ -19,7 +19,7 @@ done
 
 CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

@@ -10,14 +10,14 @@ sha512=5e811225dd65366e3ef49628d567864fadda1dbda2d66a5e473123e73c468f5a3a577ae4e
 [build]
 tar xf lsof_4.87_src.tar && cd lsof_4.87_src
 
-patch -p1 < "$K"/lsof-rpc-configure.patch || exit 1
-patch -p1 < "$K"/lsof-Makefile.patch || exit 1
-patch -p1 < "$K"/lsof-dsock.patch || exit 1
+patch -p1 < "$K"/lsof-rpc-configure.patch
+patch -p1 < "$K"/lsof-Makefile.patch
+patch -p1 < "$K"/lsof-dsock.patch
 
-./Configure -n linux || exit 1
+./Configure -n linux
 
 make -j$MAKE_THREADS CC="$CC" CDEF="$optcflags" \
-  LDFLAGS="$optldflags -static" || exit 1
+  LDFLAGS="$optldflags -static"
 
 dest="$butch_install_dir""$butch_prefix"
 install -D -m 755 lsof "$dest"/bin/lsof && \

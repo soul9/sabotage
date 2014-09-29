@@ -8,15 +8,15 @@ gtk+2
 miniupnpc
 libevent
 [build]
-patch -p1 < "$K"/transmission-off_t.patch || exit 1
+patch -p1 < "$K"/transmission-off_t.patch
 # transmission insists on --enable-nls/intltool when gtk is selected
 # - the only reason is the generation of the .desktop file
-patch -p1 < "$K"/transmission-nls.patch || exit 1
+patch -p1 < "$K"/transmission-nls.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags -DGETTEXT_PACKAGE=\\\"transmission\\\"" \
 LDFLAGS="$optldflags" \
 ./configure -C --prefix="$butch_prefix" \
   --disable-nls --disable-silent-rules \
-  --enable-utp || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --enable-utp
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

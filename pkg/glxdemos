@@ -11,4 +11,4 @@ sha512=22f0ac738c165177c2fee98c5cf4e3dea42e65fe6e43b7adbb68bbbe3cdf51f732ec4e061
 mesalib
 
 [build]
-make -j$MAKE_THREADS DEMOS_PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" glxgears glxinfo install || exit 1
+make -j$MAKE_THREADS DEMOS_PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" glxgears glxinfo install

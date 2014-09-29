@@ -12,13 +12,13 @@ openssl
 libevent
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags -static" \
-  ./configure -C --prefix="$butch_prefix" tor_cv_cflags__fPIE=no || exit 1
+  ./configure -C --prefix="$butch_prefix" tor_cv_cflags__fPIE=no
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 IS="$K"/bin/install-service
 "$IS" --down --log --force tor "$K"/services/tor

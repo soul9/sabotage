@@ -14,6 +14,6 @@ http://xorg.freedesktop.org/releases/individual/lib/libXaw-1.0.12.tar.bz2
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags|| exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
+make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 

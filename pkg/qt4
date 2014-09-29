@@ -15,13 +15,13 @@ sqlite
 
 [build]
 
-# TODO: add security patches, for example 
+# TODO: add security patches, for example
 # http://qt.gitorious.org/qt/qt/commit/9a982779eabc4fafafe18dc9ad1b44fb2425563c
 # http://qt.gitorious.org/qt/qt/commit/d28c9e9105f4b3f638bfa7492af10ce7d4f1c644
 # and other CA loading patches from 2010-now
 
 for p in socklen tolower libpng15 backspace None gl iconv gcc47 3rdparty linguist ; do
-	patch -p1 < "$K"/qt464-"$p".patch || exit 1
+	patch -p1 < "$K"/qt464-"$p".patch
 done
 
 debugflags=
@@ -49,10 +49,10 @@ CXXFLAGS="-D_GNU_SOURCE -DMESA_EGL_NO_X11_HEADERS" \
   -system-libjpeg \
   -system-zlib \
   -system-sqlite \
-  -no-separate-debug-info || exit 1
+  -no-separate-debug-info
 
-make -j$MAKE_THREADS || exit 1
-make INSTALL_ROOT="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make INSTALL_ROOT="$butch_install_dir" install
 
 cat << EOF > /dev/null
 to debug qt4 strings, we need to paste the following into gdb

@@ -13,9 +13,9 @@ CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure --prefix="/$butch_prefix" \
               --sbindir="/bin" \
               --without-readline \
-              --without-nss || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+              --without-nss
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 install -D -m 644 examples/chrony.conf.example "$butch_install_dir"/"$butch_prefix"/etc/chrony.conf
 
 IS="$K"/bin/install-service

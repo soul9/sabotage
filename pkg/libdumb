@@ -11,7 +11,7 @@ sha512=9ecdea460858b7e6ad7ca2534ecb3581397e6c1fa904459affe19ce49f528e580e143b42b
 allegro4
 
 [build]
-patch -p1 < "$K"/dumb-Makefile-DESTDIR.patch || exit 1
+patch -p1 < "$K"/dumb-Makefile-DESTDIR.patch
 
 cat << EOF > make/config.txt
 include make/unix.inc
@@ -26,5 +26,5 @@ mkdir -p "$dest/bin"
 mkdir -p "$dest/lib"
 mkdir -p "$dest/include"
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
