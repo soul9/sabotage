@@ -7,9 +7,9 @@ sha512=3720f164f3721ad06bf5a73e654c70a67d6e7a56d0ce574fb0e8571b33269e56611a909f9
 [deps]
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
-$CC -D_GNU_SOURCE $optcflags $optldflags topformflat.c -o topformflat || exit 1
+$CC -D_GNU_SOURCE $optcflags $optldflags topformflat.c -o topformflat
 dest="$butch_install_dir""$butch_prefix"
 for i in topformflat delta multidelta ; do
 install -D -m 755 $i "$dest"/bin/$i

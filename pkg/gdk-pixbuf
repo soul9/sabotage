@@ -24,16 +24,16 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib -lz" \
   ./configure -C \
   --prefix="$butch_prefix" \
   --disable-introspection \
-  --disable-nls $xconfflags gio_can_sniff=yes || exit 1
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --disable-nls $xconfflags gio_can_sniff=yes
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 dest2="$dest"/include/gdk-pixbuf-2.0/gdk-pixbuf-xlib/
 mkdir -p "$dest2"
 cp -r contrib/gdk-pixbuf-xlib/*.h "$dest2"
 
-# make fails to generate the file loaders.cache which is crucial to have, 
+# make fails to generate the file loaders.cache which is crucial to have,
 # otherwise gdk-pixbuf will not function at all and only print misleading
 # "Couldn't recognize the image file format ..." error messages
 # the makefile uses gdk-pixbuf-query-loaders on libpixbufloader-*.la,
@@ -42,9 +42,9 @@ cp -r contrib/gdk-pixbuf-xlib/*.h "$dest2"
 if [ -z "$CROSS_COMPILE" ] ; then
 LD_LIBRARY_PATH="$butch_prefix/lib:$dest/lib" \
 "$dest"/bin/gdk-pixbuf-query-loaders "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-*.so \
-  > "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache || exit 1
+  > "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
 
-sed -i 's,^"'"$dest"',",g' "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache || exit 1
+sed -i 's,^"'"$dest"',",g' "$dest"/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
 else
 	echo "XXXXXXXXXX WARNING: need to run gdk-pixbuf-query-loaders on target fs XXXXXXXXXX"
 fi

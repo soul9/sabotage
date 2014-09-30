@@ -11,8 +11,8 @@ portablexdr
 libxml2
 
 [build]
-patch -p1 < "$K"/libvirt-symbol-versioning.patch || exit 1
-patch -p1 < "$K"/libvirt-debug-python.patch || exit 1
+patch -p1 < "$K"/libvirt-symbol-versioning.patch
+patch -p1 < "$K"/libvirt-debug-python.patch
 
 [ -z "$butch_prefix" ] && butch_prefix=/
 
@@ -28,7 +28,7 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --without-firewalld \
   --with-sysctl=no \
   --with-init-script=none \
-  || exit 1
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

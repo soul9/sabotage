@@ -12,6 +12,6 @@ zlib
 [build]
 cd src
 
-make V=1 -j$MAKE_THREADS exeext= CXXFLAGS_WERROR="$optcflags" 
+make V=1 -j$MAKE_THREADS exeext= CXXFLAGS_WERROR="$optcflags"
 dest="$butch_install_dir""$butch_prefix"
 install -Dm 755 upx "$dest"/bin/upx

@@ -27,27 +27,27 @@ dopatch() {
 }
 
 cp "$K"/busybox.stage1.config .config
-dopatch "$K"/busybox.patch || exit 1
-dopatch "$K"/busybox-blowfish.patch || exit 1
-dopatch "$K"/busybox-unzip.patch || exit 1
-dopatch "$K"/busybox-xz-bugfix1.patch || exit 1
-dopatch "$K"/busybox-xz-bugfix2.patch || exit 1
-dopatch "$K"/busybox-xz-bugfix3.patch || exit 1
-dopatch "$K"/busybox-man.patch || exit 1
-dopatch "$K"/busybox-sed.patch || exit 1
-dopatch "$K"/busybox-awk-emptyfun.patch || exit 1
-dopatch "$K"/busybox-awk-int-overflow.patch || exit 1
-dopatch "$K"/busybox-tar-norecurse.patch || exit 1
-dopatch "$K"/busybox-tar-xz.patch || exit 1
-dopatch "$K"/busybox-tar-xz2.patch || exit 1
-dopatch "$K"/busybox-bzip2bug.patch || exit 1
-dopatch "$K"/busybox-fdisk-gpt-size.patch || exit 1
-dopatch "$K"/busybox-fdisk-sector-size.patch || exit 1
-dopatch "$K"/busybox-ping.patch || exit 1
-dopatch "$K"/busybox-ping2.patch || exit 1
+dopatch "$K"/busybox.patch
+dopatch "$K"/busybox-blowfish.patch
+dopatch "$K"/busybox-unzip.patch
+dopatch "$K"/busybox-xz-bugfix1.patch
+dopatch "$K"/busybox-xz-bugfix2.patch
+dopatch "$K"/busybox-xz-bugfix3.patch
+dopatch "$K"/busybox-man.patch
+dopatch "$K"/busybox-sed.patch
+dopatch "$K"/busybox-awk-emptyfun.patch
+dopatch "$K"/busybox-awk-int-overflow.patch
+dopatch "$K"/busybox-tar-norecurse.patch
+dopatch "$K"/busybox-tar-xz.patch
+dopatch "$K"/busybox-tar-xz2.patch
+dopatch "$K"/busybox-bzip2bug.patch
+dopatch "$K"/busybox-fdisk-gpt-size.patch
+dopatch "$K"/busybox-fdisk-sector-size.patch
+dopatch "$K"/busybox-ping.patch
+dopatch "$K"/busybox-ping2.patch
 
 
-#__inline seems to get activated when -std=gnu99 is used, causing havoc 
+#__inline seems to get activated when -std=gnu99 is used, causing havoc
 sed -i 's,__inline,,' ./scripts/kconfig/zconf.hash.c_shipped
 
 if [ ! -z "$DEBUGBUILD" ] ; then
@@ -59,13 +59,13 @@ fi
 
 # alternative:
 # make KBUILD_VERBOSE=1 CC="$CC" HOSTCC="$HOSTCC" \
-# HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS || exit 1
+# HOSTCFLAGS=-D_GNU_SOURCE -j$MAKE_THREADS
 
 [ -z "$HOSTCC" ] && HOSTCC="$CC"
 
 make V=1 LDFLAGS=-static HOSTLDFLAGS=-static \
 CFLAGS_busybox="$debugcflags -Wl,-z,muldefs -Werror-implicit-function-declaration" \
-HOSTCC="$HOSTCC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS || exit 1
+HOSTCC="$HOSTCC -static" CC="$CC -static" HOSTCFLAGS=-D_GNU_SOURCE  -j$MAKE_THREADS
 echo busybox build complete
 
 # make true and false binaries so scripts using it are faster
@@ -79,7 +79,7 @@ int main() { return 1; }
 EOF
 
 for p in true false ; do
-$CC -static $optcflags "$p".c -o "$p" $optldflags || exit 1
+$CC -static $optcflags "$p".c -o "$p" $optldflags
 done
 # done, continue with "make install" equivalent
 
@@ -93,11 +93,11 @@ busybox_bin=busybox
 #[ "$A" = "arm" ] || [ "$A" = "mips" ] && busybox_bin=busybox_unstripped
 
 echo cp "$busybox_bin" "$dest"/bin/busybox
-cp "$busybox_bin" "$dest"/bin/busybox || exit 1
+cp "$busybox_bin" "$dest"/bin/busybox
 
 echo check if busybox works:
 if [ -z $CROSS_COMPILE ] ; then
-	"$dest"/bin/busybox --list >/dev/null|| exit 1
+	"$dest"/bin/busybox --list >/dev/null
 fi
 
 trylink() {

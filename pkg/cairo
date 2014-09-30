@@ -29,7 +29,7 @@ CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
   ac_cv_func_XRenderCreateLinearGradient=yes \
   ac_cv_func_XRenderCreateRadialGradient=yes \
-  ac_cv_func_XRenderCreateConicalGradient=yes || exit 1
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  ac_cv_func_XRenderCreateConicalGradient=yes
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 

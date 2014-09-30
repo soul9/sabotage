@@ -9,5 +9,5 @@ dpkg
 makedev-debian
 
 [build]
-make MAKEDEV="/bin/MAKEDEV" -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make MAKEDEV="/bin/MAKEDEV" -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

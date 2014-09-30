@@ -9,7 +9,7 @@ tardir=cups-1.6.3
 [deps]
 
 [build]
-patch -p1 < "$K"/cups-1.7.0-blfs-1.patch || exit 1
+patch -p1 < "$K"/cups-1.7.0-blfs-1.patch
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
   --with-sysroot=$butch_root_dir"
@@ -35,12 +35,12 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   --with-components=core \
   --with-icondir="$butch_prefix"/share/icons \
   --with-menudir="$butch_prefix"/share/applications \
-  --with-rcdir="$butch_prefix"/share/cups-rc.d || exit 1
+  --with-rcdir="$butch_prefix"/share/cups-rc.d
 
-make -j$MAKE_THREADS || exit 1
-make DSTROOT="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DSTROOT="$butch_install_dir" install
 
-# TODO 
+# TODO
 # - write init scripts derived from /share/cups-rc.d/*
 # install users, groups etc - see
 # http://www.linuxfromscratch.org/blfs/view/7.4/pst/cups.html

@@ -11,7 +11,7 @@ openssl
 
 [build]
 mkdir -p "$butch_install_dir""$butch_prefix"/share/ca-certificates/mozilla
-patch -p1 < "$K"/ca-certificates.patch || exit 1
+patch -p1 < "$K"/ca-certificates.patch
 cp "$K"/certdata2pem.c mozilla/
 cat << EOF > mozilla/Makefile
 all: a.out
@@ -25,18 +25,18 @@ install:
 	 install -D -m 644 \$\$p \$(CERTSDIR)/\$\$p ; \
 	done
 EOF
-make || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make
+make DESTDIR="$butch_install_dir" install
 
-mkdir -p "$butch_install_dir/etc/ssl/certs" || exit 1
+mkdir -p "$butch_install_dir/etc/ssl/certs"
 
 ( cd "$butch_install_dir/share/ca-certificates/"
   find . -name '*.crt' | sort | cut -b3- > "$butch_install_dir/etc/ca-certificates.conf" )
 
-cp sbin/update-ca-certificates . || exit 1
+cp sbin/update-ca-certificates .
 sed -e 's#=/etc/#=${DESTDIR}/etc/#' -i update-ca-certificates
 sed -e 's#=/share/#=${DESTDIR}/share/#' -i update-ca-certificates
 sed -e 's#=/local/#=${DESTDIR}/local/#' -i update-ca-certificates
 
-DESTDIR="$butch_install_dir" sh ./update-ca-certificates --fresh || exit 1
+DESTDIR="$butch_install_dir" sh ./update-ca-certificates --fresh
 

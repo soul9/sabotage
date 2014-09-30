@@ -12,15 +12,15 @@ sed -i 's@$(PREFIX)/man@$(PREFIX)/share/man@g' Makefile
 sed -i 's@all: libbz2.a bzip2 bzip2recover test@all: libbz2.a bzip2 bzip2recover@' Makefile
 make -f Makefile-libbz2_so -j$MAKE_THREADS \
   CFLAGS="$optcflags -D_GNU_SOURCE -fPIC" \
-  LDFLAGS="$optldflags" CC="$CC" || exit 1
+  LDFLAGS="$optldflags" CC="$CC"
 make -j$MAKE_THREADS PREFIX="$butch_prefix" \
   CFLAGS="$optcflags -D_GNU_SOURCE -fPIC" \
-  LDFLAGS="$optldflags" CC="$CC" || exit 1
+  LDFLAGS="$optldflags" CC="$CC"
 
 make DESTDIR="$butch_install_dir" \
-  PREFIX="$butch_prefix" install || exit 1
+  PREFIX="$butch_prefix" install
 
 dest="${butch_install_dir}${butch_prefix}/lib/"
-install -m 0644 libbz2.so.1.0.6 "$dest/" || exit 1
-ln -sf libbz2.so.1.0.6 "$dest/libbz2.so.1.0" || exit 1
-ln -sf libbz2.so.1.0.6 "$dest/libbz2.so" || exit 1
+install -m 0644 libbz2.so.1.0.6 "$dest/"
+ln -sf libbz2.so.1.0.6 "$dest/libbz2.so.1.0"
+ln -sf libbz2.so.1.0.6 "$dest/libbz2.so"

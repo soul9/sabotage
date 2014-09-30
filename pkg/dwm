@@ -17,7 +17,7 @@ make \
   PREFIX="$butch_prefix" \
   CFLAGS="$optcflags -D_GNU_SOURCE -DVERSION=\\\"6.0\\\" -DXINERAMA" \
   LDFLAGS="$optldflags -lX11 -lXinerama -lXau -lXdmcp -lxcb -lX11-xcb" \
-  -j$MAKE_THREADS || exit 1
+  -j$MAKE_THREADS
 
 make PREFIX="$butch_prefix" MANPREFIX="$butch_prefix/share/man" \
-     DESTDIR="$butch_install_dir" install || exit 1
+     DESTDIR="$butch_install_dir" install

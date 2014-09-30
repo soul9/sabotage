@@ -13,4 +13,4 @@ make all install \
  PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" \
  CFLAGS="-std=gnu99 $optcflags -I. -I/include -DVERSION=\\\"0.9\\\"" \
  LDFLAGS="-lncurses $optldflags" \
- -j$MAKE_THREADS  || exit 1
+ -j$MAKE_THREADS

@@ -12,6 +12,6 @@ sha512=85d93df24d9d62e7803a5d0ac5d268b2085214adcb160e32fac316b12ee8a0ce36ccfb433
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
-  --disable-sndfile || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --disable-sndfile
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

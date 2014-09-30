@@ -23,6 +23,6 @@ x11-font-dejavu
 gdb
 
 [build]
-patch -p1 < "$K"/ecere-sabotage.patch || exit 1
-make V=1 DISABLE_GL=1 SABOTAGE_LINUX=1 -j$MAKE_THREADS prefix="$butch_prefix" || exit 1
-make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
+patch -p1 < "$K"/ecere-sabotage.patch
+make V=1 DISABLE_GL=1 SABOTAGE_LINUX=1 -j$MAKE_THREADS prefix="$butch_prefix"
+make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install

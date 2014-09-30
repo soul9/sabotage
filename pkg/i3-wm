@@ -16,4 +16,4 @@ pcre
 libstartup-notification
 
 [build]
-CPPFLAGS="-DGLOB_TILDE=0" make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install || exit 1
+CPPFLAGS="-DGLOB_TILDE=0" make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install

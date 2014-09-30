@@ -18,7 +18,7 @@ gtk+2
 glib
 
 [build]
-patch -p1 < "$K"/sweep-default-device.patch || exit 1
+patch -p1 < "$K"/sweep-default-device.patch
 cp -f "$K"/config.sub .
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
@@ -29,10 +29,10 @@ CPPFLAGS=-D_GNU_SOURCE \
   --with-ogg-includes=$butch_root_dir$butch_prefix/include \
   --with-vorbis-includes=$butch_root_dir$butch_prefix/include \
   --disable-speex --disable-oggtest --disable-vorbistest \
-  --prefix="$butch_prefix" || exit 1
+  --prefix="$butch_prefix"
 
 # included libtool version is too old.
 [ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

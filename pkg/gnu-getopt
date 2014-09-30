@@ -11,5 +11,5 @@ sha512=86d9dad674b82655986b32c8611e4025bea3d1bb5ab521f7f1a20e38a20c6eab563652fcc
 [deps]
 
 [build]
-make -j$MAKE_THREADS || exit 1
-make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make prefix="$butch_prefix" DESTDIR="$butch_install_dir" install

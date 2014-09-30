@@ -10,8 +10,8 @@ tardir=TinyGL
 libx11
 
 [build]
-patch -p1 < "$K"/tinygl.patch || exit 1
-make -j$MAKE_THREADS || exit 1
+patch -p1 < "$K"/tinygl.patch
+make -j$MAKE_THREADS
 
 dest="$butch_install_dir""$butch_prefix"
 for i in lib include ; do

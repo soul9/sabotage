@@ -18,7 +18,7 @@ sha512=1ea45e7978bffb8ec23c8eddb74b0bab686126fd55d96956203bc1eef44e3047edcf2cbc3
 [build]
 for p in glib-gtimer-varargs glib-no_python ; do
 	echo $p
-	patch -p1 < "$K"/$p.patch || exit 1
+	patch -p1 < "$K"/$p.patch
 done
 
 this_dir="$PWD"
@@ -29,7 +29,7 @@ CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Dloff_t=off_t $optcflags" \
 LDFLAGS="$optldflags" ./configure -C $xconfflags \
   --prefix="$butch_prefix" --disable-modular-tests --disable-selinux --disable-fam \
   --disable-silent-rules glib_cv_stack_grows=no glib_cv_uscore=no \
-  ac_cv_func_posix_getpwuid_r=yes ac_cv_func_posix_getgrgid_r=yes || exit 1
+  ac_cv_func_posix_getpwuid_r=yes ac_cv_func_posix_getgrgid_r=yes
 
 echo '#include <string.h>' >> config.h
 
@@ -38,6 +38,6 @@ echo true > missing
 
 make V=1 -j$MAKE_THREADS DESTDIR="$butch_install_dir" \
   LDFLAGS="-Wl,-rpath-link=$this_dir/gthread/.libs/ -Wl,-rpath-link=$this_dir/gmodule/.libs/" \
-  || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make DESTDIR="$butch_install_dir" install
 

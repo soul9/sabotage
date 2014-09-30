@@ -17,14 +17,14 @@ python
 vala
 
 [build]
-patch -p1 < "$K"/midori-no-notify.patch || exit 1
+patch -p1 < "$K"/midori-no-notify.patch
 
 rm extensions/devpet.vala
 
 DISABLE_NOTIFY=1 ./configure  --prefix="$butch_install_dir" --disable-docs --disable-apidocs \
 	--disable-unique --disable-granite --disable-tests --disable-gtk3 \
-	--disable-webkit2 --disable-zeitgeist || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="/" install || exit 1
+	--disable-webkit2 --disable-zeitgeist
+make -j$MAKE_THREADS
+make DESTDIR="/" install
 dest="$butch_install_dir""$butch_prefix"
-install -m644 -D _build/icons/48x48/midori.png "$dest"/share/pixmaps/midori.png || exit 1
+install -m644 -D _build/icons/48x48/midori.png "$dest"/share/pixmaps/midori.png

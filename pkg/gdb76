@@ -21,14 +21,14 @@ find . -name 'configure' -exec sed -i 's,MAKEINFO="$MISSING makeinfo",MAKEINFO=t
 # remove hardcoded -O2 -g CFLAGS which are *not* overridable (i.e. always appended, taking precedence)
 find . -name configure -exec sed -e 's/CFLAGS="-g -O2"/:/g' -e 's/CFLAGS="-O2"/:/g' -i "{}" \;
 
-patch -p1 < "$K"/gdb-threaddb.patch || exit 1
-patch -p1 < "$K/gdb-linux_nat.patch" || exit 1
-patch -p1 < "$K/gdb-amd64-debugreg.patch" || exit 1
-patch -p1 < "$K/gdb-arm-gentmap.patch" || exit 1
-patch -p1 < "$K"/gdb-76-linux-low-threaddb.patch || exit 1
-patch -p1 < "$K"/gdb-76-readline.patch || exit 1
-patch -p1 < "$K"/gdb-76-pid_t.patch || exit 1
-patch -p1 < "$K"/gdb-76-configure-ash.patch || exit 1
+patch -p1 < "$K"/gdb-threaddb.patch
+patch -p1 < "$K/gdb-linux_nat.patch"
+patch -p1 < "$K/gdb-amd64-debugreg.patch"
+patch -p1 < "$K/gdb-arm-gentmap.patch"
+patch -p1 < "$K"/gdb-76-linux-low-threaddb.patch
+patch -p1 < "$K"/gdb-76-readline.patch
+patch -p1 < "$K"/gdb-76-pid_t.patch
+patch -p1 < "$K"/gdb-76-configure-ash.patch
 
 # fix mips build ...
 cp "$K"/gdb-sgidefs.h gdb/sgidefs.h
@@ -44,7 +44,7 @@ mv ../config.cache .
 cat << EOF >> config.cache
 bash_cv_must_reinstall_sighandlers=yes
 bash_cv_func_sigsetjmp=yes
-bash_cv_func_strcoll_broken=no 
+bash_cv_func_strcoll_broken=no
 bash_cv_func_ctype_nonascii=no
 ac_cv_func_strncmp_works=yes
 ac_cv_c_stack_direction=-1
@@ -61,7 +61,7 @@ sed -i 's/noconfigdirs=""/noconfigdirs="intl readline"/' ../configure
 ln -sf "$butch_root_dir""$butch_prefix"/lib/libreadline.a readline/libreadline.a
 archflags=
 if [ "$A" = "powerpc" ] ; then
-	cp "$K"/ppc-regs.h . || exit 1
+	cp "$K"/ppc-regs.h .
 	archflags="-include $PWD/ppc-regs.h"
 fi
 
@@ -85,8 +85,8 @@ CFLAGS="-Dgnu_fnmatch=fnmatch \
   --with-system-zlib=yes $gdbserverflags $xconfflags $targets \
   --disable-sim \
   --disable-tui \
-  || exit 1
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install-gdb || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install-gdb
 

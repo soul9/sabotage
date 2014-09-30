@@ -10,5 +10,5 @@ http://http.debian.net/debian/pool/main/m/makedev/makedev_2.3.1.orig.tar.gz
 makedev-debian-patch
 
 [build]
-gzip -c -d "$C"/makedev_*.diff.gz |patch -p1 || exit 1
+gzip -c -d "$C"/makedev_*.diff.gz |patch -p1
 install -D -m 755 MAKEDEV "$butch_install_dir""$butch_prefix"/bin/MAKEDEV

@@ -11,9 +11,9 @@ tardir=p7zip_9.20.1
 [build]
 sed -i 's/-pipe -s//' makefile.machine &&
 sed -i -e 's/chmod 555/chmod 755/' -e 's/chmod 444/chmod 644/' install.sh &&
-make all3 -j$MAKE_THREADS OPTFLAGS="$optcflags" LDFLAGS="$optldflags" || exit 1
+make all3 -j$MAKE_THREADS OPTFLAGS="$optcflags" LDFLAGS="$optldflags"
 
 dest="$butch_install_dir""$butch_prefix"
 make DEST_HOME="$dest" \
      DEST_MAN="$dest"/share/man \
-     DEST_SHARE_DOC="$dest"/share/doc/p7zip-9.20.1 install || exit 1
+     DEST_SHARE_DOC="$dest"/share/doc/p7zip-9.20.1 install

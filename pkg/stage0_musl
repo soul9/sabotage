@@ -14,20 +14,20 @@ sha512=a46fb1db23f518beaa959e9bebcb3bf0574e583c197792d30dcd52b3974e3c28559498420
 test "$STAGE" = "0" || exit 0
 
 CC=$R/bin/gcc ./configure --enable-gcc-wrapper \
-  --prefix=$butch_prefix --syslibdir=$butch_prefix/lib || exit 1
+  --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 
 # enable debug libc when DEBUGBUILD is set
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS += -O0 -g" >> config.mak
 [ ! -z "$DEBUGBUILD" ] && echo "CFLAGS_ALL_SHARED += -O0 -g" >> config.mak
 
-make CC=$R/bin/gcc -j$MAKE_THREADS || exit 1
-make install DESTDIR="$butch_install_dir" || exit 1
+make CC=$R/bin/gcc -j$MAKE_THREADS
+make install DESTDIR="$butch_install_dir"
 
 dest="$butch_install_dir""$butch_prefix"
 
 # generate a musl-gcc wrapper that is aware of our directory layout...
 cat << EOF > "$dest"/bin/musl-gcc
-#!/bin/sh 
+#!/bin/sh
 self=\`readlink -f "\$0"\`
 selfdir=\`dirname "\$self"\`/../../../bin
 exec "\$selfdir/rawcc" "\$@" -specs "\$selfdir/../lib/musl-gcc.specs"

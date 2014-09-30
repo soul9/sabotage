@@ -22,7 +22,7 @@ LIBS="-lssl -lcrypto -lz" \
   --with-ssl \
   --enable-ipv6 \
   --with-ca-path="$butch_prefix"/etc/ssl/certs \
-  --with-random=/dev/urandom $xconfflags || exit 1
+  --with-random=/dev/urandom $xconfflags
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

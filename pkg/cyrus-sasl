@@ -7,10 +7,10 @@ sha512=78819cb9bb38bea4537d6770d309deeeef09ff44a67526177609d3e1257ff4334d2b5e513
 [deps]
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix" || exit 1
+  ./configure -C --prefix="$butch_prefix"
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

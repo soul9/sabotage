@@ -19,5 +19,5 @@ CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
   -D__int32_t=int32_t -D__int16_t=int16_t -D__uint8_t=uint8_t \
   -D__uint32_t=uint32_t -D__uint16_t=uint16_t \
   -include stdint.h $optcflags" \
-  LDFLAGS="$optldflags" make -j$MAKE_THREADS || exit 1
-make PREFIX="$butch_prefix" SBINDIR="$butch_prefix"/bin DESTDIR="$butch_install_dir" install || exit 1
+  LDFLAGS="$optldflags" make -j$MAKE_THREADS
+make PREFIX="$butch_prefix" SBINDIR="$butch_prefix"/bin DESTDIR="$butch_install_dir" install

@@ -20,9 +20,9 @@ CFLAGS="$optcflags" LDFLAGS="$optldflags" \
               --disable-mysql --disable-pgsql --disable-mail \
               --disable-snmp --disable-imjournal --disable-libgcrypt \
               --disable-omjournal --enable-imfile  \
-              --enable-relp --enable-gnutls || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+              --enable-relp --enable-gnutls
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 install -D -m640 "$K"/rsyslog.conf "$butch_install_dir"/"$butch_prefix"/etc/rsyslog.conf
 
 IS="$K"/bin/install-service

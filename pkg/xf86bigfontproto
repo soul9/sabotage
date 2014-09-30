@@ -9,6 +9,6 @@ sha512=35b53ee1f428fee6777733264a7534a28ec6ffb29fc0ad9ab02337101d651ec94007bf840
 ftp://ftp.x.org/pub/individual/proto/xf86bigfontproto-1.2.0.tar.bz2
 
 [build]
-./configure -C --prefix="$butch_prefix" || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+./configure -C --prefix="$butch_prefix"
+make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 

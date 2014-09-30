@@ -10,8 +10,8 @@ sha512=5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf
 stage0_musl
 
 [build]
-patch -p1 < "$K"/binutils-arm.diff || exit 1
-patch -p1 < "$K"/binutils-24-configure_ash.patch || exit 1
+patch -p1 < "$K"/binutils-arm.diff
+patch -p1 < "$K"/binutils-24-configure_ash.patch
 
 $K/bin/libibertyfix libiberty
 
@@ -28,11 +28,11 @@ CFLAGS="-D_GNU_SOURCE -D_LARGEFILE64_SOURCE" \
 ./configure -C --prefix="$butch_prefix" \
   --disable-nls --disable-werror \
   --enable-initfini-array \
-  --disable-install-libbfd $config_arch_flags || exit 1
+  --disable-install-libbfd $config_arch_flags
 
-make -j$MAKE_THREADS || exit 1
+make -j$MAKE_THREADS
 # tooldir=/
-make DESTDIR=$butch_install_dir install-gas install-ld install-binutils || exit 1
+make DESTDIR=$butch_install_dir install-gas install-ld install-binutils
 
 dest="$butch_install_dir""$butch_prefix"
 rm -f "$dest"/bin/ld

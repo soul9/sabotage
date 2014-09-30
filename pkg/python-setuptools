@@ -9,4 +9,4 @@ python
 http://pypi.python.org/packages/source/s/setuptools/setuptools-3.4.4.tar.gz
 
 [build]
-python setup.py install --prefix="$butch_prefix" --root="$butch_install_dir" --optimize=1 || exit 1
+python setup.py install --prefix="$butch_prefix" --root="$butch_install_dir" --optimize=1

@@ -9,18 +9,18 @@ sha512=315f5541dfe8d519ea832ad8b13b034a5ac173f8b9c0de7e3f774780b4ef42f2fab29e3ef
 gtk+2
 
 [build]
-patch -p1 < "$K"/leafpad-savebug.patch || exit 1
-patch -p1 < "$K"/leafpad-taskbar-icon.patch || exit 1
+patch -p1 < "$K"/leafpad-savebug.patch
+patch -p1 < "$K"/leafpad-taskbar-icon.patch
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
-  --disable-nls || exit 1
+  --disable-nls
 
 for i in po ; do
 	printf 'all:\n\ttrue\ninstall:\n\ttrue\clean:\n\ttrue\n' > "$i"/Makefile
 done
 
 chmod +x install-sh
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

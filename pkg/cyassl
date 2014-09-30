@@ -20,12 +20,12 @@ C_EXTRA_FLAGS="-D_GNU_SOURCE $optcflags" \
   --enable-static $debug_flags \
   --disable-silent-rules \
   --enable-ipv6 --enable-ripemd --enable-sha512 \
-  --enable-sessioncerts --enable-certgen || exit 1
+  --enable-sessioncerts --enable-certgen
 # aesni is only for cpus with aes extension, amd bulldozer+ or corei7ish
 # sniffer depends on pcap
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 if false ; then
 	# this was an attempt to use cyassl's openssl compatibility layer

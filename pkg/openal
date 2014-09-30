@@ -9,10 +9,10 @@ filesize=253006
 sha512=ca6dafdd503d06892dff08763bc00b974ec6e7c4bf3dcebb4cb41a486b4ea777c278299a198db182fee888a19a5716bd57d91a2859b764a532138a79f2bd672f
 
 [build]
-mv Alc/mixer_inc.c Alc/mixer_inc.h || exit 1
+mv Alc/mixer_inc.c Alc/mixer_inc.h
 
 # patch so *.c can be compiled without depending on system specifics
-patch -p1 < "$K"/openal-mixer.patch || exit 1
+patch -p1 < "$K"/openal-mixer.patch
 
 cp "$K/openal.Makefile" Makefile
 
@@ -80,8 +80,8 @@ for i in OpenAL32/ Alc/ Alc/backends; do cp config.h $i ; done
 printf '%s\n' "CFLAGS += $optcflags" >> config.mak
 
 mkdir lib
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/lib/pkgconfig

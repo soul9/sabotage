@@ -13,7 +13,7 @@ LDFLAGS="$optldflags" \
 CC="$CC -Wl,-static -static-libgcc -static -D_GNU_SOURCE -D_BSD_SOURCE" \
 CFLAGS="$optcflags" \
 ./configure -C --prefix="$butch_prefix" \
-  --disable-shared $xconfflags || exit 1
+  --disable-shared $xconfflags
 sed -i 's/memory.h/string.h/' src/encoding.c src/ascmagic.c
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

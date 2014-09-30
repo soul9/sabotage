@@ -39,10 +39,10 @@ CC="gcc" ./Configure -des \
   -Dvendorscript="$butch_prefix"/bin \
   -Dinc_version_list=none $debug_flags \
   -Dman1dir="$butch_prefix"/share/man/man1perl -Dman1ext=1perl \
-  -Dman3dir="$butch_prefix"/share/man/man3perl -Dman3ext=3perl || exit 1
+  -Dman3dir="$butch_prefix"/share/man/man3perl -Dman3ext=3perl
 
-make -j$MAKE_THREADS || exit 1
-make install || exit 1
+make -j$MAKE_THREADS
+make install
 
 dest="$butch_install_dir""$butch_prefix"
 
@@ -52,7 +52,7 @@ if [ -n "$butch_install_dir" ] ; then
   # and leads to perl stuff being installed into PACKAGEDESTDIR/PERLDESTDIR
   # - which of course causes breakage.
 
-  sed -i s@"$butch_install_dir"@@g "$dest"/lib/perl5/core_perl/Config_heavy.pl || exit 1
+  sed -i s@"$butch_install_dir"@@g "$dest"/lib/perl5/core_perl/Config_heavy.pl
 
   # perl manpages take 20 MB, that's a third of its entire size.
   # as long as nobody needs them, we will remove them.

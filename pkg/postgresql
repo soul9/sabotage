@@ -15,7 +15,7 @@ libxslt
 readline
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
   --with-sysroot=$butch_root_dir"
@@ -25,9 +25,9 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
   --enable-thread-safety \
   --docdir="$butch_prefix"/share/doc/postgresql \
-  --mandir="$butch_prefix"/share/man || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --mandir="$butch_prefix"/share/man
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 IS="$K"/bin/install-service
 "$IS" --down --log --force postgres "$K"/services/postgres

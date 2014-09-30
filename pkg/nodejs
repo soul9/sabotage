@@ -10,18 +10,18 @@ dynamic-toolchain
 python
 
 [build]
-patch -p1 < "$K"/nodejs-nameser_compat.h || exit 1
-patch -p1 < "$K"/nodejs-openssl_termios.h || exit 1
-patch -p1 < "$K"/nodejs-uv.patch || exit 1
-patch -p1 < "$K"/nodejs-uv_ifaddrs.patch || exit 1
-patch -p1 < "$K"/nodejs-i386.patch || exit 1
+patch -p1 < "$K"/nodejs-nameser_compat.h
+patch -p1 < "$K"/nodejs-openssl_termios.h
+patch -p1 < "$K"/nodejs-uv.patch
+patch -p1 < "$K"/nodejs-uv_ifaddrs.patch
+patch -p1 < "$K"/nodejs-i386.patch
 
 [ -z "$butch_prefix" ] && butch_prefix=/
 
-CFLAGS="-D_GNU_SOURCE" CXXFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
+CFLAGS="-D_GNU_SOURCE" CXXFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix"
 
 # the python configure script does not care about C(XX)FLAGS being passed
 sed -i "s@cflags': \[\]@cflags': ['-D_GNU_SOURCE -D_BSD_SOURCE']@" config.gypi
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

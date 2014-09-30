@@ -7,6 +7,6 @@ sha512=75e2fcc31f670bab77a3658a684054971998e91ad14743814480a4d24a59285dea1fe922d
 sed -i 's@/usr/local@'"$butch_prefix"'@g' Makefile
 sed -i 's@/usr/local@'"$butch_prefix"'@g' config.sub
 sed -i 's@/usr/local@'"$butch_prefix"'@g' configure.inc
-./configure.sh --enable-all-features || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+./configure.sh --enable-all-features
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

@@ -11,7 +11,7 @@ qt4
 cmake
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 sed -i 's@4.4.2@4.3.4@' CMakeLists.txt
 
@@ -19,9 +19,9 @@ mkdir build
 cd build
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-cmake -DCMAKE_INSTALL_PREFIX="$butch_prefix" -DWITHOUT_EMBEDDED_DISPLAY=on  .. || exit 1
+cmake -DCMAKE_INSTALL_PREFIX="$butch_prefix" -DWITHOUT_EMBEDDED_DISPLAY=on  ..
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 cd ..

@@ -9,5 +9,5 @@ sha512=d715d7466c5d5b402a7b6c44257b959c81234b8b72dc3bad4ad1080f66da784b348e73fad
 [build]
 sed -i 's@/sbin@$(bindir)/@g' Makefile
 sed -i 's@ --owner 0 --group 0@@g' Makefile
-make LDFLAGS=-static -j$MAKE_THREADS CC="$CC" || exit 1
-make DESTDIR="$butch_install_dir" bindir="$butch_prefix"/bin MANDIR="$butch_prefix"/share/man/man1 install || exit 1
+make LDFLAGS=-static -j$MAKE_THREADS CC="$CC"
+make DESTDIR="$butch_install_dir" bindir="$butch_prefix"/bin MANDIR="$butch_prefix"/share/man/man1 install

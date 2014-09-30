@@ -19,7 +19,7 @@ cairo
 glib
 
 [build]
-patch -p1 < "$K"/poppler-segfault.patch || exit 1
+patch -p1 < "$K"/poppler-segfault.patch
 # https://bugs.freedesktop.org/show_bug.cgi?id=12925
 
 [ -n "$CROSS_COMPILE" ] && \
@@ -37,7 +37,7 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   --disable-splash-output \
   --disable-libopenjpeg \
   --enable-xpdf-headers \
-  --enable-zlib || exit 1
+  --enable-zlib
 [ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

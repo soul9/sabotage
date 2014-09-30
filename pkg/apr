@@ -33,8 +33,8 @@ CPPFLAGS="-include stdlib.h -include pwd.h -D_GNU_SOURCE -DSTDC_HEADERS" \
   ac_cv_file__dev_zero=yes apr_cv_process_shared_works=yes \
   apr_cv_mutex_robust_shared=no apr_cv_tcp_nodelay_with_cork=yes \
   ac_cv_sizeof_struct_iovec=$sizeof_iovec \
-|| exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 

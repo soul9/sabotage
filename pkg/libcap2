@@ -13,12 +13,12 @@ attr
 perl
 
 [build]
-sed -i 's@/bin/bash@/bin/sh@g' progs/capsh.c || exit 1
+sed -i 's@/bin/bash@/bin/sh@g' progs/capsh.c
 make -j$MAKE_THREADS prefix="$butch_prefix" lib=lib \
   CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  BUILD_CC="$HOSTCC" CC="$CC" || exit 1
+  BUILD_CC="$HOSTCC" CC="$CC"
 
-make RAISE_SETFCAP=no FAKEROOT="$butch_install_dir" prefix="$butch_prefix" lib=lib install || exit 1
+make RAISE_SETFCAP=no FAKEROOT="$butch_install_dir" prefix="$butch_prefix" lib=lib install
 LIBDIR=$butch_install_dir$butch_prefix/lib
 SBINDIR=$butch_install_dir$butch_prefix/sbin
 

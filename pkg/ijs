@@ -14,7 +14,7 @@ sha512=b5f8df6fe394efea4ee7059c1ca8d7eb91588f060642da12f6591f0f40d169883aa9f7a69
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
-  --enable-shared --disable-static || exit 1
+  --enable-shared --disable-static
 
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

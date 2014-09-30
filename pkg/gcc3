@@ -10,11 +10,11 @@ http://ftp.gnu.org/gnu/gcc/gcc-3.4.6/gcc-core-3.4.6.tar.bz2
 
 [build]
 VERSION=3.4.6
-patch -p1 < "$K"/gcc-346-unwind2.patch || exit 1
-patch -p1 < "$K"/gcc-346-unlink.patch || exit 1
-patch -p1 < "$K"/gcc-346-libgcc-visibility.patch || exit 1
+patch -p1 < "$K"/gcc-346-unwind2.patch
+patch -p1 < "$K"/gcc-346-unlink.patch
+patch -p1 < "$K"/gcc-346-libgcc-visibility.patch
 
-find gcc/config -name linux.h -exec sed -i 's@struct siginfo@siginfo_t@g' "{}" \; || exit 1
+find gcc/config -name linux.h -exec sed -i 's@struct siginfo@siginfo_t@g' "{}" \;
 
 if [ "$A" = "i386" ] && [ "$(./config.guess)" = "i686-pc-linux-gnulibc1" ] ; then
 	printf '#!/bin/sh\necho i386-unknown-linux-gnu\n' > config.guess
@@ -22,7 +22,7 @@ fi
 
 
 # remove fix-includes
-sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in || exit 1
+sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 
 #apparently some control freak gcc used by ubuntu enforces that the mode arg is set in open calls
 sed -i 's@O_CREAT@O_CREAT, 0770@' gcc/collect2.c
@@ -67,7 +67,7 @@ if [ "$STAGE" = "0" ] && is_ubuntu_or_debian ; then
 		for i in sys bits asm gnu ; do
 			ln -sf /usr/include/"$A"-linux-gnu/"$i" include/
 		done
-		# patch for an issue in unwind-dw2.c seen on Ubuntu 13.04: 
+		# patch for an issue in unwind-dw2.c seen on Ubuntu 13.04:
 		# ./unwind-dw2.c:1032: error: field `info' has incomplete type
 		sed -i 's@struct siginfo@siginfo_t@g' gcc/config/i386/linux.h
 	fi
@@ -76,12 +76,12 @@ fi
 ./configure --prefix="$butch_prefix" \
   --mandir="$butch_prefix"/share/man \
   --infodir="$butch_prefix"/infoXXX \
-  --disable-bootstrap --disable-shared --disable-nls $archflags || exit 1
+  --disable-bootstrap --disable-shared --disable-nls $archflags
 make \
   CFLAGS="-DSTDC_HEADERS -Werror-implicit-function-declaration" \
   LDFLAGS="-static" \
-  -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install-gcc || exit 1
+  -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install-gcc
 
 dest="$butch_install_dir""$butch_prefix"
 

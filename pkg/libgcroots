@@ -8,10 +8,10 @@ sha512=5e858c36631f6a2310fedce1b2919f10188cd4c350766f2cb080432487632026d14748f45
 [deps]
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+#patch -p1 < "$K/some.patch"
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 dest="$butch_install_dir""$butch_prefix"
 (cd "$dest"/lib
 mv libgcroots.a libgc.a

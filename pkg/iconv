@@ -1,4 +1,4 @@
 [build]
-"$CC" $optcflags -std=gnu99 -o iconv "$K"/iconv.c -static $optldflags || exit 1
+"$CC" $optcflags -std=gnu99 -o iconv "$K"/iconv.c -static $optldflags
 
 mv iconv "$butch_prefix"/bin/

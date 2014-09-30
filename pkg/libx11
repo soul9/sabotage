@@ -20,5 +20,5 @@ http://xorg.freedesktop.org/releases/individual/lib/libX11-1.6.2.tar.bz2
   xconfflags="--host=$($CC -dumpmachine) --with-sysroot=$butch_root_dir"
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
-  --disable-loadable-xcursor $xconfflags || exit 1
-make V=1 DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+  --disable-loadable-xcursor $xconfflags
+make V=1 DESTDIR="$butch_install_dir" -j$MAKE_THREADS install

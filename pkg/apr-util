@@ -29,10 +29,10 @@ chmod +x apr-1-config
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
   --with-apr="$PWD/apr-1-config" \
-  --disable-util-dso || exit 1
+  --disable-util-dso
 echo '#define APR_HAVE_CRYPT_H 1' >> include/private/apu_config.h
 "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
-make CC="$CC" -j$MAKE_THREADS LIBTOOL=$PWD/libtool || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make CC="$CC" -j$MAKE_THREADS LIBTOOL=$PWD/libtool
+make DESTDIR="$butch_install_dir" install
 
 

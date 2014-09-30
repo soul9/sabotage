@@ -14,6 +14,6 @@ apr-util
 [build]
 #patch -p1 < "$K/some.patch"
 CFLAGS="-include stdlib.h -include pwd.h -D_GNU_SOURCE -DSTDC_HEADERS" ./configure -C \
-  --prefix="$butch_prefix" --with-apr="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --prefix="$butch_prefix" --with-apr="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

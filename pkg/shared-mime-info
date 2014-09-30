@@ -10,7 +10,7 @@ glib
 libxml2
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 
 mkdir .deps
 touch .deps/update_mime_database-update-mime-database.Tpo
@@ -18,7 +18,7 @@ touch .deps/update_mime_database-update-mime-database.Tpo
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine)"
 CFLAGS="$optcflags -D_GNU_SOURCE" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
 
 sed -i 's@$(AM_V_at)$(am__mv) $(DEPDIR)/update_mime_database-update-mime-database.Tpo@#@' Makefile
 
@@ -27,5 +27,5 @@ for i in po ; do
 done
 
 # FIXME makefile is buggy and breaks randomly with multiple processes
-make -j1 || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j1
+make DESTDIR="$butch_install_dir" install

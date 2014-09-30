@@ -11,9 +11,9 @@ libpng
 liblcms
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
+#patch -p1 < "$K/some.patch"
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
 cp "$K"/libmng.Makefile Makefile
 echo prefix=$butch_prefix > config.mak
-make CC="$CC" -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make CC="$CC" -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

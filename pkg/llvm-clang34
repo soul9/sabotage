@@ -15,26 +15,26 @@ clang34
 compiler-rt34
 
 [build]
-tar xf "$C"/clang-3.4.src.tar.gz || exit 1
+tar xf "$C"/clang-3.4.src.tar.gz
 mv ./clang-3.4 ./tools/clang
-tar xf "$C"/compiler-rt-3.4.src.tar.gz || exit 1
+tar xf "$C"/compiler-rt-3.4.src.tar.gz
 mv ./compiler-rt-3.4 ./projects/compiler-rt
 
-patch -p1 < "$K"/llvm34.patch || exit 1
-patch -p1 < "$K"/llvm34-dynlinker.patch || exit 1
+patch -p1 < "$K"/llvm34.patch
+patch -p1 < "$K"/llvm34-dynlinker.patch
 
-conflags='--enable-libffi --enable-optimized --enable-shared 
+conflags='--enable-libffi --enable-optimized --enable-shared
 	--disable-docs --enable-targets=all --prefix='"$butch_prefix"
 if [ ! -z "$DEBUGBUILD" ] ; then
 	conflags='--enable-debug-runtime --enable-debug-symbols
-	--enable-keep-symbols --enable-libffi --enable-optimized 
+	--enable-keep-symbols --enable-libffi --enable-optimized
 	--enable-shared --disable-docs --enable-targets=all --prefix='"$butch_prefix"
 fi
-./configure $conflags || exit 1
+./configure $conflags
 
-# For whatever reason, PROJ_INSTALL_ROOT doesn't get defined when building sample. 
+# For whatever reason, PROJ_INSTALL_ROOT doesn't get defined when building sample.
 sed -i '/$(error Projects must define PROJ_INSTALL_ROOT)/c\
-PROJ_INSTALL_ROOT := '"$butch_install_dir"'' ./projects/sample/Makefile.llvm.config || exit 1
+PROJ_INSTALL_ROOT := '"$butch_install_dir"'' ./projects/sample/Makefile.llvm.config
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

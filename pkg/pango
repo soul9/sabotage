@@ -21,15 +21,15 @@ patch -p1 < "$K/pango-querymodules-prefix.patch"
 CFLAGS="$optcflags -D_GNU_SOURCE" LDFLAGS="$optldflags" \
 CXXFLAGS="$optcflags" \
 ./configure -C --prefix="$butch_prefix" $xconfflags \
-  --enable-introspection=no || exit 1
-make -j$MAKE_THREADS V=1 || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --enable-introspection=no
+make -j$MAKE_THREADS V=1
+make DESTDIR="$butch_install_dir" install
 
 if [ -z "$CROSS_COMPILE" ] ; then
 echo query modules
 dest="$butch_install_dir""$butch_prefix"
 LD_LIBRARY_PATH="$dest"/lib \
-  "$dest"/bin/pango-querymodules prefix="$butch_install_dir" > "$dest"/etc/pango/pango.modules || exit 1
+  "$dest"/bin/pango-querymodules prefix="$butch_install_dir" > "$dest"/etc/pango/pango.modules
 else
 	echo "XXXXXXXXXXX WARNING: you must run pango-querymodules in the target rootfs! XXXXXXXXXX"
 fi

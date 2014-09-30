@@ -5,9 +5,9 @@ util-linux-tarball
 mkdir -p "$butch_build_dir"
 cd "$butch_build_dir"
 rm -rf util-linux-2.23.1
-tar xf "$C"/util-linux-2.23.1.tar.xz || exit 1
+tar xf "$C"/util-linux-2.23.1.tar.xz
 cd util-linux-2.23.1
-patch -p1 < "$K"/util-linux.patch || exit 1
+patch -p1 < "$K"/util-linux.patch
 
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
@@ -30,7 +30,7 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="-static $optldflags" \
                  --disable-schedutils --disable-wall --disable-bash-completion \
                  --disable-pg-bell --disable-use-tty-group \
                  --disable-makeinstall-chown --disable-makeinstall-setuid \
-                 --enable-libblkid --enable-partx $xconfflags || exit 1
-make -j$MAKE_THREADS partx || exit 1
+                 --enable-libblkid --enable-partx $xconfflags
+make -j$MAKE_THREADS partx
 dest="$butch_install_dir""$butch_prefix"
-install -D -m 755 partx "$dest"/bin/partx || exit 1
+install -D -m 755 partx "$dest"/bin/partx

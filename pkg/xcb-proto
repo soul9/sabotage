@@ -15,6 +15,6 @@ sha512=b979d6432dcb58b5040a460ecb5285c67d288203768e2b6d032acac6593219dda9f29ae95
 # xcb-proto will create ${destdir}lib when prefix is empty (missing slash)
 [ -z "$butch_prefix" ] && butch_prefix=/
 
-./configure -C --prefix="$butch_prefix" || exit 1
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install || exit 1
+./configure -C --prefix="$butch_prefix"
+make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 

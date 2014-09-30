@@ -11,4 +11,4 @@ libxau
 http://xorg.freedesktop.org/archive/individual/app/xprop-1.2.2.tar.bz2
 
 [build]
-CFLAGS="$optcflags" LDFLAGS="$optldflags" LIBS="-lxcb -lXau" ./configure --prefix="$butch_prefix" && make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install || exit 1
+CFLAGS="$optcflags" LDFLAGS="$optldflags" LIBS="-lxcb -lXau" ./configure --prefix="$butch_prefix" && make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install

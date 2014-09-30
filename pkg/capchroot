@@ -12,9 +12,9 @@ sha512=897c10409ab3a7128e8b89ffef03a9b187aa1a62367be3b88cb443b3ee7b61a9ee8c1d044
 libcap2
 
 [build]
-patch -p1 < "$K/capchroot-0.1-static.patch" || exit 1
+patch -p1 < "$K/capchroot-0.1-static.patch"
 sed -i 's@/opt/bedrock@@' Makefile
 
-#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS CFLAGS=-D_GNU_SOURCE || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+#CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS CFLAGS=-D_GNU_SOURCE
+make DESTDIR="$butch_install_dir" install

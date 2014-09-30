@@ -12,7 +12,7 @@ sha512=f6a8eff1c93556aced47c0ac962b8356c3394ad9b25dcfe425a87d26f35391608a9d06f7f
 
 [build]
 make ARCH="$A" prefix="$butch_prefix" DESTDIR="$butch_install_dir" install \
-  || exit 1
+
 dest="$butch_install_dir""$butch_prefix"
 #fix ext2 header...
 cp -f "$K"/ext2_fs.h "$dest"/include/linux/

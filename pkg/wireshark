@@ -14,12 +14,12 @@ gnutls
 lua
 
 [build]
-patch -p1 < "$K"/wireshark-window-icon.patch || exit 1
+patch -p1 < "$K"/wireshark-window-icon.patch
 
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
-install -m644 -D wireshark.desktop "$dest/share/applications/wireshark.desktop" || exit 1
-install -m644 -D image/wsicon48.png "$dest/share/pixmaps/wireshark.png" || exit 1
+install -m644 -D wireshark.desktop "$dest/share/applications/wireshark.desktop"
+install -m644 -D image/wsicon48.png "$dest/share/pixmaps/wireshark.png"

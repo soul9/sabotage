@@ -8,8 +8,8 @@ sha512=90f4fe3184efe56bc95a8a560b74172db184443edc2b6827a78e55549fe96d539aa93bda0
 dynamic-toolchain
 
 [build]
-#patch -p1 < "$K/some.patch" || exit 1
+#patch -p1 < "$K/some.patch"
 # warning C++
-LDFLAGS="-static" CXXFLAGS="-O0 -g0" ./configure -C --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+LDFLAGS="-static" CXXFLAGS="-O0 -g0" ./configure -C --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

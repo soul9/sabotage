@@ -9,7 +9,7 @@ sha512=a90faf1bf855ecc1e0b0f47f4133e4a46be8b2c42bd0aa7f6cf6d764b7883b34b558e3ca4
 [deps]
 
 [build]
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
@@ -17,9 +17,9 @@ sha512=a90faf1bf855ecc1e0b0f47f4133e4a46be8b2c42bd0aa7f6cf6d764b7883b34b558e3ca4
 
 CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
 
 #[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
 
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

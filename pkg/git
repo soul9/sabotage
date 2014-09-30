@@ -18,10 +18,10 @@ make CURL_LIBCURL="$butch_root_dir/lib/libcurl.a $butch_root_dir/lib/libssl.a $b
   prefix="$butch_prefix" gitexecdir="$butch_prefix"/lib/git-core \
   NO_TCLTK=1 NO_PYTHON=1 NO_EXPAT=1 NO_GETTEXT=1 \
   CFLAGS="$optcflags" LDFLAGS="$optldflags -static" \
-  DESTDIR="$butch_install_dir" -j$MAKE_THREADS V=1 all install  || exit 1
+  DESTDIR="$butch_install_dir" -j$MAKE_THREADS V=1 all install
 
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/bin
-cp gitk-git/gitk "$dest"/bin/ || exit 1
+cp gitk-git/gitk "$dest"/bin/
 ln -sf git "$dest"/bin/git-receive-pack
 ln -sf git "$dest"/bin/git-upload-archive

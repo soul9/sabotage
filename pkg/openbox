@@ -15,21 +15,21 @@ pango
 pkgconf
 
 [build]
-patch -p1 < "$K"/openbox-git.patch || exit 1
+patch -p1 < "$K"/openbox-git.patch
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
 LDFLAGS="-lXext -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib $optldflags" \
   ./configure -C \
   --prefix="$butch_prefix" --disable-nls $xconfflags \
-  --disable-imlib2 --disable-startup-notification || exit 1
+  --disable-imlib2 --disable-startup-notification
 echo true > missing
 
 [ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/share/lxde/openbox
-cp -f "$dest"/etc/xdg/openbox/menu.xml "$dest"/share/lxde/openbox/ || exit 1
+cp -f "$dest"/etc/xdg/openbox/menu.xml "$dest"/share/lxde/openbox/

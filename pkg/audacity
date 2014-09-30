@@ -12,13 +12,13 @@ libsamplerate
 wxgtk
 
 [build]
-patch -p1 < "$K"/audacity-timeb.patch || exit 1
-patch -p1 < "$K"/audacity-filedialog-segfault.patch || exit 1
-patch -p1 < "$K"/audacity-format.patch || exit 1
+patch -p1 < "$K"/audacity-timeb.patch
+patch -p1 < "$K"/audacity-filedialog-segfault.patch
+patch -p1 < "$K"/audacity-format.patch
 
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
-  --disable-sse || exit 1
+  --disable-sse
 # audacity does weird things with msgfmt & xgettext
 printf "install:\n\ttrue\n\nclean:\n\ttrue\n" > locale/Makefile
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

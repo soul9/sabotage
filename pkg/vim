@@ -13,7 +13,7 @@ tardir=vim74
 
 CFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" ./configure -C \
   --prefix="$butch_prefix" --mandir="$butch_prefix"/share/man --localstatedir="$butch_prefix"/var/lib/vim \
-  --disable-nls --disable-netbeans --disable-gui --with-x=no --enable-multibyte || exit 1
+  --disable-nls --disable-netbeans --disable-gui --with-x=no --enable-multibyte
 
-make || exit 1
-make -j1 VIMRCLOC="$butch_prefix"/etc DESTDIR="$butch_install_dir" install || exit 1
+make
+make -j1 VIMRCLOC="$butch_prefix"/etc DESTDIR="$butch_install_dir" install

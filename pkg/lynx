@@ -23,7 +23,7 @@ CFLAGS="-D_GNU_SOURCE -I$butch_root_dir$butch_prefix/include/openssl $optcflags"
 LDFLAGS="$optldflags" \
 LIBS="-lncurses -lssl -lcrypto -lz" \
   ./configure -C --prefix="$butch_prefix" --sysconfdir="$butch_prefix"/etc --mandir="$butch_prefix"/share/man \
-  --with-ssl --disable-nls --enable-ipv6  $xconfflags || exit 1
+  --with-ssl --disable-nls --enable-ipv6  $xconfflags
 #passing -jXXX to make has no effect on this pkg
-make || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make
+make DESTDIR="$butch_install_dir" install

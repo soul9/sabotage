@@ -14,6 +14,6 @@ python ./configure.py \
   --incdir="$butch_prefix"/include/python2.7 \
   --sipdir="$butch_prefix"/share/python-sip \
   --destdir="$butch_prefix"/lib/python2.7/site-packages \
-  || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

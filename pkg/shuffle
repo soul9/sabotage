@@ -6,7 +6,7 @@ sha512=733f62d94dd5067f19dd09e28088a8c611a6d12056ecd8f5c2d262f6d56baa498ca1445a4
 ftp://ftp.eskimo.com/home/scs/src/shuffle.tar.gz
 
 [build]
-make -j$MAKE_THREADS CFLAGS2="$optcflags" LINKFLAGS="$optldflags" || exit 1
+make -j$MAKE_THREADS CFLAGS2="$optcflags" LINKFLAGS="$optldflags"
 dest="$butch_install_dir""$butch_prefix"
 mkdir -p "$dest"/bin "$dest"/share/man/man1/
 cp -a shuffle "$dest"/bin

@@ -21,11 +21,11 @@ patch
 # stolen from gentoo
 epatch() {
 	echo applying patch "$1"
-	patch -p1 < "$1" || exit 1
+	patch -p1 < "$1"
 }
 epatch0() {
 	echo applying patch "$1"
-	patch -p0 < "$1" || exit 1
+	patch -p0 < "$1"
 }
 die() {
 	[ -z "$1" ] || printf "%s\n" "$*"
@@ -39,7 +39,7 @@ epatch "${FILESDIR}"/${PN}-1.0.0h-pkg-config.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-parallel-build.patch
 epatch "${FILESDIR}"/${PN}-1.0.1-x32.patch
 epatch "${FILESDIR}"/${PN}-1.0.1h-ipv6.patch
-epatch "${FILESDIR}"/${PN}-LD-nonsense.patch 
+epatch "${FILESDIR}"/${PN}-LD-nonsense.patch
 
 # disable fips in the build
 # make sure the man pages are suffixed #302165
@@ -79,7 +79,7 @@ export  SYSTEM=Linux
 # -L paths it doesnt like from LDFLAGS.
 export CFLAGS="$CFLAGS -isystem$butch_root_dir$butch_prefix/include -L$butch_root_dir$butch_prefix/lib"
 export LDFLAGS="-L$butch_root_dir$butch_prefix/lib $LDFLAGS"
-# openssl concatenates $CROSS_COMPILE and $CC, so CC becomes 
+# openssl concatenates $CROSS_COMPILE and $CC, so CC becomes
 # mips-linux-musl-mips-linux-musl-gcc
 export CC=gcc
 fi
@@ -107,17 +107,17 @@ fi
 
 #sed -i 's@#include "e_os.h"@#define CAST_LONG unsigned@' crypto/cast/cast_lcl.h
 
-make -j$MAKE_THREADS depend || exit 1
-make -j$MAKE_THREADS build_libs || exit 1
-make -j$MAKE_THREADS build-shared || exit 1
-make -j$MAKE_THREADS build_apps openssl.pc libssl.pc libcrypto.pc || exit 1
+make -j$MAKE_THREADS depend
+make -j$MAKE_THREADS build_libs
+make -j$MAKE_THREADS build-shared
+make -j$MAKE_THREADS build_apps openssl.pc libssl.pc libcrypto.pc
 echo XXX make install
-make -j$MAKE_THREADS INSTALL_PREFIX="$butch_install_dir" MANDIR="${butch_prefix}/share/man" install || exit 1
+make -j$MAKE_THREADS INSTALL_PREFIX="$butch_install_dir" MANDIR="${butch_prefix}/share/man" install
 
 # for some reason, the *.so* are not installed
 dest="${butch_install_dir}${butch_prefix}"
-mkdir -p "$dest"/lib || exit 1
-cp -a ./libcrypto.so.1.0.0 ./libcrypto.so ./libssl.so ./libssl.so.1.0.0 "$dest"/lib || exit 1
+mkdir -p "$dest"/lib
+cp -a ./libcrypto.so.1.0.0 ./libcrypto.so ./libssl.so ./libssl.so.1.0.0 "$dest"/lib
 
 # ssl manpages look pretty useless and they use a custom suffix
 # like ciphers.1ssl. rather than fixing them up, we just remove them

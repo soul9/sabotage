@@ -10,8 +10,8 @@ libpcap
 sqlite
 
 [build]
-patch -p1 < "$K"/reaver_u_char.patch || exit 1
-patch -p1 < "$K"/reaver_DESTDIR.patch || exit 1
+patch -p1 < "$K"/reaver_u_char.patch
+patch -p1 < "$K"/reaver_DESTDIR.patch
 
 cd src
 [ -n "$CROSS_COMPILE" ] && \
@@ -20,8 +20,8 @@ cd src
 
 CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $xconfflags
 
-make V=1 CC="$CC" -j$MAKE_THREADS CONFDIR="$butch_prefix"/var/lib || exit 1
+make V=1 CC="$CC" -j$MAKE_THREADS CONFDIR="$butch_prefix"/var/lib
 make DESTDIR="$butch_install_dir" CONFDIR="$butch_prefix"/var/lib install \
- || exit 1
+

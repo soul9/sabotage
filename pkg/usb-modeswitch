@@ -11,17 +11,17 @@ libusbx
 
 [build]
 cd jim/autosetup
-patch -p1 < "$K"/config.sub-musl.patch || exit 1
+patch -p1 < "$K"/config.sub-musl.patch
 cd ..
 
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine)"
 CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure --prefix="$butch_prefix" $xconfflags || exit 1
+  ./configure --prefix="$butch_prefix" $xconfflags
 cd ..
 
 make V=1 PREFIX="$butch_install_dir""$butch_prefix" \
-     -j$MAKE_THREADS -C jim lib || exit 1
+     -j$MAKE_THREADS -C jim lib
 make DESTDIR="$butch_install_dir" PREFIX="$butch_install_dir""$butch_prefix"\
-     install || exit 1
+     install

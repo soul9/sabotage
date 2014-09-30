@@ -14,5 +14,5 @@ libxinerama
 
 [build]
 cp "$K/dmenu.config.mk" config.mk
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

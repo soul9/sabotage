@@ -19,7 +19,7 @@ usemmx="--enable-mmx=no"
 CFLAGS="$optcflags" \
 LDFLAGS="$optldflags" \
 CPPFLAGS=-D_GNU_SOURCE \
-  ./configure -C --prefix="$butch_prefix" $usemmx $xconfflags || exit 1
+  ./configure -C --prefix="$butch_prefix" $usemmx $xconfflags
 echo true > missing
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

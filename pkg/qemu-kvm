@@ -13,10 +13,10 @@ sha512=c21354127d4585397ab400600ab1ac9aac80cc0431bbf615c8e906819075b00373f382954
 # more interesting configuration:
 # https://github.com/pld-linux/qemu-kvm/blob/master/qemu-kvm.spec
 
-#patch -p1 < "$K"/some.patch || exit 1
+#patch -p1 < "$K"/some.patch
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure --prefix="$butch_prefix" || exit 1
+  ./configure --prefix="$butch_prefix"
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

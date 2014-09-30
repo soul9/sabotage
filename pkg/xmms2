@@ -19,6 +19,6 @@ dynamic-toolchain
 [ -z "$butch_prefix" ] && butch_prefix=/
 
 patch -p1 < "$K/xmms2-rtp.patch"
-CFLAGS=-D_GNU_SOURCE ./waf configure --prefix="$butch_prefix" || exit 1
-./waf build -j$MAKE_THREADS || exit 1
-./waf install --destdir="$butch_install_dir" || exit 1
+CFLAGS=-D_GNU_SOURCE ./waf configure --prefix="$butch_prefix"
+./waf build -j$MAKE_THREADS
+./waf install --destdir="$butch_install_dir"

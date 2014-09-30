@@ -19,7 +19,7 @@ wget
 ./bootstrap.py
 
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./waf configure --prefix="$butch_prefix" || exit 1
+  ./waf configure --prefix="$butch_prefix"
 
-./waf build -j$MAKE_THREADS || exit 1
-./waf install --destdir="$butch_install_dir" || exit 1
+./waf build -j$MAKE_THREADS
+./waf install --destdir="$butch_install_dir"

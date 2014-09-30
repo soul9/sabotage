@@ -12,8 +12,8 @@ gtk+2
 poppler
 
 [build]
-patch -p1 < "$K"/epdfview-0.1.8-fixes-1.patch || exit 1
-patch -p1 < "$K"/epdfview-0.1.8-NULL.patch || exit 1
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --disable-nls || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+patch -p1 < "$K"/epdfview-0.1.8-fixes-1.patch
+patch -p1 < "$K"/epdfview-0.1.8-NULL.patch
+CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" --disable-nls
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

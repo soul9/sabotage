@@ -15,16 +15,16 @@ ncurses
 readline
 
 [build]
-patch -p1 < "$K"/mysql-srv_buf_size.patch || exit 1
+patch -p1 < "$K"/mysql-srv_buf_size.patch
 
 # prevent installation of 10K tests, 180MB, + and additional 35MB of symlinks
 DISABLE_TESTS=true
 if $DISABLE_TESTS ; then
 	echo "RETURN()" > tests/CMakeLists.txt
 	echo "RETURN()" > libmysqld/examples/CMakeLists.txt
-	sed -i 's@  ADD_SUBDIRECTORY(tests)@@' CMakeLists.txt || exit 1
-	sed -i 's@  ADD_SUBDIRECTORY(mysql-test)@@' CMakeLists.txt || exit 1
-	sed -i 's@  ADD_SUBDIRECTORY(mysql-test/lib/My/SafeProcess)@@' CMakeLists.txt || exit 1
+	sed -i 's@  ADD_SUBDIRECTORY(tests)@@' CMakeLists.txt
+	sed -i 's@  ADD_SUBDIRECTORY(mysql-test)@@' CMakeLists.txt
+	sed -i 's@  ADD_SUBDIRECTORY(mysql-test/lib/My/SafeProcess)@@' CMakeLists.txt
 	rm -rf tests mysql-test
 fi
 
@@ -66,13 +66,13 @@ CC="$CC -DTHD_LIB_LT=1 -Dthd_lib_detected=2" cmake \
   -DWITH_LIBEDIT=system \
   -DDEFAULT_MYSQL_HOME="/" \
   -DDEFAULT_CHARSET_HOME="/" \
-      .. || exit 1
+      ..
 
-CC="$CC -DTHD_LIB_LT=1 -Dthd_lib_detected=2" make -j$MAKE_THREADS VERBOSE=1 || exit 1
+CC="$CC -DTHD_LIB_LT=1 -Dthd_lib_detected=2" make -j$MAKE_THREADS VERBOSE=1
 
 #  -DWITH_READLINE=OFF \
 #  -DWITH_LIBEDIT=system \
 
 # possible CMAKE_BUILD_TYPEs: Debug, Release, RelWithDebInfo and MinSizeRel
 
-make DESTDIR="$butch_install_dir" install || exit 1
+make DESTDIR="$butch_install_dir" install

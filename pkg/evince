@@ -16,11 +16,11 @@ libsm
 
 [build]
 # https://bugzilla.gnome.org/show_bug.cgi?id=637055
-patch -p1 < "$K"/evince-scroll.patch || exit 1
+patch -p1 < "$K"/evince-scroll.patch
 # https://bugzilla.gnome.org/show_bug.cgi?id=638312
-patch -p1 < "$K"/evince-quit-crash.patch || exit 1
-patch -p1 < "$K"/evince-segfault.patch || exit 1
-patch -p1 < "$K"/evince-segfault2.patch || exit 1
+patch -p1 < "$K"/evince-quit-crash.patch
+patch -p1 < "$K"/evince-segfault.patch
+patch -p1 < "$K"/evince-segfault2.patch
 
 debugflags=
 [ "$DEBUGBUILD" = "1" ] && debugflags="-O0 -g3"
@@ -42,7 +42,7 @@ CFLAGS="-D_GNU_SOURCE $debugflags" \
 --disable-thumbnailer \
 --disable-previewer \
 --disable-silent-rules \
-|| exit 1
+
 
 printf '#define HAVE_POPPLER_DOCUMENT_IS_LINEARIZED\n' >> config.h
 
@@ -51,11 +51,11 @@ for i in po ; do
 done
 
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 
 # evince uses some braindamaged "GSettings schemas"
 # without compiling this stuff, it won't even start up
 # GSETTINGS_BACKEND=keyfile env var may be needed to save settings
 
-glib-compile-schemas "$butch_install_dir""$butch_prefix"/share/glib-2.0/schemas || exit 1
+glib-compile-schemas "$butch_install_dir""$butch_prefix"/share/glib-2.0/schemas

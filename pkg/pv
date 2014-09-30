@@ -6,4 +6,4 @@ sha512=913a5c84e24e0bfb23930a790d9e030f2c88014bb61266c96e3d11890c4667fe42662f01c
 http://www.ivarch.com/programs/sources/pv-1.5.2.tar.bz2
 
 [build]
-CFLAGS="$optcflags" LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" && make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install || exit 1
+CFLAGS="$optcflags" LDFLAGS="$optldflags" ./configure -C --prefix="$butch_prefix" && make -j $MAKE_THREADS && make DESTDIR="$butch_install_dir" install

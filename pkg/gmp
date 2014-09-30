@@ -19,10 +19,10 @@ printf "all:\n\ttrue\n\ninstall:\n\ttrue\n\n" > tests/Makefile.in
 CC="$CC -static" \
 CFLAGS="-D_GNU_SOURCE -D_BSD_SOURCE -Wno-implicit $optcflags" \
 ./configure -C $xconfflags \
-  --prefix="$butch_prefix" --with-pic --disable-shared $abihack || exit 1
+  --prefix="$butch_prefix" --with-pic --disable-shared $abihack
 
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
 dest="$butch_install_dir""$butch_prefix"
 rm -f "$dest"/lib/libgmp.la
 

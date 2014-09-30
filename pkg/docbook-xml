@@ -69,7 +69,7 @@ xmlcatalog --noout --add "rewriteSystem" \
 xmlcatalog --noout --add "rewriteURI" \
     "http://www.oasis-open.org/docbook/xml/4.5" \
     "file://$dest/share/xml/docbook/xml-dtd-4.5" \
-    "$dest"/etc/xml/docbook 
+    "$dest"/etc/xml/docbook
 
 
 if [ ! -e "$dest"/etc/xml/catalog ]; then

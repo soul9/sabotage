@@ -19,7 +19,7 @@ if [ -n "$CROSS_COMPILE" ] ; then
 fi
 CFLAGS="$optcflags" LDFLAGS="$optldflags" \
 ./configure -C --prefix="$butch_prefix" \
-  --disable-build-docs $xconfflags || exit 1
+  --disable-build-docs $xconfflags
 
 patch_status() {
 	kv=$(printf 'S["%s"]="%s"\n' "$1" "$2")
@@ -32,5 +32,5 @@ patch_status XCBPROTO_XCBPYTHONDIR "$butch_root_dir""$butch_prefix"/lib/python2.
 sh config.status
 fi
 
-make V=1 -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

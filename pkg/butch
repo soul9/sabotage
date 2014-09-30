@@ -20,7 +20,7 @@ fi
 printf "LDFLAGS += -static %s\n" "$optldflags" > butch/config.mak
 printf "CFLAGS += %s\n" "$optcflags" >> butch/config.mak
 
-if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then 
+if [ "$A" = "arm" ] || [ "$A" = "mips" ] ; then
 	# if on arm or mips, we only use one build thread to not exhaust memory
 	sed -i \
 	  's@#define NUM_BUILD_THREADS 2@#define NUM_BUILD_THREADS 1@' butch/butch.c
@@ -30,13 +30,13 @@ fi
 
 # and build
 [ "$STAGE" = "0" ] && CC="$butch_root_dir"/bin/musl-gcc
-CC="$CC -static" ./build.sh || exit 1
+CC="$CC -static" ./build.sh
 BUTCH_BIN=butch/butch
 mv "$BUTCH_BIN" "$BUTCH_BIN"-core
 
 # "make install"
 dest=$butch_install_dir$butch_prefix
 mkdir -p "$dest"/bin
-cp -f "$BUTCH_BIN"-core "$dest"/bin/butch-core || exit 1
+cp -f "$BUTCH_BIN"-core "$dest"/bin/butch-core
 
 

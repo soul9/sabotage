@@ -11,7 +11,7 @@ http://ftp.gnu.org/gnu/gcc/gcc-4.2.4/gcc-core-4.2.4.tar.bz2
 [build]
 VERSION=4.2.4
 
-patch -p1 < "$K"/gcc-424-libgcc-visibility.patch || exit 1
+patch -p1 < "$K"/gcc-424-libgcc-visibility.patch
 
 sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 sed -i 's@/lib/ld-linux.so.[12]@/lib/ld-musl-i386.so.1@' gcc/config/i386/linux.h
@@ -45,10 +45,10 @@ echo ac_cv_func_strsignal=yes > config.site
 --disable-nls \
 --disable-mudflap --disable-libmudflap --disable-libssp \
 --disable-libgomp \
-$armflags  || exit 1
+$armflags
 make CFLAGS="-D_GNU_SOURCE -DSTDC_HEADERS -DHAVE_STRSIGNAL -DHAVE_GETRLIMIT \
- -DHAVE_GETRLIMIT -O0 -g0" LDFLAGS="-static" -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install-gcc || exit 1
+ -DHAVE_GETRLIMIT -O0 -g0" LDFLAGS="-static" -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install-gcc
 
 dest="$butch_install_dir""$butch_prefix"
 rm -rf "$dest"/infoXXX

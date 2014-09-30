@@ -12,6 +12,6 @@ http://sourceforge.net/projects/expat/files/expat/2.1.0/expat-2.1.0.tar.gz
 [ -n "$CROSS_COMPILE" ] && xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
-  --mandir="$butch_prefix"/share/man $xconfflags || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+  --mandir="$butch_prefix"/share/man $xconfflags
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

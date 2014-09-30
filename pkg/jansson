@@ -12,7 +12,7 @@ sha512=42e66a2fcbbb3483564c20a089ad2712c9cd32f4b36a3c2cee4ae376336e33759eb715026
 
 CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
-  ./configure -C --prefix="$butch_prefix" $xconfflags || exit 1
-   
-make -j$MAKE_THREADS || exit 1  
-make DESTDIR="$butch_install_dir" install || exit 1 
+  ./configure -C --prefix="$butch_prefix" $xconfflags
+
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

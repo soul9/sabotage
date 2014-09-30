@@ -9,4 +9,4 @@ sha512=023cca1683ae18376999ae8121fbfbd134f345b6539e32b2eaa91929e23695785798e9983
 
 [build]
 dest="$butch_install_dir""$butch_prefix"
-install -D -m 644 "$C"/FluidR3_GM.sf2 "$dest"/share/sounds/sf2/FluidR3_GM.sf2 || exit 1
+install -D -m 644 "$C"/FluidR3_GM.sf2 "$dest"/share/sounds/sf2/FluidR3_GM.sf2

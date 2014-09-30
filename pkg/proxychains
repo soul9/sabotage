@@ -10,6 +10,6 @@ sha512=be783324c49a0b90f5735375ec91e99996d5c3a10587253dcfda4b62a1ffd38b9a7bb91fb
 [deps]
 
 [build]
-CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix" || exit 1
-make -j$MAKE_THREADS || exit 1
-make DESTDIR="$butch_install_dir" install install-config || exit 1
+CFLAGS=-D_GNU_SOURCE ./configure --prefix="$butch_prefix"
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install install-config

@@ -8,11 +8,11 @@ sha512=2bc2829af05a942e6041e9f2de7c9c50e466cd525f056c58c4f664b0e39012d901276737b
 [deps]
 
 [build]
-patch -p1 < "$K/termcap.patch" || exit 1
-./configure --prefix="$butch_prefix" || exit 1
+patch -p1 < "$K/termcap.patch"
+./configure --prefix="$butch_prefix"
 
-make -j$MAKE_THREADS CFLAGS="-D_GNU_SOURCE -fPIC $optcflags" || exit 1
-make DESTDIR="$butch_install_dir" install || exit 1
+make -j$MAKE_THREADS CFLAGS="-D_GNU_SOURCE -fPIC $optcflags"
+make DESTDIR="$butch_install_dir" install
 dest="$butch_install_dir""$butch_prefix"/etc
 mkdir -p $dest
 cp termcap.src "$dest"/termcap
