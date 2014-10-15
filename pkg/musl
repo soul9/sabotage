@@ -2,12 +2,12 @@
 gcc4
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-1.1.4.tar.gz
-http://www.musl-libc.org/releases/musl-1.1.4.tar.gz
+http://www.etalabs.net/musl/releases/musl-1.1.5.tar.gz
+http://www.musl-libc.org/releases/musl-1.1.5.tar.gz
 
 [main]
-filesize=866376
-sha512=a46fb1db23f518beaa959e9bebcb3bf0574e583c197792d30dcd52b3974e3c285594984207043d317859fc5552f1d303a5686e9fbe3b8825df6346de7f917f9f
+filesize=872924
+sha512=4436887367137cbfc6d34e0f403b8dd36db2a55a5160681fef4de7cc0cb1be38487ea708e6aa6dc1328b61c62868b6cc19f099649c9d12e1ba812dfa8844b772
 
 [build]
 ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
