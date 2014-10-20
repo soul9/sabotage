@@ -1,14 +1,15 @@
 [mirrors]
-http://www.dest-unreach.org/socat/download/socat-1.7.2.2.tar.gz
+http://www.dest-unreach.org/socat/download/socat-1.7.2.4.tar.gz
 
 [main]
-filesize=564923
-sha512=0b2f4bac91143b7b57465ded4ba58dbacdd050ce34dddfc01933643b488cef2eec80419714801342596c65b1d9a3e3daf46919786d5c8d46d2465ed481863c41
+filesize=583762
+sha512=7644e5cc735d151fc1b8f934276d9fcfd9988ae9e504ed00ec47909f6c3c6b1a335e59f7a735ad77769e8262799fb816314d90cd5b6ab614715ec17448fe0ab5
 
 [deps]
 openssl
 
 [build]
+patch -p0 < "$K"/socat-libressl.patch
 [ -n "$CROSS_COMPILE" ] &&
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
 
