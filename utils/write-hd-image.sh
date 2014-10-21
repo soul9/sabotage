@@ -75,7 +75,7 @@ isemptydir() {
 
 mountdir=
 
-losetup --help 2>&1 | grep [-]-sizelimit \
+losetup --help 2>&1 | grep [-]-sizelimit > /dev/null \
   || die "losetup does not support --sizelimit. maybe try building util-linux"
 
 which extlinux 2>&1 > /dev/null || die 'extlinux must be in PATH (try installing syslinux)'
