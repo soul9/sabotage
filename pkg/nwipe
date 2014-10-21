@@ -12,6 +12,7 @@ autoconf
 [deps]
 libdevmapper
 libuuid
+libblkid
 parted
 
 [build]
