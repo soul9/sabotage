@@ -1,19 +1,22 @@
 [mirrors]
-http://ftp.oregonstate.edu/pub/blfs/conglomeration/MesaLib/MesaLib-9.2.0.tar.bz2
+http://ftp.oregonstate.edu/pub/blfs/conglomeration/MesaLib/MesaLib-10.2.7.tar.bz2
 
 [main]
-filesize=6643026
-sha512=26c4b41b7e1d5284b87e2997a14424c1ee0713e11fd9dd65932987832e43b96986ed5e88c06fad4616fc912ffb8e17a2314b282cbf38a2640d76c39724965910
-tardir=Mesa-9.2.0
+filesize=7107753
+sha512=c6d346499ef9596d3b5cd0bdc0ec64b58e8170203e0c977c54b55652c8792beb471822c101461745f7228a7d15a43924211f56fc0cc989defdc1acc4ea7b8a71
+tardir=Mesa-10.2.7
 
 [deps]
 dri2proto
+dri3proto
+presentproto
 gettext
 glproto
 libdrm
 libxdamage
 libxext
 libxml2
+libxshmfence
 eudev
 
 [build]
@@ -26,18 +29,19 @@ if false ; then
   mv Mesa-7.9.2/include/GL/* include/GL/
 fi
 
-patch -p1 < "$K"/mesalib-strtod.patch
-patch -p1 < "$K"/mesalib-strtof.patch
+patch -p1 < "$K"/mesa-10.patch
+patch -p1 < "$K"/mesa-tls.patch
 patch -p1 < "$K"/mesalib-fpclassify.patch
 
 archflags=
 [ "$A" = arm ] || [ "$A" = mips ] && archflags=--with-dri-drivers=swrast
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+CPPFLAGS="-D_GNU_SOURCE -I $PWD/include/c11" \
+CFLAGS="$optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
   --sysconfdir="$butch_prefix"/etc \
-  --without-gallium-drivers \
+  --with-gallium-drivers=nouveau \
   --enable-gallium-llvm=no \
   --enable-gallium-egl=no \
   --enable-gallium-gbm=no \
@@ -47,8 +51,9 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   --enable-gles1                 \
   --enable-gles2                 \
   --enable-osmesa                \
-  --enable-xa                    \
+  --disable-xa                    \
   --disable-gbm                  \
+  --disable-asm			\
   --enable-glx-tls               \
   --with-egl-platforms="x11" $archflags \
 
