@@ -18,6 +18,8 @@ libpng
 libx11
 freetype
 kernel-headers
+mesalib
+glu
 
 [build]
 if [ "$A" = "x86_64" ] ; then
