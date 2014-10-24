@@ -9,6 +9,8 @@ sha512=99f8d89a1b4aff0d3fdc6f6cea203144ebe6ee95df70bcec7f285a32f3d2755ca4c1429b5
 [deps]
 
 [build]
+patch -p1 < "$K"/libressl-arm.patch
+
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) \
   --with-sysroot=$butch_root_dir"
