@@ -82,7 +82,9 @@ butch_build_dir="$butch_build_root/%BUTCH_TARDIR"
 butch_configure_cache="$K/config.cache"
 
 [ -z "$CC" ]  && CC=cc
+[ -z "$CXX" ]  && CXX=c++
 [ -z "$HOSTCC" ]  && HOSTCC="$CC"
+[ -z "$HOSTCXX" ]  && HOSTCXX="$CXX"
 
 user_optimizations_file="$butch_root_dir"/etc/butch-optflags.sh
 if [ -e "$user_optimizations_file" ] ; then
