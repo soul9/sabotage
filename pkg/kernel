@@ -6,7 +6,7 @@ kernel-tarball
 grsec
 
 [build]
-LINUX_VER=$(cat "$K"/linux.version)
+LINUX_VER=$(cat "$K"/kernel.version)
 GRSEC_VER=$(cat "$K"/grsecurity.version)
 
 rm -rf linux-"$LINUX_VER" || true
