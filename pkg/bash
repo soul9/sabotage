@@ -25,5 +25,5 @@ CFLAGS="$optcflags" LDFLAGS="$optldflags -static" \
   --enable-job-control bash_cv_sys_named_pipes=yes \
   --disable-nls
 #  --with-installed-readline ac_cv_rl_version=5.0 \
-make -j$MAKE_THREADS READLINE_LIB=-l:lib/readline/libreadline.a
+make -j$MAKE_THREADS READLINE_LIB=lib/readline/libreadline.a
 make DESTDIR="$butch_install_dir" install
