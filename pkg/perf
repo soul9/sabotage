@@ -1,0 +1,14 @@
+[deps]
+kernel-tarball
+libelf
+
+[build]
+LINUX_VER=$(cat "$K"/kernel.version)
+
+rm -rf linux-"$LINUX_VER" || true
+tar xf "$C"/linux-"$LINUX_VER".tar.xz
+cd linux-"$LINUX_VER"
+cd tools/perf
+
+make WERROR=0 V=1 LDFLAGS=-static NO_LIBPYTHON=1
+install -Dm 755  perf "$butch_install_dir""$butch_prefix"/bin/perf
