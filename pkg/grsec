@@ -1,9 +1,9 @@
 [mirrors]
-http://ftp.barfooze.de/pub/sabotage/tarballs/grsecurity-3.0-3.14.14-201407282111.patch.tar.xz
-http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/grsecurity-3.0-3.14.14-201407282111.patch.tar.xz
-http://dl.2f30.org/mirrors/sabotage/tarballs/grsecurity-3.0-3.14.14-201407282111.patch.tar.xz
+http://ftp.barfooze.de/pub/sabotage/tarballs/grsecurity-3.0-3.14.23-201410312212.patch.xz
+http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/grsecurity-3.0-3.14.23-201410312212.patch.xz
+http://dl.2f30.org/mirrors/sabotage/tarballs/grsecurity-3.0-3.14.23-201410312212.patch.xz
 
 [main]
-filesize=762220
-sha512=e28715834860e250523f9f186de7941825df0becf0ccdab3d7f91f9e13a6d149ee12ec0661b4f83c8cae41337b3aff06714f28626c7504aa96748ac59ae0ba38
+filesize=774904
+sha512=c912f5439a19cf38dca94efd2c9109dd52cc37b2bb45c8b20f17ab0a5b6f45d2445d855dd2da258a935cd7df9888ee8cc32a3a086af66dbf8f6bcf57875b2c38
 

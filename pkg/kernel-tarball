@@ -1,0 +1,9 @@
+[mirrors]
+ftp://kernel.org/pub/linux/kernel/v3.x/linux-3.14.23.tar.xz
+http://www.kernel.org/./pub/linux/kernel/v3.x/linux-3.14.23.tar.xz
+http://ftp.free.fr/pub/linux/kernel/v3.x/linux-3.14.23.tar.xz
+http://ftp.heanet.ie/mirrors/linux/kernel/v3.x/linux-3.14.23.tar.xz
+
+[main]
+filesize=78456428
+sha512=c4e6380a3a434e8bf5c88e86890c14df66e179317ab1457775c857712125925297c3c6dc7bb91653659dbcbdd926c219327ca8302676ce923ae9b949c7aeb7cc

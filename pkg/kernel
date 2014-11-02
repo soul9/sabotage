@@ -2,20 +2,16 @@
 gcc4
 
 [deps]
+kernel-tarball
 grsec
 
-[mirrors]
-ftp://kernel.org/pub/linux/kernel/v3.x/linux-3.14.14.tar.xz
-http://www.kernel.org/./pub/linux/kernel/v3.x/linux-3.14.14.tar.xz
-http://ftp.free.fr/pub/linux/kernel/v3.x/linux-3.14.14.tar.xz
-http://ftp.heanet.ie/mirrors/linux/kernel/v3.x/linux-3.14.14.tar.xz
-
-[main]
-filesize=78421960
-sha512=e1488096a8acf92745741bd3cd73f2c9b2e787e8f8a695aeafde068623340096c98e223a7328746972170aa72846a10d738c3345b3198a24a30935bc767c0891
-
 [build]
-GRSEC_VER=grsecurity-3.0-3.14.14-201407282111
+LINUX_VER=$(cat "$K"/linux.version)
+GRSEC_VER=$(cat "$K"/grsecurity.version)
+
+rm -rf linux-"$LINUX_VER" || true
+tar xf "$C"/linux-"$LINUX_VER".tar.xz
+cd linux-"$LINUX_VER"
 
 # get into menuconfig using
 # make HOSTCFLAGS="-D_GNU_SOURCE" HOSTLDFLAGS=-lncurses menuconfig
@@ -44,7 +40,7 @@ dopatch "$K"/linux-3.8-posix_sed.patch
 
 if [ -z "$DISABLE_GRSEC" ] ; then
 	patchname="$GRSEC_VER".patch
-	tar xf "$C"/"$patchname".tar.xz
+	xzcat "$C"/"$patchname".xz > "$patchname"
 	ln -sf "$patchname" grsec.patch
 	dopatch grsec.patch
 fi
