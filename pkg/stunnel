@@ -1,5 +1,5 @@
 [mirrors]
-http://www.stunnel.org/downloads/stunnel-5.06.tar.gz
+ftp://ftp.stunnel.org/stunnel/archive/5.x/stunnel-5.06.tar.gz
 
 [main]
 filesize=595550
