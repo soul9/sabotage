@@ -8,14 +8,25 @@ append() {
 eval "$1=\"\${$1} \$2\""
 eval "$1=\${$1# }"
 }
-if ! wget --help 2>&1 | grep BusyBox ; then
-	append wgetflags "--tries=$retries"
-	append wgetflags --no-check-certificate
-fi
 
-echo "in case the download process was killed, see $tmp for wget output"
+download() {
+	local url="$1"
+	local out="$2"
+	if [ "$USE_CURL" = 1 ] ; then
+		curl "$url" -o "$out"
+	else
+		if ! wget --help 2>&1 | grep BusyBox ; then
+			append wgetflags "--tries=$retries"
+			append wgetflags --no-check-certificate
+		fi
+		wget $wgetflags -O "$out" -c "$url"
+	fi
+}
+
+
+echo "in case the download process was killed, see $tmp for wget/curl output"
 for url in %BUTCH_MIRROR_URLS ; do
-if ! wget $wgetflags -O "$butch_cache_dir/%BUTCH_TARBALL.wip" -c "$url" \
+if ! download "$url" "$butch_cache_dir/%BUTCH_TARBALL.wip" \
    >$tmp 2>&1 ; then
 	rc=1
 	grep 404 < $tmp > /dev/null && rc=44
