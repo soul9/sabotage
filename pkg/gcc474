@@ -103,6 +103,7 @@ CFLAGS_FOR_TARGET="$config_arch_target_cflags" \
 LDFLAGS_FOR_TARGET="$config_arch_target_ldflags" \
 ./configure -C --with-headers=no --prefix="$butch_prefix" \
   --disable-multilib \
+  --with-multilib-list= \
   --disable-nls \
   --disable-mudflap \
   --disable-libmudflap \
@@ -149,12 +150,6 @@ for i in $dest/lib/gcc/$machine/$VERSION/include/* ; do
   # do not copy headers that exist in musl
   [ -e "$dest/include/$header" ] || copy "$i" "$dest/include/gcc/" || true
 done
-
-if [ "$A" = x86_64 ] ; then
-	mv "$dest"/lib64/* "$dest"/lib/ || true
-	sed -i 's,/lib/../lib64,/lib,' "$dest"/lib/libstdc++.la
-	sed -i 's,/lib/../lib64,/lib,' "$dest"/lib/libsupc++.la
-fi
 
 ln -sf gcc "$dest"/bin/cc
 
