@@ -123,6 +123,7 @@ make -j1 DESTDIR="$butch_install_dir" \
   install-gcc \
   install-lto-plugin \
   install-target-libgcc \
+  install-target-libssp \
   install-target-libstdc++-v3
 
 dest=$butch_install_dir$butch_prefix
