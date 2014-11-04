@@ -147,7 +147,7 @@ mkdir -p  $dest/include/gcc
 for i in $dest/lib/gcc/$machine/$VERSION/include/* ; do
   header=`basename "$i"`
   # do not copy headers that exist in musl
-  [ -e "$dest/include/$header" ] || copy "$i" "$dest/include/gcc/"
+  [ -e "$dest/include/$header" ] || copy "$i" "$dest/include/gcc/" || true
 done
 
 if [ "$A" = x86_64 ] ; then
