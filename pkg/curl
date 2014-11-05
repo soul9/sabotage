@@ -24,5 +24,7 @@ LIBS="-lssl -lcrypto -lz" \
   --with-ca-path="$butch_prefix"/etc/ssl/certs \
   --with-random=/dev/urandom $xconfflags
 
+[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
+
 make -j$MAKE_THREADS
 make DESTDIR="$butch_install_dir" install
