@@ -1,13 +1,14 @@
+[mirrors]
+http://youtube-dl.org/downloads/2014.11.04/youtube-dl-2014.11.04.tar.gz
+
 [main]
-filesize=785764
-sha512=8f2acc2402254d720d6020d364f400aee66e77d8eb99ad3c5b8dbab4b118366bc1f2d4c32e1ccf5ca5a3eada3592e1a3b83b66fe3ded5ee956c5945d64df828f
+filesize=1123736
+sha512=0ac8a64652ac5cab4e7dcba89129a3914b6a27380a404c316297507eedc1884fe3e819733c7d815a6379bf0425c8fbf70d60b7fc8f08d682d75e056fd82fea86
 tardir=youtube-dl
 
 [deps]
 python
-
-[mirrors]
-http://youtube-dl.org/downloads/2014.04.13/youtube-dl-2014.04.13.tar.gz
+python-setuptools
 
 [build]
 python setup.py install --prefix="$butch_prefix" --root="$butch_install_dir" --optimize=1
