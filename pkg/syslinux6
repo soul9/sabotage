@@ -52,13 +52,15 @@ sed -i '/herror.*/d' utils/gethostip.c
 sed -ri 's,__uint([0-9]+)_t,uint\1_t,g' efi/wrapper.c
 sed -ri 's,__uint([0-9]+)_t,uint\1_t,g' efi/wrapper.h
 
-make AUXDIR="$butch_prefix/lib/syslinux/bios" INSTALLROOT="$butch_install_dir" bios installer
-make AUXDIR="$butch_prefix/lib/syslinux/bios" INSTALLROOT="$butch_install_dir" -j1 bios install
+PREFIXED_PATHS="BINDIR='/bin' LIBDIR='/lib' DATADIR='/share' MANDIR='/man' INCDIR='/include'"
+
+make $PREFIXED_PATHS AUXDIR="$butch_prefix/lib/syslinux/bios" INSTALLROOT="$butch_install_dir" bios installer
+make $PREFIXED_PATHS AUXDIR="$butch_prefix/lib/syslinux/bios" INSTALLROOT="$butch_install_dir" -j1 bios install
 
 if [ "$A" == "i386" ]; then
-  make AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" efi32 installer
-  make AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" -j1 efi32 install
+  make $PREFIXED_PATHS AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" efi32 installer
+  make $PREFIXED_PATHS AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" -j1 efi32 install
 elif [ "$A" == "x86_64" ]; then
-  make AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" efi64 installer
-  make AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" -j1 efi64 install
+  make $PREFIXED_PATHS AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" efi64 installer
+  make $PREFIXED_PATHS AUXDIR="$butch_prefix/lib/syslinux" INSTALLROOT="$butch_install_dir" -j1 efi64 install
 fi
