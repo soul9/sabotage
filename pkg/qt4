@@ -41,6 +41,7 @@ CXXFLAGS="-D_GNU_SOURCE -DMESA_EGL_NO_X11_HEADERS" \
   -nomake demos            \
   -no-qt3support $debugflags \
   -no-dbus \
+  -no-cups \
   -no-phonon-backend \
   -no-audio-backend \
   -no-opengl \
