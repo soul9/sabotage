@@ -10,10 +10,23 @@ sha512=65d55da556ee283a364b376d251b70e430b7a157bb5a8ee89565060ff9937907966d416cf
 tardir=vim74
 
 [build]
-
-CFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" ./configure -C \
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+CPPFLAGS="-D_GNU_SOURCE -include stdlib.h -DHAVE_SETENV -DHAVE_PUTENV" \
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags -static" \
+./configure -C $xconfflags \
+  vim_cv_toupper_broken=no \
+  --with-tlib=ncurses \
+  vim_cv_terminfo=yes \
+  vim_cv_tty_group=world \
+  vim_cv_tty_group=world \
+  vim_cv_getcwd_broken=no \
+  vim_cv_stat_ignores_slash=no \
+  vim_cv_memmove_handles_overlap=yes \
   --prefix="$butch_prefix" --mandir="$butch_prefix"/share/man --localstatedir="$butch_prefix"/var/lib/vim \
   --disable-nls --disable-netbeans --disable-gui --with-x=no --enable-multibyte
 
-make
-make -j1 VIMRCLOC="$butch_prefix"/etc DESTDIR="$butch_install_dir" install
+make -j$MAKE_THREADS
+make -j1 STRIP=true VIMRCLOC="$butch_prefix"/etc DESTDIR="$butch_install_dir" install
