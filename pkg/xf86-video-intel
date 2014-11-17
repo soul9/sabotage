@@ -13,6 +13,7 @@ http://xorg.freedesktop.org/releases/individual/driver/xf86-video-intel-2.21.15.
 ./configure -C --prefix="$butch_prefix" \
   --enable-xvmc \
   --disable-silent-rules \
+  --enable-dri
 
 make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
 
