@@ -26,7 +26,7 @@ see the wiki page "boostrap to hd image" or utils/write-hd-image.sh
 
     butch prefetch stage0 stage1 pkg xorg gdb
 
-  the file in which butch keeps track of what is installed is /src/pkg/installed.dat
+  the file in which butch keeps track of what is installed is /var/lib/butch.db
   with the default template, butch will use /opt/packagename as DESTDIR for installs.
   the contents of that dir will then be symlinked into / in a stow-ish manner.
 
