@@ -1,9 +1,10 @@
 [mirrors]
-http://hostap.epitest.fi/releases/wpa_supplicant-1.0.tar.gz
+http://w1.fi/releases/wpa_supplicant-2.3.tar.gz
+http://hostap.epitest.fi/releases/wpa_supplicant-2.3.tar.gz
 
 [main]
-filesize=1948417
-sha512=50207c9f7e088e80315f33d1d1c32b6496c9eed606d909ace25813b33f10d9efaf45d83a1386bbec8ac690a9baf398331197d526665107b04d096fbd19239bd1
+filesize=2398722
+sha512=dc64c0ff5581ca36e9c41f7663883d5bf6626a4418423233fa69b2c4b57c24fa120e0699c95613152be7775835a45bd9edbe5cc95456ac3ce699b546ddaee71e
 
 [deps]
 libnl-tiny
