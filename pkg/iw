@@ -1,10 +1,10 @@
 [mirrors]
-ftp://www.kernel.org/pub/software/network/iw/iw-3.13.tar.xz
-http://www.kernel.org/pub/software/network/iw/iw-3.13.tar.xz
+ftp://www.kernel.org/pub/software/network/iw/iw-3.17.tar.xz
+http://www.kernel.org/pub/software/network/iw/iw-3.17.tar.xz
 
 [main]
-filesize=85724
-sha512=cbfa2ea8f4584e61060d56e52f405d1e67dc04d08b75179dde58d2ed20b78eae78b04650af1760265df97e559af0af6664e384d65109bf380391bc38b08a348d
+filesize=91796
+sha512=ac4779a88aacb9e2f4859cdb3e953bfba0a83b2e8140777092d61ced6799f09d8ec5628a359109cc23e6389e0ec0ab5a98b9da93c400b7cffedd930013c44f39
 
 [deps]
 libnl-tiny
