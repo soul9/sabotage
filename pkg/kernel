@@ -38,7 +38,7 @@ dopatch "$K"/linux-virtio9p.patch
 dopatch "$K"/linux-3.8-trap.patch
 dopatch "$K"/linux-3.8-posix_sed.patch
 
-if [ -z "$DISABLE_GRSEC" ] ; then
+if [ -n "$ENABLE_GRSEC" ] ; then
 	patchname="$GRSEC_VER".patch
 	xzcat "$C"/"$patchname".xz > "$patchname"
 	ln -sf "$patchname" grsec.patch

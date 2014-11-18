@@ -1,5 +1,5 @@
 #!/bin/sh
-if butch rebuild kernel ; then
+if ENABLE_GRSEC=1 butch rebuild kernel ; then
 mv /boot/vmlinuz /boot/vmlinuz-grsec
 mv /boot/System.map /boot/System.map-grsec
 cat << EOF > /boot/extlinux.conf
@@ -20,5 +20,5 @@ LABEL rescue
         APPEND root=/dev/sda1 rw
 
 EOF
-DISABLE_GRSEC=1 butch rebuild kernel
+butch rebuild kernel
 fi
