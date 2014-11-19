@@ -1,0 +1,53 @@
+[main]
+filesize=11202492
+sha512=06371d47b02caec83c7662f6bb4a827eafb7f3309f6cda959a0f49b647df031166a6e7c5d530b57b580104289ee260aa96f3f43cbfffcef816cea776b0d5aed0
+
+[mirrors]
+http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz
+
+[deps]
+libtheora
+libxxf86dga
+libxv
+libmad
+libao
+zlib
+sdl
+x11-font-dejavu
+libxvmc
+alsa-lib
+mesalib
+yasm
+libpng
+
+[build]
+patch -p1 < "$K"/mplayer-x11-libs.patch
+
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure --prefix="$butch_prefix" \
+	--disable-gui \
+	--disable-gif \
+	--disable-arts \
+	--enable-x11 \
+	--enable-runtime-cpudetection \
+	--disable-nas \
+	--enable-gl \
+	--disable-musepack \
+	--disable-mp3lib \
+	--disable-ossaudio \
+	--disable-pulse \
+	--disable-openal \
+	--disable-mp3lib \
+	--disable-esd \
+	--disable-mga \
+	--disable-lirc \
+	--enable-xvmc \
+	--disable-nemesi
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
