@@ -33,6 +33,11 @@ see the wiki page "boostrap to hd image" or utils/write-hd-image.sh
   use "butch unlink" command to remove symlinks to a specific package.
   use "butch relink" command to create symlinks for a pkg which is unlinked.
 
+  if you want to entirely remove a package:
+  - delete /opt/$pkg
+  - butch unlink $pkg
+  - delete the $pkg line from /var/lib/butch.db
+
 == Bootstrapping the system
 
 see README.
