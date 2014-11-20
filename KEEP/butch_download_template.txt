@@ -15,7 +15,7 @@ download() {
 	if [ "$USE_CURL" = 1 ] ; then
 		curl -C - --retry $retries -k -L "$url" -o "$out"
 	else
-		if ! wget --help 2>&1 | grep BusyBox ; then
+		if ! wget --help 2>&1 | grep BusyBox > /dev/null ; then
 			append wgetflags "--tries=$retries"
 			append wgetflags --no-check-certificate
 		fi
@@ -23,15 +23,16 @@ download() {
 	fi
 }
 
+cleanup() {
+	[ -e "$tmp" ] && { cat $tmp ; rm $tmp ; }
+}
 
 echo "in case the download process was killed, see $tmp for wget/curl output"
 for url in %BUTCH_MIRROR_URLS ; do
-if ! download "$url" "$butch_cache_dir/%BUTCH_TARBALL.wip" \
-   >$tmp 2>&1 ; then
+if ! download "$url" "$butch_cache_dir/%BUTCH_TARBALL".wip >$tmp 2>&1 ; then
 	rc=1
 	grep 404 < $tmp > /dev/null && rc=44
-	cat $tmp
-	rm $tmp
+	cleanup
 else
 	mv "$butch_cache_dir"/"%BUTCH_TARBALL".wip \
 	   "$butch_cache_dir"/"%BUTCH_TARBALL"
@@ -39,6 +40,5 @@ else
 	break
 fi
 done
-cat $tmp
-rm $tmp
+cleanup
 exit $rc
