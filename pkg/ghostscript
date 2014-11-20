@@ -30,6 +30,7 @@ CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure -C --prefix="$butch_prefix" \
   --enable-dynamic \
   --disable-static \
+  --disable-cups \
   --with-system-libtiff \
 
 
