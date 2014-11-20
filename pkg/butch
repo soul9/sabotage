@@ -14,6 +14,8 @@ stage0_musl
 if [ ! -z "$BUTCH_FROM_GIT" ] ; then
 	rm -rf butch
 	git clone https://github.com/sabotage-linux/butch
+else
+	patch -p1 < "$K"/butch_050-tarball-missing.patch
 fi
 
 # prepare build config...
