@@ -13,6 +13,7 @@ cairo
 glib
 gtk+2
 libpng
+babl
 
 [build]
 #patch -p1 < "$K/some.patch"
