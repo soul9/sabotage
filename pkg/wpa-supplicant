@@ -13,6 +13,7 @@ zlib
 
 [build]
 patch -p1 < "$K"/wpa_supplicant-fflush.patch
+patch -p1 < "$K"/wpa_supplicant-action_script.patch
 cd wpa_supplicant
 cp defconfig .config
 
