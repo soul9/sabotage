@@ -4,13 +4,13 @@
  *
  * This is a manual pager program, it will search for and format manual
  * pages which it then pipes to more.
- * 
+ *
  * The program understands manual pages that have been compressed with
  * either 'compress' or 'gzip' and will decompress them on the fly.
  *
  * The environment is checked for these variables:
  *   MANSECT=1:2:3:4:5:6:7:8:9		# Manual section search order.
- *   MANPATH=/usrlocal/man:/usr/man	# Directorys to search for man tree.
+ *   MANPATH=/usr/local/man:/usr/man	# Directorys to search for man tree.
  *   PAGER=more				# pager progam to use.
  *   PATH=...				# Search for gzip/uncompress
  *
@@ -155,14 +155,14 @@ int main(int argc, char **argv) {
 		else {
 			do_pclose_ofd = 1;
 #ifdef TIOCGWINSZ
-			struct winsize ws; 
+			struct winsize ws;
 			if(!ioctl(0, TIOCGWINSZ, &ws))
 				right_margin = ws.ws_col>251 ? 250 : ws.ws_col-2;
 			else
 #endif
 			right_margin = 78;
 		}
-	} else 
+	} else
 		ofd = stdout;
 
 	do_file();
@@ -314,7 +314,7 @@ static void close_page(void) {
 }
 
 /****************************************************************************
- * ifd is the manual page, ofd is the 'output' file or pipe, format it! 
+ * ifd is the manual page, ofd is the 'output' file or pipe, format it!
  */
 static void do_file(void) {
 	int nl;
@@ -472,7 +472,7 @@ const struct cmd_list_s {
 	char class;
 	char id;
 } cmd_list[] = {
-	{"\\\"", 0, 0}, 
+	{"\\\"", 0, 0},
 	{"nh", 0, 0},		/* This program never inserts hyphens */
 	{"hy", 0, 0},		/* This program never inserts hyphens */
 	{"PD", 0, 0},		/* Inter-para distance is 1 line */
@@ -605,7 +605,7 @@ static int do_fontwords(int this_font, int other_font, int early_exit) {
 	char *p = word;
 	int ch;
 	int in_quote = 0;
-	
+
 	no_nl = 0; /* Line is effectivly been reprocessed so NL is visible */
 	for(;;) {
 		if(p == word) insert_font(&p, this_font);
@@ -805,7 +805,7 @@ static void build_headers(void) {
 	ungetc(ch, ifd);
 
 	/* Ok we should have upto 5 arguments build the header and footer */
-	
+
 	size_t l0 = strlen(buffer[0]),
 	       l1 = strlen(buffer[1]),
 	       l2 = strlen(buffer[2]),
@@ -868,17 +868,23 @@ static void print_word(char *pword) {
 			} else if(isalpha(*s) || strchr("!&^[]|~", *s))
 				continue;
 			else if(*s == '(' || *s == '*') {
-				/* XXX Humm character xlate */
-
-				if(*s == '*')
+			/* XXX Humm character xlate - http://mdocml.bsd.lv/man/mandoc_char.7.html */
+				int out = '*';
+				if(*s == '*') {
 					if(s[1])
 						++s;
+				} else if(s[1] == 'm' && s[2] == 'i') {
+					out = '-';
+					s+=2;
+					goto K;
+				}
 				if(s[1])
 					++s;
 				if(s[1])
 					++s;
+				K:
 				checkw(1);
-				*d++ = '*' + cur_font;
+				*d++ = out + cur_font;
 				length++;
 				continue;
 			}
