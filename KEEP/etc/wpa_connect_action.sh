@@ -7,6 +7,6 @@ CONNECTED)
 dhclient "$if" || dhclient "$if";
 ;;
 DISCONNECTED)
-ifconfig "$if" down;
+:
 ;;
 esac
