@@ -29,5 +29,5 @@ LC_CTYPE=C CFLAGS="-D_GNU_SOURCE -D__KLIBC__ $optcflags -g" \
 LDFLAGS="$optldflags -static" \
   ./configure -C --prefix="$butch_prefix" $xconfflags
 
-LC_CTYPE=C make -j$MAKE_THREADS
+LC_CTYPE=C make -j$MAKE_THREADS CC_FOR_BUILD="$HOSTCC"
 make DESTDIR="$butch_install_dir" install
