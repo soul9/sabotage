@@ -58,6 +58,12 @@ starting X:
   otherwise your controls won't work!
 - execute "startx"
 
+using a WLAN:
+- install wpa-supplicant package and edit /etc/wpa_supplicant.conf for WIFI config
+  and /etc/wpa_connect_action.sh for IP address settings.
+- bring up wpa_supplicant service
+  (sv u wpa_supplicant, or permanently by rm'ing /etc/service/wpa_supplicant/down)
+
 getting a dhcp ip address:
 - execute "dhclient eth0"
 
