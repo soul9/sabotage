@@ -1,21 +1,26 @@
 [mirrors]
-https://www.torproject.org/dist/tor-0.2.4.21.tar.gz
-http://mirror.hackthissite.org/tor/tor-0.2.4.21.tar.gz
+https://www.torproject.org/dist/tor-0.2.4.24.tar.gz
+http://mirror.hackthissite.org/tor/tor-0.2.4.24.tar.gz
 
 [main]
-filesize=2909462
-sha512=be055afa95c8e80b88ca46eaeb22da19a9b7e66af39697267597f6141ad4d6b6197fec55d9f1fb0caf349073740489331a3197cb97c737ae829d488e9cda73e7
-
+filesize=3002418
+sha512=d716a112421f0d2ef69cfaba84bdadd359c047ebc8928a5f8d0bc848f489dce35300a96ae0ffdc5f4caa2889bbbda5180d4e4a64bf94628f35b9dad9c9b618b4
 
 [deps]
 openssl
 libevent
 
 [build]
-#patch -p1 < "$K"/some.patch
+patch -p0 < "$K"/tor-libressl.patch
 
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags -static" \
-  ./configure -C --prefix="$butch_prefix" tor_cv_cflags__fPIE=no
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS=-D_GNU_SOURCE \
+CFLAGS="$optcflags" \
+LDFLAGS="$optldflags -static" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags tor_cv_cflags__fPIE=no
 
 make -j$MAKE_THREADS
 make DESTDIR="$butch_install_dir" install
