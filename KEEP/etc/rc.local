@@ -2,6 +2,8 @@
 
 # put local stuff that you want to run on each start (with root powers) here.
 # for example your network config, or your keyboard layout in the linux terminal.
+# note that the below network config is only for wired networks.
+# edit /etc/wpa_connect_action.sh and /etc/wpa_supplicant.conf for wlan config.
 
 do_init_devices=false
 do_static_ip=false
