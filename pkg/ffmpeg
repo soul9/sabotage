@@ -16,8 +16,12 @@ patch -p1 < "$K"/ffmpeg-mprotect.patch
 [ -z "$butch_prefix" ] && butch_prefix=/
 sed -i 's@/bin/sh@/bin/bash@' configure
 
+[ -n "$CROSS_COMPILE" ] && xconfflags="--enable-cross-compile --target-os=linux --arch=$A"
+
 CFLAGS="-D_BSD_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure --prefix="$butch_prefix" --disable-debug --disable-yasm \
-  --enable-shared --enable-postproc --enable-gpl
-make -j$MAKE_THREADS
+  --cc="$CC" --cxx="$CXX" --host-cc="$HOSTCC" $xconfflags \
+  --enable-shared --enable-postproc --enable-gpl \
+  --disable-stripping
+make V=1 -j$MAKE_THREADS
 make DESTDIR="$butch_install_dir" install
