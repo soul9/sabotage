@@ -12,6 +12,7 @@ pango
 cairo
 fontconfig
 freetype
+gtk+2
 
 [build]
 cp -f "$K"/config.sub .
