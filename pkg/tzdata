@@ -12,7 +12,8 @@ tzcode
 [build]
 # http://www.linuxfromscratch.org/lfs/view/SVN-20131015/chapter06/glibc.html
 ZONEINFO="$butch_install_dir""$butch_prefix"/share/zoneinfo
-mkdir -pv $ZONEINFO/{posix,right}
+mkdir -p $ZONEINFO/posix
+mkdir -p $ZONEINFO/right
 
 for tz in etcetera southamerica northamerica europe africa antarctica  \
           asia australasia backward pacificnew solar87 solar88 solar89 \
