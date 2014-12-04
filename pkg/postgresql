@@ -1,9 +1,9 @@
 [mirrors]
-http://ftp.postgresql.org/pub/source/v9.2.4/postgresql-9.2.4.tar.bz2
+http://ftp.postgresql.org/pub/source/v9.2.9/postgresql-9.2.9.tar.bz2
 
 [main]
-filesize=16395184
-sha512=1f347a8e75f4c350cc1ee2e0406b1b696f8e82cd259bb17404113874516fdf4c395517962a5320d5c386994cae7ebe7dbdbbeb7ae79c76d6d506ce5bda662c3e
+filesize=16269349
+sha512=a319af5781f528b5fcd384d133d0dc0d0f4302784c650b7d934670717a07e6af8cef51abaa9a34bdfc82f925ba9e8a81770242fa69a2e2105684be2a62be2db3
 
 [deps.host]
 python
@@ -16,7 +16,6 @@ readline
 timezones
 
 [build]
-#patch -p1 < "$K/some.patch"
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
   --with-sysroot=$butch_root_dir --with-system-tzdata="$butch_prefix"/etc/zoneinfo"
