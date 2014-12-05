@@ -11,8 +11,21 @@ imlib2
 giblib
 
 [build]
-CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix"
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+cat << EOF >> giblib-config
+#!/bin/sh
+printf "%s" "-lgiblib -lImlib2"
+EOF
+chmod +x giblib-config
+export PATH="$PWD:$PATH"
 
-make -j$MAKE_THREADS
+CPPFLAGS="-D_GNU_SOURCE" \
+CFLAGS="$optcflags $optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" $xconfflags
+
+[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
+
+make V=1 -j$MAKE_THREADS INCLUDES=-I.
 make DESTDIR="$butch_install_dir" install
