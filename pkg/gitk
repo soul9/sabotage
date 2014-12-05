@@ -1,5 +1,7 @@
 [deps]
 git
+
+[deps.run]
 tcl
 tk
 
