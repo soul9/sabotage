@@ -26,6 +26,7 @@ sha512=ea2101feeb41da953b078b93977bd320a937f4047d074fbed568c7c73b1dfe433a66f7f14
 patch -p1 < "$K"/python273-pathsearch.patch
 patch -p1 < "$K"/python-xcompile.patch
 patch -p0 < "$K"/python-libressl.patch
+patch -p1 < "$K"/python-includedirs.patch
 
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) --build=$($HOSTCC -dumpmachine)"
