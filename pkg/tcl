@@ -1,12 +1,10 @@
 [mirrors]
-http://heanet.dl.sourceforge.net/project/tcl/Tcl/8.6.0/tcl8.6.0-src.tar.gz
-http://surfnet.dl.sourceforge.net/project/tcl/Tcl/8.6.0/tcl8.6.0-src.tar.gz
-http://switch.dl.sourceforge.net/project/tcl/Tcl/8.6.0/tcl8.6.0-src.tar.gz
+http://downloads.sourceforge.net/project/tcl/Tcl/8.6.3/tcl8.6.3-src.tar.gz
 
 [main]
-filesize=8636908
-sha512=ea64d2bb5b37b55bc424c759c67b5624e7d9a13b8bede744fd635cf668ff9e4a8681e41d94849f6c0a3564ee177268cbc3e5f287448b5a93179098d678e321f8
-tardir=tcl8.6.0
+filesize=8901509
+sha512=650b07e41f8943d90ebcd982ba5ac9abcd8c93fc38faf59c8f44835e0cf790a8164c68cf38c4529c22cc8fd39b41a4586c6d36b16d1717eba153a18eef969685
+tardir=tcl8.6.3
 
 [deps]
 sqlite
@@ -17,10 +15,15 @@ rm -rf pkgs/*sqlit*
 cd unix
 rm -rf *sqlit*
 rm -rf pkgs/*sqlit*
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
 CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
-  ./configure -C --prefix="$butch_prefix"
+  ./configure -C --prefix="$butch_prefix" $xconfflags \
+  tcl_cv_strtoul_unbroken=ok \
+  tcl_cv_strtod_unbroken=ok \
+  tcl_cv_strstr_unbroken=ok
 make -j$MAKE_THREADS CFLAGS_DEFAULT=
-# https://sourceforge.net/tracker/?func=detail&aid=3598282&group_id=10894&atid=110894
-export LD_LIBRARY_PATH=.
 make DESTDIR="$butch_install_dir" install
 cd ..
