@@ -13,7 +13,7 @@ download() {
 	local url="$1"
 	local out="$2"
 	if [ "$USE_CURL" = 1 ] ; then
-		curl -C - --retry $retries -k -L "$url" -o "$out"
+		curl -c /dev/null -C - --retry $retries -k -L "$url" -o "$out"
 	else
 		if ! wget --help 2>&1 | grep BusyBox > /dev/null ; then
 			append wgetflags "--tries=$retries"
