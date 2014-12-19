@@ -7,7 +7,9 @@ tardir=mutt-1.5.23
 http://downloads.sourceforge.net/project/mutt/mutt/mutt-1.5.23.tar.gz
 
 [deps]
+ncurses
 openssl
+perl
 cyrus-sasl
 
 [build]
