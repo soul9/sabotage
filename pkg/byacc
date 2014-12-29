@@ -1,16 +1,26 @@
+[mirrors]
+http://invisible-island.net/datafiles/release/byacc.tar.gz
+
 [main]
-tardir=byacc-20120526
-filesize=241153
-sha512=a5dc6d57e91f3155cbaa2d64ef12843055db8a4eab441eb1b5834f67214b6a11d89d48c4afb691dddbd7ab104ed0e5a545a145900193160ad57ddebe746d4745
+tardir=byacc-20141128
+filesize=710145
+sha512=a41debde13d489e47c635bd61ce691e7b0a1470a91df3d16e43bd7c0985064708c4d69b8fabe2134ac4d06b17e484ea9c0b7efc7a624e7d8b7ed850e89afd71c
 
 [mirrors]
 http://invisible-island.net/datafiles/release/byacc.tar.gz
 
-[deps]
-
 [build]
-#patch -p1 < "$K/some.patch"
-CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix"
-make -j$MAKE_THREADS
-make DESTDIR="$butch_install_dir" install
+#patch -p1 < "$K"/some.patch
 
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+
+#[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
