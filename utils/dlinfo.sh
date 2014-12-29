@@ -21,8 +21,11 @@ gethash() {
 }
 
 fn=tarballs/`geturlfilename "$url"`
-wget --no-check-certificate -O "$fn" "$url"
-
+if [ "$USE_CURL" = 1 ] ; then
+	curl -c /dev/null -C - -k -L "$url" -o "$fn"
+else
+	wget --no-check-certificate -O "$fn" "$url"
+fi
 echo [mirrors]
 echo "$url"
 echo
