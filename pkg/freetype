@@ -1,16 +1,24 @@
 [main]
-filesize=1442053
-sha512=2c91ee53c25deec13588618cbfc87e14b0db2a325c5413063ee2f51080c5ad7706f0060bb3125e3abe55de132d07a5dd8e729c8bf4b87ccb3cf04fc6f11fb78c
+filesize=2116521
+sha512=b2b4a403eb3126c87ed6ebf4791dc7f16bc231ddbaceb69c71ab480cdb5c2018793d81f32cc1be624c701d64b96496042eec4675aa87ed6c1cff4de194b8350b
 
 [deps]
 zlib
+libpng
 
 [mirrors]
-http://download.savannah.gnu.org/releases/freetype/freetype-2.4.4.tar.bz2
+http://download.savannah.gnu.org/releases/freetype/freetype-2.5.0.tar.gz
 
 [build]
 [ -n "$CROSS_COMPILE" ] && \
-  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/')"
-./configure -C --prefix="$butch_prefix" $xconfflags
-make DESTDIR="$butch_install_dir" -j$MAKE_THREADS install
-rm "$butch_install_dir""$butch_prefix"/bin/freetype-config
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="-L/lib $optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+
+#[ -n "$CROSS_COMPILE" ] && "$K"/libtool.cross.gen --sysroot="$butch_root_dir"
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
