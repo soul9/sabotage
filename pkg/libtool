@@ -1,9 +1,9 @@
 [main]
-filesize=2632347
-sha512=0e54af7bbec376f943f2b8e4f13631fe5627b099a37a5f0252e12bade76473b0a36a673529d594778064cd8632abdc43d8a20883d66d6b27738861afbb7e211d
+filesize=1770684
+sha512=88ae8ba640f1d7b5237fc39e1f6b24c9502ac310001636cd4e6626061ba77fec5ea6303ce5f47056a5feb86713bdde59039293534880d223b17c382bf34465f9
 
 [mirrors]
-http://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz
+http://ftpmirror.gnu.org/libtool/libtool-2.4.4.tar.gz
 
 [deps]
 
