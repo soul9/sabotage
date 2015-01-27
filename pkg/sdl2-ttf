@@ -1,0 +1,22 @@
+[main]
+filesize=5517665
+sha512=2dfd7d9a87d86b0446e52c78dcf4c45dba747256ff9cb4cc010818eac725410f5a1a781e6695ca0bcead756c70519d8d5b4df6c1b2935085e0356d9b4d7844fa
+
+[mirrors]
+https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.12.tar.gz
+
+[deps]
+sdl2
+freetype
+
+[build]
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
