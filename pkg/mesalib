@@ -18,6 +18,7 @@ libxext
 libxml2
 libxshmfence
 eudev
+bison
 
 [build]
 if false ; then
