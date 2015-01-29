@@ -3,14 +3,14 @@ bash
 git
 
 [build]
-dest="$S/build"
-if [ -d "$dest/linux-firmware-git" ]; then
-	cd "$dest/linux-firmware-git"
+dest="$S/build/linux-firmware-git"
+mkdir -p "$dest"
+if [ -d "$dest/linux-firmware" ]; then
+	cd "$dest/linux-firmware"
 	git pull
 else
-	mkdir -p "$dest"
 	cd "$dest"
-	git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/firmware/linux-firmware.git linux-firmware-git
-	cd linux-firmware-git
+	git clone https://kernel.googlesource.com/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+	cd linux-firmware
 fi
 make SHELL=/bin/bash DESTDIR="$butch_install_dir" install
