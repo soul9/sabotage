@@ -1,0 +1,23 @@
+[main]
+filesize=8398016
+sha512=300ff078c4c9a74ccc143692630e9c97e25a223bf80661cd5e7d684a25c6ad7760b20778d492d6cc41521dcd2a00e4a76947cf6dffc679fdbd54f430b3906ea6
+
+[mirrors]
+https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.tar.gz
+
+[deps]
+zlib
+libpng
+sdl2
+
+[build]
+[ -n "$CROSS_COMPILE" ] && \
+  xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
+  --with-sysroot=$butch_root_dir"
+
+CPPFLAGS="-D_GNU_SOURCE" CFLAGS="$optcflags" CXXFLAGS="$optcflags" \
+LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
+  ./configure -C --prefix="$butch_prefix" --disable-nls $xconfflags
+
+make V=1 -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install

@@ -1,10 +1,10 @@
 [mirrors]
-http://youtube-dl.org/downloads/2014.11.04/youtube-dl-2014.11.04.tar.gz
+http://youtube-dl.org/downloads/2014.12.17.2/youtube-dl-2014.12.17.2.tar.gz
 
 [main]
-filesize=1123736
-sha512=0ac8a64652ac5cab4e7dcba89129a3914b6a27380a404c316297507eedc1884fe3e819733c7d815a6379bf0425c8fbf70d60b7fc8f08d682d75e056fd82fea86
 tardir=youtube-dl
+filesize=1198383
+sha512=7c7ccdc83de804ad70b45c47600413b2fdbebb5d78000cb87651926b06c2e6fca1f71382ccb91940384db663e7862804a9dfc92093e352efe18f56e502085add
 
 [deps]
 python
