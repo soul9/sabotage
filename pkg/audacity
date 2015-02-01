@@ -17,7 +17,8 @@ patch -p1 < "$K"/audacity-filedialog-segfault.patch
 patch -p1 < "$K"/audacity-format.patch
 
 CFLAGS=-D_GNU_SOURCE ./configure -C --prefix="$butch_prefix" \
-  --disable-sse
+  --disable-sse \
+  --with-ffmpeg=no
 # audacity does weird things with msgfmt & xgettext
 printf "install:\n\ttrue\n\nclean:\n\ttrue\n" > locale/Makefile
 make -j$MAKE_THREADS
