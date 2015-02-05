@@ -1,18 +1,16 @@
 [mirrors]
-https://www.torproject.org/dist/tor-0.2.4.24.tar.gz
-http://mirror.hackthissite.org/tor/tor-0.2.4.24.tar.gz
+https://www.torproject.org/dist/tor-0.2.5.10.tar.gz
+http://mirror.hackthissite.org/tor/tor-0.2.5.10.tar.gz
 
 [main]
-filesize=3002418
-sha512=d716a112421f0d2ef69cfaba84bdadd359c047ebc8928a5f8d0bc848f489dce35300a96ae0ffdc5f4caa2889bbbda5180d4e4a64bf94628f35b9dad9c9b618b4
+filesize=3166480
+sha512=0e6522964ac84231f7753ebe80239ce8c906c62bd35e5bd65ae5f85f246d488e32fbf121c58e501cbf0b8271468f6c10bef756080a7120479240486d6af22a8f
 
 [deps]
 openssl
 libevent
 
 [build]
-patch -p0 < "$K"/tor-libressl.patch
-
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') \
   --with-sysroot=$butch_root_dir"
