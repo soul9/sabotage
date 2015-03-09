@@ -16,6 +16,10 @@ fi
 
 BINDIR=$(dirname "$(readlink -f "$0")")
 
+# butch-core requires these paths
+[ ! -d $C ] && mkdir -p $C
+[ ! -d $LOGPATH ] && mkdir -p $LOGPATH
+
 usage() {
 cat << EOF >&2
 butch wrapper v0.1.1

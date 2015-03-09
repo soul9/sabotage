@@ -6,14 +6,9 @@ if [ ! "$H" -o ! "$R" -o ! "$K" ] ; then
 	exit 1
 fi
 
-cp -r "$H"/KEEP "$R"/src/
-cp -r "$H"/pkg "$R"/src/
-
-# For building a stage1 chroot from in sabotage
-mkdir -p "$R"/src/utils
-cp "$H"/utils/utils "$H"/utils/setup-rootfs "$H"/utils/finish "$R"/src/utils/
-cp "$H"/build-stage "$R"/src/
-cp "$H"/enter-chroot "$R"/src/
+cp -r "$H"/KEEP "$H"/pkg "$H"/utils "$R"/src/     
+cp "$H"/COOKBOOK "$H"/LICENSE "$H"/README.md "$H"/THANKS "$R"/src/
+cp "$H"/build-stage "$H"/enter-chroot "$R"/src/ 
 
 cp "$K"/config.stage1 "$R"/src/config
 echo "export A=$A" >> "$R"/src/config
