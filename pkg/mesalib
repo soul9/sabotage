@@ -20,6 +20,9 @@ libxshmfence
 eudev
 bison
 
+[deps.host]
+flex
+
 [build]
 if false ; then
   # add mesaglut to deps when you need it
