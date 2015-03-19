@@ -2,15 +2,14 @@
 gcc4
 
 [mirrors]
-http://www.etalabs.net/musl/releases/musl-1.1.6.tar.gz
-http://www.musl-libc.org/releases/musl-1.1.6.tar.gz
+http://www.etalabs.net/musl/releases/musl-1.1.7.tar.gz
+http://www.musl-libc.org/releases/musl-1.1.7.tar.gz
 
 [main]
-filesize=876821
-sha512=7ae7901e040990937c9473f98c7921736aa9ba051bf133b0a089c0730949ef83acca396333a5afa08edc2514081ab9f36c14aed343919b0d92e0e574737c8bab
+filesize=904546
+sha512=7fe002ed5f7fd96c8759f3f85ee382809043e1829e093b88eaaddc197f7d558473ad66b33be41dbb1afe750ccdd62e6dfcc3a591c122e84435142fab890e8edc
 
 [build]
-patch -p1 < "$K"/musl-1.1.6-getopt_long.patch
 ./configure --prefix=$butch_prefix --syslibdir=$butch_prefix/lib
 if [ "$A" = "powerpc" ] ; then
 cat << EOF >> config.mak
