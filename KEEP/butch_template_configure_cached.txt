@@ -106,7 +106,16 @@ if %BUTCH_HAVE_TARBALL ; then
 
 	printf '%s\n' "%BUTCH_TARBALL" >> "$butch_tarballs_used"
 	printf "%s: starting to untar\n" "`date`"
-	if ! tar xf "$butch_cache_dir/%BUTCH_TARBALL" ; then
+	if echo %BUTCH_TARBALL | grep -q "\.xz" ; then
+		tarflags=xJf
+	elif echo %BUTCH_TARBALL | grep -q "\.lzma" ; then
+		tarflags=xaf
+	elif echo %BUTCH_TARBALL | grep -q "\.bz2" ; then
+		tarflags=xjf
+	else
+		tarflags=xzf
+	fi
+	if ! tar $tarflags "$butch_cache_dir/%BUTCH_TARBALL" ; then
 		case "%BUTCH_TARBALL" in
 			*.tar.*)
 				echo "tarball error"
