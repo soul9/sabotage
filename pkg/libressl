@@ -1,16 +1,14 @@
 [mirrors]
-http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.1.3.tar.gz
-http://ftp.ch.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.1.3.tar.gz
+http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.1.6.tar.gz
+http://ftp.ch.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.1.6.tar.gz
 
 [main]
-filesize=2847182
-sha512=d2806f6d147e4145a3ef7795d3a17bc6553b2673d488c47fec4d9ac87babeae3d8710f910d5ccb27e57a3d34c6e4cb7d94cd3862d92f378fa3376a6d2ebc6cd9
+filesize=2865936
+sha512=21ea1b504a000d130eac03b93301598c808f9ae75448025b8bf5ec83386364c541dbfbf8ba0b8dc1ac672f476d1a95438f73082e4fd8a5bfa8d7a40b265f38a6
 
 [deps]
 
 [build]
-patch -p1 < "$K"/libressl-arm.patch
-
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine) \
   --with-sysroot=$butch_root_dir"
