@@ -1,9 +1,9 @@
 [mirrors]
-ftp://ftp.isc.org/isc/bind9/9.9.4-P1/bind-9.9.4-P1.tar.gz
+ftp://ftp.isc.org/isc/bind9/9.10.2/bind-9.10.2.tar.gz
 
 [main]
-filesize=7512868
-sha512=761f60d9197bcb08c3ac150190194c90c2848478bfb61769c8a5325b5060ce81ff6f5d03fcb69445cf954acfeb0f307ef3a9f10351e03f51d638fc482250ed53
+filesize=8481111
+sha512=e4c72fe52641a515620930d0e1c149e6f0d9cec2e1a64cbfd510829d908ccab7293197dbbe603c863168f9ea9ded57b27b32cbad02f8b60abc91acb035c2e79f
 
 [deps]
 
@@ -18,7 +18,7 @@ LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   ./configure -C --prefix="$butch_prefix" $xconfflags \
   --without-readline \
   --with-openssl="$butch_root_dir""$butch_prefix" \
-  --with-ecdsa=yes --with-gost=yes --with-randomdev=/dev/urandom
+  --with-ecdsa=yes --with-gost=no --with-randomdev=/dev/urandom
 
 for i in dns isc bind9 isccfg lwres ; do
   make -j$MAKE_THREADS -C lib/$i
