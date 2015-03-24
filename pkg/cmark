@@ -1,0 +1,17 @@
+[mirrors]
+https://github.com/jgm/cmark/archive/0.18.tar.gz
+
+[main]
+filesize=221416
+sha512=2f7bb90ad4aadc15cc99a2d4a51c1fc612148f451a19ae8976f61550df899cde02894bf93d2ba48c1d341f9e7d0d3f76198be819fe7a24006736071ffbe7b3e0
+tardir=cmark-0.18
+
+[deps.host]
+cmake
+
+[build]
+mkdir build && cd build
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+  cmake -DCMAKE_INSTALL_PREFIX="$butch_prefix" ..
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
