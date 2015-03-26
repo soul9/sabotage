@@ -1,0 +1,25 @@
+[mirrors]
+http://w1.fi/releases/hostapd-2.4.tar.gz
+
+[main]
+filesize=1658872
+sha512=37e648fe9cce92923ab1d1e23a4267e274c988785d7be5610f1affca425ffa86b438de81e37446926a0f9158d6b67ee83e6396c3f81d571545c973dddbf1ffe3
+
+[deps]
+zlib
+openssl
+libnl-tiny
+
+[build]
+cd hostapd
+cp defconfig .config
+
+CFLAGS="-D_GNU_SOURCE -I$butch_prefix/include/libnl-tiny \
+  -DLIBNL1_COMPAT \
+  -DCONFIG_LIBNL20 \
+  -D__int32_t=int32_t -D__int16_t=int16_t -D__uint8_t=uint8_t \
+  -D__uint32_t=uint32_t -D__uint16_t=uint16_t \
+  -include stdint.h $optcflags" \
+  LDFLAGS="-lz $optldflags" make -j$MAKE_THREADS CONFIG_LIBNL_TINY=y
+make BINDIR=/bin DESTDIR="$butch_install_dir" install
+
