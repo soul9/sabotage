@@ -1,12 +1,10 @@
 [mirrors]
-ftp://ftp.altlinux.org/pub/people/legion/kbd/kbd-1.15.3.tar.gz
-http://ftp.cc.uoc.gr/mirrors/ftp.kernel.org/pub/linux/utils/kbd/kbd-1.15.3.tar.gz
-http://pkgs.fedoraproject.org/repo/pkgs/kbd/kbd-1.15.3.tar.gz/8143e179a0f3c25646ce5085e8777200/kbd-1.15.3.tar.gz
-https://www.codeaurora.org/mirrored_source/quic/le/kbd-1.15.3.tar.bz2
+http://ftp.kernel.org/pub/linux/utils/kbd/kbd-1.15.3.tar.xz
+http://ftp.cc.uoc.gr/mirrors/ftp.kernel.org/pub/linux/utils/kbd/kbd-1.15.3.tar.xz
 
 [main]
-filesize=1659867
-sha512=11b41eada434644bc1def1c896bb6f10a1cd5a4e7ab285348d7f70e7c950ab0f4e4a99e3d45137ea44dbaeb098da733677b4399eb8bb271ffc32e45545db58f3
+filesize=761072
+sha512=19dba103f4941b975f547e229d1b03c8d355cd59871e4dfe6db32235a7983b2d8f52e6c7a674d07bdef8bf3a557eefaf731eb47128c3db02f43e91192faea03c
 
 [deps]
 bison
