@@ -1,11 +1,11 @@
 [mirrors]
-http://cryptsetup.googlecode.com/files/cryptsetup-1.6.0.tar.bz2
-http://ftp.de.netbsd.org/pub/gentoo/distfiles/cryptsetup-1.6.0.tar.bz2
-http://ftp.fi.debian.org/gentoo/distfiles/cryptsetup-1.6.0.tar.bz2
+https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.7.tar.xz
+http://ftp.free.fr/mirrors/ftp.kernel.org/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.7.tar.xz
+http://www.mirrorservice.org/sites/ftp.kernel.org/pub/linux/utils/cryptsetup/v1.6/cryptsetup-1.6.7.tar.xz
 
 [main]
-filesize=1180090
-sha512=2d1b5289d79fa70af1958f77a04cf2d5e426e22b429f05f76c47eb93d50ab3a18ce75e85c6f86304f8fe4b2c06d909eba9ccf84422d6b7d033437489bad9f79f
+filesize=1188876
+sha512=d6cecd2f3f5d468d4337d4e8407c8c3315e8972c0fc72cd1f93fb67f02a632b56ad293f08f6682f24c9ad0b5ad5967be751e5679413109692ade5823aafd1d19
 
 [deps]
 libuuid
@@ -14,8 +14,7 @@ popt
 libdevmapper
 
 [build]
-patch -p1 < "$K"/cryptsetup-devpath.patch
-patch -p1 < "$K"/cryptsetup-random.patch
+
 [ -n "$CROSS_COMPILE" ] && \
   xconfflags="--host=$($CC -dumpmachine|sed 's/musl/gnu/') --with-sysroot=$butch_root_dir"
 CFLAGS="-D_GNU_SOURCE $optcflags" \
