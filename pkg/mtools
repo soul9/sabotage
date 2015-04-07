@@ -12,4 +12,4 @@ sha512=3981a4727aa4e2ec5c931201b236f52fcd1c9d55f888cb2fbdc5c4172402e2b229ede9a50
 CFLAGS="$optcflags -UHAVE_ICONV_H" \
 LDFLAGS="$optldflags -Wl,-rpath-link=$butch_root_dir$butch_prefix/lib" \
   ./configure -C --prefix="$butch_prefix" $xconfflags
-make PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" -j$MAKE_THREADS all install
+make PREFIX="$butch_prefix" DESTDIR="$butch_install_dir" -j1 all install
