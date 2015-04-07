@@ -1,9 +1,9 @@
 [mirrors]
-http://www.issihosts.com/haveged/haveged-1.8.tar.gz
+http://www.issihosts.com/haveged/haveged-1.9.1.tar.gz
 
 [main]
-filesize=459893
-sha512=770ea9f4f47a0121ba4712269ab1f6796cf4522ab4a44f04b154f9c76732899ee01d747ff8e614e01be6f08726ed7d3b1429940960d810a2d7aa883eb9a849f0
+filesize=474845
+sha512=267d62cfeb886ea00fa412de1a91a34821460d0f4ad789dcfb3547018300e1cbf480917571b19652f2d449369293031d9534f9533bbf6a59560f4f10608c9cd2
 
 [deps]
 zlib
