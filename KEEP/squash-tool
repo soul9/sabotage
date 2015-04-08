@@ -632,6 +632,9 @@ installboot() {
   if [ -e "$src"/default.cpio.gz ]; then
     cp -a "$src"/default.cpio.gz "$tmp"/mount/boot
   fi
+  if [ ! -e "$tmp"/mount/boot/default ]; then
+    cp /boot/vmlinuz "$tmp"/mount/boot/default || return 1
+  fi
   pop_mounts "$tmp"/mount/boot
   if [ ! -z "$bdir" ]; then
     mount -o remount,ro $bdir
@@ -655,9 +658,6 @@ installboot() {
   syslinux -i "$fatpart" || return 1
   if [ ! -e /boot/default.cpio.gz ]; then
     mkinitramfsgz /boot/default.cpio.gz || return 1
-  fi
-  if [ ! -e /boot/default ]; then
-    cp /boot/vmlinuz /boot/default || return 1
   fi
   local sqshdst=/boot
   if [ ! -z "$bdir" ]; then
