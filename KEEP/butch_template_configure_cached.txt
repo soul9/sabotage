@@ -117,6 +117,12 @@ if %BUTCH_HAVE_TARBALL ; then
 	fi
 	if ! tar $tarflags "$butch_cache_dir/%BUTCH_TARBALL" ; then
 		case "%BUTCH_TARBALL" in
+			*.tar.xz)
+				# old gnu tar passes .xz to lzma instead of xz
+				if ! xz -dc "$butch_cache_dir/%BUTCH_TARBALL" | tar x ; then
+					echo "tarball error"
+					exit 1
+				fi ;;
 			*.tar.*)
 				echo "tarball error"
 				exit 1 ;;
