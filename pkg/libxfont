@@ -1,3 +1,10 @@
+[mirrors]
+http://xorg.freedesktop.org/releases/individual/lib/libXfont-1.5.1.tar.bz2
+
+[main]
+filesize=502903
+sha512=3ca8f7c1c642072c9bf9a755b45857f77753111ce6f1f99bd804e0f1b90cf61259fbde609a5342cce9c1ac5431b093bf75febb68baff2f2688e0a5fe5864a666
+
 [deps]
 util-macros
 freetype
@@ -5,13 +12,6 @@ libfontenc
 xproto
 fontsproto
 xtrans
-
-[main]
-filesize=489067
-sha512=c0e28d9213464ff3bf8e756da21ef3108bc6cb37b2bfd99787a4dd1ed224e65b778a3b184f72b32ca60de13c93f48879b41bece4f79954276cddc6b34c391ed9
-
-[mirrors]
-http://xorg.freedesktop.org/releases/individual/lib/libXfont-1.4.6.tar.bz2
 
 [build]
 [ -n "$CROSS_COMPILE" ] && \
