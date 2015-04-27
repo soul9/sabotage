@@ -30,6 +30,7 @@ if $do_init_devices ; then
 	chown root:video /dev/fb0 && chmod 0660 /dev/fb0
 	chown root:tty /dev/tty && chmod 0666 /dev/tty
 	[ -e /dev/kvm ] && chown root:kvm /dev/kvm && chmod 0660 /dev/kvm
+	chmod og+r /dev/rtc0
 fi
 
 if $do_static_ip ; then
