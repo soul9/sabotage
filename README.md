@@ -42,6 +42,7 @@ or to extract the rootfs, to be found at:
 * DE : http://ftp.barfooze.de/pub/sabotage/
 * GR : http://foss.aueb.gr/mirrors/linux/sabotage/
 * UK : http://dl.2f30.org/mirrors/sabotage/
+* FR : http://mirrors.2f30.org/sabotage/
 
 the DE mirror is the master from which the other mirrors are synced
 after some hours.
