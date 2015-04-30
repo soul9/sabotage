@@ -1,16 +1,13 @@
 [mirrors]
-http://ftp.gnu.org/gnu/bash/bash-4.3.tar.gz
+http://ftp.gnu.org/gnu/bash/bash-4.3.30.tar.gz
 
 [main]
-filesize=7955839
-sha512=a852b8e46ee55568dce9d23a30a9dbd1c770c2d2a4bc91e1c3177d723b31b32c5d69d19704a93f165891b409b9dd2cc65723372044e2bd0ee49ed59a11512651
+filesize=7977214
+sha512=76e5d91f0d29f857d5ab39423075ee4a577b59bae22f86cefef82c814f25d37456655e083e3cb116406856b192ca8b5749852baf7d01dbac491a2fb2e5ab7686
 
 [deps]
 
 [build]
-# Shellshock patching (CVE-2014-7169 and CVE-2014-6271)
-patch -p0 < "$K"/bash43-import-functions.patch
-
 # FIXME: bash has a ton of configure tests with broken defaults
 # for crosscompiling. breakage could for example be introduced by
 # "checking for offset of exit status... 0" (due to crosscompile)
