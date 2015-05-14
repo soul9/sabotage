@@ -1,20 +1,21 @@
---- glib-2.36.3.org/gio/Makefile.in
-+++ glib-2.36.3/gio/Makefile.in
-@@ -576,7 +576,7 @@
-   done | $(am__uniquify_input)`
- ETAGS = etags
- CTAGS = ctags
+--- glib-2.43.4.org/gio/Makefile.in
++++ glib-2.43.4/gio/Makefile.in
+@@ -828,7 +828,7 @@
+     *) \
+       b='$*';; \
+   esac
 -DIST_SUBDIRS = gdbus-2.0/codegen xdgmime inotify kqueue fen win32 . \
 +DIST_SUBDIRS = xdgmime inotify kqueue fen win32 . \
- 	fam tests
+ 	tests fam
  DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
  am__relativize = \
-@@ -858,7 +858,7 @@
- 	gnetworking.h.win32 $(NULL) $(completion_DATA)
- TEST_PROGS = 
- NULL = 
--SUBDIRS = gdbus-2.0/codegen $(am__append_1) $(am__append_4) \
-+SUBDIRS = $(am__append_1) $(am__append_4) \
- 	$(am__append_7) $(am__append_11) $(am__append_14) . \
- 	$(am__append_17) $(am__append_24)
- @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@noinst_DATA = gio-2.0.lib
+@@ -1206,7 +1206,7 @@
+ @ENABLE_INSTALLED_TESTS_TRUE@                      $(dist_test_scripts) $(dist_installed_test_scripts)
+ 
+ @ENABLE_INSTALLED_TESTS_TRUE@installed_test_meta_DATA = $(installed_testcases:=.test)
+-SUBDIRS = gdbus-2.0/codegen $(am__append_15) $(am__append_19) \
++SUBDIRS = $(am__append_15) $(am__append_19) \
+ 	$(am__append_22) $(am__append_26) $(am__append_29) . tests \
+ 	$(am__append_32)
+ @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@install_ms_lib_cmd = $(INSTALL) gio-2.0.lib $(DESTDIR)$(libdir)
+
