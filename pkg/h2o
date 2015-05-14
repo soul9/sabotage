@@ -1,0 +1,21 @@
+[mirrors]
+https://github.com/h2o/h2o/archive/v1.2.0.tar.gz
+
+[main]
+filesize=4155709
+sha512=89bc7f908a5f6f11c099f3055b0325923821a1f53a7cbde1eaad96dc03e80b786e914d5b4f2820bbf0a727018427854c001829ce7157fe6690cf7188a93cbf3c
+tardir=h2o-1.2.0
+
+[deps]
+cmake
+openssl
+perl
+
+[build]
+CFLAGS="-D_GNU_SOURCE $optcflags" LDFLAGS="$optldflags" \
+cmake -DCMAKE_INSTALL_PREFIX="$butch_prefix" .
+make -j$MAKE_THREADS
+make DESTDIR="$butch_install_dir" install
+
+IS="$K"/bin/install-service                                               
+"$IS" --down --log --force h2o "$K"/services/h2o
