@@ -1,9 +1,9 @@
-[main]
-filesize=6187933
-sha512=8589de3133881616ad2fa5e66338c4a06a01cb102dba7f60b63127fcf359227cff8fef652bf4c991554296edf7aafae1241afa764fcf5ceb571cfdd2e9bc6051
-
 [mirrors]
-http://ffmpeg.org/releases/ffmpeg-2.0.1.tar.bz2
+http://ffmpeg.org/releases/ffmpeg-2.6.3.tar.bz2
+
+[main]
+filesize=7803314
+sha512=0998fa0cc2711b556fc28ce498e986f8f0b3ba7a30394c6b6cd494a542917eafb3d4d758f75e33fb39db4a631eca40515aa36c8b278fa3ffc9be006995d31029
 
 [deps]
 alsa-lib
@@ -12,16 +12,21 @@ libflac
 bash
 
 [build]
-patch -p1 < "$K"/ffmpeg-mprotect.patch
 [ -z "$butch_prefix" ] && butch_prefix=/
 sed -i 's@/bin/sh@/bin/bash@' configure
 
 [ -n "$CROSS_COMPILE" ] && xconfflags="--enable-cross-compile --target-os=linux --arch=$A"
 
+libvpx=
+[ -d "$butch_install_dir"/../libvpx ] && libvpx=--enable-libvpx
+libv4l2=
+[ -d "$butch_install_dir"/../libv4l2 ] && libv4l2=--enable-libv4l2
+
 CFLAGS="-D_BSD_SOURCE $optcflags" LDFLAGS="$optldflags" \
   ./configure --prefix="$butch_prefix" --disable-debug --disable-yasm \
   --cc="$CC" --cxx="$CXX" --host-cc="$HOSTCC" $xconfflags \
-  --enable-shared --enable-postproc --enable-gpl \
+  --enable-shared --enable-postproc --enable-gpl $libvpx $libv4l2 \
+  --enable-libvorbis \
   --disable-stripping \
   --enable-x11grab
   
