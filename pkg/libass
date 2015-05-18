@@ -1,9 +1,9 @@
-[main]
-filesize=257792
-sha512=3990886b9e708bf29f48921f65f99cee85031e299065860bce4f3e626970f82e60130b7525c1aaaf40e02c7b49d7003378724dbcf72db5894ab79768776694cf
-
 [mirrors]
-http://libass.googlecode.com/files/libass-0.10.1.tar.xz
+https://github.com/libass/libass/releases/download/0.12.2/libass-0.12.2.tar.xz
+
+[main]
+filesize=313208
+sha512=7cdbb6514c17eafebcc5e558d96ac06f301fa2d7658275379b8598b71b1e10c5dee4d91ebce5181ee3f16f4fe4e1afa9bb9942fa81c38babdcad7de05b59d35f
 
 [deps]
 libpng
