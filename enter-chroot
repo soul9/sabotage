@@ -38,12 +38,14 @@ else
 	    exit $?
 	fi
 
-
-	mount --bind /dev "$R"/dev
-	mount --bind /dev/pts "$R"/dev/pts
-	mount --bind /dev/shm "$R"/dev/shm
-	mount --bind /proc "$R"/proc
-	mount --bind "$C" "$R"/src/tarballs
+	# prevent from mounting twice
+	if [ ! -d "$R"/dev/pts ] ; then
+		mount --bind /dev "$R"/dev
+		mount --bind /dev/pts "$R"/dev/pts
+		mount --bind /dev/shm "$R"/dev/shm
+		mount --bind /proc "$R"/proc
+		mount --bind "$C" "$R"/src/tarballs
+	fi
 
 	CHROOT=chroot
 fi
@@ -73,7 +75,7 @@ tryumount() {
 	fi
 }
 
-if [ -z "$SUPER" ] ; then
+if [ -z "$SUPER" ] && [ -d "$R"/dev/pts ] ; then
 	tryumount "$R"/src/tarballs
 	tryumount "$R"/dev/pts
 	tryumount "$R"/dev/shm
