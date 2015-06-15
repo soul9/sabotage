@@ -8,6 +8,7 @@ sha512=e251f5b330da17a8920c589b9e0326d6dd45db28923167718db27b0af2edf769607e9ae6f
 [deps]
 apr
 apr-util
+pcre
 
 [build]
 patch -p1 < "$K"/apache-libressl.patch
