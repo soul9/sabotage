@@ -17,7 +17,7 @@
 # set BRUTE to 1 to enable LTO in the standard etc/butch-optflags profile
 # (slow to compile, but results in minimal binary size and very fast code)
 #export BRUTE=1
-# set TESTBUILD to build everything without optimization/debug (much faster)
+# set TESTBUILD to 1 to build everything without optimization/debug (much faster)
 #export TESTBUILD=1
 
 # set to basepath containing your musl-cross toolchains
