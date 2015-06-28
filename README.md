@@ -3,6 +3,9 @@
 This is Sabotage, an experimental distribution based on musl libc and busybox.
 
 Currently Sabotage supports i386, x86_64, MIPS, PowerPC32 and ARM(v4t+).
+ARM hardfloat (hf) is supported via crosscompilation of stage1,
+since it requires a recent GCC which we can't easily bootstrap in stage0 due
+to library dependencies of GCC introduced with 4.3.
 
 The preferred way to build Sabotage is using a native Linux environment for
 the desired architecture.
