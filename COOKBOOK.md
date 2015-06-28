@@ -81,15 +81,15 @@ Each script contains breif documentation explaining usage.
 There is no issue erasing `/src/tarballs`, `/src/logs` or `/src/build` beyond
 the obvious. 
 
-It is suggested to clone the upstream repo as `/src`:
+It is suggested to clone the upstream repo as `/src/sabotage`:
 
-	$ mv /src/config ~
-	$ rm -rf /src
-	$ git clone git://github.com/sabotage-linux/sabotage /src 
-	$ mv ~/config /src
+	$ git clone git://github.com/sabotage-linux/sabotage /src/sabotage
+	$ rm -rf /src/KEEP /src/pkg
+	$ ln -sf /src/sabotage/KEEP /src/KEEP
+	$ ln -sf /src/sabotage/pkg /src/pkg
 
-You can issue a `git pull` in `/src` to update to the latest version of recipes
-and utilities.
+You can issue a `git pull` in `/src/sabotage` to update to the latest version of
+recipes and utilities.
 
 
 ### Writing recipes
